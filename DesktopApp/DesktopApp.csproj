@@ -11,7 +11,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FontAwesome5" Version="2.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\Maps\mapOfRussia.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\Styles\" />
   </ItemGroup>
 
 </Project>

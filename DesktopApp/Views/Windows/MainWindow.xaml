@@ -4,19 +4,44 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DesktopApp"
+        xmlns:fa="http://schemas.fontawesome.com/icons/"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.8*"/>
-            <ColumnDefinition Width="0.2*"/>
-        </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
-            <Image Source="{DynamicResource mapRussia}" HorizontalAlignment="Center"/>
-        </Grid>
-    </Grid>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Program"/>
+            <MenuItem Header="Program"/>
+            <MenuItem Header="Program"/>
+        </Menu>
+        <DockPanel DockPanel.Dock="Top">
+            <Grid DockPanel.Dock="Left">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.05*" />
+                    <ColumnDefinition Width="0.8*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="0.3*" />
+                    <RowDefinition Height="0.3*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <Image Source="{DynamicResource mapRussia}" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="4"/>
+                <fa:ImageAwesome Icon="Solid_Plus"
+                                 Grid.Row="1"
+                                 Margin="8"
+                                 Foreground="Green"/>
+                <fa:ImageAwesome Icon="Solid_Minus"
+                                 Grid.Row="2"
+                                 Margin="8"
+                                 Foreground="Red"
+                                 />
+            </Grid>
+            <DockPanel DockPanel.Dock="Right">
+                <Grid>
+
+                </Grid>
+            </DockPanel>
+        </DockPanel>
+    </DockPanel>
 </Window>
