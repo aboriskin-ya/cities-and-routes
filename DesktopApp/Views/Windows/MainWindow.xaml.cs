@@ -11,5 +11,10 @@ namespace DesktopApp
         {
             InitializeComponent();
         }
+
+        private void ImageAwesome_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+        {
+
+        }
     }
 }
