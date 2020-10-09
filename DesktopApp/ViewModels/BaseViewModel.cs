@@ -10,7 +10,7 @@ namespace DesktopApp.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        internal bool Set<T>(ref T field, T value, [CallerMemberName]string prop = "")
+        internal virtual bool Set<T>(ref T field, T value, [CallerMemberName]string prop = "")
         {
             if (Equals(field, value)) return false;
             field = value;
