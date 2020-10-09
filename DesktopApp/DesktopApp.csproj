@@ -18,8 +18,4 @@
     <Resource Include="Resources\Maps\mapOfRussia.jpg" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Resources\Styles\" />
-  </ItemGroup>
-
 </Project>
