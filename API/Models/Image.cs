@@ -8,7 +8,8 @@ namespace API.Models
     public class Image
     {
         public Guid Id { get; set; }
-        public Image(Guid Id)
+        public byte[] Data { get; set; }
+        public Image(Guid Id, byte[] Data)
         {
             this.Id = Id;
         }
