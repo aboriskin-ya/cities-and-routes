@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using System.Linq;
+using API.Models;
 
 namespace API.Controllers
 {
@@ -13,38 +14,28 @@ namespace API.Controllers
     public class MapController : ControllerBase
     {
 
-        [HttpPost("MapCreateRequest")]
+        [HttpPost]
         public async Task<ActionResult<API.Models.Map>> MapCreateRequest(API.Models.Map mapItem)
         {
             return mapItem;
         }
 
-        [HttpPut("MapUpdateRequest")]
+        [HttpPut]
         public async Task<ActionResult<API.Models.Map>> MapUpdateRequest(API.Models.Map mapItem)
         {
             return mapItem;
         }
 
-        [HttpGet("MapGetResponse")]
-        public async Task<ActionResult<API.Models.Map>> MapGetResponse(Guid id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<API.Models.Map>> MapGetResponse(Guid Id)
         {
-            return new API.Models.Map(id);
+            return new API.Models.Map(Id,"test", new Guid());
         }
 
-        [HttpPost("MapImageUploadRequest"), DisableRequestSizeLimit]
-        public async Task<ActionResult<Guid>> MapImageUploadRequest()
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> MapDeleteResponse(Guid id)
         {
-            var file = Request.Form.Files[0];
-            var fileId = Guid.NewGuid();
-           
-            return fileId;
+            return Ok();
         }
-
-        [HttpGet("MapImageIdGetResponse")]
-        public async Task<ActionResult<API.Models.Image>> MapImageIdGetResponse(Guid id)
-        {
-            return new API.Models.Image(id, new Byte[0]);
-        }
-
     }
 }
