@@ -1,0 +1,13 @@
+﻿<Window x:Class="CitiesAndRouters.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CitiesAndRouters"
+        mc:Ignorable="d"
+        Title="Cities and Routers" Height="100" Width="350">
+    <Grid>
+        <Button Content="Add a city" Width="150" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Button Content="Add a route" Width="150" Height="30" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+    </Grid>
+</Window>

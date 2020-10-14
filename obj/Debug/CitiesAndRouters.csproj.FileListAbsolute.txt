@@ -1,0 +1,15 @@
+C:\Users\наталья\source\repos\CitiesAndRouters\bin\Debug\CitiesAndRouters.exe.config
+C:\Users\наталья\source\repos\CitiesAndRouters\bin\Debug\CitiesAndRouters.exe
+C:\Users\наталья\source\repos\CitiesAndRouters\bin\Debug\CitiesAndRouters.pdb
+C:\Users\наталья\source\repos\CitiesAndRouters\obj\Debug\CitiesAndRouters.csprojAssemblyReference.cache
+C:\Users\наталья\source\repos\CitiesAndRouters\obj\Debug\MainWindow.g.cs
+C:\Users\наталья\source\repos\CitiesAndRouters\obj\Debug\App.g.cs
+C:\Users\наталья\source\repos\CitiesAndRouters\obj\Debug\CitiesAndRouters_MarkupCompile.cache
+C:\Users\наталья\source\repos\CitiesAndRouters\obj\Debug\CitiesAndRouters_MarkupCompile.lref
+C:\Users\наталья\source\repos\CitiesAndRouters\obj\Debug\MainWindow.baml
+C:\Users\наталья\source\repos\CitiesAndRouters\obj\Debug\CitiesAndRouters.g.resources
+C:\Users\наталья\source\repos\CitiesAndRouters\obj\Debug\CitiesAndRouters.Properties.Resources.resources
+C:\Users\наталья\source\repos\CitiesAndRouters\obj\Debug\CitiesAndRouters.csproj.GenerateResource.cache
+C:\Users\наталья\source\repos\CitiesAndRouters\obj\Debug\CitiesAndRouters.csproj.CoreCompileInputs.cache
+C:\Users\наталья\source\repos\CitiesAndRouters\obj\Debug\CitiesAndRouters.exe
+C:\Users\наталья\source\repos\CitiesAndRouters\obj\Debug\CitiesAndRouters.pdb
