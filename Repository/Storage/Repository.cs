@@ -17,7 +17,7 @@ namespace Repository.Storages
             _context = context;
             _entity = context.Set<T>();
         }
-        public void CreateUpdate(T obj)
+        public void Add(T obj)
         {
             if (!_context.Entry<T>(obj).IsKeySet)
             {

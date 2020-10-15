@@ -9,6 +9,6 @@ namespace Repository.Storages
     {
         T Get(int id);
         IEnumerable<T> GetAll();
-        void CreateUpdate(T obj);
+        void Add(T obj);
     }
 }
