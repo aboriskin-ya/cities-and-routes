@@ -9,13 +9,13 @@ using Service;
 
 namespace API.Controllers
 {
-    [Route("mapimage")]
+    [Route("image")]
     [ApiController]
-    public class MapImageController : ControllerBase
+    public class ImageController : ControllerBase
     {
         private readonly IImageService _service;
 
-        public MapImageController(IImageService service)
+        public ImageController(IImageService service)
         {
             _service = service;
         }
@@ -40,14 +40,14 @@ namespace API.Controllers
                         bytes = str.ToArray();
                     }
 
-
-                    _service.CreateUpdate(new MapImage()
+                    var img = new MapImage()
                     {
                         Data = bytes,
                         ContentType = contentType
-                    });
+                    };
+                    _service.CreateUpdate(img);
 
-                    return Ok($"successful adding {fileName}");
+                    return Ok($"New image has an Id = {img.Id}");
                 }
                 else
                 {
