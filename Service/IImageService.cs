@@ -8,6 +8,6 @@ namespace Service
     {
         IEnumerable<MapImage> GetImage();
         MapImage GetImage(int id);
-        void CreateUpdate(MapImage img);
+        void StoreImage(MapImage img);
     }
 }

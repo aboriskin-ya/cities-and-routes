@@ -14,9 +14,9 @@ namespace Service
             _repository = repository;
         }
 
-        public void CreateUpdate(MapImage img)
+        public void StoreImage(MapImage img)
         {
-            _repository.CreateUpdate(img);
+            _repository.Add(img);
         }
 
         public IEnumerable<MapImage> GetImage()

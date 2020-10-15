@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -22,7 +21,7 @@ namespace API.Controllers
 
         [HttpPost, DisableRequestSizeLimit]
         [Route("upload")]
-        public async Task<IActionResult> UploadImage()
+        public async Task<ActionResult<int>> UploadImage()
         {
             try
             {
@@ -45,9 +44,9 @@ namespace API.Controllers
                         Data = bytes,
                         ContentType = contentType
                     };
-                    _service.CreateUpdate(img);
+                    _service.StoreImage(img);
 
-                    return Ok($"New image has an Id = {img.Id}");
+                    return img.Id;
                 }
                 else
                 {
