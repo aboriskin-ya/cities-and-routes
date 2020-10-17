@@ -7,7 +7,7 @@ namespace Service
     public interface IImageService
     {
         IEnumerable<MapImage> GetImage();
-        MapImage GetImage(int id);
+        MapImage GetImage(Guid id);
         void StoreImage(MapImage img);
     }
 }

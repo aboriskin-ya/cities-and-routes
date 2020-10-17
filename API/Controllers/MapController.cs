@@ -1,41 +1,137 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http.Headers;
-using System.Linq;
-using API.Models;
+using Service;
 
 namespace API.Controllers
 {
-    [Route("/{controller}/")]
+    [Route("{controller}")]
     [ApiController]
     public class MapController : ControllerBase
     {
+        private readonly IMapService _Mapservice;
+        private readonly IImageService _Imageservice;
+
+        public MapController(IMapService Mapservice, IImageService Imageservice)
+        {
+            _Mapservice = Mapservice;
+            _Imageservice = Imageservice;
+        }
+
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public async Task<ActionResult<Map>> GetMap(Guid id)
+        {
+            try
+            {
+                Map map = _Mapservice.GetMap(id);
+                if (map == null)
+                {
+                    return NotFound();
+                }
+                   
+                return map;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("getall")]
+        public IEnumerable<Map> GetMap() => _Mapservice.GetMap();
 
         [HttpPost]
-        public async Task<ActionResult<API.Models.Map>> MapCreateRequest(API.Models.Map mapItem)
+        public async Task<ActionResult<Map>> CreateMap()
         {
-            return mapItem;
+            try
+            {
+                string Name = Request.Form["Name"];
+                string ImageId = Request.Form["ImageId"];
+                Map map = new Map();
+
+                if (!(Name is null))
+                {
+                    map.Name = Name;
+                    if (!(ImageId is null))
+                    {
+                        MapImage img = _Imageservice.GetImage(Guid.Parse(ImageId));
+                        map.Image = img;
+                    }
+
+                    _Mapservice.CreateMap(map);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+                return map;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPut]
-        public async Task<ActionResult<API.Models.Map>> MapUpdateRequest(API.Models.Map mapItem)
+        [Route("{id:Guid}")]
+        public async Task<ActionResult<Map>> UpdateMap(Guid Id)
         {
-            return mapItem;
+            try
+            {
+                string Name = Request.Form["Name"];
+                string ImageId = Request.Form["ImageId"];
+                Map map = _Mapservice.GetMap(Id);
+                if (map == null)
+                {
+                    return NotFound();
+                }
+
+                if (!(Name is null))
+                {
+                    map.Name = Name;
+                    map.Id = Id;
+                    if (!(ImageId is null))
+                    {
+                        MapImage img = _Imageservice.GetImage(Guid.Parse(ImageId));
+                        map.Image = img;
+                    }
+
+                    map = _Mapservice.UpdateMap(map);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+
+                return map;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<API.Models.Map>> MapGetResponse(Guid Id)
-        {
-            return new API.Models.Map(Id,"test", new Guid());
-        }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> MapDeleteResponse(Guid id)
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<ActionResult<Map>> DeleteMap(Guid Id)
         {
-            return Ok();
+            try
+            {
+                _Mapservice.DeleteMap(Id);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
+
+
 }

@@ -12,6 +12,7 @@ namespace Repository
         {
             base.OnModelCreating(modelBuilder);
             new MapImageBuild(modelBuilder.Entity<MapImage>());
+            new MapBuild(modelBuilder.Entity<Map>());
         }
     }
 }

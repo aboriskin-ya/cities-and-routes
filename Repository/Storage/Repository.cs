@@ -19,6 +19,7 @@ namespace Repository.Storages
         }
         public void Add(T obj)
         {
+            obj.CreateOnUTC = DateTimeOffset.Now;
             if (!_context.Entry<T>(obj).IsKeySet)
             {
                 _context.Add(obj);
@@ -30,9 +31,29 @@ namespace Repository.Storages
             _context.SaveChanges();
         }
 
-        public T Get(int id)
+        public T Get(Guid id)
         {
-            return _entity.SingleOrDefault(p => p.Id == id);
+            if (typeof(T).Name == "Map")
+            { 
+                DbSet<Map> entity = _context.Set<Map>();
+                return entity.Include(p => p.Image).SingleOrDefault(p => p.Id == id) as T;
+            } else {
+                return _entity.SingleOrDefault(p => p.Id == id);
+            }
+        }
+
+        public T Update(T obj)
+        {
+            _context.Update(obj);
+            _context.SaveChanges();
+            return obj;
+        }
+        public bool Delete(Guid id)
+        {
+            var element = _entity.Single(p => p.Id == id);
+            _context.Remove(element);
+            _context.SaveChanges();
+            return true;
         }
 
         public IEnumerable<T> GetAll()

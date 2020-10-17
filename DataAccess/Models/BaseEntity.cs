@@ -1,9 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess
 {
     public class BaseEntity
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
+        public DateTimeOffset CreateOnUTC { get; set; }
+        public DateTimeOffset UpdatedOnUTC { get; set; }
     }
 }

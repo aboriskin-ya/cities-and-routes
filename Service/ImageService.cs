@@ -24,7 +24,7 @@ namespace Service
             return _repository.GetAll();
         }
 
-        public MapImage GetImage(int id)
+        public MapImage GetImage(Guid id)
         {
             return _repository.Get(id);
         }

@@ -7,8 +7,10 @@ namespace Repository.Storages
 {
     public interface IRepository<T> where T: BaseEntity
     {
-        T Get(int id);
+        T Get(Guid id);
         IEnumerable<T> GetAll();
         void Add(T obj);
+        T Update(T obj);
+        bool Delete(Guid id);
     }
 }
