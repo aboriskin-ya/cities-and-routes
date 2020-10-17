@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="SharpVectors" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\Maps\mapOfRussia.jpg" />
   </ItemGroup>
 
