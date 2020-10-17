@@ -31,6 +31,7 @@ namespace API
             });
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddTransient<IImageService, ImageService>();
+            services.AddTransient<IMapService, MapService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,15 +55,6 @@ namespace API
             {
                 endpoints.MapControllers();
             });
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
-            });
-
         }
     }
 }

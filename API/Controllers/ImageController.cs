@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -21,7 +23,7 @@ namespace API.Controllers
 
         [HttpPost, DisableRequestSizeLimit]
         [Route("upload")]
-        public async Task<ActionResult<int>> UploadImage()
+        public async Task<ActionResult<Guid>> UploadImage()
         {
             try
             {
@@ -59,8 +61,8 @@ namespace API.Controllers
             }
         }
         [HttpGet]
-        [Route("{id:int}")]
-        public IActionResult GetImage(int id)
+        [Route("{id:Guid}")]
+        public IActionResult GetImage(Guid id)
         {
             MapImage img = _service.GetImage(id);
             if (img == null)
@@ -68,6 +70,10 @@ namespace API.Controllers
 
             return File(img.Data, img.ContentType);
         }
+
+        [HttpGet]
+        [Route("getall")]
+        public IEnumerable<MapImage> GetImage() => _service.GetImage();
 
     }
 }
