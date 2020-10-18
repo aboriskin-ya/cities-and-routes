@@ -4,9 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DesktopApp"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
         mc:Ignorable="d"
         Title="CreateMapDialog" Height="450" Width="450">
-    <Grid Margin="10">
+    
+    <Window.DataContext>
+        <local:CreateMapViewModel/>
+    </Window.DataContext>
+
+    <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.1*"/>
             <RowDefinition Height="0.8*"/>
@@ -17,14 +24,48 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <DockPanel LastChildFill="True">
-            <Label DockPanel.Dock="Left" VerticalAlignment="Center" Target="{Binding ElementName=mapName}">Map name:</Label>
-            <TextBox VerticalAlignment="Center" Name="mapName"/>
+        <DockPanel Grid.ColumnSpan="2" 
+                   LastChildFill="True">
+            <Label DockPanel.Dock="Left" 
+                   VerticalAlignment="Center" 
+                   Target="{Binding ElementName=mapName}">
+                Map name:
+            </Label>
+            <TextBox VerticalAlignment="Center" 
+                     Text="{Binding MapName}"/>
         </DockPanel>
 
-        <Border Grid.Row="1" Grid.ColumnSpan="3" BorderBrush="Gray" BorderThickness="2" Margin="0 10 0 10">
+        <Border
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Background="White"
+            BorderBrush="LightGray"
+            BorderThickness="2"
+            ToolTip="Drop new map here"
+            
+            AllowDrop="True" 
+            dd:DragDrop.IsDragSource="True"
+            dd:DragDrop.IsDropTarget="True"
+            dd:DragDrop.DropHandler="{Binding}">
+
+            <ScrollViewer x:Name="scroll" 
+                          VerticalScrollBarVisibility="Hidden">
+                <Image x:Name="newMap"
+                   Source="Resources/Icons/upload.png"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Width="80"/>
+            </ScrollViewer>
         </Border>
 
-        <Button Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left">Create</Button>
+        <Button 
+            Content="Create"
+            Grid.Row="2" 
+            VerticalAlignment="Center"
+            
+            Command="{Binding CreateCommand}">
+            
+        </Button>
     </Grid>
 </Window>

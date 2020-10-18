@@ -1,16 +1,14 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using System.Windows.Input;
 
 namespace DesktopApp
 {
-    class MainWindowViewModel
+    class MainWindowViewModel: ViewModelBase
     {
         public MainWindowViewModel()
         {
-            ShowCreateMapDialogCommand = new SimpleCommand(d => ShowDialog());
+            ShowCreateMapDialogCommand = new RelayCommand(ShowDialog);
         }
 
         public ICommand ShowCreateMapDialogCommand { get; }

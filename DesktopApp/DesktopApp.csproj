@@ -7,15 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Icons\upload.png" />
     <None Remove="Resources\Maps\mapOfRussia.jpg" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FontAwesome5" Version="2.0.8" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
+    <PackageReference Include="gong-wpf-dragdrop" Version="2.3.1" />
+    <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
+    <PackageReference Include="SharpVectors" Version="1.0.0" />
+    <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Icons\upload.png" />
     <Resource Include="Resources\Maps\mapOfRussia.jpg" />
   </ItemGroup>
 
