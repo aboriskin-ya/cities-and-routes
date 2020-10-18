@@ -24,20 +24,13 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public async Task<ActionResult<Map>> GetMap(Guid id)
         {
-            try
+            Map map = _Mapservice.GetMap(id);
+            if (map == null)
             {
-                Map map = _Mapservice.GetMap(id);
-                if (map == null)
-                {
-                    return NotFound();
-                }
-                   
-                return map;
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+
+            return map;
         }
 
         [HttpGet]
@@ -120,15 +113,13 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public async Task<ActionResult<Map>> DeleteMap(Guid Id)
         {
-            try
+            if (_Mapservice.DeleteMap(Id))
             {
-                _Mapservice.DeleteMap(Id);
-
                 return Ok();
             }
-            catch (Exception ex)
+            else
             {
-                return StatusCode(500, ex.Message);
+                return NotFound();
             }
         }
     }

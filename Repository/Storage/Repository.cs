@@ -50,9 +50,15 @@ namespace Repository.Storages
         }
         public bool Delete(Guid id)
         {
-            var element = _entity.Single(p => p.Id == id);
-            _context.Remove(element);
+            var obj = _entity.Single(p => p.Id == id);
+            if (obj is null)
+            {
+                return false;
+            }
+            
+            _context.Remove(obj);
             _context.SaveChanges();
+
             return true;
         }
 
