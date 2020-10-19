@@ -17,19 +17,32 @@ namespace DesktopApp
 
         private string mapName;
         private string mapPath;
+        private bool isAvailableForDownload;
 
         private readonly IMessageBoxService _messageBoxService;
         public CreateMapViewModel(IMessageBoxService messageBoxService)
         {
             _messageBoxService = messageBoxService;
             InitializeProperties();
-            CreateCommand = new RelayCommand(CreateNewMap);
+            CreateCommand = new RelayCommand(
+                p => CreateNewMap(), 
+                b => { return !string.IsNullOrEmpty(MapName) && IsAvailableForDownload; });
         }
 
         public void InitializeProperties()
         {
-            MapName = "new map";
+            MapName = "";
             MapPath = "/Resources/Icons/uploadIcon.png";
+            isAvailableForDownload = false;
+        }
+        public bool IsAvailableForDownload
+        {
+            get { return isAvailableForDownload; }
+            set
+            {
+                isAvailableForDownload = value;
+                RaisePropertyChanged("IsAvailableForDownload");
+            }
         }
         public string MapPath
         {
@@ -47,7 +60,7 @@ namespace DesktopApp
             {
                 mapName = value;
                 RaisePropertyChanged("MapName");
-            }
+            }            
         }
 
         public ICommand CreateCommand { get; }
@@ -79,21 +92,29 @@ namespace DesktopApp
 
         public void Drop(IDropInfo dropInfo)
         {
-            var dataObject = dropInfo.Data as DataObject;
-            string[] dropPath = dataObject.GetData(DataFormats.FileDrop, true) as string[];
-
-            string fullPath = Path.GetFullPath(dropPath[0]);
-
-            System.Drawing.Image img = System.Drawing.Image.FromFile(fullPath);
-
-            if (Enum.IsDefined(typeof(AllowExtensions), Path.GetExtension(dropPath[0]).Trim('.')) ||
-                img.Width >= 1000 || img.Height >= 1000)
+            try
             {
-                MapName = Path.GetFileNameWithoutExtension(dropPath[0]);
-                MapPath = fullPath;
+                var dataObject = dropInfo.Data as DataObject;
+                string[] dropPath = dataObject.GetData(DataFormats.FileDrop, true) as string[];
+
+                string fullPath = Path.GetFullPath(dropPath[0]);
+
+                System.Drawing.Image img = System.Drawing.Image.FromFile(fullPath);
+
+                if (Enum.IsDefined(typeof(AllowExtensions), Path.GetExtension(dropPath[0]).Trim('.')) &&
+                    img.Width >= 1000 && img.Height >= 1000)
+                {
+                    MapName = Path.GetFileNameWithoutExtension(dropPath[0]);
+                    MapPath = fullPath;
+                    isAvailableForDownload = true;
+                }
+                else
+                    _messageBoxService.Show($"{Path.GetFileName(dropPath[0])} has an inappropriate format or resolution", "Error");
             }
-            else
-                _messageBoxService.Show($"{Path.GetFileName(dropPath[0])} has an inappropriate format or resolution", "Error");
+            catch(Exception ex)
+            {
+                _messageBoxService.Show($"Error:\n {ex}", "Error");
+            }
         }
 
     }
