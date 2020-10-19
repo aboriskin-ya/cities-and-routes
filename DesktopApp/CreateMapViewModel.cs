@@ -1,37 +1,68 @@
-﻿using GalaSoft.MvvmLight;
+﻿using DesktopApp.Service;
+using DesktopApp.Services;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GongSolutions.Wpf.DragDrop;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace DesktopApp
 {
-    public class CreateMapViewModel: ViewModelBase, IDropTarget
+    public enum AllowExtensions { jpg, png };
+    public class CreateMapViewModel : ViewModelBase, IDropTarget
     {
-        private string mapName = "new map";
+
+        private string mapName;
+        private string mapPath;
+
+        private readonly IMessageBoxService _messageBoxService;
+        public CreateMapViewModel(IMessageBoxService messageBoxService)
+        {
+            _messageBoxService = messageBoxService;
+            InitializeProperties();
+            CreateCommand = new RelayCommand(CreateNewMap);
+        }
+
+        public void InitializeProperties()
+        {
+            MapName = "new map";
+            MapPath = "/Resources/Icons/uploadIcon.png";
+        }
+        public string MapPath
+        {
+            get { return mapPath; }
+            set
+            {
+                mapPath = value;
+                RaisePropertyChanged("MapPath");
+            }
+        }
         public string MapName
         {
             get { return mapName; }
             set
             {
                 mapName = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged("MapName");
             }
-        }   
+        }
 
         public ICommand CreateCommand { get; }
-
-        private void CreateNewMap()
+        private async void CreateNewMap()
         {
-            
-            mapName = "fuck the system";
-            RaisePropertyChanged("MapName");
+            ImageAPIService service = new ImageAPIService();
+            var res = await service.UploadImage(MapPath);
+
+            if (res != null)
+            {
+                _messageBoxService.Show($"We have new map \"{MapName}\" with id = {res}", "Success");
+                InitializeProperties();
+            }
+            else
+                _messageBoxService.Show("Oops! Some server problems", "Error");
         }
 
         public void DragOver(IDropInfo dropInfo)
@@ -39,7 +70,7 @@ namespace DesktopApp
             dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
 
             var dataObject = dropInfo.Data as IDataObject;
-            
+
             if (dataObject != null && dataObject.GetDataPresent(DataFormats.FileDrop))
             {
                 dropInfo.Effects = DragDropEffects.Link;
@@ -51,17 +82,19 @@ namespace DesktopApp
             var dataObject = dropInfo.Data as DataObject;
             string[] dropPath = dataObject.GetData(DataFormats.FileDrop, true) as string[];
 
-            if (Enum.IsDefined(typeof(AllowExtensions), Path.GetExtension(dropPath[0]).Trim('.')))
+            string fullPath = Path.GetFullPath(dropPath[0]);
+
+            System.Drawing.Image img = System.Drawing.Image.FromFile(fullPath);
+
+            if (Enum.IsDefined(typeof(AllowExtensions), Path.GetExtension(dropPath[0]).Trim('.')) ||
+                img.Width >= 1000 || img.Height >= 1000)
             {
                 MapName = Path.GetFileNameWithoutExtension(dropPath[0]);
-                
+                MapPath = fullPath;
             }
+            else
+                _messageBoxService.Show($"{Path.GetFileName(dropPath[0])} has an inappropriate format or resolution", "Error");
         }
 
-        public CreateMapViewModel()
-        {
-            CreateCommand = new RelayCommand(CreateNewMap);
-        }
-       
     }
 }

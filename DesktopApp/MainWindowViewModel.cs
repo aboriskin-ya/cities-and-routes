@@ -16,6 +16,7 @@ namespace DesktopApp
         private void ShowDialog()
         {
             CreateMapDialog cmd = new CreateMapDialog();
+            cmd.Owner = App.Current.MainWindow;
             cmd.Show();
         }
     }
