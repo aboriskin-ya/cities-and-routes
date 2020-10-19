@@ -8,6 +8,7 @@
             <ResourceDictionary.MergedDictionaries>
 
                 <ResourceDictionary Source="Resources\DictionaryMaps.xaml"/>
+                <ResourceDictionary Source="Resources\CreateMapDialogStyles.xaml"/>
                 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

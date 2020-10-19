@@ -8,7 +8,7 @@ namespace DesktopApp
     {
         public MainWindowViewModel()
         {
-            ShowCreateMapDialogCommand = new RelayCommand(ShowDialog);
+            ShowCreateMapDialogCommand = new RelayCommand(s => ShowDialog());
         }
 
         public ICommand ShowCreateMapDialogCommand { get; }
