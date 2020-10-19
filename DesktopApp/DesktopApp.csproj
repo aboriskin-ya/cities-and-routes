@@ -7,19 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\Icons\upload.png" />
+    <None Remove="Resources\Icons\uploadIcon.png" />
     <None Remove="Resources\Maps\mapOfRussia.jpg" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="gong-wpf-dragdrop" Version="2.3.1" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
     <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
-    <PackageReference Include="SharpVectors" Version="1.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Icons\upload.png" />
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Icons\uploadIcon.png" />
     <Resource Include="Resources\Maps\mapOfRussia.jpg" />
   </ItemGroup>
 
