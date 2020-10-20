@@ -1,13 +1,12 @@
 ﻿using DesktopApp.Service;
-using DesktopApp.Services;
+using DesktopApp.APIInteraction;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
+
 
 namespace DesktopApp
 {
@@ -67,15 +66,26 @@ namespace DesktopApp
         private async void CreateNewMap()
         {
             ImageAPIService service = new ImageAPIService();
-            var res = await service.UploadImage(MapPath);
-
-            if (res != null)
+            try
             {
-                _messageBoxService.Show($"We have new map \"{MapName}\" with id = {res}", "Success");
-                InitializeProperties();
+                var res = await service.UploadImage(MapPath);
+                if (res != null)
+                {
+                    _messageBoxService.ShowInfo($"We have new map \"{MapName}\" with id = {res}", "Success");
+                    InitializeProperties();
+                }
+                else
+                    _messageBoxService.ShowError("Oops! Some server problems", "Error");
             }
-            else
-                _messageBoxService.Show("Oops! Some server problems", "Error");
+            catch (System.Net.Http.HttpRequestException rex)
+            {
+                _messageBoxService.ShowError(rex, "Server is not found.");
+            }
+            catch (Exception ex)
+            {
+                _messageBoxService.ShowError(ex, ex.Message);
+            }
+            
         }
 
         public void DragOver(IDropInfo dropInfo)
@@ -109,11 +119,14 @@ namespace DesktopApp
                     isAvailableForDownload = true;
                 }
                 else
-                    _messageBoxService.Show($"{Path.GetFileName(dropPath[0])} has an inappropriate format or resolution", "Error");
+                {
+                    dropInfo.Effects = DragDropEffects.None;
+                    return;
+                }
             }
             catch(Exception ex)
             {
-                _messageBoxService.Show($"Error:\n {ex}", "Error");
+                _messageBoxService.ShowError(ex, "Some error here:");
             }
         }
 

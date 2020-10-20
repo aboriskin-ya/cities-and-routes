@@ -4,7 +4,7 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace DesktopApp.Services
+namespace DesktopApp.APIInteraction
 {
     public class ImageAPIService
     {

@@ -9,9 +9,10 @@
         Title="CreateMapDialog" Height="450" Width="450">
     <Window.Resources>
         <ResourceDictionary Source="Resources\CreateMapDialogStyles.xaml" />
+        
     </Window.Resources>
 
-    <Grid Margin="15">
+    <Grid Style="{StaticResource GridStyle}">
         
         <Grid.RowDefinitions>
             <RowDefinition Height="0.1*"/>
@@ -52,7 +53,8 @@
 
             <ScrollViewer 
                 x:Name="scroll" 
-                VerticalScrollBarVisibility="Hidden">
+                VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Auto">
                 
                 <Image x:Name="newMap"
                    Source="{Binding MapPath}"
@@ -62,6 +64,7 @@
         </Border>
 
         <Button 
+            x:Name="btnCreate"
             Content="Create"
             Grid.Row="2"            
             Command="{Binding CreateCommand}"

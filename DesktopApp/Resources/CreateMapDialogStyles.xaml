@@ -5,6 +5,9 @@
         <Setter Property="Control.VerticalAlignment" Value="Center" />
         <Setter Property="Control.HorizontalAlignment" Value="Center" />
     </Style>
+    <Style TargetType="Grid" x:Key="GridStyle">
+        <Setter Property="Margin" Value="15"/>
+    </Style>
     <Style TargetType="Button">
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
@@ -16,4 +19,5 @@
     <Style TargetType="TextBox">
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
+    
 </ResourceDictionary>

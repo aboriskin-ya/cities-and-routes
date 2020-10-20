@@ -1,4 +1,5 @@
-﻿using DesktopApp.Service;
+﻿using DesktopApp.APIInteraction;
+using DesktopApp.Service;
 using System.Windows;
 
 namespace DesktopApp

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 
-namespace DesktopApp
+namespace DesktopApp.APIInteraction
 {
     public class APIClient
     {
