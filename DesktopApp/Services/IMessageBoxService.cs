@@ -7,6 +7,8 @@ namespace DesktopApp.Service
 {
     public interface IMessageBoxService
     {
-        void Show(string message, string caption, MessageBoxButton buttons = MessageBoxButton.OK);
+        void ShowInfo(string message, string caption);
+        void ShowError(Exception ex, string message);
+        void ShowError(string message, string caption);
     }
 }
