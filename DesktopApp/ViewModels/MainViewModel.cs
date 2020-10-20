@@ -1,13 +1,9 @@
 ﻿using DesktopApp.Services.Commands;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 
 namespace DesktopApp.ViewModels
 {
@@ -35,39 +31,63 @@ namespace DesktopApp.ViewModels
         }
         #endregion
 
-        #region ZoomInCommand
-        public BaseCommand ZoomInCommand => new BaseCommand((p) => OnCanZoomInExecute(p), (p) => OnZoomInExecuted(p));
+        #region ZoomCommand
+        public ZoomCommand ZoomCommand => new ZoomCommand(p => OnCanZoomExecute(p), p => OnZoomExecuted(p));
 
-        private void OnZoomInExecuted(object p)
+        private void OnZoomExecuted(object p)
         {
-           var image= (p is Image) ? p as Image : null;
-            if (image != null)
-            {
-                ScaleValue *= 2;
-                ScaleTransform transform = new ScaleTransform(ScaleValue,ScaleValue);
-                image.RenderTransform = transform;
-            }
+            if (double.TryParse(p.ToString(), out double scale))
+                ScaleValue *= scale;
         }
 
-        private bool OnCanZoomInExecute(object p) => true;
+        private bool OnCanZoomExecute(object p) => ( ScaleValue < 1.0  || ScaleValue >= 16.0) ? false : true;
         #endregion
 
-        #region ZoomOut
-        public BaseCommand ZoomOutCommand => new BaseCommand((p) => OnCanZoomOutExecute(p), (p) => OnZoomOutExecuted(p));
+        #region NavigateCommand
+        public NavigateCommand NavigateCommand => new NavigateCommand(p => OnCanNavigateExecute(p), p => OnNavigateExecuted(p));
 
-        private void OnZoomOutExecuted(object p)
+        private void OnNavigateExecuted(object p)
         {
-            var image = (p is Image) ? p as Image : null;
-            if (image != null)
-            {
-                ScaleValue /= 2;
-                ScaleTransform transform = new ScaleTransform(ScaleValue, ScaleValue);
-                image.RenderTransform = transform;
-            }
+            OffsetValue = (Point)p;
         }
 
-        private bool OnCanZoomOutExecute(object p) => true;
-       
+        private bool OnCanNavigateExecute(object p)
+        {
+            MousePosition = (Point)p;
+            if (MousePosition.X <= 1.0 && MousePosition.X >= 0 && MousePosition.Y <= 1.0 && MousePosition.Y >= 0) return true;
+            else
+            {
+                switch (MousePosition)
+                {
+                    case Point i when i.X < 0: MousePosition = new Point(0, MousePosition.Y); break;
+                    case Point i when i.Y < 0: MousePosition = new Point(MousePosition.X, 0); break;
+                    case Point i when i.X > 1: MousePosition = new Point(1, MousePosition.Y); break;
+                    case Point i when i.Y > 1: MousePosition = new Point(MousePosition.X, 1); break;
+                    default:return true;
+                }
+            }
+            return false;
+        }
+        #endregion
+
+        #region OffsetValue
+        private Point _OffsetValue;
+        public Point OffsetValue
+        {
+            get => _OffsetValue;
+            set => Set<Point>(ref _OffsetValue, value);
+        }
+
+        #endregion
+
+        #region MousePosition
+        private Point _MousePosition = new Point(0.5, 0.5);
+
+        public Point MousePosition
+        {
+            get => _MousePosition;
+            set => Set<Point>(ref _MousePosition, value);
+        }
         #endregion
     }
 }

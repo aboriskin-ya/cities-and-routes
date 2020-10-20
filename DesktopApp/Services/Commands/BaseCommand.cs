@@ -5,30 +5,25 @@ using System.Windows.Input;
 
 namespace DesktopApp.Services.Commands
 {
-    internal class BaseCommand : ICommand
+    internal abstract class BaseCommand : ICommand
     {
         private Predicate<object> _CanExecute;
         private Action<object> _Executed;
-        internal BaseCommand(Predicate<object> CanExecute, Action<Object> Executed)
+        internal BaseCommand(Predicate<object> CanExecute, Action<object> Executed)
         {
             _Executed = Executed;
             _CanExecute = CanExecute;
         }
-        
 
-        
         public event EventHandler CanExecuteChanged
         {
             add => CommandManager.RequerySuggested += value;
             remove => CommandManager.RequerySuggested -= value;
         }
 
-        public bool CanExecute(object parameter) => _CanExecute?.Invoke(parameter) ?? true;
-        
+        public virtual bool CanExecute(object parameter) => _CanExecute?.Invoke(parameter) ?? true;
 
-        public void Execute(object parameter)
-        {
-            _Executed?.Invoke(parameter);
-        }
+
+        public virtual void Execute(object parameter) => _Executed.Invoke(parameter);
     }
 }

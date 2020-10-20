@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using DesktopApp.ViewModels;
+using System;
+using System.Windows;
+using System.Windows.Input;
 
 namespace DesktopApp
 {
@@ -12,4 +15,5 @@ namespace DesktopApp
             InitializeComponent();
         }
     }
+      
 }
