@@ -20,6 +20,7 @@ namespace Service
         public void StoreImage(Image img)
         {
             _repository.Add(img);
+            _context.SaveChanges();
         }
 
         public IEnumerable<Image> GetImage()
