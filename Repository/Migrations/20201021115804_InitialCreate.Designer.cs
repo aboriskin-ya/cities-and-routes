@@ -10,7 +10,7 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(CityRouteContext))]
-    [Migration("20201017112730_InitialCreate")]
+    [Migration("20201021115804_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,33 +21,7 @@ namespace Repository.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("DataAccess.Models.Map", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("CreateOnUTC")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid?>("ImageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("UpdatedOnUTC")
-                        .HasColumnType("datetimeoffset");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ImageId");
-
-                    b.ToTable("Map");
-                });
-
-            modelBuilder.Entity("DataAccess.Models.MapImage", b =>
+            modelBuilder.Entity("DataAccess.Models.Image", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -69,15 +43,43 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MapImage");
+                    b.ToTable("Image");
                 });
 
             modelBuilder.Entity("DataAccess.Models.Map", b =>
                 {
-                    b.HasOne("DataAccess.Models.MapImage", "Image")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreateOnUTC")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("UpdatedOnUTC")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
+
+                    b.ToTable("Map");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.Map", b =>
+                {
+                    b.HasOne("DataAccess.Models.Image", "Image")
                         .WithMany()
                         .HasForeignKey("ImageId")
-                        .HasConstraintName("FK1");
+                        .HasConstraintName("FK1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

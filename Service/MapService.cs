@@ -1,5 +1,6 @@
 ﻿using DataAccess.Models;
 using Repository.Storages;
+using Repository;
 using System;
 using System.Collections.Generic;
 
@@ -7,16 +8,18 @@ namespace Service
 {
     public class MapService : IMapService
     {
-        private IRepository<Map> _repository;
+        private IMapRepository _repository;
+        protected readonly CityRouteContext _context;
 
-        public MapService(IRepository<Map> repository)
+        public MapService(IMapRepository repository, CityRouteContext context)
         {
             _repository = repository;
+            _context = context;
         }
 
         public void CreateMap(Map map)
         {
-             _repository.Add(map);
+            _repository.Add(map);
         }
 
         public IEnumerable<Map> GetMap()
@@ -31,12 +34,23 @@ namespace Service
 
         public bool DeleteMap(Guid id)
         {
-            return _repository.Delete(id);
+            bool result;
+            if (result = _repository.Delete(id))
+            {
+                _context.SaveChanges();
+                return result;
+            }
+            else
+            {
+                return result;
+            }
         }
 
         public Map UpdateMap(Map map)
         {
-            return _repository.Update(map);
+            map = _repository.Update(map);
+            _context.SaveChanges();
+            return map;
         }
     }
 }

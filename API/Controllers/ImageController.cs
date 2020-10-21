@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -41,7 +41,7 @@ namespace API.Controllers
                         bytes = str.ToArray();
                     }
 
-                    var img = new MapImage()
+                    var img = new Image()
                     {
                         Data = bytes,
                         ContentType = contentType
@@ -64,7 +64,7 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public IActionResult GetImage(Guid id)
         {
-            MapImage img = _service.GetImage(id);
+            Image img = _service.GetImage(id);
             if (img == null)
                 return NotFound();
 
@@ -73,7 +73,17 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("getall")]
-        public IEnumerable<MapImage> GetImage() => _service.GetImage();
+        public IActionResult GetImage()
+        {
+            IEnumerable<Image> ImageList = _service.GetImage();
+
+            if (ImageList.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(ImageList);
+        }
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DataAccess.Models;
 using Repository.Storages;
+using Repository;
 using System;
 using System.Collections.Generic;
 
@@ -7,24 +8,26 @@ namespace Service
 {
     public class ImageService : IImageService
     {
-        private IRepository<MapImage> _repository;
+        private IImageRepository _repository;
+        protected readonly CityRouteContext _context;
 
-        public ImageService(IRepository<MapImage> repository)
+        public ImageService(IImageRepository repository, CityRouteContext context)
         {
             _repository = repository;
+            _context = context;
         }
 
-        public void StoreImage(MapImage img)
+        public void StoreImage(Image img)
         {
             _repository.Add(img);
         }
 
-        public IEnumerable<MapImage> GetImage()
+        public IEnumerable<Image> GetImage()
         {
             return _repository.GetAll();
         }
 
-        public MapImage GetImage(Guid id)
+        public Image GetImage(Guid id)
         {
             return _repository.Get(id);
         }

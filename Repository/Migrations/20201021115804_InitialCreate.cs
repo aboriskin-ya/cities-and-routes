@@ -8,7 +8,7 @@ namespace Repository.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "MapImage",
+                name: "Image",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -19,7 +19,7 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MapImage", x => x.Id);
+                    table.PrimaryKey("PK_Image", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -30,7 +30,7 @@ namespace Repository.Migrations
                     CreateOnUTC = table.Column<DateTimeOffset>(nullable: false),
                     UpdatedOnUTC = table.Column<DateTimeOffset>(nullable: false),
                     Name = table.Column<string>(nullable: false),
-                    ImageId = table.Column<Guid>(nullable: true)
+                    ImageId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -38,9 +38,9 @@ namespace Repository.Migrations
                     table.ForeignKey(
                         name: "FK1",
                         column: x => x.ImageId,
-                        principalTable: "MapImage",
+                        principalTable: "Image",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -55,7 +55,7 @@ namespace Repository.Migrations
                 name: "Map");
 
             migrationBuilder.DropTable(
-                name: "MapImage");
+                name: "Image");
         }
     }
 }
