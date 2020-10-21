@@ -16,8 +16,7 @@ namespace Repository.Storages
 
         public new Map Get(Guid id)
         {
-            DbSet<Map> entity = _context.Set<Map>();
-            return entity.Include(p => p.Image).SingleOrDefault(p => p.Id == id);
+            return _entity.Include(p => p.Image).SingleOrDefault(p => p.Id == id);
         }
     }
 }
