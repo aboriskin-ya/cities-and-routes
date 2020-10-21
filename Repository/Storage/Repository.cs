@@ -8,15 +8,16 @@ using System.Text;
 
 namespace Repository.Storages
 {
-    public class Repository<T> : IRepository<T> where T: BaseEntity
+    public abstract class Repository<T> : IRepository<T> where T : BaseEntity
     {
-        private readonly CityRouteContext _context;
-        private readonly DbSet<T> _entity;
+        protected readonly CityRouteContext _context;
+        protected readonly DbSet<T> _entity;
         public Repository(CityRouteContext context)
         {
             _context = context;
             _entity = context.Set<T>();
         }
+
         public void Add(T obj)
         {
             obj.CreateOnUTC = DateTimeOffset.Now;
@@ -33,19 +34,13 @@ namespace Repository.Storages
 
         public T Get(Guid id)
         {
-            if (typeof(T).Name == "Map")
-            { 
-                DbSet<Map> entity = _context.Set<Map>();
-                return entity.Include(p => p.Image).SingleOrDefault(p => p.Id == id) as T;
-            } else {
-                return _entity.SingleOrDefault(p => p.Id == id);
-            }
+            return _entity.SingleOrDefault(p => p.Id == id);
         }
 
         public T Update(T obj)
         {
+            obj.UpdatedOnUTC = DateTimeOffset.Now;
             _context.Update(obj);
-            _context.SaveChanges();
             return obj;
         }
         public bool Delete(Guid id)
@@ -55,9 +50,8 @@ namespace Repository.Storages
             {
                 return false;
             }
-            
+
             _context.Remove(obj);
-            _context.SaveChanges();
 
             return true;
         }

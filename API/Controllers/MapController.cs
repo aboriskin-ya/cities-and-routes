@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Service;
+using AutoMapper;
 
 namespace API.Controllers
 {
@@ -12,17 +14,17 @@ namespace API.Controllers
     public class MapController : ControllerBase
     {
         private readonly IMapService _Mapservice;
-        private readonly IImageService _Imageservice;
+        private readonly IMapper _mapper;
 
-        public MapController(IMapService Mapservice, IImageService Imageservice)
+        public MapController(IMapService MapService, IMapper Mapper)
         {
-            _Mapservice = Mapservice;
-            _Imageservice = Imageservice;
+            _Mapservice = MapService;
+            _mapper = Mapper;
         }
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public async Task<ActionResult<Map>> GetMap(Guid id)
+        public ActionResult<Map> GetMap(Guid id)
         {
             Map map = _Mapservice.GetMap(id);
             if (map == null)
@@ -35,32 +37,25 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("getall")]
-        public IEnumerable<Map> GetMap() => _Mapservice.GetMap();
+        public IActionResult GetMap()
+        {
+            IEnumerable<Map> MapList = _Mapservice.GetMap();
+
+            if (MapList.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(MapList);
+        }
 
         [HttpPost]
-        public async Task<ActionResult<Map>> CreateMap()
+        public ActionResult<Map> CreateMap([FromBody] MapDTO dto)
         {
             try
             {
-                string Name = Request.Form["Name"];
-                string ImageId = Request.Form["ImageId"];
-                Map map = new Map();
-
-                if (!(Name is null))
-                {
-                    map.Name = Name;
-                    if (!(ImageId is null))
-                    {
-                        MapImage img = _Imageservice.GetImage(Guid.Parse(ImageId));
-                        map.Image = img;
-                    }
-
-                    _Mapservice.CreateMap(map);
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                 Map map = _mapper.Map<Map>(dto);
+                _Mapservice.CreateMap(map);
                 return map;
             }
             catch (Exception ex)
@@ -71,35 +66,13 @@ namespace API.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
-        public async Task<ActionResult<Map>> UpdateMap(Guid Id)
+        public ActionResult<Map> UpdateMap(Guid id, [FromBody] MapDTO dto)
         {
             try
             {
-                string Name = Request.Form["Name"];
-                string ImageId = Request.Form["ImageId"];
-                Map map = _Mapservice.GetMap(Id);
-                if (map == null)
-                {
-                    return NotFound();
-                }
-
-                if (!(Name is null))
-                {
-                    map.Name = Name;
-                    map.Id = Id;
-                    if (!(ImageId is null))
-                    {
-                        MapImage img = _Imageservice.GetImage(Guid.Parse(ImageId));
-                        map.Image = img;
-                    }
-
-                    map = _Mapservice.UpdateMap(map);
-                }
-                else
-                {
-                    return BadRequest();
-                }
-
+                Map map = _Mapservice.GetMap(id);
+                _mapper.Map<MapDTO, Map>(dto, map);
+                _Mapservice.UpdateMap(map);
                 return map;
             }
             catch (Exception ex)
@@ -111,9 +84,9 @@ namespace API.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
-        public async Task<ActionResult<Map>> DeleteMap(Guid Id)
+        public ActionResult<Map> DeleteMap(Guid id)
         {
-            if (_Mapservice.DeleteMap(Id))
+            if (_Mapservice.DeleteMap(id))
             {
                 return Ok();
             }

@@ -4,11 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccess.Models
 {
-    public class Map: BaseEntity
+    public class MapDTO
     {
-        [Required]
         public string Name { get; set; }
-        public Image Image { get; set; }
         public Guid ImageId { get; set; }
     }
 }

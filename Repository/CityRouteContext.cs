@@ -11,7 +11,7 @@ namespace Repository
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            new MapImageBuild(modelBuilder.Entity<MapImage>());
+            new ImageBuild(modelBuilder.Entity<Image>());
             new MapBuild(modelBuilder.Entity<Map>());
         }
     }
