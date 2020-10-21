@@ -3,7 +3,6 @@
     fetch('/image/getall')
         .then(response => response.json())
         .then(result => {
-            result.forEach(element => document.getElementById('imageList').insertAdjacentHTML('beforeend', '<option value="' + element.id + '">' + element.id + '</option>'));
             result.forEach(element => document.getElementById('imageList2').insertAdjacentHTML('beforeend', '<option value="' + element.id + '">' + element.id + '</option>'));
         })
     document.getElementById('imageList2').addEventListener('change', function () {
