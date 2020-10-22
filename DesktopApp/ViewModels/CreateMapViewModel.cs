@@ -62,7 +62,7 @@ namespace DesktopApp.ViewModels
             set
             {
                 mapName = value;
-                FirePropertyChanged(p => p.mapName);
+                FirePropertyChanged(p => p.MapName);
             }            
         }
 
