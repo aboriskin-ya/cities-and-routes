@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DataAccess
 {
-    public class MapImageBuild
+    public class ImageBuild
     {
-        public MapImageBuild(EntityTypeBuilder<MapImage> entityBuilder)
+        public ImageBuild(EntityTypeBuilder<Image> entityBuilder)
         {
             entityBuilder.HasKey(m => m.Id);
             entityBuilder.Property(m => m.Data).HasColumnType("image").IsRequired();

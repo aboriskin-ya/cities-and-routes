@@ -8,6 +8,8 @@ using Repository;
 using Microsoft.EntityFrameworkCore;
 using Service;
 using Repository.Storages;
+using System;
+using AutoMapper;
 
 namespace API
 {
@@ -29,8 +31,11 @@ namespace API
             {
                 options.UseSqlServer(connection);
             });
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped(typeof(IMapRepository), typeof(MapRepository));
+            services.AddScoped(typeof(IImageRepository), typeof(ImageRepository));
             services.AddTransient<IImageService, ImageService>();
+            services.AddTransient<IMapService, MapService>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,15 +59,6 @@ namespace API
             {
                 endpoints.MapControllers();
             });
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
-            });
-
         }
     }
 }
