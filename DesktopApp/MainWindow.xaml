@@ -15,8 +15,25 @@
             <ColumnDefinition Width="0.2*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
-            <Image Source="{DynamicResource mapRussia}" HorizontalAlignment="Center"/>
+        <Menu 
+            Height="25" 
+            VerticalAlignment="Top">
+            <MenuItem 
+                Header="Map">
+                <MenuItem 
+                    Header="Create new" 
+                    Command="{Binding ShowCreateMapDialogCommand}">
+                </MenuItem>
+                <MenuItem 
+                    Header="Select existing" >
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+
+        <Grid 
+            Grid.Column="0">
+            <Image  
+                HorizontalAlignment="Center"/>
         </Grid>
     </Grid>
 </Window>
