@@ -6,12 +6,13 @@ using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using System.Linq.Expressions;
+using System.ComponentModel;
 
-
-namespace DesktopApp
+namespace DesktopApp.ViewModels
 {
     public enum AllowExtensions { jpg, png };
-    public class CreateMapViewModel : ViewModelBase, IDropTarget
+    public class CreateMapViewModel : INotifyPropertyChanged, IDropTarget
     {
 
         private string mapName;
@@ -19,20 +20,23 @@ namespace DesktopApp
         private bool isAvailableForDownload;
 
         private readonly IMessageBoxService _messageBoxService;
-        public CreateMapViewModel(IMessageBoxService messageBoxService)
+        private readonly IImageAPIService _imageAPIService;
+        public CreateMapViewModel(IMessageBoxService messageBoxService, IImageAPIService imageAPIService)
         {
             _messageBoxService = messageBoxService;
+            _imageAPIService = imageAPIService;
             InitializeProperties();
+
             CreateCommand = new RelayCommand(
                 p => CreateNewMap(), 
                 b => { return !string.IsNullOrEmpty(MapName) && IsAvailableForDownload; });
         }
 
-        public void InitializeProperties()
+        public void InitializeProperties(string name = "", string path = "/Resources/Icons/uploadIcon.png", bool isAvailable = false)
         {
-            MapName = "";
-            MapPath = "/Resources/Icons/uploadIcon.png";
-            isAvailableForDownload = false;
+            MapName = name;
+            MapPath = path;
+            isAvailableForDownload = isAvailable;
         }
         public bool IsAvailableForDownload
         {
@@ -40,7 +44,7 @@ namespace DesktopApp
             set
             {
                 isAvailableForDownload = value;
-                RaisePropertyChanged("IsAvailableForDownload");
+                FirePropertyChanged(p => p.IsAvailableForDownload);
             }
         }
         public string MapPath
@@ -49,7 +53,7 @@ namespace DesktopApp
             set
             {
                 mapPath = value;
-                RaisePropertyChanged("MapPath");
+                FirePropertyChanged(p => p.MapPath);
             }
         }
         public string MapName
@@ -58,17 +62,16 @@ namespace DesktopApp
             set
             {
                 mapName = value;
-                RaisePropertyChanged("MapName");
+                FirePropertyChanged(p => p.mapName);
             }            
         }
 
         public ICommand CreateCommand { get; }
         private async void CreateNewMap()
         {
-            ImageAPIService service = new ImageAPIService();
             try
             {
-                var res = await service.UploadImage(MapPath);
+                var res = await _imageAPIService.UploadImage(MapPath);
                 if (res != null)
                 {
                     _messageBoxService.ShowInfo($"We have new map \"{MapName}\" with id = {res}", "Success");
@@ -114,9 +117,7 @@ namespace DesktopApp
                 if (Enum.IsDefined(typeof(AllowExtensions), Path.GetExtension(dropPath[0]).Trim('.')) &&
                     img.Width >= 1000 && img.Height >= 1000)
                 {
-                    MapName = Path.GetFileNameWithoutExtension(dropPath[0]);
-                    MapPath = fullPath;
-                    isAvailableForDownload = true;
+                    InitializeProperties(Path.GetFileNameWithoutExtension(dropPath[0]), fullPath, true);
                 }
                 else
                 {
@@ -129,6 +130,18 @@ namespace DesktopApp
                 _messageBoxService.ShowError(ex, "Some error here:");
             }
         }
+        private void FirePropertyChanged<TValue>(Expression<Func<CreateMapViewModel, TValue>> propertySelector)
+        {
+            if (PropertyChanged == null)
+                return;
 
+            var memberExpression = propertySelector.Body as MemberExpression;
+            if (memberExpression == null)
+                return;
+
+            PropertyChanged(this, new PropertyChangedEventArgs(memberExpression.Member.Name));
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

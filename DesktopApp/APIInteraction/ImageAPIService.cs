@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DesktopApp.APIInteraction
 {
-    public class ImageAPIService
+    public class ImageAPIService: IImageAPIService
     {
         public async Task<string> UploadImage(string path)
         {

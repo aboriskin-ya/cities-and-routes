@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Autofac;
+using DesktopApp.Dialogs;
+using DesktopApp.ViewModels;
 using System.Windows;
 
 namespace DesktopApp
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
+
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            var container = RegisterServices.Configure();
+
+            var model = container.Resolve<MainWindowViewModel>();
+            var view = new MainWindow { DataContext = model };
+            view.Show();
+        }
     }
 }
