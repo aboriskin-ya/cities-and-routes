@@ -1,16 +1,19 @@
 ﻿using DesktopApp.APIInteraction;
 using DesktopApp.Service;
+using DesktopApp.ViewModels;
+using System.Configuration;
 using System.Windows;
 
-namespace DesktopApp
+namespace DesktopApp.Dialogs
 {
     public partial class CreateMapDialog : Window
     {
         public CreateMapDialog()
         {
             InitializeComponent();
-            DataContext = new CreateMapViewModel(new MessageBoxService());
-            APIClient.InitializeClient("http://localhost:54877/");
+
+            string url = ConfigurationManager.AppSettings["baseApiUrl"];
+            APIClient.InitializeClient(url);
         }
     }
 }
