@@ -62,17 +62,17 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Map", x => x.Id);
+                    table.PrimaryKey("PK_Route", x => x.Id);
                     table.ForeignKey(
                         name: "FK1",
                         column: x => x.FirstCityId,
-                        principalTable: "Map",
+                        principalTable: "FirstCityId",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK2",
                         column: x => x.SecondCityId,
-                        principalTable: "Map",
+                        principalTable: "SecondCityId",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -106,6 +106,9 @@ namespace Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "Image");
+
+            migrationBuilder.DropTable(
+                name: "Route");
         }
     }
 }

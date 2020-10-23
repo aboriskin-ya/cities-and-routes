@@ -25,5 +25,13 @@ namespace DataAccess.Models
             FirstCityId = dto.FirstCityId;
             SecondCityId = dto.SecondCityId;
         }
+
+        public void Update(RouteDTO dto)
+        {
+            Distance = dto.Distance;
+            MapId = dto.MapId;
+            FirstCityId = dto.FirstCityId;
+            SecondCityId = dto.SecondCityId;
+        }
     }
 }

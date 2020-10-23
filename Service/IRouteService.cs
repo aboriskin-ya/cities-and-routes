@@ -9,7 +9,7 @@ namespace Service
     {
         IEnumerable<Route> GetRoute();
         Route GetRoute(Guid id);
-        void CreateRoute(Route route);
-        Route UpdateRoute(Route route);
+        void CreateRoute(RouteDTO dto);
+        Route UpdateRoute(RouteDTO dto);
     }
 }

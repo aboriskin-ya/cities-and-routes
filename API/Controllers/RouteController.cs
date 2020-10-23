@@ -29,7 +29,6 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-
             return Ok(RouteList);
         }
 
@@ -42,7 +41,6 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-
             return route;
         }
 
@@ -52,7 +50,7 @@ namespace API.Controllers
             try
             {
                 Route route = new Route(dto);
-                _routeservice.CreateRoute(route);
+                _routeservice.CreateRoute(dto);
                 return route;
             }
             catch (Exception ex)
@@ -68,11 +66,8 @@ namespace API.Controllers
             try
             {
                 Route route = _routeservice.GetRoute(id);
-                route.Distance = dto.Distance;
-                route.MapId = dto.MapId;
-                route.FirstCityId = dto.FirstCityId;
-                route.SecondCityId = dto.SecondCityId;
-                _routeservice.UpdateRoute(route);
+                route.Update(dto);
+                _routeservice.UpdateRoute(dto);
                 return route;
             }
             catch (Exception ex)

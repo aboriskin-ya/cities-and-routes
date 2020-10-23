@@ -28,14 +28,16 @@ namespace Service
             return _repository.Get(id);
         }
 
-        public void CreateRoute(Route route)
+        public void CreateRoute(RouteDTO dto)
         {
+            Route route = new Route(dto);
             _repository.Add(route);
             _context.SaveChanges();
         }
 
-        public Route UpdateRoute(Route route)
+        public Route UpdateRoute(RouteDTO dto)
         {
+            Route route = new Route(dto);
             route = _repository.Update(route);
             _context.SaveChanges();
             return route;
