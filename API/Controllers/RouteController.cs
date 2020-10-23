@@ -12,18 +12,18 @@ namespace API.Controllers
     [ApiController]
     public class RouteController : ControllerBase
     {
-        private readonly IRouteService _Routeservice;
+        private readonly IRouteService _routeservice;
 
         public RouteController(IRouteService Routeservice)
         {
-            _Routeservice = Routeservice;
+            _routeservice = Routeservice;
         }
 
         [HttpGet]
         [Route("getall")]
         public IActionResult GetRoute()
         {
-            IEnumerable<Route> RouteList = _Routeservice.GetRoute();
+            IEnumerable<Route> RouteList = _routeservice.GetRoute();
 
             if (RouteList.Count() == 0)
             {
@@ -37,7 +37,7 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public ActionResult<Route> GetRoute(Guid id)
         {
-            Route route = _Routeservice.GetRoute(id);
+            Route route = _routeservice.GetRoute(id);
             if (route == null)
             {
                 return NotFound();
@@ -51,12 +51,8 @@ namespace API.Controllers
         {
             try
             {
-                Route route = new Route();
-                route.Distance = dto.Distance;
-                route.MapId = dto.MapId;
-                route.FirstCityId = dto.FirstCityId;
-                route.SecondCityId = dto.SecondCityId;
-                _Routeservice.CreateRoute(route);
+                Route route = new Route(dto);
+                _routeservice.CreateRoute(route);
                 return route;
             }
             catch (Exception ex)
@@ -71,12 +67,12 @@ namespace API.Controllers
         {
             try
             {
-                Route route = _Routeservice.GetRoute(id);
+                Route route = _routeservice.GetRoute(id);
                 route.Distance = dto.Distance;
                 route.MapId = dto.MapId;
                 route.FirstCityId = dto.FirstCityId;
                 route.SecondCityId = dto.SecondCityId;
-                _Routeservice.UpdateRoute(route);
+                _routeservice.UpdateRoute(route);
                 return route;
             }
             catch (Exception ex)
