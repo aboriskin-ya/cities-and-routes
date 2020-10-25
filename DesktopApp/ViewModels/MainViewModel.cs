@@ -9,7 +9,7 @@ namespace DesktopApp.ViewModels
 {
     internal class MainViewModel:BaseViewModel
     {
-        internal MainViewModel()
+        public MainViewModel()
         {
             MapImageSource = new BitmapImage(new Uri("/Resources/Maps/mapOfRussia.jpg", UriKind.Relative));
         }
@@ -37,10 +37,17 @@ namespace DesktopApp.ViewModels
         private void OnZoomExecuted(object p)
         {
             if (double.TryParse(p.ToString(), out double scale))
-                ScaleValue *= scale;
+            {
+                switch (scale)
+                {
+                    case 2:if (ScaleValue >= 1 && ScaleValue < 16) ScaleValue *= scale;break;
+                    case 0.5: if (ScaleValue > 1 && ScaleValue <= 16) ScaleValue *= scale; break;
+                }
+            }
+               
         }
 
-        private bool OnCanZoomExecute(object p) => ( ScaleValue < 1.0  || ScaleValue >= 16.0) ? false : true;
+        private bool OnCanZoomExecute(object p) => true;
         #endregion
 
         #region NavigateCommand
@@ -51,23 +58,8 @@ namespace DesktopApp.ViewModels
             OffsetValue = (Point)p;
         }
 
-        private bool OnCanNavigateExecute(object p)
-        {
-            MousePosition = (Point)p;
-            if (MousePosition.X <= 1.0 && MousePosition.X >= 0 && MousePosition.Y <= 1.0 && MousePosition.Y >= 0) return true;
-            else
-            {
-                switch (MousePosition)
-                {
-                    case Point i when i.X < 0: MousePosition = new Point(0, MousePosition.Y); break;
-                    case Point i when i.Y < 0: MousePosition = new Point(MousePosition.X, 0); break;
-                    case Point i when i.X > 1: MousePosition = new Point(1, MousePosition.Y); break;
-                    case Point i when i.Y > 1: MousePosition = new Point(MousePosition.X, 1); break;
-                    default:return true;
-                }
-            }
-            return false;
-        }
+        private bool OnCanNavigateExecute(object p) => true;
+        
         #endregion
 
         #region OffsetValue
@@ -80,13 +72,13 @@ namespace DesktopApp.ViewModels
 
         #endregion
 
-        #region MousePosition
-        private Point _MousePosition = new Point(0.5, 0.5);
+        #region TransformPosition
+        private Point _TransformPosition = new Point(0.5, 0.5);
 
-        public Point MousePosition
+        public Point TransformPosition
         {
-            get => _MousePosition;
-            set => Set<Point>(ref _MousePosition, value);
+            get => _TransformPosition;
+            set => Set<Point>(ref _TransformPosition, value);
         }
         #endregion
     }

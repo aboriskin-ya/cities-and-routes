@@ -1,4 +1,5 @@
 ﻿using Accessibility;
+using DesktopApp.Services.Helper;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -20,14 +21,16 @@ namespace DesktopApp.UserControllers
     /// </summary>
     public partial class MapControl : UserControl
     {
-        private Vector _RelativeCurrentPosition;
+        private Vector _RelativeTransformPosition;
         private Vector _RelativeOffsetValue;
+
         public MapControl()
         {
             InitializeComponent();
-            _RelativeCurrentPosition = new Vector();
-            _RelativeCurrentPosition.X += CurrentPosition.X;
-            _RelativeCurrentPosition.Y += CurrentPosition.Y;
+            TransformPosition = new Point(0.5, 0.5);
+            _RelativeTransformPosition = new Vector();
+            _RelativeTransformPosition.X += TransformPosition.X;
+            _RelativeTransformPosition.Y += TransformPosition.Y;
             this.MouseDown += MapControl_MouseDown;
             this.MouseWheel += MapControl_MouseWheel;
             SetBinding(ZoomCommandProperty, new Binding("ZoomCommand"));
@@ -36,27 +39,20 @@ namespace DesktopApp.UserControllers
 
         private void MapControl_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            var point = e.GetPosition(this);
-            if (_RelativeCurrentPosition.X < e.GetPosition(this).X / ActualHeight )
-            {
-                _RelativeCurrentPosition.X += e.GetPosition(this).X / ActualHeight ;
-            }
-            else _RelativeCurrentPosition.X -= e.GetPosition(this).X / ActualHeight ;
-            if (_RelativeCurrentPosition.Y < e.GetPosition(this).Y / ActualWidth )
-            {
-                _RelativeCurrentPosition.Y += e.GetPosition(this).Y / ActualWidth ;
-            }
-            else _RelativeCurrentPosition.Y -= e.GetPosition(this).Y / ActualWidth ;
-            CurrentPosition = Vector.Add(_RelativeCurrentPosition, new Point());
             if (e.Delta > 0)
             {
-                if (ScaleValue >= 1 && ScaleValue < 16) ZoomCommand.Execute(2);
-                
+                if (ScaleValue >= 1 && ScaleValue < 16) ZoomCommand.Execute(2); 
             }
-            else
-                if (ScaleValue > 1 && ScaleValue <= 16) ZoomCommand.Execute(0.5);
+            else {
+
+                if (ScaleValue > 1 && ScaleValue <= 16)
+                {
+                    ZoomCommand.Execute(0.5);
+                }
+            }
         }
 
+        #region DragActions
         private void MapControl_MouseDown(object sender, MouseButtonEventArgs e)
         {
             _RelativeOffsetValue = e.GetPosition(this) - new Point();
@@ -68,33 +64,31 @@ namespace DesktopApp.UserControllers
         private void MapControl_MouseUp(object sender, MouseButtonEventArgs e)
         {
             FinishDrag(e);
-            Mouse.Capture(null);
         }
         private void UpdatePosition(MouseEventArgs e)
         {
-            if (NavigateCommand.CanExecute(CurrentPosition))
             NavigateCommand.Execute(e.GetPosition(this) - _RelativeOffsetValue);
         }
         private void FinishDrag(MouseEventArgs e)
         {
             UpdatePosition(e);
+            TransformPosition = MapHelper.GetRelativeCurrentPosition(OffsetValue, ActualHeight, ActualWidth, ScaleValue,out _RelativeTransformPosition);
+            OffsetValue = default;
             this.MouseMove -= MapControl_MouseMove;
             this.LostMouseCapture -= MapControl_LostMouseCapture;
             this.MouseUp -= MapControl_MouseUp;
-            _RelativeCurrentPosition.X -= (OffsetValue.X / ActualWidth) / ScaleValue;
-            _RelativeCurrentPosition.Y -= (OffsetValue.Y / ActualHeight) / ScaleValue;
-            CurrentPosition = Vector.Add(_RelativeCurrentPosition, new Point());
-            OffsetValue = default;
             Mouse.Capture(null);
         }
         private void MapControl_LostMouseCapture(object sender, MouseEventArgs e)
         {
+            Mouse.Capture(null);
             FinishDrag(e);
         }
         private void MapControl_MouseMove(object sender, MouseEventArgs e)
         {
             UpdatePosition(e);
         }
+        #endregion
 
         #region ImageSource
         public ImageSource MapImageSource
@@ -128,15 +122,16 @@ namespace DesktopApp.UserControllers
         public static readonly DependencyProperty OffsetValueProperty =
             DependencyProperty.Register("OffsetValue", typeof(Point), typeof(MapControl), new PropertyMetadata(new Point(0,0)));
         #endregion
-        #region CurrentPosition
-        public Point CurrentPosition
+
+        #region TransformPosition
+        public Point TransformPosition
         {
-            get { return (Point)GetValue(CurrentPositionProperty); }
-            set { SetValue(CurrentPositionProperty, value); }
+            get { return (Point)GetValue(TransformPositionProperty); }
+            set { SetValue(TransformPositionProperty, value); }
         }
 
-        public static readonly DependencyProperty CurrentPositionProperty =
-            DependencyProperty.Register("CurrentPosition", typeof(Point), typeof(MapControl));
+        public static readonly DependencyProperty TransformPositionProperty =
+            DependencyProperty.Register("TransformPosition", typeof(Point), typeof(MapControl));
         #endregion
 
         #region NavigateCommand

@@ -25,15 +25,13 @@
                     <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Grid.Row="0"/>
-                <TextBox Text="{Binding MousePosition}" Grid.Column="1" Grid.Row="0"/>
             </Grid>
         </DockPanel>
         <DockPanel DockPanel.Dock="Top">
-            <uc:MapControl OffsetValue="{Binding OffsetValue,Mode=TwoWay}"
+            <uc:MapControl OffsetValue="{Binding OffsetValue, Mode=TwoWay}"
                            ScaleValue="{Binding ScaleValue,Mode=TwoWay}"
                            MapImageSource="{Binding MapImageSource}"
-                           CurrentPosition="{Binding MousePosition}"
+                           TransformPosition="{Binding TransformPosition,Mode=TwoWay}"
                            />
         </DockPanel>
     </DockPanel>
