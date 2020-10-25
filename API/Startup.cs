@@ -33,8 +33,10 @@ namespace API
             });
             services.AddScoped(typeof(IMapRepository), typeof(MapRepository));
             services.AddScoped(typeof(IImageRepository), typeof(ImageRepository));
+            services.AddScoped(typeof(ICityRepository), typeof(CityRepository));
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<IMapService, MapService>();
+            services.AddTransient<ICityService, CityService>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
