@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DataAccess.Models;
 using Service;
+using AutoMapper;
 
 namespace API.Controllers
 {
@@ -13,10 +14,12 @@ namespace API.Controllers
     public class RouteController : ControllerBase
     {
         private readonly IRouteService _routeservice;
+        private readonly IMapper _mapper;
 
-        public RouteController(IRouteService Routeservice)
+        public RouteController(IRouteService Routeservice, IMapper Mapper)
         {
             _routeservice = Routeservice;
+            _mapper = Mapper;
         }
 
         [HttpGet]
@@ -49,7 +52,7 @@ namespace API.Controllers
         {
             try
             {
-                Route route = new Route(dto);
+                Route route = _mapper.Map<Route>(dto);
                 _routeservice.CreateRoute(dto);
                 return route;
             }
@@ -66,7 +69,7 @@ namespace API.Controllers
             try
             {
                 Route route = _routeservice.GetRoute(id);
-                route.Update(dto);
+                _mapper.Map<RouteDTO, Route>(dto, route);
                 _routeservice.UpdateRoute(dto);
                 return route;
             }
