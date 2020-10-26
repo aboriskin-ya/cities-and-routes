@@ -64,8 +64,7 @@ namespace API.Controllers
         {
             try
             {
-                Route route = _routeservice.GetRoute(id);
-                return _routeservice.UpdateRoute(dto, route);           
+                return _routeservice.UpdateRoute(dto, id);           
             }
             catch (Exception ex)
             {
