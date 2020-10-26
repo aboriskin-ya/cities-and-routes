@@ -1,5 +1,5 @@
 ﻿using DataAccess.Models;
-using Repository.Storages;
+using Repository.Storage;
 using Repository;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ namespace Service
 {
     public class MapService : IMapService
     {
-        private IMapRepository _repository;
+        private readonly IMapRepository _repository;
         protected readonly CityRouteContext _context;
 
         public MapService(IMapRepository repository, CityRouteContext context)

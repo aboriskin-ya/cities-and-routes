@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DataAccess.DTO;
 using DataAccess.Models;
 
 namespace DataAccess.Mapper
@@ -8,6 +9,7 @@ namespace DataAccess.Mapper
         public AutoMapperProfile()
         {
             CreateMap<MapDTO, Map>();
+            CreateMap<SettingsDTO, Settings>();
         }
     }
 }

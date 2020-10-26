@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataAccess.Models
+namespace DataAccess.DTO
 {
     public class MapDTO
     {

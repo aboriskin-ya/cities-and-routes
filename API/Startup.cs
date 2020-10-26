@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Repository;
 using Microsoft.EntityFrameworkCore;
 using Service;
-using Repository.Storages;
+using Repository.Storage;
 using System;
 using AutoMapper;
 
@@ -33,8 +33,12 @@ namespace API
             });
             services.AddScoped(typeof(IMapRepository), typeof(MapRepository));
             services.AddScoped(typeof(IImageRepository), typeof(ImageRepository));
+            services.AddScoped(typeof(ISettingsRepository), typeof(SettingsRepository));
+
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<IMapService, MapService>();
+            services.AddTransient<ISettingsService, SettingsService>();
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 

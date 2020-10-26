@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Repository.Storages
+namespace Repository.Storage
 {
     public class ImageRepository : Repository<Image>, IImageRepository
     {

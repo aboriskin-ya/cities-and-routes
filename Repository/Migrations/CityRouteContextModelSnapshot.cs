@@ -75,7 +75,7 @@ namespace Repository.Migrations
                     b.HasOne("DataAccess.Models.Image", "Image")
                         .WithMany()
                         .HasForeignKey("ImageId")
-                        .HasConstraintName("FK1")
+                        .HasConstraintName("FK_ImageMap")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

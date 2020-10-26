@@ -6,6 +6,7 @@ using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Service;
 using AutoMapper;
+using DataAccess.DTO;
 
 namespace API.Controllers
 {
