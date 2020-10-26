@@ -14,12 +14,10 @@ namespace API.Controllers
     public class RouteController : ControllerBase
     {
         private readonly IRouteService _routeservice;
-        private readonly IMapper _mapper;
 
-        public RouteController(IRouteService Routeservice, IMapper Mapper)
+        public RouteController(IRouteService Routeservice)
         {
             _routeservice = Routeservice;
-            _mapper = Mapper;
         }
 
         [HttpGet]
@@ -52,9 +50,7 @@ namespace API.Controllers
         {
             try
             {
-                Route route = _mapper.Map<Route>(dto);
-                _routeservice.CreateRoute(dto);
-                return route;
+                return _routeservice.CreateRoute(dto);
             }
             catch (Exception ex)
             {
@@ -69,9 +65,7 @@ namespace API.Controllers
             try
             {
                 Route route = _routeservice.GetRoute(id);
-                _mapper.Map<RouteDTO, Route>(dto, route);
-                _routeservice.UpdateRoute(dto);
-                return route;
+                return _routeservice.UpdateRoute(dto, route);           
             }
             catch (Exception ex)
             {
