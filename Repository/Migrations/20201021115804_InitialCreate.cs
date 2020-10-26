@@ -46,7 +46,7 @@ namespace Repository.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Map_ImageId",
                 table: "Map",
-                column: "ImageId");
+                column: "ImageId");     
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

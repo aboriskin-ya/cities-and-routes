@@ -8,6 +8,7 @@ namespace DataAccess.Mapper
         public AutoMapperProfile()
         {
             CreateMap<MapDTO, Map>();
+            CreateMap<RouteDTO, Route>();
         }
     }
 }
