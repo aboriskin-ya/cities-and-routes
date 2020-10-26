@@ -11,6 +11,6 @@ namespace Service
         IEnumerable<Route> GetRoute();
         Route GetRoute(Guid id);
         Route CreateRoute(RouteDTO dto);
-        Route UpdateRoute(RouteDTO dto, Route route);
+        Route UpdateRoute(RouteDTO dto, Guid id);
     }
 }

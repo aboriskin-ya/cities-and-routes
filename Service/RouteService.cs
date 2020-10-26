@@ -39,8 +39,9 @@ namespace Service
             return route;
         }
 
-        public Route UpdateRoute(RouteDTO dto, Route route)
+        public Route UpdateRoute(RouteDTO dto, Guid id)
         {
+            Route route = _repository.Get(id);
             _mapper.Map<RouteDTO, Route>(dto, route);
             route = _repository.Update(route);
             _context.SaveChanges();
