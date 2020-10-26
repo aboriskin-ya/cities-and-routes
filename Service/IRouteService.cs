@@ -1,4 +1,5 @@
-﻿using DataAccess.Models;
+﻿using AutoMapper;
+using DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,7 +10,7 @@ namespace Service
     {
         IEnumerable<Route> GetRoute();
         Route GetRoute(Guid id);
-        void CreateRoute(RouteDTO dto);
-        Route UpdateRoute(RouteDTO dto);
+        Route CreateRoute(RouteDTO dto);
+        Route UpdateRoute(RouteDTO dto, Route route);
     }
 }
