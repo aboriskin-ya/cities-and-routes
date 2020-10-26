@@ -1,17 +1,16 @@
-﻿using DataAccess.Models;
+﻿using DataAccess.DTO;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Service
 {
     public interface ISettingsService
     {
-        IEnumerable<Settings> GetSettings();
-        Settings GetSettings(Guid id);
-        Map GetMap(Guid id);
-        void CreateSettings(Settings settings);
-        Settings UpdateSettings(Settings settings);
+        IEnumerable<SettingsDTO> GetSettings();
+        SettingsDTO GetSettings(Guid id);
+        SettingsDTO GetSettingsOfMap(Guid id);
+        void CreateSettings(SettingsDTO settingsDTO);
+        SettingsDTO UpdateSettings(SettingsDTO settingsDTO);
         bool DeleteSettings(Guid id);
     }
 }

@@ -1,4 +1,6 @@
-﻿using DataAccess.Models;
+﻿using AutoMapper;
+using DataAccess.DTO;
+using DataAccess.Models;
 using Repository;
 using Repository.Storage;
 using System;
@@ -11,15 +13,17 @@ namespace Service
     {
         private readonly ISettingsRepository _repository;
         private readonly CityRouteContext _context;
-
-        public SettingsService(ISettingsRepository repository, CityRouteContext context)
+        private readonly IMapper _mapper;
+        public SettingsService(ISettingsRepository repository, CityRouteContext context, IMapper mapper)
         {
             _repository = repository;
             _context = context;
+            _mapper = mapper;
         }
 
-        public void CreateSettings(Settings settings)
+        public void CreateSettings(SettingsDTO settingsDTO)
         {
+            Settings settings = _mapper.Map<Settings>(settingsDTO);
             _repository.Add(settings);
             _context.SaveChanges();
         }
@@ -32,24 +36,26 @@ namespace Service
             return flag;
         }
 
-        public Map GetMap(Guid id)
+        public SettingsDTO GetSettingsOfMap(Guid id)
         {
-            return _repository.GetMap(id);
+            return _mapper.Map<Settings, SettingsDTO>(_repository.GetSettingsOfMap(id));
         }
 
-        public IEnumerable<Settings> GetSettings()
+        public IEnumerable<SettingsDTO> GetSettings()
         {
-            return _repository.GetAll();
+            return _mapper.Map <IEnumerable<Settings>, IEnumerable<SettingsDTO>>(_repository.GetAll());
         }
 
-        public Settings GetSettings(Guid id)
+        public SettingsDTO GetSettings(Guid id)
         {
-            return _repository.Get(id);
+            return _mapper.Map<Settings, SettingsDTO>(_repository.Get(id));
         }
 
-        public Settings UpdateSettings(Settings settings)
+        public SettingsDTO UpdateSettings(SettingsDTO settingsDTO)
         {
-            return _repository.Update(settings);
+            Settings settings = _mapper.Map<Settings>(settingsDTO);
+            _repository.Update(settings);
+            return settingsDTO;
         }
     }
 }

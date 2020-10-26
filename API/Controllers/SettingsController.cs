@@ -14,19 +14,16 @@ namespace API.Controllers
     public class SettingsController : ControllerBase
     {
         private readonly ISettingsService _service;
-        private readonly IMapper _mapper;
-
-        public SettingsController(ISettingsService service, IMapper mapper)
+        public SettingsController(ISettingsService service)
         {
             _service = service;
-            _mapper = mapper;
         }
 
         [HttpGet]
         [Route("getall")]
         public ActionResult Get()
         {
-            IEnumerable<Settings> settings = _service.GetSettings();
+            IEnumerable<SettingsDTO> settings = _service.GetSettings();
 
             if (settings.Count() == 0)
             {
@@ -38,9 +35,9 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("{id:guid}")]
-        public ActionResult<Settings> Get(Guid id)
+        public ActionResult<SettingsDTO> Get(Guid id)
         {
-            Settings settings = _service.GetSettings(id);
+            SettingsDTO settings = _service.GetSettings(id);
 
             if (settings == null)
             {
@@ -52,26 +49,25 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("~/map/{id:guid}/settings")]
-        public ActionResult<Map> GetMap(Guid id)
+        public ActionResult<SettingsDTO> GetMap(Guid id)
         {
-            Map map = _service.GetMap(id);
+            SettingsDTO settings = _service.GetSettingsOfMap(id);
 
-            if (map == null)
+            if (settings == null)
             {
                 return NotFound();
             }
 
-            return map;
+            return settings;
         }
 
         [HttpPost]
-        public ActionResult<Settings> Post([FromBody] SettingsDTO settingsDTO)
+        public ActionResult<SettingsDTO> Post([FromBody] SettingsDTO settingsDTO)
         {
             try
             {
-                Settings settings = _mapper.Map<Settings>(settingsDTO);
-                _service.CreateSettings(settings);
-                return settings;
+                _service.CreateSettings(settingsDTO);
+                return settingsDTO;
             }
             catch (Exception ex)
             {
@@ -81,13 +77,11 @@ namespace API.Controllers
 
         [HttpPut]
         [Route("{id:guid}")]
-        public ActionResult<Settings> Put(Guid id, [FromBody] SettingsDTO settingsDTO)
+        public ActionResult<SettingsDTO> Put(Guid id, [FromBody] SettingsDTO settingsDTO)
         {
             try
             {
-                Settings settings = _service.GetSettings(id);
-
-                _mapper.Map(settingsDTO, settings);
+                SettingsDTO settings = _service.GetSettings(id);
 
                 _service.UpdateSettings(settings);
                 return settings;

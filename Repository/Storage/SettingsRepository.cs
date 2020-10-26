@@ -10,13 +10,10 @@ namespace Repository.Storage
         public SettingsRepository(CityRouteContext context): base(context)
         { }
 
-        public Map GetMap(Guid id)
+        public Settings GetSettingsOfMap(Guid id)
         {
             return _entity
-                .Include(s => s.Map)
-                    .ThenInclude(m => m.Image)
                 .Where(s => s.MapId == id)
-                .Select(s => s.Map)
                 .FirstOrDefault();
         }
     }

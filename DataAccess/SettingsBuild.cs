@@ -16,7 +16,7 @@ namespace DataAccess
             entityBuilder.Property(s => s.EdgeSize).IsRequired();
             entityBuilder.Property(s => s.EdgeColor).IsRequired();
             
-            entityBuilder.HasOne(s => s.Map).WithMany().HasForeignKey("MapId").HasConstraintName("FK_MapSettings");
+            entityBuilder.HasOne(s => s.Map).WithMany().HasForeignKey("MapId");
         }
     }
 }

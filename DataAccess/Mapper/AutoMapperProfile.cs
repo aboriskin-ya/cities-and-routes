@@ -9,7 +9,7 @@ namespace DataAccess.Mapper
         public AutoMapperProfile()
         {
             CreateMap<MapDTO, Map>();
-            CreateMap<SettingsDTO, Settings>();
+            CreateMap<Settings, SettingsDTO>();
         }
     }
 }

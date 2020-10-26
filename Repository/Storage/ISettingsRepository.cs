@@ -5,6 +5,6 @@ namespace Repository.Storage
 {
     public interface ISettingsRepository: IRepository<Settings> 
     {
-        Map GetMap(Guid id);
+        Settings GetSettingsOfMap(Guid id);
     }
 }
