@@ -1,17 +1,17 @@
 ﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
+using Repository.Storage;
 using System;
 using System.Linq;
 
-namespace Repository.Storage
+namespace Repository.Storages
 {
-    public class RouteRepository : Repository<Route>, IRouteRepository
+    public class CityRepository : Repository<City>, ICityRepository
     {
-        public RouteRepository(CityRouteContext context) : base(context)
+        public CityRepository(CityRouteContext context) : base(context)
         {
         }
-
-        public new Route Get(Guid id)
+        public new City Get(Guid id)
         {
             return _entity.Include(p => p.Map).SingleOrDefault(p => p.Id == id);
         }
