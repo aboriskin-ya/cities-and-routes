@@ -3,9 +3,47 @@
                     xmlns:fa="http://schemas.fontawesome.com/icons/">
 
     <ControlTemplate x:Key="ScalePlus" TargetType="Button">
-        <fa:ImageAwesome Icon="Solid_Plus" Margin="8" Foreground="Green"/>
+        <fa:ImageAwesome Icon="Solid_Plus" Foreground="Green"  Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsPressed" Value="true">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Duration="0:0:0.3" From="40" To="35" Storyboard.TargetProperty="Height"/>
+                            <DoubleAnimation Duration="0:0:0.3" From="40" To="35" Storyboard.TargetProperty="Width"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Duration="0:0:0.3" From="35" To="40" Storyboard.TargetProperty="Height"/>
+                            <DoubleAnimation Duration="0:0:0.3" From="35" To="40" Storyboard.TargetProperty="Width"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+        </ControlTemplate.Triggers>
     </ControlTemplate>
     <ControlTemplate x:Key="ScaleMinus" TargetType="Button">
-        <fa:ImageAwesome Icon="Solid_Minus" Margin="8" Foreground="Red"/>
+        <fa:ImageAwesome Icon="Solid_Minus" Margin="8" Foreground="Red"  Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsPressed" Value="true">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Duration="0:0:0.3" From="60" To="38" Storyboard.TargetProperty="Width"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Duration="0:0:0.3" From="38" To="60" Storyboard.TargetProperty="Width"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+        </ControlTemplate.Triggers>
     </ControlTemplate>
 </ResourceDictionary>

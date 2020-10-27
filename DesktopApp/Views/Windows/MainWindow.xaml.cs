@@ -3,11 +3,8 @@ using System;
 using System.Windows;
 using System.Windows.Input;
 
-namespace DesktopApp
-{
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+namespace DesktopApp 
+{ 
     public partial class MainWindow : Window
     {
         public MainWindow()

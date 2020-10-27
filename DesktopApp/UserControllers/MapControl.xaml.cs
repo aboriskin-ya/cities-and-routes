@@ -1,29 +1,19 @@
-﻿using Accessibility;
-using DesktopApp.Services.Helper;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using DesktopApp.Services.Helper;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DesktopApp.UserControllers
 {
-    /// <summary>
-    /// Логика взаимодействия для MaoControl.xaml
-    /// </summary>
     public partial class MapControl : UserControl
     {
+        #region fields
         private Vector _RelativeTransformPosition;
         private Vector _RelativeOffsetValue;
-
+        #endregion
         public MapControl()
         {
             InitializeComponent();
@@ -41,7 +31,11 @@ namespace DesktopApp.UserControllers
         {
             if (e.Delta > 0)
             {
-                if (ScaleValue >= 1 && ScaleValue < 16) ZoomCommand.Execute(2); 
+                if (ScaleValue >= 1 && ScaleValue < 16)
+                {
+                    ZoomCommand.Execute(2);
+                   
+                }
             }
             else {
 
@@ -50,16 +44,21 @@ namespace DesktopApp.UserControllers
                     ZoomCommand.Execute(0.5);
                 }
             }
+            PPW = ImageWidth / ActualWidth;
+            PPH = ImageHeight / ActualHeight;
         }
 
         #region DragActions
         private void MapControl_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            PPW = ImageWidth / ActualWidth;
+            PPH = ImageHeight / ActualHeight;
             _RelativeOffsetValue = e.GetPosition(this) - new Point();
             this.MouseMove += MapControl_MouseMove;
             this.LostMouseCapture += MapControl_LostMouseCapture;
             this.MouseUp += MapControl_MouseUp;
             Mouse.Capture(this);
+            this.Cursor = Cursors.Hand;
         }
         private void MapControl_MouseUp(object sender, MouseButtonEventArgs e)
         {
@@ -72,12 +71,13 @@ namespace DesktopApp.UserControllers
         private void FinishDrag(MouseEventArgs e)
         {
             UpdatePosition(e);
-            TransformPosition = MapHelper.GetRelativeCurrentPosition(OffsetValue, ActualHeight, ActualWidth, ScaleValue,out _RelativeTransformPosition);
+            TransformPosition = MapHelper.GetRelativeCurrentPosit1ion(OffsetValue, ActualHeight, ActualWidth, ScaleValue, out _RelativeTransformPosition);
             OffsetValue = default;
             this.MouseMove -= MapControl_MouseMove;
             this.LostMouseCapture -= MapControl_LostMouseCapture;
             this.MouseUp -= MapControl_MouseUp;
             Mouse.Capture(null);
+            this.Cursor = null;
         }
         private void MapControl_LostMouseCapture(object sender, MouseEventArgs e)
         {
@@ -123,6 +123,51 @@ namespace DesktopApp.UserControllers
             DependencyProperty.Register("OffsetValue", typeof(Point), typeof(MapControl), new PropertyMetadata(new Point(0,0)));
         #endregion
 
+        #region Offset
+
+
+        public Offset Offset
+        {
+            get { return (Offset)GetValue(OffsetProperty); }
+            set { SetValue(OffsetProperty, value); }
+        }
+
+        public static readonly DependencyProperty OffsetProperty =
+            DependencyProperty.Register("Offset", typeof(Offset), typeof(MapControl));
+
+
+
+
+        #endregion
+
+        #region ImageHeight
+
+
+        public double ImageHeight
+        {
+            get { return (double)GetValue(ImageHeightProperty); }
+            set { SetValue(ImageHeightProperty, value); }
+        }
+        public static readonly DependencyProperty ImageHeightProperty =
+            DependencyProperty.Register("ImageHeight", typeof(double), typeof(MapControl));
+
+
+        #endregion
+
+        #region ImageWidth
+
+
+        public double ImageWidth
+        {
+            get { return (double)GetValue(ImageWidthProperty); }
+            set { SetValue(ImageWidthProperty, value); }
+        }
+        public static readonly DependencyProperty ImageWidthProperty =
+            DependencyProperty.Register("ImageWidth", typeof(double), typeof(MapControl));
+
+
+        #endregion
+
         #region TransformPosition
         public Point TransformPosition
         {
@@ -156,6 +201,36 @@ namespace DesktopApp.UserControllers
 
         public static readonly DependencyProperty ZoomCommandProperty =
             DependencyProperty.Register("ZoomCommand", typeof(ICommand), typeof(MapControl));
+
+
+        #endregion
+
+        #region PixelPerWidth
+
+
+        public double PPW
+        {
+            get { return (double)GetValue(PPWProperty); }
+            set { SetValue(PPWProperty, value); }
+        }
+
+        public static readonly DependencyProperty PPWProperty =
+            DependencyProperty.Register("PPW", typeof(double), typeof(MapControl));
+
+
+        #endregion
+
+        #region PixelPerHeight
+
+
+        public double PPH
+        {
+            get { return (double)GetValue(PPHProperty); }
+            set { SetValue(PPHProperty, value); }
+        }
+
+        public static readonly DependencyProperty PPHProperty =
+            DependencyProperty.Register("PPH", typeof(double), typeof(MapControl));
 
 
         #endregion
