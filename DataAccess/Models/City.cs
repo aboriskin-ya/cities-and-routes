@@ -1,10 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccess.Models
 {
-    public class City: BaseEntity
+    public class City : BaseEntity
     {
         [Required]
         public string Name { get; set; }

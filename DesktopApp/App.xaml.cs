@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using DesktopApp.Dialogs;
 using DesktopApp.ViewModels;
 using System.Windows;
 

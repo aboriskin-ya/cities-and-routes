@@ -1,5 +1,4 @@
 ﻿using DataAccess.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DataAccess
@@ -15,7 +14,7 @@ namespace DataAccess
             entityBuilder.Property(s => s.VertexColor).IsRequired();
             entityBuilder.Property(s => s.EdgeSize).IsRequired();
             entityBuilder.Property(s => s.EdgeColor).IsRequired();
-            
+
             entityBuilder.HasOne(s => s.Map).WithMany().HasForeignKey("MapId");
         }
     }

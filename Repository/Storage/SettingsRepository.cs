@@ -1,13 +1,12 @@
 ﻿using DataAccess.Models;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
 namespace Repository.Storage
 {
-    public class SettingsRepository: Repository<Settings>, ISettingsRepository
+    public class SettingsRepository : Repository<Settings>, ISettingsRepository
     {
-        public SettingsRepository(CityRouteContext context): base(context)
+        public SettingsRepository(CityRouteContext context) : base(context)
         { }
 
         public Settings GetSettingsOfMap(Guid id)

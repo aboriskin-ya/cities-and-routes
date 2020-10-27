@@ -2,11 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Repository.Storages
-{ 
+namespace Repository.Storage
+{
     public class RouteRepository : Repository<Route>, IRouteRepository
     {
         public RouteRepository(CityRouteContext context) : base(context)

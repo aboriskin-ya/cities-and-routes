@@ -20,7 +20,7 @@ namespace Service
         public void CreateMap(Map map)
         {
             _repository.Add(map);
-             _context.SaveChanges();
+            _context.SaveChanges();
         }
 
         public IEnumerable<Map> GetMap()

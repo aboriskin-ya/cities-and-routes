@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DataAccess.Models;
 using Service;
-using AutoMapper;
 
 namespace API.Controllers
 {
@@ -64,7 +62,7 @@ namespace API.Controllers
         {
             try
             {
-                return _routeservice.UpdateRoute(dto, id);           
+                return _routeservice.UpdateRoute(dto, id);
             }
             catch (Exception ex)
             {

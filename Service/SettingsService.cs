@@ -5,7 +5,6 @@ using Repository;
 using Repository.Storage;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Service
 {
@@ -43,7 +42,7 @@ namespace Service
 
         public IEnumerable<SettingsDTO> GetSettings()
         {
-            return _mapper.Map <IEnumerable<Settings>, IEnumerable<SettingsDTO>>(_repository.GetAll());
+            return _mapper.Map<IEnumerable<Settings>, IEnumerable<SettingsDTO>>(_repository.GetAll());
         }
 
         public SettingsDTO GetSettings(Guid id)

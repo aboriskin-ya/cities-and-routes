@@ -1,6 +1,5 @@
 ﻿using DesktopApp.Service;
 using DesktopApp.APIInteraction;
-using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.IO;
@@ -28,7 +27,7 @@ namespace DesktopApp.ViewModels
             InitializeProperties();
 
             CreateCommand = new RelayCommand(
-                p => CreateNewMap(), 
+                p => CreateNewMap(),
                 b => { return !string.IsNullOrEmpty(MapName) && IsAvailableForDownload; });
         }
 
@@ -63,7 +62,7 @@ namespace DesktopApp.ViewModels
             {
                 mapName = value;
                 FirePropertyChanged(p => p.MapName);
-            }            
+            }
         }
 
         public ICommand CreateCommand { get; }
@@ -88,7 +87,7 @@ namespace DesktopApp.ViewModels
             {
                 _messageBoxService.ShowError(ex, ex.Message);
             }
-            
+
         }
 
         public void DragOver(IDropInfo dropInfo)
@@ -125,7 +124,7 @@ namespace DesktopApp.ViewModels
                     return;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _messageBoxService.ShowError(ex, "Some error here:");
             }

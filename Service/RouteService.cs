@@ -1,10 +1,9 @@
 ﻿using DataAccess.Models;
-using Repository.Storages;
 using Repository;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using AutoMapper;
+using Repository.Storage;
 
 namespace Service
 {

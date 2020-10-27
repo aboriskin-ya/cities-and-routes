@@ -2,7 +2,7 @@
 
 namespace DataAccess.Models
 {
-    public class Settings: BaseEntity
+    public class Settings : BaseEntity
     {
         public bool DisplayingImage { get; set; }
         public bool DisplayingGraph { get; set; }

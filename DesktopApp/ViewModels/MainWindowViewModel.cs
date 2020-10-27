@@ -1,14 +1,11 @@
 ﻿using Autofac;
 using DesktopApp.Dialogs;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
-using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Input;
 
 namespace DesktopApp.ViewModels
 {
-    class MainWindowViewModel: ViewModelBase
+    class MainWindowViewModel : ViewModelBase
     {
         public MainWindowViewModel()
         {

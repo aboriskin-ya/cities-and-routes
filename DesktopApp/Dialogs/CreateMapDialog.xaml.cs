@@ -1,6 +1,4 @@
 ﻿using DesktopApp.APIInteraction;
-using DesktopApp.Service;
-using DesktopApp.ViewModels;
 using System.Configuration;
 using System.Windows;
 

@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.StaticFiles;
-using System;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace DesktopApp.APIInteraction
 {
-    public class ImageAPIService: IImageAPIService
+    public class ImageAPIService : IImageAPIService
     {
         public async Task<string> UploadImage(string path)
         {
