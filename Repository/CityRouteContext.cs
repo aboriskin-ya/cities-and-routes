@@ -13,6 +13,7 @@ namespace Repository
             base.OnModelCreating(modelBuilder);
             new ImageBuild(modelBuilder.Entity<Image>());
             new MapBuild(modelBuilder.Entity<Map>());
+            new SettingsBuild(modelBuilder.Entity<Settings>());
             new CityBuild(modelBuilder.Entity<City>());
         }
     }

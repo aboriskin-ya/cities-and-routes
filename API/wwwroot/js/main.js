@@ -30,4 +30,14 @@
         var CityForm = document.getElementById('CityGet');
         CityForm.setAttribute('action', CityForm.dataset.action.replace('{id}', this.value));
     });
+
+    fetch('/settings/getall')
+        .then(response => response.json())
+        .then(result => {
+            result.forEach(element => document.getElementById('settingsList').insertAdjacentHTML('beforeend', '<option value="' + element.id + '">' + element.id + '</option>'));
+        })
+    document.getElementById('settingsList').addEventListener('change', function () {
+        var mapForm = document.getElementById('settingsGet');
+        mapForm.setAttribute('action', mapForm.dataset.action.replace('{id}', this.value));
+    });
 })

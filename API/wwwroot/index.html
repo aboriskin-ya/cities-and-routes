@@ -44,7 +44,7 @@
                         </form>
                     </div>
                     <div class="card-body">
-                        <form method="get" id="imageGet" data-action="image/{id}" enctype="multipart/form-data" target="_blank">
+                        <form method="get" id="imageGet" data-action="image/{id}" target="_blank">
                             <div class="form-group">
                                 File Api Get
                             </div>
@@ -62,7 +62,7 @@
                 </div>
                 <div class="card" style="width: 18rem;">
                     <div class="card-body">
-                        <form method="get" id="mapGet" data-action="map/{id}" enctype="multipart/form-data" target="_blank">
+                        <form method="get" id="mapGet" data-action="map/{id}" target="_blank">
                             <div class="form-group">
                                 Map Api Get
                             </div>
@@ -87,6 +87,24 @@
                             <div class="form-group">
                                 <label>City Id</label>
                                 <select type="text" id="CityList" class="form-control">
+                                    <option></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-primary" value="Get" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <form method="get" id="settingsGet" data-action="settings/{id}" target="_blank">
+                            <div class="form-group">
+                                Settings Api Get
+                            </div>
+                            <div class="form-group">
+                                <label>Settings Id</label>
+                                <select type="text" id="settingsList" class="form-control">
                                     <option></option>
                                 </select>
                             </div>
