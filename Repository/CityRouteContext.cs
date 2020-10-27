@@ -14,6 +14,7 @@ namespace Repository
             new ImageBuild(modelBuilder.Entity<Image>());
             new MapBuild(modelBuilder.Entity<Map>());
             new SettingsBuild(modelBuilder.Entity<Settings>());
+            new CityBuild(modelBuilder.Entity<City>());
         }
     }
 }

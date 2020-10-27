@@ -19,6 +19,38 @@ namespace Repository.Migrations
             .HasAnnotation("Relational:MaxIdentifierLength", 128)
             .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("DataAccess.Models.City", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreateOnUTC")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("MapId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("UpdatedOnUTC")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("X")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Y")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MapId");
+
+                    b.ToTable("City");
+                });
+
             modelBuilder.Entity("DataAccess.Models.Image", b =>
             {
                 b.Property<Guid>("Id")
@@ -111,6 +143,15 @@ namespace Repository.Migrations
 
                 b.ToTable("Settings");
             });
+
+            modelBuilder.Entity("DataAccess.Models.City", b =>
+                {
+                    b.HasOne("DataAccess.Models.Map", "Map")
+                        .WithMany()
+                        .HasForeignKey("MapId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
             modelBuilder.Entity("DataAccess.Models.Map", b =>
             {
