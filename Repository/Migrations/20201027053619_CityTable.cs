@@ -23,7 +23,7 @@ namespace Repository.Migrations
                 {
                     table.PrimaryKey("PK_City", x => x.Id);
                     table.ForeignKey(
-                        name: "FK2",
+                        name: "FK_City_Map_MapId",
                         column: x => x.MapId,
                         principalTable: "Map",
                         principalColumn: "Id",

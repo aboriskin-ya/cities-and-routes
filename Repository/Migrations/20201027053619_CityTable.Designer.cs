@@ -10,7 +10,7 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(CityRouteContext))]
-    [Migration("20201025105009_CityTable")]
+    [Migration("20201027053619_CityTable")]
     partial class CityTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -109,7 +109,6 @@ namespace Repository.Migrations
                     b.HasOne("DataAccess.Models.Map", "Map")
                         .WithMany()
                         .HasForeignKey("MapId")
-                        .HasConstraintName("FK2")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

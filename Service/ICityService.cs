@@ -8,8 +8,8 @@ namespace Service
     {
         IEnumerable<City> GetCity();
         City GetCity(Guid id);
-        void CreateCity(City city);
-        City UpdateCity(City city);
+        City CreateCity(CityDTO city);
+        City UpdateCity(Guid id, CityDTO city);
         bool DeleteCity(Guid id);
     }
 }

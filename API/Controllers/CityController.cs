@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Service;
-using AutoMapper;
 
 namespace API.Controllers
 {
@@ -14,12 +13,10 @@ namespace API.Controllers
     public class CityController : ControllerBase
     {
         private readonly ICityService _Cityservice;
-        private readonly IMapper _mapper;
 
-        public CityController(ICityService CityService, IMapper Cityper)
+        public CityController(ICityService CityService)
         {
             _Cityservice = CityService;
-            _mapper = Cityper;
         }
 
         [HttpGet]
@@ -54,9 +51,7 @@ namespace API.Controllers
         {
             try
             {
-                 City city = _mapper.Map<City>(dto);
-                _Cityservice.CreateCity(city);
-                return city;
+                return _Cityservice.CreateCity(dto);
             }
             catch (Exception ex)
             {
@@ -66,14 +61,11 @@ namespace API.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
-        public ActionResult<City> UpdateCity(Guid id, [FromBody] CityDTO dto)
+        public ActionResult<City> UpdateCity(Guid id, [FromBody] CityDTO city)
         {
             try
             {
-                City city = _Cityservice.GetCity(id);
-                _mapper.Map<CityDTO, City>(dto, city);
-                _Cityservice.UpdateCity(city);
-                return city;
+                return _Cityservice.UpdateCity(id, city);
             }
             catch (Exception ex)
             {

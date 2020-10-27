@@ -107,7 +107,6 @@ namespace Repository.Migrations
                     b.HasOne("DataAccess.Models.Map", "Map")
                         .WithMany()
                         .HasForeignKey("MapId")
-                        .HasConstraintName("FK2")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
