@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Repository.Storages
+﻿namespace Repository.Storage
 {
     public interface IRouteRepository : IRepository<DataAccess.Models.Route>
     {

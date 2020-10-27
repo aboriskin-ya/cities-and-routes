@@ -1,5 +1,4 @@
-﻿using DesktopApp.ViewModels;
-using System.Windows;
+﻿using System.Windows;
 
 
 namespace DesktopApp

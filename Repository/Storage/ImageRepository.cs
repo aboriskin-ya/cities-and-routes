@@ -1,12 +1,6 @@
-﻿using DataAccess;
-using DataAccess.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using DataAccess.Models;
 
-namespace Repository.Storages
+namespace Repository.Storage
 {
     public class ImageRepository : Repository<Image>, IImageRepository
     {

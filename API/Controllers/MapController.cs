@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Service;
 using AutoMapper;
+using DataAccess.DTO;
 
 namespace API.Controllers
 {
@@ -54,7 +54,7 @@ namespace API.Controllers
         {
             try
             {
-                 Map map = _mapper.Map<Map>(dto);
+                Map map = _mapper.Map<Map>(dto);
                 _Mapservice.CreateMap(map);
                 return map;
             }

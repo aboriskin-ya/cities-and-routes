@@ -3,13 +3,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Models
 {
-    public class Route : BaseEntity
+    public class City : BaseEntity
     {
         [Required]
-        public int Distance { get; set; }
-        public Guid FirstCityId { get; set; }
-        public Guid SecondCityId { get; set; }
+        public string Name { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
         public Map Map { get; set; }
         public Guid MapId { get; set; }
+
     }
 }

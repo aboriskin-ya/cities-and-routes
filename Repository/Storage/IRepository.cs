@@ -1,11 +1,10 @@
 ﻿using DataAccess;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Repository.Storages
+namespace Repository.Storage
 {
-    public interface IRepository<T> where T: BaseEntity
+    public interface IRepository<T> where T : BaseEntity
     {
         T Get(Guid id);
         IEnumerable<T> GetAll();
