@@ -25,16 +25,16 @@
             Stretch="Fill" Name="Image" 
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Grid.RowSpan="4">
+            Grid.RowSpan="4"
+            >
             <Image.RenderTransform>
                 <TransformGroup >
                     <ScaleTransform ScaleX="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:MapControl},Path=ScaleValue}" 
                                     ScaleY="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:MapControl},Path=ScaleValue}"/>
                     <TranslateTransform X="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:MapControl},Path=OffsetValue.X}"
                                         Y="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:MapControl},Path=OffsetValue.Y}"/>
-                </TransformGroup>   
+                </TransformGroup>
             </Image.RenderTransform>
-  
         </Image>
         <Button Grid.Row="1" 
                         Template="{StaticResource ScalePlus}" 
