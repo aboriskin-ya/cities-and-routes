@@ -10,8 +10,8 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(CityRouteContext))]
-    [Migration("20201027053619_CityTable")]
-    partial class CityTable
+    [Migration("20201028081335_CreateNewDb")]
+    partial class CreateNewDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -104,6 +104,48 @@ namespace Repository.Migrations
                     b.ToTable("Map");
                 });
 
+            modelBuilder.Entity("DataAccess.Models.Settings", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreateOnUTC")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("DisplayingGraph")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DisplayingImage")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("EdgeColor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("EdgeSize")
+                        .HasColumnType("float");
+
+                    b.Property<Guid>("MapId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("UpdatedOnUTC")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("VertexColor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("VertexSize")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MapId");
+
+                    b.ToTable("Settings");
+                });
+
             modelBuilder.Entity("DataAccess.Models.City", b =>
                 {
                     b.HasOne("DataAccess.Models.Map", "Map")
@@ -118,7 +160,15 @@ namespace Repository.Migrations
                     b.HasOne("DataAccess.Models.Image", "Image")
                         .WithMany()
                         .HasForeignKey("ImageId")
-                        .HasConstraintName("FK1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DataAccess.Models.Settings", b =>
+                {
+                    b.HasOne("DataAccess.Models.Map", "Map")
+                        .WithMany()
+                        .HasForeignKey("MapId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
