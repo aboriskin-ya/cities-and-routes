@@ -29,11 +29,20 @@
                     <RowDefinition Height="1*" />
                     <RowDefinition Height="1*" />
                     <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
+                <TextBox Text="{Binding ImageHeight}" Grid.Row="0" Grid.Column="0"/>
+                <TextBox Text="{Binding ImageWidth}" Grid.Row="0" Grid.Column="1"/>
+                <TextBox Text="{Binding Offset.Top,StringFormat='top:{0}'}" Grid.Row="1" Grid.Column="0"/>
+                <TextBox Text="{Binding Offset.Right,StringFormat='right:{0}'}" Grid.Row="1" Grid.Column="1"/>
+                <TextBox Text="{Binding Offset.Bottom,StringFormat='bottom:{0}'}" Grid.Row="2" Grid.Column="0"/>
+                <TextBox Text="{Binding Offset.Left,StringFormat='left:{0}'}" Grid.Row="2" Grid.Column="1"/>
+                <TextBox Text="{Binding OffsetValue.X,StringFormat='x:{0}'}" Grid.Row="3" Grid.Column="0"/>
+                <TextBox Text="{Binding OffsetValue.Y,StringFormat='y:{0}'}" Grid.Row="3" Grid.Column="1"/>
             </Grid>
         </DockPanel>
         <DockPanel DockPanel.Dock="Top">

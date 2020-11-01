@@ -21,7 +21,7 @@ namespace DesktopApp.ViewModels
         
         public MainWindowViewModel()
         {
-            MapImageSource = new BitmapImage(new Uri(@"Resources\Maps\USAMap.jpg", UriKind.Relative));
+            MapImageSource = new BitmapImage(new Uri(@"Resources\Maps\mapRussia.jpg", UriKind.Relative));
             ImageHeight = (MapImageSource as BitmapImage).PixelHeight;
             ImageWidth = (MapImageSource as BitmapImage).PixelWidth;
             ShowCreateMapDialogCommand = new ShowCreateMapDialogCommand(null, p => ShowDialog(p));
@@ -89,16 +89,17 @@ namespace DesktopApp.ViewModels
                     case 2:if (ScaleValue >= 1 && ScaleValue < 16)
                         {
                             ScaleValue *= scale;
+                            Offset = MapHelper.GetOffset(Offset, ScaleValue,ImageHeight,ImageWidth,TransformPosition, ZoomEnum.ZoomIn);
                             ImageHeight /= 2; ImageWidth /= 2;
-                            Offset = MapHelper.GetOffset(Offset, ScaleValue, ZoomEnum.ZoomIn);
                         }
                         break;
                       
                     case 0.5: if (ScaleValue > 1 && ScaleValue <= 16)
                         {
                             ScaleValue *= scale;
-                            Offset = MapHelper.GetOffset(Offset, ScaleValue, ZoomEnum.ZoomOut);
                             ImageHeight *= 2; ImageWidth *= 2;
+                            Offset = MapHelper.GetOffset(Offset, ScaleValue, ImageHeight, ImageWidth, TransformPosition, ZoomEnum.ZoomOut);
+                            
                         }
                         break;
                         
@@ -124,9 +125,9 @@ namespace DesktopApp.ViewModels
 
         private void OnNavigateExecuted(object p)
         {
-            var RefOffset = Offset;
-            OffsetValue = MapHelper.GetOffsetValue(PPW, PPH,ref RefOffset, (Point)p);
-            Offset = RefOffset;
+            
+            OffsetValue = (Point)p;
+         
         }
 
         private bool OnCanNavigateExecute(object p) => true;
