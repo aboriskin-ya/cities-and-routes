@@ -1,4 +1,4 @@
-﻿namespace DataAccess.DTO
+﻿namespace Service.DTO
 {
     public class SettingsDTO
     {

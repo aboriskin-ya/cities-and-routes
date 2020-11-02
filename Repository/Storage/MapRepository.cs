@@ -1,6 +1,7 @@
 ﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Repository.Storage
@@ -14,6 +15,18 @@ namespace Repository.Storage
         public new Map Get(Guid id)
         {
             return _entity.Include(p => p.Image).SingleOrDefault(p => p.Id == id);
+        }
+
+        public IEnumerable<Map> GetAllWholeMap()
+        {
+            return _entity.Include(p => p.Cities).Include(p => p.Routes).Include(p => p.Settings)
+                .Include(p => p.Image).AsEnumerable();
+        }
+
+        public Map GetWholeMap(Guid id)
+        {
+            return _entity.Include(p => p.Cities).Include(p => p.Routes).Include(p => p.Settings)
+                .Include(p => p.Image).SingleOrDefault(p => p.Id == id);
         }
     }
 }

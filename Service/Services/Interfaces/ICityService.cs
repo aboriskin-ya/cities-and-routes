@@ -1,8 +1,9 @@
 ﻿using DataAccess.Models;
+using Service.DTO;
 using System;
 using System.Collections.Generic;
 
-namespace Service
+namespace Service.Services.Interfaces
 {
     public interface ICityService
     {
