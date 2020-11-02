@@ -1,10 +1,11 @@
-﻿using DesktopApp.Services.Helper;
+﻿using DesktopApp.Models;
+using DesktopApp.Services.Helper;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace DesktopApp.UserControllers
 {
@@ -23,6 +24,7 @@ namespace DesktopApp.UserControllers
             _RelativeTransformPosition.Y += TransformPosition.Y;
             this.MouseDown += MapControl_MouseDown;
             this.MouseWheel += MapControl_MouseWheel;
+
             SetBinding(ZoomCommandProperty, new Binding("ZoomCommand"));
             SetBinding(NavigateCommandProperty, new Binding("NavigateCommand"));
         }
@@ -51,6 +53,7 @@ namespace DesktopApp.UserControllers
         #region DragActions
         private void MapControl_MouseDown(object sender, MouseButtonEventArgs e)
         {
+
             PPW = ImageWidth / ActualWidth;
             PPH = ImageHeight / ActualHeight;
             _RelativeOffsetValue = e.GetPosition(this) - new Point();
@@ -59,6 +62,9 @@ namespace DesktopApp.UserControllers
             this.MouseUp += MapControl_MouseUp;
             Mouse.Capture(this);
             this.Cursor = Cursors.Hand;
+            
+            if(IsAbleToSetCity)
+                MapControl_SetCity();
         }
         private void MapControl_MouseUp(object sender, MouseButtonEventArgs e)
         {
@@ -234,6 +240,94 @@ namespace DesktopApp.UserControllers
 
 
         #endregion
+
+        #region CursorPosition
+
+        public double PosX
+        {
+            get { return (double)GetValue(PosXProperty); }
+            set { SetValue(PosXProperty, value); }
+        }
+
+        public static readonly DependencyProperty PosXProperty =
+            DependencyProperty.Register(nameof(PosX), typeof(double), typeof(MapControl));
+
+
+        public double PosY
+        {
+            get { return (double)GetValue(PosYProperty); }
+            set { SetValue(PosYProperty, value); }
+        }
+
+        public static readonly DependencyProperty PosYProperty =
+            DependencyProperty.Register(nameof(PosY), typeof(double), typeof(MapControl));
+
+
+        #endregion
+
+        public ObservableCollection<City> CityCollection
+        {
+            get { return (ObservableCollection<City>)GetValue(CityCollectionProperty); }
+            set { SetValue(CityCollectionProperty, value); }
+        }
+
+        public static readonly DependencyProperty CityCollectionProperty =
+        DependencyProperty.Register(nameof(CityCollection), typeof(ObservableCollection<City>), typeof(MapControl));
+
+        public City SelectedCity
+        {
+            get { return (City)GetValue(SelectedCityProperty); }
+            set { SetValue(SelectedCityProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedCityProperty =
+            DependencyProperty.Register(nameof(SelectedCity), typeof(City), typeof(MapControl));
+
+        public Settings SettingsMap
+        {
+            get { return (Settings)GetValue(SettingsMapProperty); }
+            set { SetValue(SettingsMapProperty, value); }
+        }
+
+        public static readonly DependencyProperty SettingsMapProperty =
+            DependencyProperty.Register(nameof(SettingsMap), typeof(Settings), typeof(MapControl));
+
+        #region IsAbleToCreateCity
+
+        public bool IsAbleToCreateCity
+        {
+            get { return (bool)GetValue(IsAbleToCreateCityProperty); }
+            set { SetValue(IsAbleToCreateCityProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsAbleToCreateCityProperty =
+            DependencyProperty.Register(nameof(IsAbleToCreateCity), typeof(bool), typeof(MapControl));
+
+        #endregion
+
+        #region IsAbleToSetCity
+        public bool IsAbleToSetCity
+        {
+            get { return (bool)GetValue(IsAbleToSetCityProperty); }
+            set { SetValue(IsAbleToSetCityProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsAbleToSetCityProperty =
+            DependencyProperty.Register(nameof(IsAbleToSetCity), typeof(bool), typeof(MapControl));
+
+        #endregion
+        
+        private void MapControl_SetCity()
+        {
+            SelectedCity = new City() 
+            { 
+                X = PosX,// p.X - SettingsMap.VertexSize / 2,
+                Y = PosY
+            };
+
+            IsAbleToCreateCity = true;
+            IsAbleToSetCity = false;
+        }
 
     }
 }

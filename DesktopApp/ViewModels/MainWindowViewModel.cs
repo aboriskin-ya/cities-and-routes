@@ -2,10 +2,10 @@
 using DesktopApp.Dialogs;
 using DesktopApp.Services.Commands;
 using DesktopApp.Services.Helper;
+using DesktopApp.Services.State;
 using DesktopApp.UserControllers;
 using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -16,21 +16,24 @@ namespace DesktopApp.ViewModels
     {
         ZoomIn, ZoomOut
     }
-    internal class MainWindowViewModel:BaseViewModel
+    internal class MainWindowViewModel : BaseViewModel
     {
-        
-        public MainWindowViewModel()
+        public IMapViewModel MapViewModel { get; }
+
+        public ICursorPositionViewModel PositionViewModel { get; }
+
+        public MainWindowViewModel(IMapViewModel viewModel, ICursorPositionViewModel positionViewModel)
         {
             MapImageSource = new BitmapImage(new Uri(@"Resources\Maps\USAMap.jpg", UriKind.Relative));
             ImageHeight = (MapImageSource as BitmapImage).PixelHeight;
             ImageWidth = (MapImageSource as BitmapImage).PixelWidth;
-            ShowCreateMapDialogCommand = new ShowCreateMapDialogCommand(null, p => ShowDialog(p));
+
+            MapViewModel = viewModel;
+            PositionViewModel = positionViewModel;
         }
 
-        #region ShowCreateMapDialog
-
-       
-        public ICommand ShowCreateMapDialogCommand { get; }
+        #region ShowCreateMapDialog     
+        public ICommand ShowCreateMapDialogCommand => new ShowCreateMapDialogCommand(null, p => ShowDialog(p));
 
         private void ShowDialog(object p)
         {
@@ -39,6 +42,30 @@ namespace DesktopApp.ViewModels
             view.Owner = App.Current.MainWindow;
             view.Show();
         }
+        #endregion
+
+        #region AddNewCityCommand
+        public ICommand AddNewCityCommand => new AddNewCityCommand(p => OnCanAddNewCityExecute(p), p => OnAddNewCity(p));
+
+        private void OnAddNewCity(object p)
+        {
+            StatusBar = StateLine.Show(StateLineStatus.SetMap);
+            IsAbleToSetCity = true;
+        }
+
+        private bool OnCanAddNewCityExecute(object p) => !IsAbleToSetCity && !IsAbleToCreateCity;//&& Map != null;
+        #endregion
+
+        #region CreateNewCityCommand
+        public ICommand CreateNewCityCommand => new CreateCityCommand(p => OnCanCreateNewCityExecuted(p), p => OnCreateNewCityExecuted(p));
+
+        private void OnCreateNewCityExecuted(object p)
+        {            
+            MapViewModel.CreateNewCityCommand.Execute(p);
+            IsAbleToCreateCity = false;
+        }
+
+        private bool OnCanCreateNewCityExecuted(object p) => IsAbleToCreateCity && MapViewModel.SelectedCity.Name != null;
         #endregion
 
         #region MapImage
@@ -78,7 +105,7 @@ namespace DesktopApp.ViewModels
         #endregion
 
         #region ZoomCommand
-        public ZoomCommand ZoomCommand => new ZoomCommand(p => OnCanZoomExecute(p), p => OnZoomExecuted(p));
+        public ZoomCommand ZoomCommand => new ZoomCommand(p =>true, p => OnZoomExecuted(p));
 
         private void OnZoomExecuted(object p)
         {
@@ -125,7 +152,7 @@ namespace DesktopApp.ViewModels
         private void OnNavigateExecuted(object p)
         {
             var RefOffset = Offset;
-            OffsetValue = MapHelper.GetOffsetValue(PPW, PPH,ref RefOffset, (Point)p);
+            OffsetValue = MapHelper.GetOffsetValue(PPW, PPH, ref RefOffset, (Point)p);
             Offset = RefOffset;
         }
 
@@ -169,6 +196,39 @@ namespace DesktopApp.ViewModels
             get => _TransformPosition;
             set => Set<Point>(ref _TransformPosition, value);
         }
+        #endregion
+
+        #region StateLine
+
+        private string statusBar = StateLine.Show(StateLineStatus.AddMap);
+        public string StatusBar
+        {
+            get => statusBar;
+            set => Set<string>(ref statusBar, value);
+        }
+
+        #endregion
+
+        #region CreateCityPossibility
+
+        private bool _IsAbleToCreateCity = false;
+        public bool IsAbleToCreateCity
+        {
+            get => _IsAbleToCreateCity;
+            set => Set<bool>(ref _IsAbleToCreateCity, value);
+        }
+
+        #endregion
+
+        #region SetCityPossibility
+
+        private bool _IsAbleToSetCity = false;
+        public bool IsAbleToSetCity
+        {
+            get => _IsAbleToSetCity;
+            set => Set<bool>(ref _IsAbleToSetCity, value);
+        }
+
         #endregion
     }
 }

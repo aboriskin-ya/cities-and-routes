@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="CreateMapDialog" Height="450" Width="450">
     <Window.Resources>
-        <ResourceDictionary Source="..\Resources\CreateMapDialogStyles.xaml" />
+        <ResourceDictionary Source="..\Resources\Styles\CreateMapDialogStyles.xaml" />
         
     </Window.Resources>
 

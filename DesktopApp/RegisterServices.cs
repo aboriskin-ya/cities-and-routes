@@ -14,6 +14,9 @@ namespace DesktopApp
 
             builder.RegisterType<MessageBoxService>().As<IMessageBoxService>();
             builder.RegisterType<ImageAPIService>().As<IImageAPIService>();
+            builder.RegisterType<MapViewModel>().As<IMapViewModel>();
+            builder.RegisterType<CursorPositionViewModel>().As<ICursorPositionViewModel>();
+            builder.RegisterType<CityAPIService>().As<ICityAPIService>();
 
             builder.RegisterType<MainWindowViewModel>().AsSelf();
             builder.RegisterType<CreateMapViewModel>().AsSelf();
