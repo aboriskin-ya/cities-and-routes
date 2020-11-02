@@ -1,6 +1,7 @@
-﻿using System;
+﻿using DataAccess.Models;
+using System;
 
-namespace DataAccess.Models
+namespace Service.DTO
 {
     public class CityDTO
     {

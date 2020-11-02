@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using AutoMapper;
 using Repository.Storage;
+using Service.Services.Interfaces;
+using Service.DTO;
 
-namespace Service
+namespace Service.Services
 {
     class RouteService : IRouteService
     {

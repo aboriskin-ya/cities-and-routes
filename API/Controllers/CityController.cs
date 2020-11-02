@@ -4,6 +4,8 @@ using System.Linq;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Service;
+using Service.DTO;
+using Service.Services.Interfaces;
 
 namespace API.Controllers
 {

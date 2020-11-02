@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Service;
+using Service.Services.Interfaces;
 
 namespace API.Controllers
 {

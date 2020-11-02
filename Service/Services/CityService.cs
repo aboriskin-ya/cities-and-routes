@@ -4,8 +4,10 @@ using Repository;
 using System;
 using System.Collections.Generic;
 using AutoMapper;
+using Service.Services.Interfaces;
+using Service.DTO;
 
-namespace Service
+namespace Service.Services
 {
     public class CityService : ICityService
     {

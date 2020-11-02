@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
-using DataAccess.DTO;
+using Service.DTO;
 using DataAccess.Models;
 using Repository;
 using Repository.Storage;
+using Service.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 
-namespace Service
+namespace Service.Services
 {
     public class SettingsService : ISettingsService
     {
