@@ -33,8 +33,7 @@ namespace DesktopApp.UserControllers
             {
                 if (ScaleValue >= 1 && ScaleValue < 16)
                 {
-                    ZoomCommand.Execute(2);
-                   
+                    ZoomCommand.Execute(2);     
                 }
             }
             else {

@@ -21,7 +21,7 @@ namespace DesktopApp.ViewModels
         
         public MainWindowViewModel()
         {
-            MapImageSource = new BitmapImage(new Uri(@"Resources\Maps\mapRussia.jpg", UriKind.Relative));
+            MapImageSource = new BitmapImage(new Uri(@"Resources\Maps\USAMap.jpg", UriKind.Relative));
             ImageHeight = (MapImageSource as BitmapImage).PixelHeight;
             ImageWidth = (MapImageSource as BitmapImage).PixelWidth;
             ShowCreateMapDialogCommand = new ShowCreateMapDialogCommand(null, p => ShowDialog(p));
