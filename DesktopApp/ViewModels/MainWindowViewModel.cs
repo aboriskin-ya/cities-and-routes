@@ -60,7 +60,7 @@ namespace DesktopApp.ViewModels
         public ICommand CreateNewCityCommand => new CreateCityCommand(p => OnCanCreateNewCityExecuted(p), p => OnCreateNewCityExecuted(p));
 
         private void OnCreateNewCityExecuted(object p)
-        {            
+        { 
             MapViewModel.CreateNewCityCommand.Execute(p);
             IsAbleToCreateCity = false;
         }

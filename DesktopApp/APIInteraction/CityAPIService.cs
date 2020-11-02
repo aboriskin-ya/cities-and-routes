@@ -15,7 +15,7 @@ namespace DesktopApp.APIInteraction
 
             HttpResponseMessage response = await APIClient.Client.PostAsJsonAsync("city", cityDTO);
             response.EnsureSuccessStatusCode();
-
+            
             return response.Headers.Location;
         }
     }

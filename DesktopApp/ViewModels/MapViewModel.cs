@@ -1,6 +1,7 @@
 ﻿using DesktopApp.APIInteraction;
 using DesktopApp.Models;
 using DesktopApp.Services.Commands;
+using System;
 using System.Collections.ObjectModel;
 
 namespace DesktopApp.ViewModels
@@ -15,6 +16,11 @@ namespace DesktopApp.ViewModels
         {
             CityCollection = new ObservableCollection<City>();
             SelectedCity = new City() { X = -100, Y = -100 };
+            SettingsMap = new Settings()
+            {
+                VertexColor = "#FF0000",
+                VertexSize = 10
+            };
             _cityAPIService = cityAPIService;
         }
 
@@ -25,11 +31,7 @@ namespace DesktopApp.ViewModels
             set => Set<City>(ref _SelectedCity, value, nameof(SelectedCity));
         }
 
-        private Settings _SettingsMap = new Settings()
-        {
-            VertexColor = "#FF0000",
-            VertexSize = 10
-        };
+        private Settings _SettingsMap;
         public Settings SettingsMap
         {
             get => _SettingsMap;
@@ -39,7 +41,7 @@ namespace DesktopApp.ViewModels
         public CreateCityCommand CreateNewCityCommand { get => new CreateCityCommand(p => OnCanAddCollection(), m => AddCollection()); }
         private void AddCollection()
         {
-            _cityAPIService.CreateCityAsync(SelectedCity);
+            var res = _cityAPIService.CreateCityAsync(SelectedCity);
             CityCollection.Add(SelectedCity);
         }
         private bool OnCanAddCollection() => SelectedCity.Name != null;
