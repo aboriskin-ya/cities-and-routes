@@ -33,9 +33,6 @@
     <None Update="Resources\Maps\EnglandMap.gif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\Maps\mapRussia.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Resources\Maps\USAMap.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

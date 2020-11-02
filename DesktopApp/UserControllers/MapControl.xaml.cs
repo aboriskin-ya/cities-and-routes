@@ -33,8 +33,7 @@ namespace DesktopApp.UserControllers
             {
                 if (ScaleValue >= 1 && ScaleValue < 16)
                 {
-                    ZoomCommand.Execute(2);
-                   
+                    ZoomCommand.Execute(2);     
                 }
             }
             else {
@@ -51,8 +50,6 @@ namespace DesktopApp.UserControllers
         #region DragActions
         private void MapControl_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            PPW = ImageWidth / ActualWidth;
-            PPH = ImageHeight / ActualHeight;
             _RelativeOffsetValue = e.GetPosition(this) - new Point();
             this.MouseMove += MapControl_MouseMove;
             this.LostMouseCapture += MapControl_LostMouseCapture;
@@ -66,12 +63,16 @@ namespace DesktopApp.UserControllers
         }
         private void UpdatePosition(MouseEventArgs e)
         {
-            NavigateCommand.Execute(e.GetPosition(this) - _RelativeOffsetValue);
+            var transient = e.GetPosition(this) - _RelativeOffsetValue;
+            PPW = ImageWidth / ActualWidth;
+            PPH = ImageHeight / ActualHeight;
+            NavigateCommand.Execute(MapHelper.GetOffsetValue(PPW, PPH, Offset, transient));
         }
         private void FinishDrag(MouseEventArgs e)
         {
             UpdatePosition(e);
             TransformPosition = MapHelper.GetRelativeCurrentPosit1ion(OffsetValue, ActualHeight, ActualWidth, ScaleValue, out _RelativeTransformPosition);
+            Offset = MapHelper.GetOffsetAfterDrag(PPW, PPH, Offset, OffsetValue);
             OffsetValue = default;
             this.MouseMove -= MapControl_MouseMove;
             this.LostMouseCapture -= MapControl_LostMouseCapture;
