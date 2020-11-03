@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DataAccess
+namespace DataAccess.EntityBuilders
 {
     public class ImageBuild
     {

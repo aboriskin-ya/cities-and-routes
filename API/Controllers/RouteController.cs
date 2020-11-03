@@ -4,6 +4,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using DataAccess.Models;
 using Service;
+using Service.Services.Interfaces;
+using Service.DTO;
 
 namespace API.Controllers
 {
@@ -22,7 +24,7 @@ namespace API.Controllers
         [Route("getall")]
         public IActionResult GetRoute()
         {
-            IEnumerable<Route> RouteList = _routeservice.GetRoute();
+            IEnumerable<RouteDTO> RouteList = _routeservice.GetRoutes();
 
             if (RouteList.Count() == 0)
             {
@@ -33,9 +35,9 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public ActionResult<Route> GetRoute(Guid id)
+        public ActionResult<RouteDTO> GetRoute(Guid id)
         {
-            Route route = _routeservice.GetRoute(id);
+            RouteDTO route = _routeservice.GetRoute(id);
             if (route == null)
             {
                 return NotFound();

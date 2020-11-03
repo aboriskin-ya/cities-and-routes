@@ -1,6 +1,11 @@
-﻿namespace Repository.Storage
+﻿using DataAccess.Models;
+using System;
+using System.Collections.Generic;
+
+namespace Repository.Storage
 {
-    public interface IMapRepository : IRepository<DataAccess.Models.Map>
+    public interface IMapRepository : IRepository<Map> 
     {
+        Map GetWholeMap(Guid id);
     }
 }

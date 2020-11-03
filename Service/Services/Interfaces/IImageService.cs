@@ -2,11 +2,11 @@
 using System;
 using System.Collections.Generic;
 
-namespace Service
+namespace Service.Services.Interfaces
 {
     public interface IImageService
     {
-        IEnumerable<Image> GetImage();
+        IEnumerable<Image> GetImages();
         Image GetImage(Guid id);
         void StoreImage(Image img);
     }
