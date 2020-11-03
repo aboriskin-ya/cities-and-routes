@@ -39,7 +39,7 @@ namespace API.Controllers
         [Route("getall")]
         public IActionResult GetMap()
         {
-            List<MapGetDTO> MapList = _Mapservice.GetMap();
+            IEnumerable<MapGetDTO> MapList = _Mapservice.GetMaps();
             if (MapList.Count() == 0)
             {
                 return NotFound();

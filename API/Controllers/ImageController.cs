@@ -76,7 +76,7 @@ namespace API.Controllers
         [Route("getall")]
         public IActionResult GetImage()
         {
-            IEnumerable<Image> ImageList = _service.GetImage();
+            IEnumerable<Image> ImageList = _service.GetImages();
 
             if (ImageList.Count() == 0)
             {

@@ -30,7 +30,7 @@ namespace Service.Services
             return city;
         }
 
-        public IEnumerable<City> GetCity()
+        public IEnumerable<City> GetCities()
         {
             return _repository.GetAll();
         }

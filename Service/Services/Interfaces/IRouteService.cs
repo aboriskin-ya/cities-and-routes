@@ -7,7 +7,7 @@ namespace Service.Services.Interfaces
 {
     public interface IRouteService
     {
-        IEnumerable<Route> GetRoute();
+        IEnumerable<Route> GetRoutes();
         Route GetRoute(Guid id);
         Route CreateRoute(RouteDTO dto);
         Route UpdateRoute(RouteDTO dto, Guid id);

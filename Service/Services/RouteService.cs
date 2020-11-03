@@ -22,7 +22,7 @@ namespace Service.Services
             _context = context;
         }
 
-        public IEnumerable<Route> GetRoute()
+        public IEnumerable<Route> GetRoutes()
         {
             return _repository.GetAll();
         }

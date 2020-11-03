@@ -24,7 +24,7 @@ namespace API.Controllers
         [Route("getall")]
         public IActionResult GetRoute()
         {
-            IEnumerable<Route> RouteList = _routeservice.GetRoute();
+            IEnumerable<Route> RouteList = _routeservice.GetRoutes();
 
             if (RouteList.Count() == 0)
             {

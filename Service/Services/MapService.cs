@@ -32,11 +32,11 @@ namespace Service.Services
             return map;
         }
 
-        public List<MapGetDTO> GetMap()
+        public IEnumerable<MapGetDTO> GetMaps()
         {
             List<MapGetDTO> mapGetDTOs = new List<MapGetDTO>();
             MapGetDTO mapGetTemp = new MapGetDTO();
-            foreach (var item in _repository.GetAllWholeMap())
+            foreach (var item in _repository.GetAll())
             {
                 _mapper.Map<Map, MapGetDTO>(item, mapGetTemp);
                 mapGetDTOs.Add(mapGetTemp);
@@ -46,8 +46,7 @@ namespace Service.Services
 
         public MapGetDTO GetMap(Guid id)
         {
-            MapGetDTO mapGetDTO = new MapGetDTO();
-            _mapper.Map<Map, MapGetDTO>(_repository.GetWholeMap(id), mapGetDTO);
+            var mapGetDTO = _mapper.Map<Map, MapGetDTO>(_repository.GetWholeMap(id));
             return mapGetDTO;
         }
 

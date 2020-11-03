@@ -24,7 +24,7 @@ namespace Service.Services
             _context.SaveChanges();
         }
 
-        public IEnumerable<Image> GetImage()
+        public IEnumerable<Image> GetImages()
         {
             return _repository.GetAll();
         }
