@@ -22,14 +22,21 @@ namespace Service.Services
             _context = context;
         }
 
-        public IEnumerable<Route> GetRoutes()
+        public IEnumerable<RouteDTO> GetRoutes()
         {
-            return _repository.GetAll();
+            List<RouteDTO> routeDTOs = new List<RouteDTO>();
+            RouteDTO routeDTOTemp = new RouteDTO();
+            foreach (var item in _repository.GetAll())
+            {
+                _mapper.Map<Route, RouteDTO>(item, routeDTOTemp);
+                routeDTOs.Add(routeDTOTemp);
+            }
+            return routeDTOs;
         }
 
-        public Route GetRoute(Guid id)
+        public RouteDTO GetRoute(Guid id)
         {
-            return _repository.Get(id);
+            return _mapper.Map<Route, RouteDTO>(_repository.Get(id));
         }
 
         public Route CreateRoute(RouteDTO dto)

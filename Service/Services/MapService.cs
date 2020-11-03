@@ -46,8 +46,7 @@ namespace Service.Services
 
         public MapGetDTO GetMap(Guid id)
         {
-            var mapGetDTO = _mapper.Map<Map, MapGetDTO>(_repository.GetWholeMap(id));
-            return mapGetDTO;
+            return _mapper.Map<Map, MapGetDTO>(_repository.GetWholeMap(id));
         }
 
         public bool DeleteMap(Guid id)

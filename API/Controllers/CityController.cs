@@ -22,9 +22,9 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public ActionResult<City> GetCity(Guid id)
+        public ActionResult<CityDTO> GetCity(Guid id)
         {
-            City city = _Cityservice.GetCity(id);
+            CityDTO city = _Cityservice.GetCity(id);
             if (city == null)
             {
                 return NotFound();
@@ -37,7 +37,7 @@ namespace API.Controllers
         [Route("getall")]
         public IActionResult GetCity()
         {
-            IEnumerable<City> CityList = _Cityservice.GetCities();
+            IEnumerable<CityDTO> CityList = _Cityservice.GetCities();
 
             if (CityList.Count() == 0)
             {
