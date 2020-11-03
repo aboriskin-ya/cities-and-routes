@@ -11,7 +11,7 @@ namespace DesktopApp.APIInteraction
     {
         public async Task<Uri> CreateCityAsync(City city)
         {
-            var cityDTO =  MyMapper.GetMapper().Map<DataAccess.Models.CityDTO>(city);
+            var cityDTO =  AppMapper.GetAppMapper().Mapper.Map<DataAccess.Models.CityDTO>(city);
 
             HttpResponseMessage response = await APIClient.Client.PostAsJsonAsync("city", cityDTO);
             response.EnsureSuccessStatusCode();

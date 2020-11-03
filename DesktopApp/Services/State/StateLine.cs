@@ -17,7 +17,7 @@
                 case StateLineStatus.SetMap:
                     return "Please click on the map to create a new city";
                 case StateLineStatus.AddBondAndDistance:
-                    return "Please set the bond and distance betwwn cities";
+                    return "Please set the bond and distance between cities";
             }
             return "";
         }
