@@ -24,7 +24,7 @@ namespace API.Controllers
         [Route("getall")]
         public IActionResult GetRoute()
         {
-            IEnumerable<Route> RouteList = _routeservice.GetRoutes();
+            IEnumerable<RouteDTO> RouteList = _routeservice.GetRoutes();
 
             if (RouteList.Count() == 0)
             {
@@ -35,9 +35,9 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public ActionResult<Route> GetRoute(Guid id)
+        public ActionResult<RouteDTO> GetRoute(Guid id)
         {
-            Route route = _routeservice.GetRoute(id);
+            RouteDTO route = _routeservice.GetRoute(id);
             if (route == null)
             {
                 return NotFound();

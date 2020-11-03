@@ -30,14 +30,21 @@ namespace Service.Services
             return city;
         }
 
-        public IEnumerable<City> GetCities()
+        public IEnumerable<CityDTO> GetCities()
         {
-            return _repository.GetAll();
+            List<CityDTO> cityDTOs = new List<CityDTO>();
+            CityDTO cityDTOTemp = new CityDTO();
+            foreach (var item in _repository.GetAll())
+            {
+                _mapper.Map<City, CityDTO>(item, cityDTOTemp);
+                cityDTOs.Add(cityDTOTemp);
+            }
+            return cityDTOs;
         }
 
-        public City GetCity(Guid id)
+        public CityDTO GetCity(Guid id)
         {
-            return _repository.Get(id);
+            return _mapper.Map<City, CityDTO>(_repository.Get(id));
         }
 
         public bool DeleteCity(Guid id)
@@ -56,7 +63,7 @@ namespace Service.Services
 
         public City UpdateCity(Guid id, CityDTO dto)
         {
-            City city = this.GetCity(id);
+            City city = _repository.Get(id);
             _mapper.Map<CityDTO, City>(dto, city);
             city = _repository.Update(city);
             _context.SaveChanges();
