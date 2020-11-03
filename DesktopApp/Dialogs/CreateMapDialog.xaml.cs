@@ -1,6 +1,4 @@
-﻿using DesktopApp.APIInteraction;
-using System.Configuration;
-using System.Windows;
+﻿using System.Windows;
 
 namespace DesktopApp.Dialogs
 {
@@ -9,9 +7,6 @@ namespace DesktopApp.Dialogs
         public CreateMapDialog()
         {
             InitializeComponent();
-
-            string url = ConfigurationManager.AppSettings["baseApiUrl"];
-            APIClient.InitializeClient(url);
         }
     }
 }
