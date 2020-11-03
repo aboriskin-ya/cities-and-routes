@@ -37,7 +37,7 @@ namespace API.Controllers
         [Route("getall")]
         public IActionResult GetCity()
         {
-            IEnumerable<City> CityList = _Cityservice.GetCity();
+            IEnumerable<City> CityList = _Cityservice.GetCities();
 
             if (CityList.Count() == 0)
             {

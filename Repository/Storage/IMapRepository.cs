@@ -7,6 +7,5 @@ namespace Repository.Storage
     public interface IMapRepository : IRepository<Map> 
     {
         Map GetWholeMap(Guid id);
-        IEnumerable<Map> GetAllWholeMap();
     }
 }
