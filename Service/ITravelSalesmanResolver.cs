@@ -5,6 +5,6 @@ namespace Service
 {
     interface ITravelSalesmanResolver
     {
-        IEnumerable<int> CalcAppropriatePath(HttpRequestMessage request);
+        IEnumerable<int> CalcAppropriatePath(IEnumerable<int> SelectedCitiesId);
     }
 }

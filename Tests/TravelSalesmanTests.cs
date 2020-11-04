@@ -12,7 +12,7 @@ namespace Tests
         public void CheckTravelSalesman3Cities()
         {
             //Arrange
-            var request = new HttpRequestMessage();//here should be controller with actionMethod which have a PostType and data for reading
+            var SelectedCities = new int[] { 6, 7, 8 };
             var resolver = new TravelSalesmanResolver();
             var graph = new GraphDTO();
             var EdgeList = new List<EdgeDTO>()
@@ -25,7 +25,7 @@ namespace Tests
             graph.Vertexes = new int[] { 7, 8, 6 };
             var ExptectedAns = new int[] { 8, 6, 7};
             //Act
-            var ActualAnswer = resolver.CalcAppropriatePath(request);
+            var ActualAnswer = resolver.CalcAppropriatePath(SelectedCities);
             //Assert
             Assert.Equal(ExptectedAns, ActualAnswer);
 
@@ -34,7 +34,7 @@ namespace Tests
         public void CheckTravelSalesman5Cities()
         {
             //Arrange
-            var request = new HttpRequestMessage();//here should be controller with actionMethod which have a PostType and data for reading
+            var SelectedCities = new int[] { 1, 2, 3, 4, 5 };
             var resolver = new TravelSalesmanResolver();
             var graph = new GraphDTO();
             var EdgeList = new List<EdgeDTO>()
@@ -49,7 +49,7 @@ namespace Tests
             graph.Vertexes = new int[] { 1,2,3,4,5 };
             var ExptectedAns = new int[] {5,3,2,4,1 };
             //Act
-            var ActualAnswer = resolver.CalcAppropriatePath(request);
+            var ActualAnswer = resolver.CalcAppropriatePath(SelectedCities);
             //Assert
             Assert.Equal(ExptectedAns, ActualAnswer);
 

@@ -8,6 +8,6 @@ namespace Service
 {
     public class TravelSalesmanResolver : ITravelSalesmanResolver
     { 
-        public IEnumerable<int> CalcAppropriatePath(HttpRequestMessage request) => null;
+        public IEnumerable<int> CalcAppropriatePath(IEnumerable<int> SelectedCitiesId) => null;
     }
 }
