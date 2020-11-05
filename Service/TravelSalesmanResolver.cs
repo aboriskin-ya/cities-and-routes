@@ -1,4 +1,5 @@
 ﻿using Repository.Storages;
+using Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -8,6 +9,6 @@ namespace Service
 {
     public class TravelSalesmanResolver : ITravelSalesmanResolver
     { 
-        public IEnumerable<int> CalcAppropriatePath(IEnumerable<int> SelectedCitiesId) => null;
+        public IEnumerable<int> Resolve(IEnumerable<int> Vertexes, GraphDTO Graph) => null;
     }
 }

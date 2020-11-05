@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Net.Http;
+using Service.Models;
 
 namespace Service
 {
     interface ITravelSalesmanResolver
     {
-        IEnumerable<int> CalcAppropriatePath(IEnumerable<int> SelectedCitiesId);
+        IEnumerable<int> Resolve(IEnumerable<int> Vertexes, GraphDTO Graph);
     }
 }

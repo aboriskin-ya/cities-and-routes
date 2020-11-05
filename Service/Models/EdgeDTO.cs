@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DataAccess.DTO
+namespace Service.Models
 {
     public class EdgeDTO
     {
         public double Distance { get; set; }
+        public int InitVertex { get; set; }
+        public int EndVertex { get; set; }
     }
 }

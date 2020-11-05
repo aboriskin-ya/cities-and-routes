@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DataAccess.DTO
+namespace Service.Models
 {
     public class GraphDTO
     {
