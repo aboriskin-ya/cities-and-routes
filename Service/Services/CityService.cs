@@ -1,5 +1,5 @@
 ﻿using DataAccess.Models;
-using Repository.Storages;
+using Repository.Storage;
 using Repository;
 using System;
 using System.Collections.Generic;
@@ -45,6 +45,11 @@ namespace Service.Services
         public CityDTO GetCity(Guid id)
         {
             return _mapper.Map<City, CityDTO>(_repository.Get(id));
+        }
+
+        public List<City> GetAllCityByMap(Guid mapId)
+        {
+            return _repository.GetAllCityByMap(mapId);
         }
 
         public bool DeleteCity(Guid id)
