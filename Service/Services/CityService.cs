@@ -4,8 +4,10 @@ using Repository;
 using System;
 using System.Collections.Generic;
 using AutoMapper;
+using Service.Services.Interfaces;
+using Service.DTO;
 
-namespace Service
+namespace Service.Services
 {
     public class CityService : ICityService
     {
@@ -28,14 +30,21 @@ namespace Service
             return city;
         }
 
-        public IEnumerable<City> GetCity()
+        public IEnumerable<CityDTO> GetCities()
         {
-            return _repository.GetAll();
+            List<CityDTO> cityDTOs = new List<CityDTO>();
+            CityDTO cityDTOTemp = new CityDTO();
+            foreach (var item in _repository.GetAll())
+            {
+                _mapper.Map<City, CityDTO>(item, cityDTOTemp);
+                cityDTOs.Add(cityDTOTemp);
+            }
+            return cityDTOs;
         }
 
-        public City GetCity(Guid Id)
+        public City GetCity(Guid id)
         {
-            return _repository.Get(Id);
+            return _repository.Get(id);
         }
 
         public List<City> GetAllCityByMap(Guid MapId)
@@ -59,9 +68,9 @@ namespace Service
 
         public City UpdateCity(Guid Id, CityDTO Dto)
         {
-            City City = this.GetCity(Id);
-            _mapper.Map<CityDTO, City>(Dto, City);
-            City = _repository.Update(City);
+            City city = this.GetCity(id);
+            _mapper.Map<CityDTO, City>(dto, city);
+            city = _repository.Update(city);
             _context.SaveChanges();
             return City;
         }

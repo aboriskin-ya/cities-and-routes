@@ -5,11 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Repository;
 using Microsoft.EntityFrameworkCore;
+using Service;
 using Repository.Storage;
 using System;
 using AutoMapper;
-using Service.Services.Interfaces;
-using Service.Services;
 
 namespace API
 {
@@ -35,13 +34,10 @@ namespace API
             services.AddScoped(typeof(IImageRepository), typeof(ImageRepository));
             services.AddScoped(typeof(ISettingsRepository), typeof(SettingsRepository));
             services.AddScoped(typeof(ICityRepository), typeof(CityRepository));
+
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<IMapService, MapService>();
             services.AddTransient<ISettingsService, SettingsService>();
-            services.AddTransient<IPathResolverService, PathResolverService>();
-            services.AddTransient<ICityService, CityService>();
-            services.AddTransient<IPathToGraphService, PathToGraphService>();
-            services.AddTransient<IPathResolverService, PathResolverService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
