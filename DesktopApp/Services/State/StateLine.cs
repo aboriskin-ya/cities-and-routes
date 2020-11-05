@@ -2,9 +2,11 @@
 {
     public enum StateLineStatus
     {
-        AddMap = 1,
-        SetMap,
-        AddBondAndDistance
+        Empty,
+        AddCity,
+        SetCity,
+        CreateCity,
+        AddRouteAndDistance
     }  
     public static class StateLine
     {
@@ -12,12 +14,16 @@
         {
             switch (status)
             {
-                case StateLineStatus.AddMap:
+                case StateLineStatus.Empty:
+                    return "";
+                case StateLineStatus.AddCity:
                     return "Please click on the \"Add a city\" to create a new city";
-                case StateLineStatus.SetMap:
+                case StateLineStatus.SetCity:
                     return "Please click on the map to create a new city";
-                case StateLineStatus.AddBondAndDistance:
-                    return "Please set the bond and distance between cities";
+                case StateLineStatus.CreateCity:
+                    return "Please enter the name of the new city";
+                case StateLineStatus.AddRouteAndDistance:
+                    return "Please set the route and distance between cities";
             }
             return "";
         }

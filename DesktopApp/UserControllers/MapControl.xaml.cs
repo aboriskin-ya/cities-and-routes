@@ -321,8 +321,8 @@ namespace DesktopApp.UserControllers
         {
             SelectedCity = new City() 
             { 
-                X = PosX,// p.X - SettingsMap.VertexSize / 2,
-                Y = PosY
+                X = PosX,
+                Y = PosY 
             };
 
             IsAbleToCreateCity = true;

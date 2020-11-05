@@ -70,16 +70,28 @@
                     <TextBox DataContext="{Binding MapViewModel}"
                         Text="{Binding SelectedCity.Name}"
                         Grid.Column="1"
-                        Name="cityName"/>
+                        x:Name="cityName"/>
 
                     <Button
                         Grid.Row="1"
                         Content="Create"
-                        Command="{Binding CreateNewCityCommand}"></Button>
+                        Command="{Binding CreateNewCityCommand}">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text.Length, ElementName=cityName, UpdateSourceTrigger=PropertyChanged}" Value="0">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                     <Button 
                         Grid.Column="1"
                         Grid.Row="1"
-                        Content="Delete"></Button>
+                        Content="Cancel"
+                        Command="{Binding CancelCreatingCityCommand}">
+                    </Button>
                 </Grid>
 
             </StackPanel>

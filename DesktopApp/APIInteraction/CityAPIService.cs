@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using DesktopApp.APIInteraction.Mapper;
+﻿using DesktopApp.APIInteraction.Mapper;
 using DesktopApp.Models;
 using Service.DTO;
 using System;
@@ -15,8 +14,10 @@ namespace DesktopApp.APIInteraction
             var cityDTO =  AppMapper.GetAppMapper().Mapper.Map<CityDTO>(city);
 
             HttpResponseMessage response = await APIClient.Client.PostAsJsonAsync("city", cityDTO);
-            response.EnsureSuccessStatusCode();
             
+            if (!response.IsSuccessStatusCode)
+                throw new HttpRequestException($"We got a http status code: {response.StatusCode}");
+        
             return response.Headers.Location;
         }
     }
