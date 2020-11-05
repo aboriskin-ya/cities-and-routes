@@ -1,8 +1,11 @@
 ﻿using DesktopApp.APIInteraction;
 using DesktopApp.Models;
+using DesktopApp.Service;
 using DesktopApp.Services.Commands;
 using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace DesktopApp.ViewModels
 {
@@ -12,16 +15,19 @@ namespace DesktopApp.ViewModels
 
         private readonly ICityAPIService _cityAPIService;
 
-        public MapViewModel(ICityAPIService cityAPIService)
+        private readonly IMessageBoxService _messageBoxService;
+
+        public MapViewModel(ICityAPIService cityAPIService, IMessageBoxService messageBoxService)
         {
             CityCollection = new ObservableCollection<City>();
-            SelectedCity = new City() { X = -100, Y = -100 };
+            SelectedCity = new City();
             SettingsMap = new Settings()
             {
                 VertexColor = "#FF0000",
                 VertexSize = 10
             };
             _cityAPIService = cityAPIService;
+            _messageBoxService = messageBoxService;
         }
 
         private City _SelectedCity;
@@ -38,12 +44,30 @@ namespace DesktopApp.ViewModels
             set => Set<Settings>(ref _SettingsMap, value, nameof(SettingsMap));
         }        
 
-        public CreateCityCommand CreateNewCityCommand { get => new CreateCityCommand(p => OnCanAddCollection(), m => AddCollection()); }
-        private void AddCollection()
-        {
-            var res = _cityAPIService.CreateCityAsync(SelectedCity);
+        public CreateCityCommand CreateNewCityCommand { get => new CreateCityCommand(p => OnCanAddCollection(), async m => await AddCollectionAsync()); }
+        private async Task AddCollectionAsync()
+        {            
+            try 
+            {
+                var res = await _cityAPIService.CreateCityAsync(SelectedCity);
+                if (!res.IsSuccessful)
+                    throw new Exception();
+            }
+            catch(Exception ex)
+            {                
+                _messageBoxService.ShowError(ex, "An error occured. Please try it again.");
+                RemoveFromCollection();
+            }
             CityCollection.Add(SelectedCity);
         }
-        private bool OnCanAddCollection() => SelectedCity.Name != null;
+        private bool OnCanAddCollection() => true;
+
+        public CancelCreatingCityCommand CancelCreatingCityCommand { get => new CancelCreatingCityCommand(p => OnCanRemoveFromCollection(), m => RemoveFromCollection()); }
+        private void RemoveFromCollection()
+        {
+            CityCollection.Remove(SelectedCity);
+            SelectedCity = new City();
+        }
+        private bool OnCanRemoveFromCollection() => true;
     }
 }

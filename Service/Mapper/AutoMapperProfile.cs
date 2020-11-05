@@ -12,6 +12,7 @@ namespace Service.Mapper
             CreateMap<Map, MapCreateDTO>();
             CreateMap<CityDTO, City>().ForMember("X", opt => opt.MapFrom(src => src.Position.X)).ForMember("Y", opt => opt.MapFrom(src => src.Position.Y));
             CreateMap<RouteDTO, Route>();
+            CreateMap<SettingsDTO, Settings>();
             CreateMap<Settings, SettingsDTO>();
         }
     }
