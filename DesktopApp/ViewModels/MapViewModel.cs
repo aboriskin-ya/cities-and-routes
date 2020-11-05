@@ -50,11 +50,13 @@ namespace DesktopApp.ViewModels
             try 
             {
                 var res = await _cityAPIService.CreateCityAsync(SelectedCity);
+                if (!res.IsSuccessful)
+                    throw new Exception();
             }
             catch(Exception ex)
-            {
+            {                
+                _messageBoxService.ShowError(ex, "An error occured. Please try it again.");
                 RemoveFromCollection();
-                _messageBoxService.ShowError(ex, "An error occured. Please try it again.");               
             }
             CityCollection.Add(SelectedCity);
         }

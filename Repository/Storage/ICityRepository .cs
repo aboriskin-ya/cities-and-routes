@@ -1,6 +1,4 @@
-﻿using Repository.Storage;
-
-namespace Repository.Storages
+﻿namespace Repository.Storage
 {
     public interface ICityRepository : IRepository<DataAccess.Models.City>
     {

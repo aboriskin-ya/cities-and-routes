@@ -6,6 +6,6 @@ namespace DesktopApp.APIInteraction
 {
     public interface ICityAPIService
     {
-        Task<Uri> CreateCityAsync(City city);
+        Task<HttpResponsePayload<City>> CreateCityAsync(City city);
     }
 }

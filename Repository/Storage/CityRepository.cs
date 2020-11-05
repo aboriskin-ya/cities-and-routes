@@ -1,10 +1,9 @@
 ﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using Repository.Storage;
 using System;
 using System.Linq;
 
-namespace Repository.Storages
+namespace Repository.Storage
 {
     public class CityRepository : Repository<City>, ICityRepository
     {
