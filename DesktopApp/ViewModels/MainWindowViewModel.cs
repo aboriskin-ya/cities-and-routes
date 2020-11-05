@@ -49,7 +49,6 @@ namespace DesktopApp.ViewModels
 
         private void OnAddNewCity(object p)
         {
-            StatusBar = StateLine.Show(StateLineStatus.SetMap);
             IsAbleToSetCity = true;
         }
 
@@ -60,12 +59,24 @@ namespace DesktopApp.ViewModels
         public ICommand CreateNewCityCommand => new CreateCityCommand(p => OnCanCreateNewCityExecuted(p), p => OnCreateNewCityExecuted(p));
 
         private void OnCreateNewCityExecuted(object p)
-        { 
+        {
             MapViewModel.CreateNewCityCommand.Execute(p);
             IsAbleToCreateCity = false;
         }
 
-        private bool OnCanCreateNewCityExecuted(object p) => IsAbleToCreateCity && MapViewModel.SelectedCity.Name != null;
+        private bool OnCanCreateNewCityExecuted(object p) => IsAbleToCreateCity;
+        #endregion
+
+        #region CancelCreatingNewCityCommand
+        public ICommand CancelCreatingCityCommand => new CancelCreatingCityCommand(p => OnCanCancelCreatingCityExecuted(p), p => OnCancelCreatingCityExecuted(p));
+
+        private void OnCancelCreatingCityExecuted(object p)
+        {
+            MapViewModel.CancelCreatingCityCommand.Execute(p);
+            IsAbleToCreateCity = false;
+        }
+
+        private bool OnCanCancelCreatingCityExecuted(object p) => IsAbleToCreateCity;
         #endregion
 
         #region MapImage
@@ -201,7 +212,7 @@ namespace DesktopApp.ViewModels
 
         #region StateLine
 
-        private string statusBar = StateLine.Show(StateLineStatus.AddMap);
+        private string statusBar;
         public string StatusBar
         {
             get => statusBar;
@@ -216,7 +227,11 @@ namespace DesktopApp.ViewModels
         public bool IsAbleToCreateCity
         {
             get => _IsAbleToCreateCity;
-            set => Set<bool>(ref _IsAbleToCreateCity, value);
+            set 
+            { 
+                Set<bool>(ref _IsAbleToCreateCity, value);
+                StatusBarUpdate();
+            }
         }
 
         #endregion
@@ -227,9 +242,26 @@ namespace DesktopApp.ViewModels
         public bool IsAbleToSetCity
         {
             get => _IsAbleToSetCity;
-            set => Set<bool>(ref _IsAbleToSetCity, value);
+            set
+            {
+                Set<bool>(ref _IsAbleToSetCity, value);
+                StatusBarUpdate();
+            }
         }
 
         #endregion
+
+        public void StatusBarUpdate()
+        {
+            if (IsAbleToSetCity)
+                StatusBar = StateLine.Show(StateLineStatus.SetCity);
+            else
+            {
+                if (IsAbleToCreateCity)
+                    StatusBar = StateLine.Show(StateLineStatus.CreateCity);
+                else
+                    StatusBar = StateLine.Show(StateLineStatus.Empty);
+            }
+        }
     }
 }

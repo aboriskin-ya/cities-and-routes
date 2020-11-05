@@ -5,8 +5,8 @@ namespace DesktopApp.Models
     public class City : ViewModelBase
     {
         private string name;
-        private double x;
-        private double y;
+        private double x = -100;
+        private double y = -100;
         public double X
         {
             get { return x; }
