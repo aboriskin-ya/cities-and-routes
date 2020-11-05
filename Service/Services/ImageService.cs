@@ -3,8 +3,9 @@ using Repository.Storage;
 using Repository;
 using System;
 using System.Collections.Generic;
+using Service.Services.Interfaces;
 
-namespace Service
+namespace Service.Services
 {
     public class ImageService : IImageService
     {
@@ -23,7 +24,7 @@ namespace Service
             _context.SaveChanges();
         }
 
-        public IEnumerable<Image> GetImage()
+        public IEnumerable<Image> GetImages()
         {
             return _repository.GetAll();
         }

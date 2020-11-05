@@ -1,5 +1,6 @@
 ﻿using DesktopApp.APIInteraction.Mapper;
 using DesktopApp.Models;
+using Service.DTO;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace DesktopApp.APIInteraction
     {        
         public async Task<HttpResponsePayload<City>> CreateCityAsync(City city)
         {
-            var cityDTO =  AppMapper.GetAppMapper().Mapper.Map<DataAccess.Models.CityDTO>(city);
+            var cityDTO =  AppMapper.GetAppMapper().Mapper.Map<CityDTO>(city);
 
             HttpResponseMessage response; 
 

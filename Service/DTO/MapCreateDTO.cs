@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace DataAccess.DTO
+namespace Service.DTO
 {
-    public class MapDTO
+    public class MapCreateDTO
     {
         public string Name { get; set; }
         public Guid ImageId { get; set; }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DataAccess.Models
+namespace Service.DTO
 {
     public class RouteDTO
     {

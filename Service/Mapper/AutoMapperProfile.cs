@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
-using DataAccess.DTO;
 using DataAccess.Models;
+using Service.DTO;
 
-namespace DataAccess.Mapper
+namespace Service.Mapper
 {
     public class AutoMapperProfile : Profile
     {
         public AutoMapperProfile()
         {
-            CreateMap<MapDTO, Map>();
+            CreateMap<MapGetDTO, Map>();
+            CreateMap<Map, MapCreateDTO>();
             CreateMap<CityDTO, City>().ForMember("X", opt => opt.MapFrom(src => src.Position.X)).ForMember("Y", opt => opt.MapFrom(src => src.Position.Y));
             CreateMap<RouteDTO, Route>();
             CreateMap<SettingsDTO, Settings>();

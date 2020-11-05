@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using AutoMapper;
 using Repository.Storage;
+using Service.Services.Interfaces;
+using Service.DTO;
 
-namespace Service
+namespace Service.Services
 {
     class RouteService : IRouteService
     {
@@ -20,14 +22,21 @@ namespace Service
             _context = context;
         }
 
-        public IEnumerable<Route> GetRoute()
+        public IEnumerable<RouteDTO> GetRoutes()
         {
-            return _repository.GetAll();
+            List<RouteDTO> routeDTOs = new List<RouteDTO>();
+            RouteDTO routeDTOTemp = new RouteDTO();
+            foreach (var item in _repository.GetAll())
+            {
+                _mapper.Map<Route, RouteDTO>(item, routeDTOTemp);
+                routeDTOs.Add(routeDTOTemp);
+            }
+            return routeDTOs;
         }
 
-        public Route GetRoute(Guid id)
+        public RouteDTO GetRoute(Guid id)
         {
-            return _repository.Get(id);
+            return _mapper.Map<Route, RouteDTO>(_repository.Get(id));
         }
 
         public Route CreateRoute(RouteDTO dto)
