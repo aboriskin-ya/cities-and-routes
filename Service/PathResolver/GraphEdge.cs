@@ -11,10 +11,10 @@ namespace PathResolver
 
         public int EdgeWeight { get; }
 
-        public GraphEdge(GraphVertex connectedVertex, int weight)
+        public GraphEdge(GraphVertex ConnectedVertex, int Weight)
         {
-            ConnectedVertex = connectedVertex;
-            EdgeWeight = weight;
+            this.ConnectedVertex = ConnectedVertex;
+            EdgeWeight = Weight;
         }
     }
 }

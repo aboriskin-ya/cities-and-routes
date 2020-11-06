@@ -6,7 +6,6 @@ namespace Service
 {
     public interface IPathToGraphService
     {
-        List<Guid> CityListToGraph(IEnumerable<City> cityList, Guid cityFromId, Guid cityToId);
-        int calculateDistance(City city, City otherCity);
+        List<Guid> CityListToGraph(IEnumerable<City> CityList, Guid CityFromId, Guid CityToId);
     }
 }

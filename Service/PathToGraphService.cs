@@ -8,42 +8,31 @@ namespace Service
 {
     public class PathToGraphService : IPathToGraphService
     {
-        public List<Guid> CityListToGraph(IEnumerable<City> cityList, Guid cityFromId, Guid cityToId)
+        public List<Guid> CityListToGraph(IEnumerable<City> CityList, Guid CityFromId, Guid CityToId)
         {
-            var graph = new Graph();
+            var Graph = new Graph();
 
-            foreach (City city in cityList)
+            foreach (City City in CityList)
             {
-                graph.AddVertex(city.Id.ToString());
+                Graph.AddVertex(City.Id.ToString());
             }
 
-            foreach (City city in cityList)
+            foreach (City City in CityList)
             {
-                foreach (City otherCity in cityList)
+                foreach (City OtherCity in CityList)
                 {
-                    if (city.Id != otherCity.Id && city.Id != cityToId && city.Id != cityFromId)
+                    if (City.Id != OtherCity.Id && City.Id != CityToId && City.Id != CityFromId)
                     {
-                       graph.AddEdge(city.Id.ToString(), otherCity.Id.ToString(), this.calculateDistance(city, otherCity));
+                       Graph.AddEdge(City.Id.ToString(), OtherCity.Id.ToString(), 123);
                     }
                 }
             }
 
-            var graphService = new GraphService(graph);
-            var path = graphService.FindShortestPath(cityFromId.ToString(), cityToId.ToString());
+            var GraphService = new GraphService(Graph);
+            var Path = GraphService.FindShortestPath(CityFromId.ToString(), CityToId.ToString());
 
-            return path;
+            return Path;
         }
 
-        public int calculateDistance(City city, City otherCity)
-        {
-            int distance;
-
-            distance = city.X - otherCity.X + city.Y - otherCity.Y;
-            if (distance < 0)
-            {
-                distance *= (-1);
-            }
-            return distance;
-        }
     }
 }

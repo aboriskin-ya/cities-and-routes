@@ -19,9 +19,9 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("FindPath")]
-        public IActionResult FindPath([FromBody] PathResolverDTO dto)
+        public IActionResult FindPath([FromBody] PathResolverDTO Dto)
         {
-            return Ok(_pathResolverservice.FindPath(dto.mapId, dto.cityFromId, dto.cityToId));
+            return Ok(_pathResolverservice.FindPath(Dto.mapId, Dto.cityFromId, Dto.cityToId));
         }
 
     }
