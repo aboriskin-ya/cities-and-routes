@@ -11,22 +11,22 @@ namespace PathResolver
 
         public List<GraphEdge> Edges { get; }
 
-        public GraphVertex(string vertexName)
+        public GraphVertex(string VertexName)
         {
-            Name = vertexName;
+            Name = VertexName;
             Edges = new List<GraphEdge>();
         }
         
-        public void AddEdge(GraphEdge newEdge)
+        public void AddEdge(GraphEdge NewEdge)
         {
-            Edges.Add(newEdge);
+            Edges.Add(NewEdge);
         }
         
-        public void AddEdge(GraphVertex vertex, int edgeWeight)
+        public void AddEdge(GraphVertex Vertex, int EdgeWeight)
         {
-            if (!FindEdge(vertex.Name))
+            if (!FindEdge(Vertex.Name))
             {
-                AddEdge(new GraphEdge(vertex, edgeWeight));
+                AddEdge(new GraphEdge(Vertex, EdgeWeight));
             }
         }
 

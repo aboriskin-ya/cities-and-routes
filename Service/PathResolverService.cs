@@ -15,19 +15,19 @@ namespace Service
         private readonly IPathToGraphService _pathService;
         protected readonly CityRouteContext _context;
 
-        public PathResolverService(IMapRepository mapRepository, ICityRepository cityRepository, IPathToGraphService pathService, CityRouteContext context)
+        public PathResolverService(IMapRepository MapRepository, ICityRepository CityRepository, IPathToGraphService PathService, CityRouteContext Context)
         {
-            _context = context;
-            _mapRepository = mapRepository;
-            _cityRepository = cityRepository;
-            _pathService = pathService;
+            _context = Context;
+            _mapRepository = MapRepository;
+            _cityRepository = CityRepository;
+            _pathService = PathService;
         }
 
-        public List<Guid> FindPath(Guid mapId, Guid cityToId, Guid cityFromId)
+        public List<Guid> FindPath(Guid MapId, Guid CityToId, Guid CityFromId)
         {
-            List<City> cityList = this.GetAllCityByMap(mapId);
+            List<City> CityList = this.GetAllCityByMap(MapId);
 
-            return _pathService.CityListToGraph(cityList, cityFromId, cityToId);
+            return _pathService.CityListToGraph(CityList, CityFromId, CityToId);
         }
 
         public List<City> GetAllCityByMap(Guid mapId)
