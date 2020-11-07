@@ -63,9 +63,9 @@ namespace Service.Services
 
         public City UpdateCity(Guid Id, CityDTO Dto)
         {
-            City city = _repository.Get(id);
-            _mapper.Map<CityDTO, City>(dto, city);
-            city = _repository.Update(city);
+            City City = _repository.Get(Id);
+            _mapper.Map<CityDTO, City>(Dto, City);
+            City = _repository.Update(City);
             _context.SaveChanges();
             return City;
         }

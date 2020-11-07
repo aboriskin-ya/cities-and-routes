@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using Service.Services.Interfaces;
 using AutoMapper;
 using Service.DTO;
-using System.Runtime.InteropServices.ComTypes;
-using System.Linq;
 
 namespace Service.Services
 {

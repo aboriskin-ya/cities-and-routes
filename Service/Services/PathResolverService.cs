@@ -3,10 +3,9 @@ using Repository.Storage;
 using Repository;
 using System;
 using System.Collections.Generic;
-using DataAccess.DTO;
-using PathResolver;
+using Service.Services.Interfaces;
 
-namespace Service
+namespace Service.Services
 {
     public class PathResolverService : IPathResolverService
     {
@@ -25,14 +24,9 @@ namespace Service
 
         public List<Guid> FindPath(Guid MapId, Guid CityToId, Guid CityFromId)
         {
-            List<City> CityList = this.GetAllCityByMap(MapId);
+            List<City> CityList = new List<City>();//= this.GetAllCityByMap(MapId);
 
             return _pathService.CityListToGraph(CityList, CityFromId, CityToId);
-        }
-
-        public List<City> GetAllCityByMap(Guid mapId)
-        {
-            return _cityRepository.GetAllCityByMap(mapId);
         }
 
     }

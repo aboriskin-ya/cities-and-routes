@@ -2,8 +2,9 @@
 using System;
 using System.Collections.Generic;
 using PathResolver;
+using Service.Services.Interfaces;
 
-namespace Service
+namespace Service.Services
 {
     public class GraphService : IGraphService
     {

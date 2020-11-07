@@ -1,10 +1,10 @@
 ﻿using DataAccess.Models;
 using System;
 using System.Collections.Generic;
-using DataAccess.DTO;
 using PathResolver;
+using Service.Services.Interfaces;
 
-namespace Service
+namespace Service.Services
 {
     public class PathToGraphService : IPathToGraphService
     {

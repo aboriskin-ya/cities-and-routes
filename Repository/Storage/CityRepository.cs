@@ -15,10 +15,5 @@ namespace Repository.Storage
         {
             return _entity.Include(p => p.Map).SingleOrDefault(p => p.Id == id);
         }
-
-        public List<City> GetAllCityByMap(Guid mapId)
-        {
-            return _entity.Where(p => p.MapId == mapId).ToList();
-        }
     }
 }
