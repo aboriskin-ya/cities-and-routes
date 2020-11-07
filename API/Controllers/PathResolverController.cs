@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DataAccess.Models;
-using Service;
+using Service.Services.Interfaces;
 using DataAccess.DTO;
-using System;
 
 namespace API.Controllers
 {
@@ -21,7 +20,7 @@ namespace API.Controllers
         [Route("FindPath")]
         public IActionResult FindPath([FromBody] PathResolverDTO Dto)
         {
-            return Ok(_pathResolverservice.FindPath(Dto.mapId, Dto.cityFromId, Dto.cityToId));
+            return Ok(_pathResolverservice.FindPath(Dto.MapId, Dto.CityFromId, Dto.CityToId));
         }
 
     }

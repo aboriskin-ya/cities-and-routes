@@ -28,7 +28,7 @@ namespace DesktopApp.APIInteraction
             {
                 IsSuccessful = response.IsSuccessStatusCode ? true : false
             };
-            cityDTO = HttpContentExtensions.ReadAsAsync(response.Content, typeof(DataAccess.Models.CityDTO)).Result as DataAccess.Models.CityDTO;
+            cityDTO = HttpContentExtensions.ReadAsAsync(response.Content, typeof(CityDTO)).Result as CityDTO;
             responsePayload.Payload = AppMapper.GetAppMapper().Mapper.Map<City>(cityDTO);
 
             return responsePayload;

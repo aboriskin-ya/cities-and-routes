@@ -16,7 +16,7 @@ namespace DesktopApp.APIInteraction.Mapper
                           Y = source.Y
                     }));
 
-            CreateMap<DataAccess.Models.CityDTO, City>()
+            CreateMap<CityDTO, City>()
                 .ForMember("X", opt => opt.MapFrom(src => src.Position.X))
                 .ForMember("Y", opt => opt.MapFrom(src => src.Position.Y));
         }

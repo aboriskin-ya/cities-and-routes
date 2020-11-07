@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Service
+namespace Service.Services.Interfaces
 {
     public interface IGraphService
     {

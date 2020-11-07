@@ -2,10 +2,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace Service
+namespace Service.Services.Interfaces
 {
     public interface IPathResolverService
     {
-        List<Guid> FindPath(Guid mapId, Guid cityToId, Guid cityFromId);
+        List<Guid> FindPath(Guid MapId, Guid CityToId, Guid CityFromId);
     }
 }
