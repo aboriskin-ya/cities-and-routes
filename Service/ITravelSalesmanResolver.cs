@@ -3,7 +3,7 @@ using Service.Models;
 
 namespace Service
 {
-    interface ITravelSalesmanResolver
+   public interface ITravelSalesmanResolver
     {
         IEnumerable<int> Resolve(IEnumerable<int> Vertexes, GraphDTO Graph);
     }
