@@ -15,16 +15,16 @@ namespace Service.Services
         protected readonly CityRouteContext _context;
         private readonly IMapper _mapper;
 
-        public CityService(ICityRepository repository, CityRouteContext context, IMapper Cityper)
+        public CityService(ICityRepository Repository, CityRouteContext context, IMapper Cityper)
         {
-            _repository = repository;
+            _repository = Repository;
             _context = context;
             _mapper = Cityper;
         }
 
-        public City CreateCity(CityDTO dto)
+        public City CreateCity(CityDTO Dto)
         {
-            City city = _mapper.Map<City>(dto);
+            City city = _mapper.Map<City>(Dto);
             _repository.Add(city);
             _context.SaveChanges();
             return city;
@@ -47,10 +47,10 @@ namespace Service.Services
             return _mapper.Map<City, CityDTO>(_repository.Get(id));
         }
 
-        public bool DeleteCity(Guid id)
+        public bool DeleteCity(Guid Id)
         {
             bool result;
-            if (result = _repository.Delete(id))
+            if (result = _repository.Delete(Id))
             {
                 _context.SaveChanges();
                 return result;
@@ -61,13 +61,13 @@ namespace Service.Services
             }
         }
 
-        public City UpdateCity(Guid id, CityDTO dto)
+        public City UpdateCity(Guid Id, CityDTO Dto)
         {
-            City city = _repository.Get(id);
-            _mapper.Map<CityDTO, City>(dto, city);
-            city = _repository.Update(city);
+            City City = _repository.Get(Id);
+            _mapper.Map<CityDTO, City>(Dto, City);
+            City = _repository.Update(City);
             _context.SaveChanges();
-            return city;
+            return City;
         }
     }
 }
