@@ -5,7 +5,8 @@ using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Service;
 using AutoMapper;
-using DataAccess.DTO;
+using Service.Services.Interfaces;
+using Service.DTO;
 
 namespace API.Controllers
 {
@@ -24,14 +25,13 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public ActionResult<Map> GetMap(Guid id)
+        public ActionResult<MapGetDTO> GetMap(Guid id)
         {
-            Map map = _Mapservice.GetMap(id);
+            MapGetDTO map = _Mapservice.GetMap(id);
             if (map == null)
             {
                 return NotFound();
             }
-
             return map;
         }
 
@@ -39,24 +39,20 @@ namespace API.Controllers
         [Route("getall")]
         public IActionResult GetMap()
         {
-            IEnumerable<Map> MapList = _Mapservice.GetMap();
-
+            IEnumerable<MapGetDTO> MapList = _Mapservice.GetMaps();
             if (MapList.Count() == 0)
             {
                 return NotFound();
             }
-
             return Ok(MapList);
         }
 
         [HttpPost]
-        public ActionResult<Map> CreateMap([FromBody] MapDTO dto)
+        public ActionResult<Map> CreateMap([FromBody] MapCreateDTO dto)
         {
             try
             {
-                Map map = _mapper.Map<Map>(dto);
-                _Mapservice.CreateMap(map);
-                return map;
+                return _Mapservice.CreateMap(dto);
             }
             catch (Exception ex)
             {
@@ -66,14 +62,11 @@ namespace API.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
-        public ActionResult<Map> UpdateMap(Guid id, [FromBody] MapDTO dto)
+        public ActionResult<Map> UpdateMap(Guid id, [FromBody] MapCreateDTO dto)
         {
             try
             {
-                Map map = _Mapservice.GetMap(id);
-                _mapper.Map<MapDTO, Map>(dto, map);
-                _Mapservice.UpdateMap(map);
-                return map;
+                return _Mapservice.UpdateMap(dto, id);
             }
             catch (Exception ex)
             {

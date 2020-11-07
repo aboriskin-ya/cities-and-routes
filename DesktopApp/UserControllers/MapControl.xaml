@@ -3,11 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:DesktopApp.UserControllers"
-             xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:fa="http://schemas.fontawesome.com/icons/"
+             xmlns:converters="clr-namespace:DesktopApp.Services.Converters"
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:beh="clr-namespace:DesktopApp.Services"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             x:Name="mControl">
+    <UserControl.Resources>
+        <converters:StringToColorBrushConverter x:Key="StringToColorConverter"/>
+        <converters:CenterOffsetConverter x:Key="CenterOffsetConverter"/>
+    </UserControl.Resources>
     <Grid ClipToBounds="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.1*" />
@@ -19,32 +25,126 @@
             <RowDefinition Height="0.5*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <Image 
-            Source="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:MapControl}, Path=MapImageSource}"
-            RenderTransformOrigin="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType=local:MapControl},Path=TransformPosition}"
-            Stretch="Fill" Name="Image" 
+        
+        <Grid
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Grid.RowSpan="4"
-            >
-            <Image.RenderTransform>
+            RenderTransformOrigin="{Binding ElementName=mControl,Path=TransformPosition}">
+            <Grid.RenderTransform>
                 <TransformGroup >
-                    <ScaleTransform ScaleX="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:MapControl},Path=ScaleValue}" 
-                                    ScaleY="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:MapControl},Path=ScaleValue}"/>
-                    <TranslateTransform X="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:MapControl},Path=OffsetValue.X}"
-                                        Y="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:MapControl},Path=OffsetValue.Y}"/>
+                    <ScaleTransform ScaleX="{Binding ElementName=mControl, Path=ScaleValue}" 
+                                    ScaleY="{Binding ElementName=mControl, Path=ScaleValue}"/>
+                    <TranslateTransform X="{Binding ElementName=mControl, Path=OffsetValue.X}"
+                                        Y="{Binding ElementName=mControl, Path=OffsetValue.Y}"/>
                 </TransformGroup>
-            </Image.RenderTransform>
-        </Image>
+            </Grid.RenderTransform>
+            
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding ElementName=mControl, Path=IsAbleToSetCity}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="Cursor" Value="Hand" />
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+
+            <i:Interaction.Behaviors>
+                <beh:MouseBehaviour 
+                MouseX="{Binding ElementName=mControl, Path=PosX, Mode=OneWayToSource}"
+                MouseY="{Binding ElementName=mControl, Path=PosY, Mode=OneWayToSource}" />
+            </i:Interaction.Behaviors>
+
+            <Image
+                RenderTransformOrigin="{Binding ElementName=mControl, Path=TransformPosition}"
+                Source="{Binding ElementName=mControl, Path=MapImageSource}"            
+                Stretch="Fill" Name="Image" 
+                >
+            </Image>
+
+            <Canvas x:Name="MapCanvas">
+                <Canvas.Resources>
+                    <dxmvvm:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+                </Canvas.Resources>
+                <Canvas Canvas.Left="{Binding ElementName=mControl, Path=PosX}"
+                        Canvas.Top="{Binding ElementName=mControl, Path=PosY}">
+                    <Ellipse Fill="LightGreen"
+                             Visibility="{Binding ElementName=mControl, Path=IsAbleToSetCity, 
+                                Converter={StaticResource BooleanToVisibilityConverter}}"
+                             Width="{Binding ElementName=mControl, Path=SettingsMap.VertexSize}"
+                             Height="{Binding ElementName=mControl, Path=SettingsMap.VertexSize}"
+                             Canvas.Left="{Binding RelativeSource={RelativeSource Self}, Path=ActualWidth, 
+                                Converter={StaticResource CenterOffsetConverter}}"
+                             Canvas.Top="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, 
+                                Converter={StaticResource CenterOffsetConverter}}"
+                             x:Name="GreenCursor"/>
+                </Canvas>
+                <Canvas Canvas.Left="{Binding ElementName=mControl, Path=SelectedCity.X}"
+                        Canvas.Top="{Binding ElementName=mControl, Path=SelectedCity.Y}">
+                <Ellipse Fill="{Binding ElementName=GreenCursor, Path=Fill}"
+                         Width="{Binding ElementName=mControl, Path=SettingsMap.VertexSize}"
+                         Height="{Binding ElementName=mControl, Path=SettingsMap.VertexSize}"
+                         Canvas.Left="{Binding RelativeSource={RelativeSource Self}, Path=ActualWidth, 
+                            Converter={StaticResource CenterOffsetConverter}}"
+                         Canvas.Top="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, 
+                            Converter={StaticResource CenterOffsetConverter}}"
+                         x:Name="GreenPoint"/>
+                </Canvas>
+                <ItemsControl 
+                    ItemsSource="{Binding ElementName=mControl, 
+                    Path=CityCollection}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Canvas>
+                                <Ellipse Name="city" Fill="{Binding ElementName=mControl, Path=SettingsMap.VertexColor, 
+                                            Converter={StaticResource StringToColorConverter}}" 
+                                         Width="{Binding ElementName=mControl, Path=SettingsMap.VertexSize}"
+                                         Height="{Binding ElementName=mControl, Path=SettingsMap.VertexSize}"
+                                         Canvas.Left="{Binding RelativeSource={RelativeSource Self}, Path=ActualWidth, 
+                                            Converter={StaticResource CenterOffsetConverter}}"
+                                         Canvas.Top="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, 
+                                            Converter={StaticResource CenterOffsetConverter}}"/>
+                                <Label Content="{Binding Name}"
+                                       Canvas.Bottom="{Binding ElementName=city, Path=ActualHeight}"
+                                       FontWeight="ExtraBlack"
+                                       Canvas.Left="{Binding RelativeSource={RelativeSource Self}, Path=ActualWidth,
+                                            Converter={StaticResource CenterOffsetConverter}}"/>
+                            </Canvas>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    
+                    <ItemsControl.ItemContainerStyle>
+                        <Style>
+                            <Setter Property="Canvas.Top" Value="{Binding Path=Y}" />
+                            <Setter Property="Canvas.Left" Value="{Binding Path=X}" /> 
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                </ItemsControl>
+
+            </Canvas>
+        </Grid>
+
         <Button Grid.Row="1" 
                         Template="{StaticResource ScalePlus}" 
-                        Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:MapControl},Path=ZoomCommand}"
+                        Command="{Binding ElementName=mControl, Path=ZoomCommand}"
                         CommandParameter="2,0"
                         />
 
         <Button Grid.Row="2" 
                         Template="{StaticResource ScaleMinus}" 
-                        Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:MapControl},Path=ZoomCommand}"
+                        Command="{Binding ElementName=mControl, Path=ZoomCommand}"
                         CommandParameter="0,5"
                         />
     </Grid>

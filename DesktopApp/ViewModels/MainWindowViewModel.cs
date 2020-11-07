@@ -2,10 +2,10 @@
 using DesktopApp.Dialogs;
 using DesktopApp.Services.Commands;
 using DesktopApp.Services.Helper;
+using DesktopApp.Services.State;
 using DesktopApp.UserControllers;
 using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -16,21 +16,24 @@ namespace DesktopApp.ViewModels
     {
         ZoomIn, ZoomOut
     }
-    internal class MainWindowViewModel:BaseViewModel
+    internal class MainWindowViewModel : BaseViewModel
     {
-        
-        public MainWindowViewModel()
+        public IMapViewModel MapViewModel { get; }
+
+        public ICursorPositionViewModel PositionViewModel { get; }
+
+        public MainWindowViewModel(IMapViewModel viewModel, ICursorPositionViewModel positionViewModel)
         {
             MapImageSource = new BitmapImage(new Uri(@"Resources\Maps\USAMap.jpg", UriKind.Relative));
             ImageHeight = (MapImageSource as BitmapImage).PixelHeight;
             ImageWidth = (MapImageSource as BitmapImage).PixelWidth;
-            ShowCreateMapDialogCommand = new ShowCreateMapDialogCommand(null, p => ShowDialog(p));
+
+            MapViewModel = viewModel;
+            PositionViewModel = positionViewModel;
         }
 
-        #region ShowCreateMapDialog
-
-       
-        public ICommand ShowCreateMapDialogCommand { get; }
+        #region ShowCreateMapDialog     
+        public ICommand ShowCreateMapDialogCommand => new ShowCreateMapDialogCommand(null, p => ShowDialog(p));
 
         private void ShowDialog(object p)
         {
@@ -39,6 +42,41 @@ namespace DesktopApp.ViewModels
             view.Owner = App.Current.MainWindow;
             view.Show();
         }
+        #endregion
+
+        #region AddNewCityCommand
+        public ICommand AddNewCityCommand => new AddNewCityCommand(p => OnCanAddNewCityExecute(p), p => OnAddNewCity(p));
+
+        private void OnAddNewCity(object p)
+        {
+            IsAbleToSetCity = true;
+        }
+
+        private bool OnCanAddNewCityExecute(object p) => !IsAbleToSetCity && !IsAbleToCreateCity;//&& Map != null;
+        #endregion
+
+        #region CreateNewCityCommand
+        public ICommand CreateNewCityCommand => new CreateCityCommand(p => OnCanCreateNewCityExecuted(p), p => OnCreateNewCityExecuted(p));
+
+        private void OnCreateNewCityExecuted(object p)
+        {
+            MapViewModel.CreateNewCityCommand.Execute(p);
+            IsAbleToCreateCity = false;
+        }
+
+        private bool OnCanCreateNewCityExecuted(object p) => IsAbleToCreateCity;
+        #endregion
+
+        #region CancelCreatingNewCityCommand
+        public ICommand CancelCreatingCityCommand => new CancelCreatingCityCommand(p => OnCanCancelCreatingCityExecuted(p), p => OnCancelCreatingCityExecuted(p));
+
+        private void OnCancelCreatingCityExecuted(object p)
+        {
+            MapViewModel.CancelCreatingCityCommand.Execute(p);
+            IsAbleToCreateCity = false;
+        }
+
+        private bool OnCanCancelCreatingCityExecuted(object p) => IsAbleToCreateCity;
         #endregion
 
         #region MapImage
@@ -78,7 +116,7 @@ namespace DesktopApp.ViewModels
         #endregion
 
         #region ZoomCommand
-        public ZoomCommand ZoomCommand => new ZoomCommand(p => OnCanZoomExecute(p), p => OnZoomExecuted(p));
+        public ZoomCommand ZoomCommand => new ZoomCommand(p =>true, p => OnZoomExecuted(p));
 
         private void OnZoomExecuted(object p)
         {
@@ -171,5 +209,59 @@ namespace DesktopApp.ViewModels
             set => Set<Point>(ref _TransformPosition, value);
         }
         #endregion
+
+        #region StateLine
+
+        private string statusBar;
+        public string StatusBar
+        {
+            get => statusBar;
+            set => Set<string>(ref statusBar, value);
+        }
+
+        #endregion
+
+        #region CreateCityPossibility
+
+        private bool _IsAbleToCreateCity = false;
+        public bool IsAbleToCreateCity
+        {
+            get => _IsAbleToCreateCity;
+            set 
+            { 
+                Set<bool>(ref _IsAbleToCreateCity, value);
+                StatusBarUpdate();
+            }
+        }
+
+        #endregion
+
+        #region SetCityPossibility
+
+        private bool _IsAbleToSetCity = false;
+        public bool IsAbleToSetCity
+        {
+            get => _IsAbleToSetCity;
+            set
+            {
+                Set<bool>(ref _IsAbleToSetCity, value);
+                StatusBarUpdate();
+            }
+        }
+
+        #endregion
+
+        public void StatusBarUpdate()
+        {
+            if (IsAbleToSetCity)
+                StatusBar = StateLine.Show(StateLineStatus.SetCity);
+            else
+            {
+                if (IsAbleToCreateCity)
+                    StatusBar = StateLine.Show(StateLineStatus.CreateCity);
+                else
+                    StatusBar = StateLine.Show(StateLineStatus.Empty);
+            }
+        }
     }
 }

@@ -5,10 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Repository;
 using Microsoft.EntityFrameworkCore;
-using Service;
 using Repository.Storage;
 using System;
 using AutoMapper;
+using Service.Services.Interfaces;
+using Service.Services;
 
 namespace API
 {
