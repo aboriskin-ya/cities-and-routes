@@ -38,6 +38,10 @@ namespace API
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<IMapService, MapService>();
             services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<IPathResolverService, PathResolverService>();
+            services.AddTransient<ICityService, CityService>();
+            services.AddTransient<IPathToGraphService, PathToGraphService>();
+            services.AddTransient<IPathResolverService, PathResolverService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
