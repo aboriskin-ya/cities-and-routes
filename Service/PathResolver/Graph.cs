@@ -17,11 +17,11 @@ namespace PathResolver
 
         public GraphVertex FindVertex(string VertexName)
         {
-            foreach (var v in Vertices)
+            foreach (var Vertex in Vertices)
             {
-                if (v.Name.Equals(VertexName))
+                if (Vertex.Name.Equals(VertexName))
                 {
-                    return v;
+                    return Vertex;
                 }
             }
 
@@ -30,12 +30,12 @@ namespace PathResolver
 
         public void AddEdge(string FirstName, string SecondName, int Weight)
         {
-            var V1 = FindVertex(FirstName);
-            var V2 = FindVertex(SecondName);
-            if (V2 != null && V1 != null)
+            var FirstVertex = FindVertex(FirstName);
+            var SecondVertex = FindVertex(SecondName);
+            if (SecondVertex != null && FirstVertex != null)
             {
-                V1.AddEdge(V2, Weight);
-                V2.AddEdge(V1, Weight);
+                FirstVertex.AddEdge(SecondVertex, Weight);
+                SecondVertex.AddEdge(FirstVertex, Weight);
             }
         }
     }

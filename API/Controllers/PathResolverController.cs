@@ -2,6 +2,7 @@
 using DataAccess.Models;
 using Service.Services.Interfaces;
 using DataAccess.DTO;
+using System;
 
 namespace API.Controllers
 {
@@ -9,18 +10,18 @@ namespace API.Controllers
     [ApiController]
     public class PathResolverController : ControllerBase
     {
-        private readonly IPathResolverService _pathResolverservice;
+        private readonly IAlgorithmService _algorithmService;
 
-        public PathResolverController(IPathResolverService PathResolverService)
+        public PathResolverController(IAlgorithmService AlgorithmService)
         {
-            _pathResolverservice = PathResolverService;
+            _algorithmService = AlgorithmService;
         }
 
         [HttpPost]
-        [Route("FindPath")]
-        public IActionResult FindPath([FromBody] PathResolverDTO Dto)
+        [Route("FindShortestPath")]
+        public IActionResult FindShortestPath([FromBody] PathResolverDTO Dto)
         {
-            return Ok(_pathResolverservice.FindPath(Dto.MapId, Dto.CityFromId, Dto.CityToId));
+            return Ok(_algorithmService.FindShortestPath(Dto.MapId, Dto.CityFromId, Dto.CityToId));
         }
 
     }
