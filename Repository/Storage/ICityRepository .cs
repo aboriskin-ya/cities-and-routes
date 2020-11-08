@@ -3,4 +3,5 @@
     public interface ICityRepository : IRepository<DataAccess.Models.City>
     {
     }
+
 }
