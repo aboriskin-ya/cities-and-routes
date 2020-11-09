@@ -5,11 +5,13 @@ using System;
 using System.Collections.Generic;
 using Service.Services.Interfaces;
 using Service.DTO;
+using System.Linq;
 
 namespace Service.Services
 {
     public class AlgorithmService : Interfaces.IAlgorithmService
     {
+        private readonly ITravelSalesmanResolver _Resolver;
         private readonly IMapRepository _mapRepository;
         private readonly ICityRepository _cityRepository;
         private readonly IPathToGraphService _pathToGraphService;
@@ -21,6 +23,7 @@ namespace Service.Services
             _mapRepository = MapRepository;
             _cityRepository = CityRepository;
             _pathToGraphService = PathService;
+            _Resolver = resolver;
         }
         
         public List<Guid> FindShortestPath(Guid MapId, Guid CityToId, Guid CityFromId)
@@ -33,9 +36,14 @@ namespace Service.Services
         }
         public IEnumerable<Guid> SolveTSG(IEnumerable<Guid> SelectedCities,Guid MapId)
         {
+            
             Map map = _mapRepository.GetWholeMap(MapId);
-            ShortPathResolverDTO CitiesRoutes = _pathToGraphService.MapToGraph(map);
-            return new TravelSalesmanResolver().Resolve(SelectedCities, CitiesRoutes);
+            if (SelectedCities.Count() > 0 && map != null)
+            {
+                ShortPathResolverDTO CitiesRoutes = _pathToGraphService.MapToGraph(map);
+                return _Resolver.Resolve(SelectedCities, CitiesRoutes);
+            }
+            return default;
         }
 
         

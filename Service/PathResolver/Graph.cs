@@ -6,10 +6,11 @@ namespace PathResolver
     {
         public List<GraphVertex> Vertices { get; }
 
-        public List<GraphEdge> Edges { get; set; }
+        public List<GraphEdge> Edges { get;  }
         public Graph()
         {
             Vertices = new List<GraphVertex>();
+            Edges = new List<GraphEdge>();
         }
 
         public void AddVertex(string VertexName)
@@ -32,6 +33,8 @@ namespace PathResolver
 
         public void AddEdge(string FirstName, string SecondName, int Weight)
         {
+            Edges.Add(new GraphEdge(FindVertex(FirstName), FindVertex(SecondName), Weight));
+            Edges.Add(new GraphEdge(FindVertex(SecondName), FindVertex(FirstName), Weight));
             var FirstVertex = FindVertex(FirstName);
             var SecondVertex = FindVertex(SecondName);
             if (SecondVertex != null && FirstVertex != null)

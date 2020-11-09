@@ -1,4 +1,5 @@
-﻿using PathResolver;
+﻿using Microsoft.EntityFrameworkCore.Internal;
+using PathResolver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ namespace Service.TSRMethods
 {
     public class AnnealingMethod
     {
-        private IEnumerable<int> _PreferableSequnce;
+        private IEnumerable<string> _PreferableSequnce;
         private double _Temperature=100;
         private double _DeltaWeight;
         private double _MinWeightValue;
@@ -15,14 +16,16 @@ namespace Service.TSRMethods
         private int _MinLimit;
         private int _MaxLimit;
         public void ChangeTemperature() => _Temperature *= 0.75;
-        public IEnumerable<int> SolveGoal(Graph graph)
+        public IEnumerable<string> SolveGoal(Graph graph)
         {
             double WorkWeightValue = 0;
-            int[] CurrentSequence = graph.Vertices.Select(t => Convert.ToInt32(t.Name)).ToArray();
-            _MinLimit = CurrentSequence.Min();
-            _MaxLimit = CurrentSequence.Max();
+            string[] CurrentSequence = graph.Vertices.Select(t => t.Name).ToArray();
+            _MinLimit = CurrentSequence.IndexOf(CurrentSequence.First());
+            _MaxLimit = CurrentSequence.IndexOf(CurrentSequence.Last());
             _MinWeightValue = GetEdgeSum(CurrentSequence,graph);
+            if (_MinWeightValue.Equals(double.MaxValue)) return null;
             var LastWeightValue = _MinWeightValue;
+            _PreferableSequnce = CurrentSequence;
             while(_Temperature>=0.05)
             {
                 var ChangedIndexes = GetRandomVexes(_MinLimit, _MaxLimit);
@@ -47,33 +50,34 @@ namespace Service.TSRMethods
             
         }
 
-        public int[] SwapVertexSequnce(int[] Sequence,int[]ChangedIndexes)
+        public string[] SwapVertexSequnce(string[] Sequence,int[]ChangedIndexes)
         {
-            for (int i = 0; i < Sequence.Count(); i++)
-            {
-                if (Sequence[i] == ChangedIndexes[0])
-                {
-                    Sequence[i] = ChangedIndexes[1];
-                    continue;
-                }
-                if (Sequence[i] == ChangedIndexes[1])
-                {
-                    Sequence[i] = ChangedIndexes[0];
-                    continue;
-                }
-            }
+            string buf;
+            buf = Sequence[ChangedIndexes[0]];
+            Sequence[ChangedIndexes[0]] = Sequence[ChangedIndexes[1]];
+            Sequence[ChangedIndexes[1]] = buf;
             return Sequence;
         }
-        public double GetEdgeSum(int[]CurrentSequence,Graph graph)
+        public double GetEdgeSum(string[]CurrentSequence,Graph graph)
         {
             double MinValue = 0;
-            for (int i = 0; i < graph.Vertices.Count-1; i++)
-            {
-                MinValue += graph.Edges.FirstOrDefault(t => Convert.ToInt32(t.FirstVertex.Name) == CurrentSequence[i] 
-                && Convert.ToInt32(t.SecondVertex.Name)==CurrentSequence[i+1]).EdgeWeight;
-            }
-            MinValue += graph.Edges.FirstOrDefault(t => Convert.ToInt32(t.FirstVertex.Name) == CurrentSequence[CurrentSequence.Length - 1] 
-            && Convert.ToInt32(t.SecondVertex.Name) == CurrentSequence[0]).EdgeWeight;
+            
+                for (int i = 0; i < graph.Vertices.Count - 1; i++)
+                {
+                    try
+                    {
+                        MinValue += graph.Edges.FirstOrDefault(t => t.FirstVertex?.Name == CurrentSequence[i]
+                        && t.SecondVertex?.Name == CurrentSequence[i + 1])?.EdgeWeight ?? throw new NullReferenceException();
+                    }
+                    catch (NullReferenceException)
+                    {
+                        return double.MaxValue;
+                    }
+                }
+                MinValue += graph.Edges.FirstOrDefault(t => t.FirstVertex.Name == CurrentSequence[CurrentSequence.Length - 1]
+                && t.SecondVertex.Name == CurrentSequence[0]).EdgeWeight;
+            
+           
             return MinValue;
         }
 

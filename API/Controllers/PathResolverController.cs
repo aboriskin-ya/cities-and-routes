@@ -27,7 +27,12 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("appropriateroute")]
-        public IActionResult FindShortestPath([FromBody] AppropriateRouteBody BodyRequest) => Ok(_algorithmService.SolveTSG(BodyRequest.SelectedCities, BodyRequest.MapId));
+        public IActionResult FindShortestPath([FromBody] AppropriateRouteBody BodyRequest)
+        {
+            var GuidCollection = _algorithmService.SolveTSG(BodyRequest.SelectedCities, BodyRequest.MapId);
+            if (GuidCollection == default) return BadRequest();
+            return Ok(GuidCollection);
+        }
         
 
     }
