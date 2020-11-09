@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DesktopApp.Models;
+using Service.DTO;
 
 namespace DesktopApp.APIInteraction.Mapper
 {
@@ -7,7 +8,7 @@ namespace DesktopApp.APIInteraction.Mapper
     {
         public AutoMapperProfile()
         {
-            CreateMap<City, DataAccess.Models.CityDTO>()
+            CreateMap<City, CityDTO>()
                 .ForMember(dest => dest.Position,
                     map => map.MapFrom(
                     source => new DataAccess.Models.Position

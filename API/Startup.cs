@@ -10,6 +10,7 @@ using System;
 using AutoMapper;
 using Service.Services.Interfaces;
 using Service.Services;
+using Service;
 
 namespace API
 {
@@ -35,13 +36,15 @@ namespace API
             services.AddScoped(typeof(IImageRepository), typeof(ImageRepository));
             services.AddScoped(typeof(ISettingsRepository), typeof(SettingsRepository));
             services.AddScoped(typeof(ICityRepository), typeof(CityRepository));
+
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<IMapService, MapService>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IAlgorithmService, AlgorithmService>();
+            services.AddTransient<ITravelSalesmanResolver, TravelSalesmanResolver>();
+            services.AddTransient<IShortestPathResolverService, ShortestPathResolverService>();
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<IPathToGraphService, PathToGraphService>();
-            services.AddTransient<IAlgorithmService, AlgorithmService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }

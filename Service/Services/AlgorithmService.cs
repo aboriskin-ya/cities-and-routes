@@ -15,7 +15,7 @@ namespace Service.Services
         private readonly IPathToGraphService _pathToGraphService;
         protected readonly CityRouteContext _context;
 
-        public AlgorithmService(IMapRepository MapRepository, ICityRepository CityRepository, IPathToGraphService PathService, CityRouteContext Context)
+        public AlgorithmService(IMapRepository MapRepository, ICityRepository CityRepository, IPathToGraphService PathService, CityRouteContext Context,ITravelSalesmanResolver resolver)
         {
             _context = Context;
             _mapRepository = MapRepository;
@@ -31,6 +31,14 @@ namespace Service.Services
 
             return Path;
         }
+        public IEnumerable<Guid> SolveTSG(IEnumerable<Guid> SelectedCities,Guid MapId)
+        {
+            Map map = _mapRepository.GetWholeMap(MapId);
+            ShortPathResolverDTO CitiesRoutes = _pathToGraphService.MapToGraph(map);
+            return new TravelSalesmanResolver().Resolve(SelectedCities, CitiesRoutes);
+        }
+
+        
 
     }
 }

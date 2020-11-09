@@ -5,6 +5,8 @@ namespace PathResolver
     public class Graph
     {
         public List<GraphVertex> Vertices { get; }
+
+        public List<GraphEdge> Edges { get; set; }
         public Graph()
         {
             Vertices = new List<GraphVertex>();
@@ -38,5 +40,6 @@ namespace PathResolver
                 SecondVertex.AddEdge(FirstVertex, Weight);
             }
         }
+       
     }
 }

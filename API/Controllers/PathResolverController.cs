@@ -3,6 +3,7 @@ using DataAccess.Models;
 using Service.Services.Interfaces;
 using DataAccess.DTO;
 using System;
+using Service.PathResolver;
 
 namespace API.Controllers
 {
@@ -23,6 +24,11 @@ namespace API.Controllers
         {
             return Ok(_algorithmService.FindShortestPath(Dto.MapId, Dto.CityFromId, Dto.CityToId));
         }
+
+        [HttpPost]
+        [Route("appropriateroute")]
+        public IActionResult FindShortestPath([FromBody] AppropriateRouteBody BodyRequest) => Ok(_algorithmService.SolveTSG(BodyRequest.SelectedCities, BodyRequest.MapId));
+        
 
     }
 }

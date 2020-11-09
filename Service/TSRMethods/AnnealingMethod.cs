@@ -1,4 +1,4 @@
-﻿using Service.Models;
+﻿using PathResolver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +15,12 @@ namespace Service.TSRMethods
         private int _MinLimit;
         private int _MaxLimit;
         public void ChangeTemperature() => _Temperature *= 0.75;
-        public IEnumerable<int> SolveGoal(GraphDTO graph)
+        public IEnumerable<int> SolveGoal(Graph graph)
         {
             double WorkWeightValue = 0;
-            int[] CurrentSequence = graph.Vertexes.ToArray();
-            _MinLimit = CurrentSequence[0];
-            _MaxLimit = CurrentSequence[CurrentSequence.Length - 1];
+            int[] CurrentSequence = graph.Vertices.Select(t => Convert.ToInt32(t.Name)).ToArray();
+            _MinLimit = CurrentSequence.Min();
+            _MaxLimit = CurrentSequence.Max();
             _MinWeightValue = GetEdgeSum(CurrentSequence,graph);
             var LastWeightValue = _MinWeightValue;
             while(_Temperature>=0.05)
@@ -64,14 +64,16 @@ namespace Service.TSRMethods
             }
             return Sequence;
         }
-        public double GetEdgeSum(int[]CurrentSequence,GraphDTO graph)
+        public double GetEdgeSum(int[]CurrentSequence,Graph graph)
         {
             double MinValue = 0;
-            for (int i = 0; i < graph.VertexCount-1; i++)
+            for (int i = 0; i < graph.Vertices.Count-1; i++)
             {
-                MinValue += graph.Edges.FirstOrDefault(t => t.InitVertex == CurrentSequence[i]&&t.EndVertex==CurrentSequence[i+1]).Distance;
+                MinValue += graph.Edges.FirstOrDefault(t => Convert.ToInt32(t.FirstVertex.Name) == CurrentSequence[i] 
+                && Convert.ToInt32(t.SecondVertex.Name)==CurrentSequence[i+1]).EdgeWeight;
             }
-            MinValue += graph.Edges.FirstOrDefault(t => t.InitVertex == CurrentSequence[CurrentSequence.Length - 1] && t.EndVertex == CurrentSequence[0]).Distance;
+            MinValue += graph.Edges.FirstOrDefault(t => Convert.ToInt32(t.FirstVertex.Name) == CurrentSequence[CurrentSequence.Length - 1] 
+            && Convert.ToInt32(t.SecondVertex.Name) == CurrentSequence[0]).EdgeWeight;
             return MinValue;
         }
 
