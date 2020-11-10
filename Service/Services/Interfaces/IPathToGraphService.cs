@@ -1,5 +1,5 @@
-﻿using Service.DTO;
-using DataAccess.Models;
+﻿using DataAccess.Models;
+using Service.DTO;
 
 namespace Service.Services.Interfaces
 {

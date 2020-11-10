@@ -1,10 +1,10 @@
 ﻿using DataAccess.Models;
-using Repository.Storage;
 using Repository;
+using Repository.Storage;
+using Service.DTO;
+using Service.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using Service.Services.Interfaces;
-using Service.DTO;
 
 namespace Service.Services
 {
@@ -22,12 +22,12 @@ namespace Service.Services
             _cityRepository = CityRepository;
             _pathToGraphService = PathService;
         }
-        
+
         public List<Guid> FindShortestPath(Guid MapId, Guid CityToId, Guid CityFromId)
         {
             Map Map = _mapRepository.GetWholeMap(MapId);
             ShortPathResolverDTO PathDto = _pathToGraphService.MapToGraph(Map);
-            List<Guid>Path = new ShortestPathResolverService().FindShortestPath(PathDto, CityFromId.ToString(), CityToId.ToString());
+            List<Guid> Path = new ShortestPathResolverService().FindShortestPath(PathDto, CityFromId.ToString(), CityToId.ToString());
 
             return Path;
         }

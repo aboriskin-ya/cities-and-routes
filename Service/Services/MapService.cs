@@ -1,11 +1,11 @@
-﻿using DataAccess.Models;
-using Repository.Storage;
+﻿using AutoMapper;
+using DataAccess.Models;
 using Repository;
+using Repository.Storage;
+using Service.DTO;
+using Service.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using Service.Services.Interfaces;
-using AutoMapper;
-using Service.DTO;
 
 namespace Service.Services
 {
@@ -38,7 +38,7 @@ namespace Service.Services
             {
                 _mapper.Map<Map, MapGetDTO>(item, mapGetTemp);
                 mapGetDTOs.Add(mapGetTemp);
-            }  
+            }
             return mapGetDTOs;
         }
 

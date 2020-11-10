@@ -7,7 +7,7 @@
         SetCity,
         CreateCity,
         AddRouteAndDistance
-    }  
+    }
     public static class StateLine
     {
         public static string Show(StateLineStatus status)

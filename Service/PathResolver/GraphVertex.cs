@@ -18,12 +18,12 @@ namespace PathResolver
             EdgesWeightSum = int.MaxValue;
             PreviousVertex = null;
         }
-        
+
         public void AddEdge(GraphEdge NewEdge)
         {
             Edges.Add(NewEdge);
         }
-        
+
         public void AddEdge(GraphVertex Vertex, int EdgeWeight)
         {
             if (!FindEdge(Vertex.Name))

@@ -1,7 +1,7 @@
-﻿using DataAccess.Models;
-using Service.Services.Interfaces;
+﻿using AutoMapper;
+using DataAccess.Models;
 using Service.DTO;
-using AutoMapper;
+using Service.Services.Interfaces;
 
 namespace Service.Services
 {

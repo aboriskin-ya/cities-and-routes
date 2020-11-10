@@ -1,25 +1,24 @@
 ﻿using DesktopApp.APIInteraction.Mapper;
 using DesktopApp.Models;
 using Service.DTO;
-using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace DesktopApp.APIInteraction
 {
     public class CityAPIService : ICityAPIService
-    {        
+    {
         public async Task<HttpResponsePayload<City>> CreateCityAsync(City city)
         {
-            var cityDTO =  AppMapper.GetAppMapper().Mapper.Map<CityDTO>(city);
+            var cityDTO = AppMapper.GetAppMapper().Mapper.Map<CityDTO>(city);
 
-            HttpResponseMessage response; 
+            HttpResponseMessage response;
 
             try
             {
                 response = await APIClient.Client.PostAsJsonAsync("city", cityDTO);
             }
-            catch(HttpRequestException ex)
+            catch (HttpRequestException ex)
             {
                 throw ex;
             }

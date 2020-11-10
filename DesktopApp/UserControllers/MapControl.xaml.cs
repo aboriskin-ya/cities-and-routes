@@ -35,10 +35,11 @@ namespace DesktopApp.UserControllers
             {
                 if (ScaleValue >= 1 && ScaleValue < 16)
                 {
-                    ZoomCommand.Execute(2);     
+                    ZoomCommand.Execute(2);
                 }
             }
-            else {
+            else
+            {
 
                 if (ScaleValue > 1 && ScaleValue <= 16)
                 {
@@ -58,8 +59,8 @@ namespace DesktopApp.UserControllers
             this.MouseUp += MapControl_MouseUp;
             Mouse.Capture(this);
             this.Cursor = Cursors.Hand;
-            
-            if(IsAbleToSetCity)
+
+            if (IsAbleToSetCity)
                 MapControl_SetCity();
         }
         private void MapControl_MouseUp(object sender, MouseButtonEventArgs e)
@@ -126,7 +127,7 @@ namespace DesktopApp.UserControllers
         }
 
         public static readonly DependencyProperty OffsetValueProperty =
-            DependencyProperty.Register("OffsetValue", typeof(Point), typeof(MapControl), new PropertyMetadata(new Point(0,0)));
+            DependencyProperty.Register("OffsetValue", typeof(Point), typeof(MapControl), new PropertyMetadata(new Point(0, 0)));
         #endregion
 
         #region Offset
@@ -192,7 +193,7 @@ namespace DesktopApp.UserControllers
             set { SetValue(NavigateCommandProperty, value); }
         }
 
-       
+
         public static readonly DependencyProperty NavigateCommandProperty =
             DependencyProperty.Register("NavigateCommand", typeof(ICommand), typeof(MapControl));
         #endregion
@@ -316,13 +317,13 @@ namespace DesktopApp.UserControllers
             DependencyProperty.Register(nameof(IsAbleToSetCity), typeof(bool), typeof(MapControl));
 
         #endregion
-        
+
         private void MapControl_SetCity()
         {
-            SelectedCity = new City() 
-            { 
+            SelectedCity = new City()
+            {
                 X = PosX,
-                Y = PosY 
+                Y = PosY
             };
 
             IsAbleToCreateCity = true;

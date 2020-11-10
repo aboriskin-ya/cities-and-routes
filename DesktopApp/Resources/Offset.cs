@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DesktopApp.UserControllers
+﻿namespace DesktopApp.UserControllers
 {
     public struct Offset
     {

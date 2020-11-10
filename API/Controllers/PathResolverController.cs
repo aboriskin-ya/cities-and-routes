@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataAccess.DTO;
 using DataAccess.Models;
+using Microsoft.AspNetCore.Mvc;
 using Service.Services.Interfaces;
-using DataAccess.DTO;
-using System;
 
 namespace API.Controllers
 {

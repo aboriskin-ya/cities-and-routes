@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using Service.Models;
+﻿using Service.Models;
+using System.Collections.Generic;
 
 namespace Service
 {
-   public interface ITravelSalesmanResolver
+    public interface ITravelSalesmanResolver
     {
         IEnumerable<int> Resolve(IEnumerable<int> Vertexes, GraphDTO Graph);
     }
