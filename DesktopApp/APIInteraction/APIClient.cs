@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace DesktopApp.APIInteraction
 {
@@ -10,6 +11,8 @@ namespace DesktopApp.APIInteraction
         {
             Client = new HttpClient();
             Client.BaseAddress = new Uri(baseUri);
+            Client.DefaultRequestHeaders.Authorization = 
+                new AuthenticationHeaderValue("Basic", Convert.ToBase64String(System.Text.ASCIIEncoding.UTF8.GetBytes("Admin:Cities_Pass")));
         }
     }
 }

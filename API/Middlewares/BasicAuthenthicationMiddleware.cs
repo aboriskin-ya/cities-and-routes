@@ -44,13 +44,4 @@ namespace API.Middlewares
             }
         }
     }
-
-    // Extension method used to add the middleware to the HTTP request pipeline.
-    public static class BasicAuthenthicationMiddlewareExtensions
-    {
-        public static IApplicationBuilder UseBasicAuthenthicationMiddleware(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<BasicAuthenthicationMiddleware>();
-        }
-    }
 }
