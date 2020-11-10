@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataAccess.DTO;
 using DataAccess.Models;
-using Service.Services.Interfaces;
-using DataAccess.DTO;
-using System;
+using Microsoft.AspNetCore.Mvc;
 using Service.PathResolver;
+using Service.Services.Interfaces;
 
 namespace API.Controllers
 {
@@ -33,7 +32,7 @@ namespace API.Controllers
             if (guidCollection == default) return BadRequest();
             return Ok(guidCollection);
         }
-        
+
 
     }
 }

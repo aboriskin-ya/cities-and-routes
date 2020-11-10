@@ -10,16 +10,16 @@ namespace Service
 {
     public class TravelSalesmanResolver : ITravelSalesmanResolver
     {
-        private AnnealingMethod _AnnealingMethod;
+        private AnnealingMethod _annealingMethod;
         public TravelSalesmanResolver()
         {
-            _AnnealingMethod = new AnnealingMethod();
+            _annealingMethod = new AnnealingMethod();
         }
         public IEnumerable<Guid> Resolve(IEnumerable<Guid> Vertices, ShortPathResolverDTO CitiesRoutes)
         {
             try
             {
-                return _AnnealingMethod.SolveGoal(ConvertToGraph(Vertices, CitiesRoutes)).Select(Guid.Parse);
+                return _annealingMethod.SolveGoal(ConvertToGraph(Vertices, CitiesRoutes)).Select(Guid.Parse);
             }
             catch (Exception)
             {

@@ -18,31 +18,31 @@ namespace Service.TSRMethods
         public void ChangeTemperature() => _temperature *= 0.75;
         public IEnumerable<string> SolveGoal(Graph graph)
         {
-            double WorkWeightValue = 0;
-            string[] CurrentSequence = graph.Vertices.Select(t => t.Name).ToArray();
-            _minLimit = CurrentSequence.IndexOf(CurrentSequence.First());
-            _maxLimit = CurrentSequence.IndexOf(CurrentSequence.Last());
-            _minWeightValue = GetEdgeSum(CurrentSequence,graph);
+            double workWeightValue = 0;
+            string[] currentSequence = graph.Vertices.Select(t => t.Name).ToArray();
+            _minLimit = currentSequence.IndexOf(currentSequence.First());
+            _maxLimit = currentSequence.IndexOf(currentSequence.Last());
+            _minWeightValue = GetEdgeSum(currentSequence,graph);
             if (_minWeightValue.Equals(double.MaxValue)) return null;
-            var LastWeightValue = _minWeightValue;
-            _preferableSequnce = CurrentSequence;
+            var lastWeightValue = _minWeightValue;
+            _preferableSequnce = currentSequence;
             while(_temperature>=0.05)
             {
-                var ChangedIndexes = GetRandomVexes(_minLimit, _maxLimit);
-                var RandomProbability = GetRandomProbability();
-                var PrevSequence = SwapVertexSequnce(CurrentSequence, ChangedIndexes);
-                WorkWeightValue = GetEdgeSum(PrevSequence, graph);
-                _deltaWeight = WorkWeightValue - LastWeightValue;
+                var changedIndexes = GetRandomVexes(_minLimit, _maxLimit);
+                var randomProbability = GetRandomProbability();
+                var prevSequence = SwapVertexSequnce(currentSequence, changedIndexes);
+                workWeightValue = GetEdgeSum(prevSequence, graph);
+                _deltaWeight = workWeightValue - lastWeightValue;
                 _currentProbability = GetProbability(_temperature, _deltaWeight);
-                if (_currentProbability > RandomProbability)
+                if (_currentProbability > randomProbability)
                 {
-                    CurrentSequence = PrevSequence;
-                    if (WorkWeightValue < _minWeightValue)
+                    currentSequence = prevSequence;
+                    if (workWeightValue < _minWeightValue)
                     {
-                        _minWeightValue = WorkWeightValue;
-                        _preferableSequnce = PrevSequence;
+                        _minWeightValue = workWeightValue;
+                        _preferableSequnce = prevSequence;
                     }
-                    LastWeightValue = WorkWeightValue;
+                    lastWeightValue = workWeightValue;
                 }
                 
             }
@@ -59,22 +59,22 @@ namespace Service.TSRMethods
         }
         public double GetEdgeSum(string[]CurrentSequence,Graph graph)
         {
-            double MinValue = 0;
+            double minValue = 0;
                 for (int i = 0; i < graph.Vertices.Count - 1; i++)
                 {
                     var CurrentEdge = graph.GetEdge(CurrentSequence[i], CurrentSequence[i + 1]);
                     if (CurrentEdge == null) return double.MaxValue;
-                    MinValue += CurrentEdge.EdgeWeight;
+                    minValue += CurrentEdge.EdgeWeight;
                 }
-             MinValue += graph.GetEdge(CurrentSequence[CurrentSequence.Length - 1], CurrentSequence[0]).EdgeWeight;
-             return MinValue;
+             minValue += graph.GetEdge(CurrentSequence[CurrentSequence.Length - 1], CurrentSequence[0]).EdgeWeight;
+             return minValue;
         }
 
         public double GetProbability(double Temperature,double DeltaWeight)
         {
-            var Probability = 100 * Math.Pow(Math.E, (-DeltaWeight)/Temperature);
+            var probability = 100 * Math.Pow(Math.E, (-DeltaWeight)/Temperature);
             ChangeTemperature();
-            return Probability;
+            return probability;
         }
 
         public int[] GetRandomVexes(int InitIndex,int LastIndex)
