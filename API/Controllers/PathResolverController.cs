@@ -26,12 +26,12 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Route("appropriateroute")]
-        public IActionResult FindShortestPath([FromBody] AppropriateRouteBody BodyRequest)
+        [Route("solve-travel-salesman")]
+        public IActionResult SolveTravelSalesman([FromBody] TravelSalesmanRequest BodyRequest)
         {
-            var GuidCollection = _algorithmService.SolveTSG(BodyRequest.SelectedCities, BodyRequest.MapId);
-            if (GuidCollection == default) return BadRequest();
-            return Ok(GuidCollection);
+            var guidCollection = _algorithmService.SolveTravelSalesman(BodyRequest);
+            if (guidCollection == default) return BadRequest();
+            return Ok(guidCollection);
         }
         
 

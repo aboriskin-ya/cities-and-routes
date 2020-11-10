@@ -5,6 +5,6 @@ namespace Service.Services.Interfaces
 {
     public interface IPathToGraphService
     {
-        ShortPathResolverDTO MapToGraph(Map Map);
+        ShortPathResolverDTO MapToResolver(Map Map);
     }
 }

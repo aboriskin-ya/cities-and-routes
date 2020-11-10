@@ -8,46 +8,45 @@ namespace Service.TSRMethods
 {
     public class AnnealingMethod
     {
-        private IEnumerable<string> _PreferableSequnce;
-        private double _Temperature=100;
-        private double _DeltaWeight;
-        private double _MinWeightValue;
-        private double _CurrentProbability;
-        private int _MinLimit;
-        private int _MaxLimit;
-        public void ChangeTemperature() => _Temperature *= 0.75;
+        private IEnumerable<string> _preferableSequnce;
+        private double _temperature=100;
+        private double _deltaWeight;
+        private double _minWeightValue;
+        private double _currentProbability;
+        private int _minLimit;
+        private int _maxLimit;
+        public void ChangeTemperature() => _temperature *= 0.75;
         public IEnumerable<string> SolveGoal(Graph graph)
         {
             double WorkWeightValue = 0;
             string[] CurrentSequence = graph.Vertices.Select(t => t.Name).ToArray();
-            _MinLimit = CurrentSequence.IndexOf(CurrentSequence.First());
-            _MaxLimit = CurrentSequence.IndexOf(CurrentSequence.Last());
-            _MinWeightValue = GetEdgeSum(CurrentSequence,graph);
-            if (_MinWeightValue.Equals(double.MaxValue)) return null;
-            var LastWeightValue = _MinWeightValue;
-            _PreferableSequnce = CurrentSequence;
-            while(_Temperature>=0.05)
+            _minLimit = CurrentSequence.IndexOf(CurrentSequence.First());
+            _maxLimit = CurrentSequence.IndexOf(CurrentSequence.Last());
+            _minWeightValue = GetEdgeSum(CurrentSequence,graph);
+            if (_minWeightValue.Equals(double.MaxValue)) return null;
+            var LastWeightValue = _minWeightValue;
+            _preferableSequnce = CurrentSequence;
+            while(_temperature>=0.05)
             {
-                var ChangedIndexes = GetRandomVexes(_MinLimit, _MaxLimit);
+                var ChangedIndexes = GetRandomVexes(_minLimit, _maxLimit);
                 var RandomProbability = GetRandomProbability();
-                var PrevSequence = SwapVertexSequnce(CurrentSequence.ToArray(), ChangedIndexes);
+                var PrevSequence = SwapVertexSequnce(CurrentSequence, ChangedIndexes);
                 WorkWeightValue = GetEdgeSum(PrevSequence, graph);
-                _DeltaWeight = WorkWeightValue - LastWeightValue;
-                _CurrentProbability = GetProbability(_Temperature, _DeltaWeight);
-                if (_CurrentProbability > RandomProbability)
+                _deltaWeight = WorkWeightValue - LastWeightValue;
+                _currentProbability = GetProbability(_temperature, _deltaWeight);
+                if (_currentProbability > RandomProbability)
                 {
                     CurrentSequence = PrevSequence;
-                    if (WorkWeightValue < _MinWeightValue)
+                    if (WorkWeightValue < _minWeightValue)
                     {
-                        _MinWeightValue = WorkWeightValue;
-                        _PreferableSequnce = PrevSequence;
+                        _minWeightValue = WorkWeightValue;
+                        _preferableSequnce = PrevSequence;
                     }
                     LastWeightValue = WorkWeightValue;
                 }
                 
             }
-            return _PreferableSequnce;
-            
+            return _preferableSequnce;
         }
 
         public string[] SwapVertexSequnce(string[] Sequence,int[]ChangedIndexes)
@@ -61,24 +60,14 @@ namespace Service.TSRMethods
         public double GetEdgeSum(string[]CurrentSequence,Graph graph)
         {
             double MinValue = 0;
-            
                 for (int i = 0; i < graph.Vertices.Count - 1; i++)
                 {
-                    try
-                    {
-                        MinValue += graph.Edges.FirstOrDefault(t => t.FirstVertex?.Name == CurrentSequence[i]
-                        && t.SecondVertex?.Name == CurrentSequence[i + 1])?.EdgeWeight ?? throw new NullReferenceException();
-                    }
-                    catch (NullReferenceException)
-                    {
-                        return double.MaxValue;
-                    }
+                    var CurrentEdge = graph.GetEdge(CurrentSequence[i], CurrentSequence[i + 1]);
+                    if (CurrentEdge == null) return double.MaxValue;
+                    MinValue += CurrentEdge.EdgeWeight;
                 }
-                MinValue += graph.Edges.FirstOrDefault(t => t.FirstVertex.Name == CurrentSequence[CurrentSequence.Length - 1]
-                && t.SecondVertex.Name == CurrentSequence[0]).EdgeWeight;
-            
-           
-            return MinValue;
+             MinValue += graph.GetEdge(CurrentSequence[CurrentSequence.Length - 1], CurrentSequence[0]).EdgeWeight;
+             return MinValue;
         }
 
         public double GetProbability(double Temperature,double DeltaWeight)

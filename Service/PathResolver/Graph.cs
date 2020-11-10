@@ -18,6 +18,14 @@ namespace PathResolver
             Vertices.Add(new GraphVertex(VertexName));
         }
 
+        public GraphEdge GetEdge(string FirstVertexName,string SecondVertexName)
+        {
+            foreach(var item in Edges)
+            {
+                if (FirstVertexName.Equals(item.FirstVertex.Name) && SecondVertexName.Equals(item.SecondVertex.Name)) return item;
+            }
+            return null;
+        }
         public GraphVertex FindVertex(string VertexName)
         {
             foreach (var Vertex in Vertices)

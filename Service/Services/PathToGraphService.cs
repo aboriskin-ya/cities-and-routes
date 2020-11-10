@@ -13,7 +13,7 @@ namespace Service.Services
         {
             _mapper = mapper;
         }
-        public ShortPathResolverDTO MapToGraph(Map Map)
+        public ShortPathResolverDTO MapToResolver(Map Map)
         {
             ShortPathResolverDTO PathResolverDTO = _mapper.Map<ShortPathResolverDTO>(Map);
             return PathResolverDTO;
