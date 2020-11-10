@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using PathResolver;
 using Repository;
 using Repository.Storage;
 using Service.DTO;
@@ -12,7 +13,7 @@ namespace Service.Services
 {
     public class AlgorithmService : Interfaces.IAlgorithmService
     {
-        private readonly ITravelSalesmanResolver _resolver;
+        private readonly ITravelSalesmanAnnealingResolver _resolver;
         private readonly IMapRepository _mapRepository;
         private readonly ICityRepository _cityRepository;
         private readonly IPathToGraphService _pathToGraphService;
@@ -22,7 +23,7 @@ namespace Service.Services
                                 ICityRepository CityRepository,
                                 IPathToGraphService PathService,
                                 CityRouteContext Context,
-                                ITravelSalesmanResolver resolver)
+                                ITravelSalesmanAnnealingResolver resolver)
         {
             _context = Context;
             _mapRepository = MapRepository;
@@ -43,8 +44,8 @@ namespace Service.Services
             Map map = _mapRepository.GetWholeMap(request.MapId);
             if (request.SelectedCities.Count() > 0 && map != null)
             {
-                ShortPathResolverDTO CitiesRoutes = _pathToGraphService.MapToResolver(map);
-                return _resolver.Resolve(request.SelectedCities, CitiesRoutes);
+                Graph graph = _pathToGraphService.MapToGraph(map,request.SelectedCities);
+                return _resolver.Resolve(graph);
             }
             return default;
         }

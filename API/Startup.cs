@@ -41,7 +41,7 @@ namespace API
             services.AddTransient<IMapService, MapService>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IAlgorithmService, AlgorithmService>();
-            services.AddTransient<ITravelSalesmanResolver, TravelSalesmanResolver>();
+            services.AddTransient<ITravelSalesmanAnnealingResolver, TravelSalesmanAnnealingResolver>();
             services.AddTransient<IShortestPathResolverService, ShortestPathResolverService>();
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<IPathToGraphService, PathToGraphService>();

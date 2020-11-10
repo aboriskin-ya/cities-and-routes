@@ -6,8 +6,8 @@ using Service.DTO;
 
 namespace Service
 {
-    public interface ITravelSalesmanResolver
+    public interface ITravelSalesmanAnnealingResolver
     {
-        IEnumerable<Guid> Resolve(IEnumerable<Guid> Vertices, ShortPathResolverDTO CitiesRoutes);
+        IEnumerable<Guid> Resolve(Graph Graph);
     }
 }

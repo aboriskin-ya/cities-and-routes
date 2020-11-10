@@ -39,16 +39,16 @@ namespace PathResolver
             return null;
         }
 
-        public void AddEdge(string FirstName, string SecondName, int Weight)
+        public void AddEdge(string firstName, string secondName, int weight)
         {
-            Edges.Add(new GraphEdge(FindVertex(FirstName), FindVertex(SecondName), Weight));
-            Edges.Add(new GraphEdge(FindVertex(SecondName), FindVertex(FirstName), Weight));
-            var FirstVertex = FindVertex(FirstName);
-            var SecondVertex = FindVertex(SecondName);
+            Edges.Add(new GraphEdge(FindVertex(firstName), FindVertex(secondName), weight));
+            Edges.Add(new GraphEdge(FindVertex(secondName), FindVertex(firstName), weight));
+            var FirstVertex = FindVertex(firstName);
+            var SecondVertex = FindVertex(secondName);
             if (SecondVertex != null && FirstVertex != null)
             {
-                FirstVertex.AddEdge(SecondVertex, Weight);
-                SecondVertex.AddEdge(FirstVertex, Weight);
+                FirstVertex.AddEdge(SecondVertex, weight);
+                SecondVertex.AddEdge(FirstVertex, weight);
             }
         }
        
