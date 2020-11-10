@@ -5,7 +5,6 @@ using DesktopApp.Services.Commands;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace DesktopApp.ViewModels
 {
@@ -42,19 +41,19 @@ namespace DesktopApp.ViewModels
         {
             get => _SettingsMap;
             set => Set<Settings>(ref _SettingsMap, value, nameof(SettingsMap));
-        }        
+        }
 
         public CreateCityCommand CreateNewCityCommand { get => new CreateCityCommand(p => OnCanAddCollection(), async m => await AddCollectionAsync()); }
         private async Task AddCollectionAsync()
-        {            
-            try 
+        {
+            try
             {
                 var res = await _cityAPIService.CreateCityAsync(SelectedCity);
                 if (!res.IsSuccessful)
                     throw new Exception();
             }
-            catch(Exception ex)
-            {                
+            catch (Exception ex)
+            {
                 _messageBoxService.ShowError(ex, "An error occured. Please try it again.");
                 RemoveFromCollection();
             }

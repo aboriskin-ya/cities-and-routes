@@ -15,7 +15,7 @@ namespace DesktopApp
             APIClient.InitializeClient(url);
 
             var model = RegisterServices.Configure().Resolve<MainWindowViewModel>();
-            var view = new MainWindow{ DataContext = model };
+            var view = new MainWindow { DataContext = model };
 
             view.Show();
         }

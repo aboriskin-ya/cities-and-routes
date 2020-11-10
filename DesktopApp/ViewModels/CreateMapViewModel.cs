@@ -1,12 +1,12 @@
-﻿using DesktopApp.Service;
-using DesktopApp.APIInteraction;
+﻿using DesktopApp.APIInteraction;
+using DesktopApp.Service;
 using GongSolutions.Wpf.DragDrop;
 using System;
+using System.ComponentModel;
 using System.IO;
+using System.Linq.Expressions;
 using System.Windows;
 using System.Windows.Input;
-using System.Linq.Expressions;
-using System.ComponentModel;
 
 namespace DesktopApp.ViewModels
 {
