@@ -10,6 +10,7 @@ using System;
 using AutoMapper;
 using Service.Services.Interfaces;
 using Service.Services;
+using API.Middlewares;
 
 namespace API
 {
@@ -55,6 +56,8 @@ namespace API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseMiddleware<BasicAuthenthicationMiddleware>();
 
             app.UseRouting();
 
