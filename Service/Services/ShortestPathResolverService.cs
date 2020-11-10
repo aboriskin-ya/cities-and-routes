@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DataAccess.Models;
 using PathResolver;
-using Service.Services.Interfaces;
 using Service.DTO;
-using DataAccess.Models;
+using Service.Services.Interfaces;
+using System;
+using System.Collections.Generic;
 
 namespace Service.Services
 {
@@ -83,7 +83,7 @@ namespace Service.Services
         List<Guid> GetPath(GraphVertex startVertex, GraphVertex endVertex)
         {
             var path = endVertex.ToString();
-            List<Guid> ResultList =  new List<Guid>();
+            List<Guid> ResultList = new List<Guid>();
             while (startVertex != endVertex)
             {
                 endVertex = endVertex.PreviousVertex;

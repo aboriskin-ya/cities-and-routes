@@ -1,8 +1,7 @@
-using Xunit;
+using Service;
 using Service.Models;
 using System.Collections.Generic;
-using Service;
-using System.Net.Http;
+using Xunit;
 
 namespace Tests
 {
@@ -12,7 +11,7 @@ namespace Tests
         public void CheckTravelSalesman4Cities()
         {
             //Arrange
-            
+
             var resolver = new TravelSalesmanResolver();
             var Vertexes = new int[] { 6, 7, 8, 9 };
             var graph = new GraphDTO();
@@ -35,7 +34,7 @@ namespace Tests
             graph.Vertexes = Vertexes;
             var ExpectedAns = new int[] { 7, 8, 6, 9 };
             //Act
-            var ActualAnswer = resolver.Resolve(Vertexes,graph);
+            var ActualAnswer = resolver.Resolve(Vertexes, graph);
             //Assert
             Assert.Equal(ExpectedAns, ActualAnswer);
 
@@ -71,10 +70,10 @@ namespace Tests
                  new EdgeDTO{ Distance=10,InitVertex=2,EndVertex=4 }
             };
             graph.Edges = EdgeList;
-            graph.Vertexes = new int[] { 1,2,3,4,5 };
-            var ExpectedAns = new int[] {1,3,2,4,5 };
+            graph.Vertexes = new int[] { 1, 2, 3, 4, 5 };
+            var ExpectedAns = new int[] { 1, 3, 2, 4, 5 };
             //Act
-            var ActualAnswer = resolver.Resolve(Vertexes,graph);
+            var ActualAnswer = resolver.Resolve(Vertexes, graph);
             //Assert
             Assert.Equal(ExpectedAns, ActualAnswer);
 

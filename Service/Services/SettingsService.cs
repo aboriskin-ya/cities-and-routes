@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Service.DTO;
 using DataAccess.Models;
 using Repository;
 using Repository.Storage;
+using Service.DTO;
 using Service.Services.Interfaces;
 using System;
 using System.Collections.Generic;

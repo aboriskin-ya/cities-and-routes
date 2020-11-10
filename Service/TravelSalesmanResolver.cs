@@ -1,9 +1,6 @@
 ﻿using Service.Models;
 using Service.TSRMethods;
-using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
 
 namespace Service
 {

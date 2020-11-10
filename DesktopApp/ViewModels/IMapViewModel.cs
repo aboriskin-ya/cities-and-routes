@@ -13,7 +13,7 @@ namespace DesktopApp.ViewModels
 
         Settings SettingsMap { get; set; }
 
-        CreateCityCommand CreateNewCityCommand { get; } 
+        CreateCityCommand CreateNewCityCommand { get; }
 
         CancelCreatingCityCommand CancelCreatingCityCommand { get; }
     }

@@ -8,7 +8,7 @@ namespace Service.TSRMethods
     public class AnnealingMethod
     {
         private IEnumerable<int> _PreferableSequnce;
-        private double _Temperature=100;
+        private double _Temperature = 100;
         private double _DeltaWeight;
         private double _MinWeightValue;
         private double _CurrentProbability;
@@ -21,9 +21,9 @@ namespace Service.TSRMethods
             int[] CurrentSequence = graph.Vertexes.ToArray();
             _MinLimit = CurrentSequence[0];
             _MaxLimit = CurrentSequence[CurrentSequence.Length - 1];
-            _MinWeightValue = GetEdgeSum(CurrentSequence,graph);
+            _MinWeightValue = GetEdgeSum(CurrentSequence, graph);
             var LastWeightValue = _MinWeightValue;
-            while(_Temperature>=0.05)
+            while (_Temperature >= 0.05)
             {
                 var ChangedIndexes = GetRandomVexes(_MinLimit, _MaxLimit);
                 var RandomProbability = GetRandomProbability();
@@ -41,13 +41,13 @@ namespace Service.TSRMethods
                     }
                     LastWeightValue = WorkWeightValue;
                 }
-                
+
             }
             return _PreferableSequnce;
-            
+
         }
 
-        public int[] SwapVertexSequnce(int[] Sequence,int[]ChangedIndexes)
+        public int[] SwapVertexSequnce(int[] Sequence, int[] ChangedIndexes)
         {
             for (int i = 0; i < Sequence.Count(); i++)
             {
@@ -64,25 +64,25 @@ namespace Service.TSRMethods
             }
             return Sequence;
         }
-        public double GetEdgeSum(int[]CurrentSequence,GraphDTO graph)
+        public double GetEdgeSum(int[] CurrentSequence, GraphDTO graph)
         {
             double MinValue = 0;
-            for (int i = 0; i < graph.VertexCount-1; i++)
+            for (int i = 0; i < graph.VertexCount - 1; i++)
             {
-                MinValue += graph.Edges.FirstOrDefault(t => t.InitVertex == CurrentSequence[i]&&t.EndVertex==CurrentSequence[i+1]).Distance;
+                MinValue += graph.Edges.FirstOrDefault(t => t.InitVertex == CurrentSequence[i] && t.EndVertex == CurrentSequence[i + 1]).Distance;
             }
             MinValue += graph.Edges.FirstOrDefault(t => t.InitVertex == CurrentSequence[CurrentSequence.Length - 1] && t.EndVertex == CurrentSequence[0]).Distance;
             return MinValue;
         }
 
-        public double GetProbability(double Temperature,double DeltaWeight)
+        public double GetProbability(double Temperature, double DeltaWeight)
         {
-            var Probability = 100 * Math.Pow(Math.E, (-DeltaWeight)/Temperature);
+            var Probability = 100 * Math.Pow(Math.E, (-DeltaWeight) / Temperature);
             ChangeTemperature();
             return Probability;
         }
 
-        public int[] GetRandomVexes(int InitIndex,int LastIndex)
+        public int[] GetRandomVexes(int InitIndex, int LastIndex)
         {
             var rand = new Random();
             var ans = new int[2];
@@ -94,7 +94,7 @@ namespace Service.TSRMethods
             }
             return ans;
         }
-        
+
         public double GetRandomProbability()
         {
             var rand = new Random();

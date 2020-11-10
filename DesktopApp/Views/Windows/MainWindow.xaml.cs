@@ -1,12 +1,12 @@
 ﻿using System.Windows;
 
-namespace DesktopApp 
-{ 
+namespace DesktopApp
+{
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
         }
-    }     
+    }
 }

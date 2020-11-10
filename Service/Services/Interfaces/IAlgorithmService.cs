@@ -1,5 +1,4 @@
-﻿using DataAccess.DTO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Service.Services.Interfaces

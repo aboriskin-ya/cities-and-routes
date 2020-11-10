@@ -12,8 +12,8 @@ namespace DesktopApp.APIInteraction.Mapper
                     map => map.MapFrom(
                     source => new DataAccess.Models.Position
                     {
-                          X = source.X,
-                          Y = source.Y
+                        X = source.X,
+                        Y = source.Y
                     }));
 
             CreateMap<CityDTO, City>()
