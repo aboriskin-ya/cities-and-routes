@@ -33,7 +33,7 @@ namespace Tests
                                         "2b21b9bb-133b-4882-d3a0-28d884a52a23",
                                         "2b21b9bb-133b-4882-d3a0-28e774a52a20"}.Select(Guid.Parse);
             //Act
-            var actualAnswer = alghorithmService.SolveTravelSalesman(request);
+            var actualAnswer = alghorithmService.SolveAnnealingTravelSalesman(request);
             //Assert
             Assert.Equal(expectedAns, actualAnswer);
         }

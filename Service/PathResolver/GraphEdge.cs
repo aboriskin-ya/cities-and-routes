@@ -12,8 +12,9 @@
             this.ConnectedVertex = ConnectedVertex;
             EdgeWeight = Weight;
         }
-        public GraphEdge(GraphVertex FirstVert,GraphVertex SecondVert, int Weight)
+        public GraphEdge(GraphVertex FirstVert, GraphVertex SecondVert, int Weight)
         {
+            ConnectedVertex = FirstVert;
             FirstVertex = FirstVert;
             SecondVertex = SecondVert;
             EdgeWeight = Weight;

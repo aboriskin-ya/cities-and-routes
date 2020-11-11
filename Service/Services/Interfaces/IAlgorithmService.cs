@@ -1,6 +1,4 @@
-﻿using DataAccess.DTO;
-using Service.DTO;
-using Service.PathResolver;
+﻿using Service.PathResolver;
 using System;
 using System.Collections.Generic;
 
@@ -10,6 +8,8 @@ namespace Service.Services.Interfaces
     {
         List<Guid> FindShortestPath(Guid MapId, Guid CityToId, Guid CityFromId);
 
-        IEnumerable<Guid> SolveTravelSalesman(TravelSalesmanRequest requestBody);
+        TravelSalesmanResponse SolveAnnealingTravelSalesman(TravelSalesmanRequest requestBody);
+
+        TravelSalesmanResponse SolveNearestNeghborTravelSalesman(TravelSalesmanRequest requestBody);
     }
 }

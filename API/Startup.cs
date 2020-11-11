@@ -1,4 +1,3 @@
-using API.Middlewares;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,7 +35,7 @@ namespace API
             services.AddScoped(typeof(IImageRepository), typeof(ImageRepository));
             services.AddScoped(typeof(ISettingsRepository), typeof(SettingsRepository));
             services.AddScoped(typeof(ICityRepository), typeof(CityRepository));
-
+            services.AddTransient<ITravelSalesmanNearestNeighbor, TravelSalesmanNearestNeighbor>();
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<IMapService, MapService>();
             services.AddTransient<ISettingsService, SettingsService>();
@@ -55,7 +54,7 @@ namespace API
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
-            app.UseMiddleware<BasicAuthenthicationMiddleware>();
+            //app.UseMiddleware<BasicAuthenthicationMiddleware>();
 
             app.UseRouting();
 

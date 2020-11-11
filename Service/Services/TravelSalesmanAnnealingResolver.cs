@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Internal;
 using PathResolver;
+using Service.PathResolver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,18 +10,19 @@ namespace Service
     public class TravelSalesmanAnnealingResolver : ITravelSalesmanAnnealingResolver
     {
         #region fields
+        private int _result;
         private IEnumerable<string> _preferableSequnce;
         private double _temperature = 100;
-        private double _deltaWeight;
-        private double _minWeightValue;
-        private double _previosWeightValue;
+        private int _deltaWeight;
+        private int _minWeightValue;
+        private int _previosWeightValue;
         private double _currentProbability;
         private int _minLimit;
         private int _maxLimit;
-        private double _currentWeightValue = 0;
+        private int _currentWeightValue = 0;
         private string[] _currentSequence;
         #endregion
-        public IEnumerable<Guid> Resolve(Graph graph)
+        public TravelSalesmanResponse Resolve(Graph graph)
         {
             Initialize(graph);
             if (CheckExecuting(_minWeightValue)) return null;
@@ -38,7 +40,13 @@ namespace Service
                     MatchSequencesAndWeights(changedSequence);
                 _previosWeightValue = _currentWeightValue;
             }
-            return _preferableSequnce.Select(Guid.Parse);
+            var response = new TravelSalesmanResponse()
+            {
+                PreferableSequenceOfCities = _preferableSequnce.Select(Guid.Parse),
+                CalculatedDistance = _result,
+                NameAlghorithm = nameof(TravelSalesmanAnnealingResolver)
+            };
+            return response;
         }
         #region Supporting functionallity
         public string[] SwapVertexSequence(string[] sequence, int[] changedIndexes)
@@ -49,14 +57,14 @@ namespace Service
             sequence[changedIndexes[1]] = buf;
             return sequence;
         }
-        private double GetEdgeSum(string[] currentSequence, Graph graph)
+        private int GetEdgeSum(string[] currentSequence, Graph graph)
         {
-            if (currentSequence.Length == 1) return double.MaxValue;
-            double weightValue = 0;
+            if (currentSequence.Length == 1) return int.MaxValue;
+            int weightValue = 0;
             for (int i = 0; i < graph.Vertices.Count - 1; i++)
             {
                 var CurrentEdge = graph.GetEdge(currentSequence[i], currentSequence[i + 1]);
-                if (CurrentEdge == null) return double.MaxValue;
+                if (CurrentEdge == null) return int.MaxValue;
                 weightValue += CurrentEdge.EdgeWeight;
             }
             weightValue += graph.GetEdge(currentSequence[currentSequence.Length - 1], currentSequence[0]).EdgeWeight;
@@ -89,7 +97,7 @@ namespace Service
             return rand.NextDouble() * 100;
         }
 
-        private double GetDeltaWeight(double currentWeightValue, double previosWeightValue) => currentWeightValue - previosWeightValue;
+        private int GetDeltaWeight(int currentWeightValue, int previosWeightValue) => currentWeightValue - previosWeightValue;
 
         private bool ComparePropabilities(double comparablePropability) => _currentProbability > comparablePropability;
         private void MatchSequencesAndWeights(string[] changedSequence)
@@ -97,6 +105,7 @@ namespace Service
             if (_currentWeightValue < _minWeightValue)
             {
                 _minWeightValue = _currentWeightValue;
+                _result += _minWeightValue;
                 _preferableSequnce = changedSequence;
             }
         }
