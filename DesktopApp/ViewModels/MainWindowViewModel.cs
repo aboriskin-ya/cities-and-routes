@@ -1,10 +1,12 @@
 ﻿using Autofac;
 using DesktopApp.Dialogs;
+using DesktopApp.Models;
 using DesktopApp.Services.Commands;
 using DesktopApp.Services.Helper;
-using DesktopApp.Services.State;
+using DesktopApp.Services.Utils;
 using DesktopApp.UserControllers;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -27,6 +29,7 @@ namespace DesktopApp.ViewModels
             MapImageSource = new BitmapImage(new Uri(@"Resources\Maps\USAMap.jpg", UriKind.Relative));
             ImageHeight = (MapImageSource as BitmapImage).PixelHeight;
             ImageWidth = (MapImageSource as BitmapImage).PixelWidth;
+            AppState = new States();
 
             MapViewModel = viewModel;
             PositionViewModel = positionViewModel;
@@ -49,22 +52,59 @@ namespace DesktopApp.ViewModels
 
         private void OnAddNewCity(object p)
         {
-            IsAbleToSetCity = true;
+            AppState.IsAbleToSetCity = true;
         }
 
-        private bool OnCanAddNewCityExecute(object p) => !IsAbleToSetCity && !IsAbleToCreateCity;//&& Map != null;
+        private bool OnCanAddNewCityExecute(object p) => !AppState.IsAbleToSetCity && !AppState.IsAbleToCreateCity;//&& Map != null;
         #endregion
+       
 
         #region CreateNewCityCommand
+
         public ICommand CreateNewCityCommand => new CreateCityCommand(p => OnCanCreateNewCityExecuted(p), p => OnCreateNewCityExecuted(p));
 
         private void OnCreateNewCityExecuted(object p)
         {
-            MapViewModel.CreateNewCityCommand.Execute(p);
-            IsAbleToCreateCity = false;
+            MapViewModel.CreateNewCityCommand.Execute(p);                
+            AppState.IsAbleToCreateCity = false;
+            if(MapViewModel.CityWasSaved())
+                AppState.IsSuccess = true;
         }
 
-        private bool OnCanCreateNewCityExecuted(object p) => IsAbleToCreateCity;
+        private bool OnCanCreateNewCityExecuted(object p) => AppState.IsAbleToCreateCity;
+
+        #endregion
+
+        #region AddNewRouteCommand
+
+        public ICommand AddNewRouteCommand => new AddNewRouteCommand(p => OnCanAddNewRouteExecute(p), p => OnAddNewRoute(p));
+
+        private void OnAddNewRoute(object p)
+        {
+            AppState.IsAbleToPickFirstCity = true;
+        }
+
+        private bool OnCanAddNewRouteExecute(object p) => !AppState.IsAbleToCreateRoute 
+            && !AppState.IsAbleToPickFirstCity
+            && MapViewModel.CitiesCount() >= 2 
+            && MapViewModel.RoutesCount() < MathUtils.BinomialCoefficient((uint)MapViewModel.CitiesCount(), 2);
+
+        #endregion
+
+        #region CreateNewRouteCommand
+
+        public ICommand CreateNewRouteCommand => new CreateRouteCommand(p => OnCanCreateNewRouteExecuted(p), p => OnCreateNewRouteExecuted(p));
+
+        private void OnCreateNewRouteExecuted(object p)
+        {
+            MapViewModel.CreateNewRouteCommand.Execute(p);
+            AppState.IsAbleToCreateRoute = false;
+            if (MapViewModel.RouteWasSaved())
+                AppState.IsSuccess = true;
+        }
+
+        private bool OnCanCreateNewRouteExecuted(object p) => MapViewModel.IsRouteHasBothCities();
+
         #endregion
 
         #region CancelCreatingNewCityCommand
@@ -73,10 +113,22 @@ namespace DesktopApp.ViewModels
         private void OnCancelCreatingCityExecuted(object p)
         {
             MapViewModel.CancelCreatingCityCommand.Execute(p);
-            IsAbleToCreateCity = false;
+            AppState.IsAbleToCreateCity = false;
         }
 
-        private bool OnCanCancelCreatingCityExecuted(object p) => IsAbleToCreateCity;
+        private bool OnCanCancelCreatingCityExecuted(object p) => AppState.IsAbleToCreateCity;
+        #endregion
+
+        #region CancelCreatingNewCityCommand
+        public ICommand CancelCreatingRouteCommand => new CancelCreatingRouteCommand(p => OnCanCancelCreatingRouteExecuted(p), p => OnCancelCreatingRouteExecuted(p));
+
+        private void OnCancelCreatingRouteExecuted(object p)
+        {
+            MapViewModel.CancelCreatingRouteCommand.Execute(p);
+            AppState.IsAbleToCreateRoute = false;
+        }
+
+        private bool OnCanCancelCreatingRouteExecuted(object p) => AppState.IsAbleToCreateRoute;
         #endregion
 
         #region MapImage
@@ -165,9 +217,9 @@ namespace DesktopApp.ViewModels
 
         private void OnNavigateExecuted(object p)
         {
-
+            
             OffsetValue = (Point)p;
-
+         
         }
 
         private bool OnCanNavigateExecute(object p) => true;
@@ -212,58 +264,11 @@ namespace DesktopApp.ViewModels
         }
         #endregion
 
-        #region StateLine
-
-        private string statusBar;
-        public string StatusBar
+        private States appState;
+        public States AppState
         {
-            get => statusBar;
-            set => Set<string>(ref statusBar, value);
-        }
-
-        #endregion
-
-        #region CreateCityPossibility
-
-        private bool _IsAbleToCreateCity = false;
-        public bool IsAbleToCreateCity
-        {
-            get => _IsAbleToCreateCity;
-            set
-            {
-                Set<bool>(ref _IsAbleToCreateCity, value);
-                StatusBarUpdate();
-            }
-        }
-
-        #endregion
-
-        #region SetCityPossibility
-
-        private bool _IsAbleToSetCity = false;
-        public bool IsAbleToSetCity
-        {
-            get => _IsAbleToSetCity;
-            set
-            {
-                Set<bool>(ref _IsAbleToSetCity, value);
-                StatusBarUpdate();
-            }
-        }
-
-        #endregion
-
-        public void StatusBarUpdate()
-        {
-            if (IsAbleToSetCity)
-                StatusBar = StateLine.Show(StateLineStatus.SetCity);
-            else
-            {
-                if (IsAbleToCreateCity)
-                    StatusBar = StateLine.Show(StateLineStatus.CreateCity);
-                else
-                    StatusBar = StateLine.Show(StateLineStatus.Empty);
-            }
+            get => appState;
+            set => Set<States>(ref appState, value, nameof(AppState));
         }
     }
 }

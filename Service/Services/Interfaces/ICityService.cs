@@ -1,5 +1,4 @@
-﻿using DataAccess.Models;
-using Service.DTO;
+﻿using Service.DTO;
 using System;
 using System.Collections.Generic;
 
@@ -7,10 +6,10 @@ namespace Service.Services.Interfaces
 {
     public interface ICityService
     {
-        IEnumerable<CityDTO> GetCities();
-        CityDTO GetCity(Guid id);
-        City CreateCity(CityDTO city);
-        City UpdateCity(Guid id, CityDTO city);
+        IEnumerable<CityGetDTO> GetCities();
+        CityGetDTO GetCity(Guid id);
+        CityGetDTO CreateCity(CityCreateDTO city);
+        CityCreateDTO UpdateCity(Guid id, CityCreateDTO city);
         bool DeleteCity(Guid id);
     }
 }

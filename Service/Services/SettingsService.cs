@@ -21,11 +21,14 @@ namespace Service.Services
             _mapper = mapper;
         }
 
-        public void CreateSettings(SettingsDTO settingsDTO)
+        public SettingsDTO CreateSettings(SettingsDTO settingsDTO)
         {
-            Settings settings = _mapper.Map<Settings>(settingsDTO);
+            var settings = _mapper.Map<Settings>(settingsDTO);
             _repository.Add(settings);
             _context.SaveChanges();
+
+            _mapper.Map(settings, settingsDTO);
+            return settingsDTO;
         }
 
         public bool DeleteSettings(Guid id)
@@ -51,11 +54,14 @@ namespace Service.Services
             return _mapper.Map<Settings, SettingsDTO>(_repository.Get(id));
         }
 
-        public SettingsDTO UpdateSettings(SettingsDTO settingsDTO)
+        public SettingsDTO UpdateSettings(Guid Id, SettingsUpdateDTO settingsUpdateDTO)
         {
-            Settings settings = _mapper.Map<Settings>(settingsDTO);
-            _repository.Update(settings);
-            return settingsDTO;
+            var settings = _repository.Get(Id);
+            _mapper.Map(settingsUpdateDTO, settings);
+            settings = _repository.Update(settings);
+            _context.SaveChanges();
+
+            return _mapper.Map<SettingsDTO>(settings);
         }
     }
 }

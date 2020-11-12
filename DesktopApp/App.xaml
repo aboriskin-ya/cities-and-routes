@@ -1,13 +1,18 @@
 ﻿<Application x:Class="DesktopApp.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:DesktopApp">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
 
+                <ResourceDictionary Source="Resources\Dictionaries\Converters.xaml"/>
                 <ResourceDictionary Source="Resources\Styles\CreateMapDialogStyles.xaml"/>
                 <ResourceDictionary Source="Resources\Styles\Buttons.xaml"/>
+                <ResourceDictionary Source="Resources\Templates\GraphItemControlTemplate.xaml"/>
+                <ResourceDictionary Source="Resources\Templates\ValidationErrorTemplate.xaml"/>
+                <ResourceDictionary Source="Resources\Triggers\GrowTrigger.xaml"/>
+                <ResourceDictionary Source="Resources\Styles\CityPointStyles.xaml"/>
+                <ResourceDictionary Source="Resources\Styles\RouteLineStyles.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

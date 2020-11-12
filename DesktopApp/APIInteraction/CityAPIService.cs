@@ -10,7 +10,7 @@ namespace DesktopApp.APIInteraction
     {
         public async Task<HttpResponsePayload<City>> CreateCityAsync(City city)
         {
-            var cityDTO = AppMapper.GetAppMapper().Mapper.Map<CityDTO>(city);
+            var cityDTO = AppMapper.GetAppMapper().Mapper.Map<CityCreateDTO>(city);
 
             HttpResponseMessage response;
 
@@ -27,8 +27,8 @@ namespace DesktopApp.APIInteraction
             {
                 IsSuccessful = response.IsSuccessStatusCode ? true : false
             };
-            cityDTO = HttpContentExtensions.ReadAsAsync(response.Content, typeof(CityDTO)).Result as CityDTO;
-            responsePayload.Payload = AppMapper.GetAppMapper().Mapper.Map<City>(cityDTO);
+            var cityGetDTO = await response.Content.ReadAsAsync<CityGetDTO>();
+            responsePayload.Payload = AppMapper.GetAppMapper().Mapper.Map<City>(cityGetDTO);
 
             return responsePayload;
         }

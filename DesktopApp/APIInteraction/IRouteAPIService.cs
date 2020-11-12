@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace DesktopApp.APIInteraction
 {
-    public interface ICityAPIService
+    public interface IRouteAPIService
     {
-        Task<HttpResponsePayload<City>> CreateCityAsync(City city);
+        Task<HttpResponsePayload<Route>> CreateRouteAsync(Route route);
     }
 }

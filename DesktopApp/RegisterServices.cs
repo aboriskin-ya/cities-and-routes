@@ -17,6 +17,7 @@ namespace DesktopApp
             builder.RegisterType<MapViewModel>().As<IMapViewModel>();
             builder.RegisterType<CursorPositionViewModel>().As<ICursorPositionViewModel>();
             builder.RegisterType<CityAPIService>().As<ICityAPIService>();
+            builder.RegisterType<RouteAPIService>().As<IRouteAPIService>();
 
             builder.RegisterType<MainWindowViewModel>().AsSelf();
             builder.RegisterType<CreateMapViewModel>().AsSelf();

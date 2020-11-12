@@ -35,6 +35,7 @@ namespace API
             services.AddScoped(typeof(IImageRepository), typeof(ImageRepository));
             services.AddScoped(typeof(ISettingsRepository), typeof(SettingsRepository));
             services.AddScoped(typeof(ICityRepository), typeof(CityRepository));
+            services.AddScoped(typeof(IRouteRepository), typeof(RouteRepository));
             services.AddTransient<ITravelSalesmanNearestNeighbor, TravelSalesmanNearestNeighbor>();
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<IMapService, MapService>();
@@ -43,6 +44,7 @@ namespace API
             services.AddTransient<ITravelSalesmanAnnealingResolver, TravelSalesmanAnnealingResolver>();
             services.AddTransient<IShortestPathResolverService, ShortestPathResolverService>();
             services.AddTransient<ICityService, CityService>();
+            services.AddTransient<IRouteService, RouteService>();
             services.AddTransient<IPathToGraphService, PathToGraphService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

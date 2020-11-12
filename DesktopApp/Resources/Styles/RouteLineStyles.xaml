@@ -1,0 +1,31 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="RouteOfMapStyle">
+        <Setter Property="Line.Stroke" Value="{Binding ElementName=mControl, Path=SettingsMap.EdgeColor, 
+                         Converter={StaticResource StringToColorConverter}}"/>
+        <Setter Property="Line.StrokeThickness" Value="{Binding ElementName=mControl, Path=SettingsMap.EdgeSize}"/>
+    </Style>
+
+    <Style BasedOn="{StaticResource RouteOfMapStyle}" x:Key="LineAnimation">
+        <Setter Property="Line.X1" Value="{Binding ElementName=mControl, Path=SelectedRoute.FirstCity.X}"/>
+        <Setter Property="Line.Y1" Value="{Binding ElementName=mControl, Path=SelectedRoute.FirstCity.Y}"/>
+        <Setter Property="Line.X2" Value="{Binding ElementName=mControl, Path=PosX}"/>
+        <Setter Property="Line.Y2" Value="{Binding ElementName=mControl, Path=PosY}"/>
+    </Style>
+
+    <Style BasedOn="{StaticResource RouteOfMapStyle}" x:Key="LineAttemptToLoad">
+        <Setter Property="Line.X1" Value="{Binding ElementName=mControl, Path=SelectedRoute.FirstCity.X}"/>
+        <Setter Property="Line.Y1" Value="{Binding ElementName=mControl, Path=SelectedRoute.FirstCity.Y}"/>
+        <Setter Property="Line.X2" Value="{Binding ElementName=mControl, Path=SelectedRoute.SecondCity.X}"/>
+        <Setter Property="Line.Y2" Value="{Binding ElementName=mControl, Path=SelectedRoute.SecondCity.Y}"/>
+    </Style>
+
+    <Style BasedOn="{StaticResource RouteOfMapStyle}" x:Key="LineRoute">
+        <Setter Property="Line.X1" Value="{Binding Path=FirstCity.X}"/>
+        <Setter Property="Line.Y1" Value="{Binding Path=FirstCity.Y}"/>
+        <Setter Property="Line.X2" Value="{Binding Path=SecondCity.X}"/>
+        <Setter Property="Line.Y2" Value="{Binding Path=SecondCity.Y}"/>
+    </Style>
+</ResourceDictionary>
+    
