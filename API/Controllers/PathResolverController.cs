@@ -47,15 +47,18 @@ namespace API.Controllers
         public IActionResult Experiment([FromBody] TravelSalesmanRequest BodyRequest)
         {
             TravelSalesmanResponse response = new TravelSalesmanResponse(); ;
-            var taskArr = new Task[] {
-               new Task(async ()=>  response=await _algorithmService.SolveNearestNeghborTravelSalesman(BodyRequest)),
-               new Task(async () => response=await _algorithmService.SolveAnnealingTravelSalesman(BodyRequest))
+            var taskArr = new Task<TravelSalesmanResponse>[]
+            {
+                _algorithmService.SolveAnnealingTravelSalesman(BodyRequest),
+                _algorithmService.SolveNearestNeghborTravelSalesman(BodyRequest)
+
             };
+            int index = 0;
             foreach (var task in taskArr)
             {
-                task.Start();
-                Task.WaitAny(taskArr);
+                index = Task.WaitAny(taskArr);
             }
+            response = taskArr[index].Result;
             return Ok(response);
         }
 
