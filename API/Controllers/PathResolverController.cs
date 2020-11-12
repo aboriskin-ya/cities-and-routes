@@ -54,10 +54,7 @@ namespace API.Controllers
 
             };
             int index = 0;
-            foreach (var task in taskArr)
-            {
-                index = Task.WaitAny(taskArr);
-            }
+            index = Task.WaitAny(taskArr);
             response = taskArr[index].Result;
             return Ok(response);
         }
