@@ -3,6 +3,7 @@ using PathResolver;
 using Service.PathResolver;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Service
@@ -21,6 +22,7 @@ namespace Service
         private int _maxLimit;
         private double _currentWeightValue = 0;
         private string[] _currentSequence;
+        private Stopwatch _timeCounter;
         #endregion
         public TravelSalesmanResponse Resolve(Graph graph)
         {
@@ -40,11 +42,13 @@ namespace Service
                     MatchSequencesAndWeights(changedSequence);
                 _previosWeightValue = _currentWeightValue;
             }
+            _timeCounter.Stop();
             var response = new TravelSalesmanResponse()
             {
                 PreferableSequenceOfCities = _preferableSequnce.Select(Guid.Parse),
                 CalculatedDistance = _result,
-                NameAlghorithm = nameof(TravelSalesmanAnnealingResolver)
+                NameAlghorithm = nameof(TravelSalesmanAnnealingResolver),
+                ProcessDuration = GetProcessDuration(_timeCounter.Elapsed)
             };
             return response;
         }
@@ -77,7 +81,6 @@ namespace Service
             var probability = 100 * Math.Pow(Math.E, (-deltaWeight) / temperature);
             return probability;
         }
-
         private int[] GetRandomIndexVertices(int initIndex, int lastIndex)
         {
             var rand = new Random();
@@ -117,9 +120,18 @@ namespace Service
             _maxLimit = _currentSequence.IndexOf(_currentSequence.Last());
             _minWeightValue = GetEdgeSum(_currentSequence, graph);
             _preferableSequnce = _currentSequence;
+            _timeCounter = new Stopwatch();
+            _timeCounter.Start();
         }
-        #endregion
+        
 
         private bool CheckExecuting(double criticalValue) => criticalValue.Equals(double.MaxValue);
+        private string GetProcessDuration(TimeSpan timeSpan)
+        {
+            var seconds = timeSpan.Seconds.ToString();
+            var milliSeconds = timeSpan.Milliseconds;
+            return $"{seconds}s,{milliSeconds}ms.";
+        }
+        #endregion
     }
 }

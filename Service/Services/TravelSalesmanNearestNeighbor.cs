@@ -2,6 +2,7 @@
 using Service.PathResolver;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Service.Services.Interfaces
 {
@@ -12,12 +13,15 @@ namespace Service.Services.Interfaces
         private bool _allVisited = false;
         private List<Guid> _sequence;
         private GraphVertex _currentVertex;
+        private Stopwatch _timeCounter;
         public TravelSalesmanNearestNeighbor()
         {
             _sequence = new List<Guid>();
+            _timeCounter = new Stopwatch();
         }
         public TravelSalesmanResponse Solve(Graph graph)
         {
+            _timeCounter.Start();
             var vertex = graph.Vertices[0];
             vertex.IsUnvisited = false;
             while (!_allVisited)
@@ -45,13 +49,21 @@ namespace Service.Services.Interfaces
                     _allVisited = true;
                 }
             }
+            _timeCounter.Stop();
             var response = new TravelSalesmanResponse()
             {
                 PreferableSequenceOfCities = _sequence,
                 CalculatedDistance = _result,
-                NameAlghorithm = nameof(TravelSalesmanNearestNeighbor)
+                NameAlghorithm = nameof(TravelSalesmanNearestNeighbor),
+                ProcessDuration = GetProcessDuration(_timeCounter.Elapsed)
             };
             return response;
+        }
+        private string GetProcessDuration(TimeSpan timeSpan)
+        {
+            var seconds = timeSpan.Seconds.ToString();
+            var milliSeconds = timeSpan.Milliseconds;
+            return $"{seconds}s,{milliSeconds}ms.";
         }
     }
 }

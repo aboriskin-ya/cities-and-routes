@@ -46,16 +46,14 @@ namespace API.Controllers
         [Route("experiment")]
         public IActionResult Experiment([FromBody] TravelSalesmanRequest BodyRequest)
         {
-            TravelSalesmanResponse response = new TravelSalesmanResponse(); ;
             var taskArr = new Task<TravelSalesmanResponse>[]
             {
-                _algorithmService.SolveAnnealingTravelSalesman(BodyRequest),
-                _algorithmService.SolveNearestNeghborTravelSalesman(BodyRequest)
-
+                _algorithmService.SolveNearestNeghborTravelSalesman(BodyRequest),
+                _algorithmService.SolveAnnealingTravelSalesman(BodyRequest)
             };
-            int index = 0;
-            index = Task.WaitAny(taskArr);
-            response = taskArr[index].Result;
+            
+            var task = Task.WhenAny(taskArr).Result;
+            var response = task.Result;
             return Ok(response);
         }
 
