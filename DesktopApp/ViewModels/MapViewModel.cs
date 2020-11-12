@@ -36,7 +36,7 @@ namespace DesktopApp.ViewModels
 
         public ObservableCollection<City> CityCollection { get; set; }
         public ObservableCollection<Route> RouteCollection { get; set; }
-        
+
         private City _SelectedCity;
         public City SelectedCity
         {

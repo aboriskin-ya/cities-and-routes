@@ -18,13 +18,13 @@ namespace DesktopApp.Models
 
         #region CreateCityPossibility
 
-        private bool _IsAbleToCreateCity = false;
+        private bool _isAbleToCreateCity = false;
         public bool IsAbleToCreateCity
         {
-            get => _IsAbleToCreateCity;
+            get => _isAbleToCreateCity;
             set
             {
-                _IsAbleToCreateCity = value;
+                _isAbleToCreateCity = value;
                 RaisePropertyChanged(nameof(IsAbleToCreateCity));
                 State = CityStatusUpdate();
             }
@@ -34,13 +34,13 @@ namespace DesktopApp.Models
 
         #region SetCityPossibility
 
-        private bool _IsAbleToSetCity = false;
+        private bool _isAbleToSetCity = false;
         public bool IsAbleToSetCity
         {
-            get => _IsAbleToSetCity;
+            get => _isAbleToSetCity;
             set
             {
-                _IsAbleToSetCity = value;
+                _isAbleToSetCity = value;
                 RaisePropertyChanged(nameof(IsAbleToSetCity));
                 State = CityStatusUpdate();
             }
@@ -50,13 +50,13 @@ namespace DesktopApp.Models
 
         #region CreateRoutePossibility
 
-        private bool _IsAbleToCreateRoute = false;
+        private bool _isAbleToCreateRoute = false;
         public bool IsAbleToCreateRoute
         {
-            get => _IsAbleToCreateRoute;
+            get => _isAbleToCreateRoute;
             set
             {
-                _IsAbleToCreateRoute = value;
+                _isAbleToCreateRoute = value;
                 RaisePropertyChanged(nameof(IsAbleToCreateRoute));
                 State = RouteStatusUpdate();
             }
@@ -66,25 +66,25 @@ namespace DesktopApp.Models
 
         #region SetRoutePossibility
 
-        private bool _IsAbleToPickFirstCity = false;
+        private bool _isAbleToPickFirstCity = false;
         public bool IsAbleToPickFirstCity
         {
-            get => _IsAbleToPickFirstCity;
+            get => _isAbleToPickFirstCity;
             set
             {
-                _IsAbleToPickFirstCity = value;
+                _isAbleToPickFirstCity = value;
                 RaisePropertyChanged(nameof(IsAbleToPickFirstCity));
                 State = RouteStatusUpdate();
             }
         }
 
-        private bool _IsAbleToPickSecondCity = false;
+        private bool _isAbleToPickSecondCity = false;
         public bool IsAbleToPickSecondCity
         {
-            get => _IsAbleToPickSecondCity;
+            get => _isAbleToPickSecondCity;
             set
             {
-                _IsAbleToPickSecondCity = value;
+                _isAbleToPickSecondCity = value;
                 RaisePropertyChanged(nameof(IsAbleToPickSecondCity));
                 IsAbleToPickFirstCity = IsAbleToPickSecondCity;
             }
@@ -94,13 +94,13 @@ namespace DesktopApp.Models
 
         #region SuccessfulCreating
 
-        private bool _IsSuccess;
+        private bool _isSuccess;
         public bool IsSuccess
         {
-            get => _IsSuccess;
+            get => _isSuccess;
             set
             {
-                _IsSuccess = value;
+                _isSuccess = value;
                 RaisePropertyChanged(nameof(IsSuccess));
                 State = SuccessStatusUpdate();
             }

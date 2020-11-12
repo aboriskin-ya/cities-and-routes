@@ -61,8 +61,7 @@ namespace Service.Services
             settings = _repository.Update(settings);
             _context.SaveChanges();
 
-            var dto = _mapper.Map<SettingsDTO>(settings);
-            return dto;
+            return _mapper.Map<SettingsDTO>(settings);
         }
     }
 }
