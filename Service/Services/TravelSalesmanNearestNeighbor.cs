@@ -3,6 +3,7 @@ using Service.PathResolver;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Service.Services.Interfaces
 {
@@ -46,6 +47,7 @@ namespace Service.Services.Interfaces
                 _minWeightValue = int.MaxValue;
                 if (_sequence.Count == graph.Vertices.Count && _currentVertex.IsUnvisited == false)
                 {
+                    _result += graph.GetEdge(_sequence.Last().ToString(),_sequence.First().ToString()).EdgeWeight;
                     _allVisited = true;
                 }
             }
