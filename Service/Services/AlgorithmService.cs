@@ -8,18 +8,14 @@ using Service.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Repository;
-using Repository.Storage;
-using Service.DTO;
-using Service.Services.Interfaces;
-using System;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Service.Services
 {
     public class AlgorithmService : Interfaces.IAlgorithmService
     {
-        private readonly ITravelSalesmanAnnealingResolver _resolver;
+        private readonly ITravelSalesmanNearestNeighbor _nearestResolver;
+        private readonly ITravelSalesmanAnnealingResolver _annealingResolver;
         private readonly IMapRepository _mapRepository;
         private readonly ICityRepository _cityRepository;
         private readonly IPathToGraphService _pathToGraphService;
@@ -29,13 +25,15 @@ namespace Service.Services
                                 ICityRepository CityRepository,
                                 IPathToGraphService PathService,
                                 CityRouteContext Context,
-                                ITravelSalesmanAnnealingResolver resolver)
+                                ITravelSalesmanAnnealingResolver Annealingresolver,
+                                ITravelSalesmanNearestNeighbor nearestResolver)
         {
             _context = Context;
             _mapRepository = MapRepository;
             _cityRepository = CityRepository;
             _pathToGraphService = PathService;
-            _resolver = resolver;
+            _annealingResolver = Annealingresolver;
+            _nearestResolver = nearestResolver;
         }
 
         public List<Guid> FindShortestPath(Guid MapId, Guid CityToId, Guid CityFromId)
@@ -45,13 +43,24 @@ namespace Service.Services
             List<Guid> Path = new ShortestPathResolverService().FindShortestPath(PathDto, CityFromId.ToString(), CityToId.ToString());
             return Path;
         }
-        public IEnumerable<Guid> SolveTravelSalesman(TravelSalesmanRequest request)
+        public async Task<TravelSalesmanResponse> SolveAnnealingTravelSalesman(TravelSalesmanRequest request)
         {
             Map map = _mapRepository.GetWholeMap(request.MapId);
             if (request.SelectedCities.Count() > 0 && map != null)
             {
-                Graph graph = _pathToGraphService.MapToGraph(map,request.SelectedCities);
-                return _resolver.Resolve(graph);
+                Graph graph = _pathToGraphService.MapToGraph(map, request.SelectedCities);
+                return await Task.Run(() => _annealingResolver.Resolve(graph));
+            }
+            return default;
+        }
+
+        public async Task<TravelSalesmanResponse> SolveNearestNeghborTravelSalesman(TravelSalesmanRequest requestBody)
+        {
+            Map map = _mapRepository.GetWholeMap(requestBody.MapId);
+            if (requestBody.SelectedCities.Count() > 0 && map != null)
+            {
+                Graph graph = _pathToGraphService.MapToGraph(map, requestBody.SelectedCities);
+                return await Task.Run(() => _nearestResolver.Solve(graph));
             }
             return default;
         }

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using DataAccess.DTO;
-using PathResolver;
-using Service.DTO;
+﻿using PathResolver;
+using Service.PathResolver;
 
 namespace Service
 {
     public interface ITravelSalesmanAnnealingResolver
     {
-        IEnumerable<Guid> Resolve(Graph Graph);
+        public TravelSalesmanResponse Resolve(Graph Graph);
     }
 }

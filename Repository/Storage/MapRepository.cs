@@ -19,7 +19,8 @@ namespace Repository.Storage
         public Map GetWholeMap(Guid id)
         {
             return _entity.Include(p => p.Cities).Include(p => p.Routes).Include(p => p.Settings)
-                .Include(p => p.Image).SingleOrDefault(p => p.Id == id);
+                 .Include(p => p.Image).SingleOrDefault(p => p.Id == id);
+
         }
     }
 }

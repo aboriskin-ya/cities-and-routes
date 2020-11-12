@@ -1,4 +1,3 @@
-using API.Middlewares;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,7 +36,7 @@ namespace API
             services.AddScoped(typeof(ISettingsRepository), typeof(SettingsRepository));
             services.AddScoped(typeof(ICityRepository), typeof(CityRepository));
             services.AddScoped(typeof(IRouteRepository), typeof(RouteRepository));
-            
+            services.AddTransient<ITravelSalesmanNearestNeighbor, TravelSalesmanNearestNeighbor>();
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<IMapService, MapService>();
             services.AddTransient<ISettingsService, SettingsService>();
