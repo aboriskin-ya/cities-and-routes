@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace API.Controllers
 {
@@ -8,6 +9,7 @@ namespace API.Controllers
     {
         public string ApiIsRuning()
         {
+            Log.Information("Index page");
             return "API Running...";
             //Todo: maybe add AspNetCore.RouteAnalyzer
         }

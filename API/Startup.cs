@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Repository;
 using Repository.Storage;
+using Serilog;
 using Service;
 using Service.Services;
 using Service.Services.Interfaces;
@@ -28,6 +29,13 @@ namespace API
         {
             services.AddControllers();
             string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            Log.Logger = new LoggerConfiguration()
+            .WriteTo.Seq("http://localhost:5341/")
+            .CreateLogger();
+
+            services.AddSingleton<Serilog.ILogger>(Log.Logger);
+
             services.AddDbContext<CityRouteContext>(options =>
             {
                 options.UseSqlServer(connection);
