@@ -1,15 +1,16 @@
+using API.Middlewares;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Repository;
-using Microsoft.EntityFrameworkCore;
 using Repository.Storage;
-using System;
-using AutoMapper;
-using Service.Services.Interfaces;
+using Service;
 using Service.Services;
+using Service.Services.Interfaces;
+using System;
 
 namespace API
 {
@@ -41,10 +42,11 @@ namespace API
             services.AddTransient<IMapService, MapService>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IAlgorithmService, AlgorithmService>();
+            services.AddTransient<ITravelSalesmanAnnealingResolver, TravelSalesmanAnnealingResolver>();
+            services.AddTransient<IShortestPathResolverService, ShortestPathResolverService>();
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<IRouteService, RouteService>();
             services.AddTransient<IPathToGraphService, PathToGraphService>();
-            services.AddTransient<IAlgorithmService, AlgorithmService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
@@ -52,19 +54,12 @@ namespace API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
-            app.UseAuthorization();
+            app.UseMiddleware<BasicAuthenthicationMiddleware>();
+
+            app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {

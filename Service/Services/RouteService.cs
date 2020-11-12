@@ -1,11 +1,11 @@
-﻿using DataAccess.Models;
+﻿using AutoMapper;
+using DataAccess.Models;
 using Repository;
+using Repository.Storage;
+using Service.DTO;
+using Service.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using AutoMapper;
-using Repository.Storage;
-using Service.Services.Interfaces;
-using Service.DTO;
 
 namespace Service.Services
 {

@@ -1,8 +1,6 @@
 ﻿using DesktopApp.UserControllers;
 using DesktopApp.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 
 namespace DesktopApp.Services.Helper
@@ -23,15 +21,15 @@ namespace DesktopApp.Services.Helper
             RelativeVector.Y -= OffsetValue.Y / Height / ScaleValue * CorrectiveKoef;
             return Vector.Add(RelativeVector, new Point());
         }
-        public static Offset GetOffset(Offset Offset, double ScaleValue,double Height,double Width,Point TransformPosition, ZoomEnum ZoomSelector)
+        public static Offset GetOffset(Offset Offset, double ScaleValue, double Height, double Width, Point TransformPosition, ZoomEnum ZoomSelector)
         {
             if (ScaleValue > 16) return Offset;
             if (ScaleValue == 1) return new Offset(0, 0, 0, 0);
             switch ((int)ZoomSelector)
             {
                 case 0:
-                    Offset.Top += Height*TransformPosition.Y / 2;
-                    Offset.Bottom += Height*(1-TransformPosition.Y) / 2;
+                    Offset.Top += Height * TransformPosition.Y / 2;
+                    Offset.Bottom += Height * (1 - TransformPosition.Y) / 2;
                     Offset.Right += Width * (1 - TransformPosition.X) / 2;
                     Offset.Left += Width * TransformPosition.X / 2;
                     return Offset;
@@ -45,7 +43,7 @@ namespace DesktopApp.Services.Helper
             return Offset;
         }
 
-        public static Point GetOffsetValue(double PPW, double PPH,Offset offset, Point CurrentOffsetValue)
+        public static Point GetOffsetValue(double PPW, double PPH, Offset offset, Point CurrentOffsetValue)
         {
 
             var CurrentRelativeOffsetX = CurrentOffsetValue.X * PPW;
@@ -55,7 +53,7 @@ namespace DesktopApp.Services.Helper
                 if (Math.Max(Math.Abs(CurrentRelativeOffsetX), offset.Left) > offset.Left)
                     CurrentRelativeOffsetX = offset.Left;
             }
-            if(CurrentRelativeOffsetY > 0)
+            if (CurrentRelativeOffsetY > 0)
             {
                 if (Math.Max(Math.Abs(CurrentRelativeOffsetY), offset.Top) > offset.Top)
                     CurrentRelativeOffsetY = offset.Top;
@@ -68,9 +66,9 @@ namespace DesktopApp.Services.Helper
             if (CurrentRelativeOffsetY < 0)
             {
                 if (Math.Max(Math.Abs(CurrentRelativeOffsetY), offset.Bottom) > offset.Bottom)
-                    CurrentRelativeOffsetY = - offset.Bottom;
+                    CurrentRelativeOffsetY = -offset.Bottom;
             }
-            return new Point(CurrentRelativeOffsetX/PPW, CurrentRelativeOffsetY/PPH);
+            return new Point(CurrentRelativeOffsetX / PPW, CurrentRelativeOffsetY / PPH);
         }
         public static Offset GetOffsetAfterDrag(double PPW, double PPH, Offset CurrentOffset, Point CurrentOffsetValue)
         {

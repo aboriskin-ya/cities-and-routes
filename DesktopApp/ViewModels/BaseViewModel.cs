@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace DesktopApp.ViewModels
 {
@@ -10,7 +7,7 @@ namespace DesktopApp.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        internal virtual bool Set<T>(ref T field, T value, [CallerMemberName]string prop = "")
+        internal virtual bool Set<T>(ref T field, T value, [CallerMemberName] string prop = "")
         {
             if (Equals(field, value)) return false;
             field = value;

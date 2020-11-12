@@ -141,7 +141,7 @@ namespace DesktopApp.ViewModels
         #endregion
 
         #region ScaleValue
-        private double _ScaleValue=1.0;
+        private double _ScaleValue = 1.0;
         public double ScaleValue
         {
             get => _ScaleValue;
@@ -168,7 +168,7 @@ namespace DesktopApp.ViewModels
         #endregion
 
         #region ZoomCommand
-        public ZoomCommand ZoomCommand => new ZoomCommand(p =>true, p => OnZoomExecuted(p));
+        public ZoomCommand ZoomCommand => new ZoomCommand(p => true, p => OnZoomExecuted(p));
 
         private void OnZoomExecuted(object p)
         {
@@ -176,26 +176,28 @@ namespace DesktopApp.ViewModels
             {
                 switch (scale)
                 {
-                    case 2:if (ScaleValue >= 1 && ScaleValue < 16)
+                    case 2:
+                        if (ScaleValue >= 1 && ScaleValue < 16)
                         {
                             ScaleValue *= scale;
-                            Offset = MapHelper.GetOffset(Offset, ScaleValue,ImageHeight,ImageWidth,TransformPosition, ZoomEnum.ZoomIn);
+                            Offset = MapHelper.GetOffset(Offset, ScaleValue, ImageHeight, ImageWidth, TransformPosition, ZoomEnum.ZoomIn);
                             ImageHeight /= 2; ImageWidth /= 2;
                         }
                         break;
-                      
-                    case 0.5: if (ScaleValue > 1 && ScaleValue <= 16)
+
+                    case 0.5:
+                        if (ScaleValue > 1 && ScaleValue <= 16)
                         {
                             ScaleValue *= scale;
                             ImageHeight *= 2; ImageWidth *= 2;
                             Offset = MapHelper.GetOffset(Offset, ScaleValue, ImageHeight, ImageWidth, TransformPosition, ZoomEnum.ZoomOut);
-                            
+
                         }
                         break;
-                        
+
                 }
             }
-               
+
         }
 
         private bool OnCanZoomExecute(object p) => true;
@@ -221,7 +223,7 @@ namespace DesktopApp.ViewModels
         }
 
         private bool OnCanNavigateExecute(object p) => true;
-        
+
         #endregion
 
         #region OffsetValue

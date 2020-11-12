@@ -1,8 +1,8 @@
 ﻿using Autofac;
-using DesktopApp.Service;
 using DesktopApp.APIInteraction;
-using DesktopApp.ViewModels;
 using DesktopApp.Dialogs;
+using DesktopApp.Service;
+using DesktopApp.ViewModels;
 
 namespace DesktopApp
 {

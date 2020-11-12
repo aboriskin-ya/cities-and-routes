@@ -38,7 +38,7 @@ namespace DesktopApp.Models
             set
             {
                 y = value;
-                RaisePropertyChanged(nameof(Y));  
+                RaisePropertyChanged(nameof(Y));
             }
         }
 

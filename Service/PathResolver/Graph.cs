@@ -5,9 +5,12 @@ namespace PathResolver
     public class Graph
     {
         public List<GraphVertex> Vertices { get; }
+
+        public List<GraphEdge> Edges { get;  }
         public Graph()
         {
             Vertices = new List<GraphVertex>();
+            Edges = new List<GraphEdge>();
         }
 
         public void AddVertex(string VertexName)
@@ -15,6 +18,14 @@ namespace PathResolver
             Vertices.Add(new GraphVertex(VertexName));
         }
 
+        public GraphEdge GetEdge(string FirstVertexName,string SecondVertexName)
+        {
+            foreach(var item in Edges)
+            {
+                if (FirstVertexName.Equals(item.FirstVertex.Name) && SecondVertexName.Equals(item.SecondVertex.Name)) return item;
+            }
+            return null;
+        }
         public GraphVertex FindVertex(string VertexName)
         {
             foreach (var Vertex in Vertices)
@@ -28,15 +39,18 @@ namespace PathResolver
             return null;
         }
 
-        public void AddEdge(string FirstName, string SecondName, int Weight)
+        public void AddEdge(string firstName, string secondName, int weight)
         {
-            var FirstVertex = FindVertex(FirstName);
-            var SecondVertex = FindVertex(SecondName);
+            Edges.Add(new GraphEdge(FindVertex(firstName), FindVertex(secondName), weight));
+            Edges.Add(new GraphEdge(FindVertex(secondName), FindVertex(firstName), weight));
+            var FirstVertex = FindVertex(firstName);
+            var SecondVertex = FindVertex(secondName);
             if (SecondVertex != null && FirstVertex != null)
             {
-                FirstVertex.AddEdge(SecondVertex, Weight);
-                SecondVertex.AddEdge(FirstVertex, Weight);
+                FirstVertex.AddEdge(SecondVertex, weight);
+                SecondVertex.AddEdge(FirstVertex, weight);
             }
         }
+       
     }
 }

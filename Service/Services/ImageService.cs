@@ -1,9 +1,9 @@
 ﻿using DataAccess.Models;
-using Repository.Storage;
 using Repository;
+using Repository.Storage;
+using Service.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using Service.Services.Interfaces;
 
 namespace Service.Services
 {
