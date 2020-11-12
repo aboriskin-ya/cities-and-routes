@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using DataAccess.Models;
-using Service;
 using Service.Services.Interfaces;
 using Service.DTO;
 
@@ -24,7 +22,7 @@ namespace API.Controllers
         [Route("getall")]
         public IActionResult GetRoute()
         {
-            IEnumerable<RouteDTO> RouteList = _routeservice.GetRoutes();
+            var RouteList = _routeservice.GetRoutes();
 
             if (RouteList.Count() == 0)
             {
@@ -35,9 +33,9 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public ActionResult<RouteDTO> GetRoute(Guid id)
+        public ActionResult<RouteGetDTO> GetRoute(Guid id)
         {
-            RouteDTO route = _routeservice.GetRoute(id);
+            var route = _routeservice.GetRoute(id);
             if (route == null)
             {
                 return NotFound();
@@ -46,7 +44,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Route> CreateRoute([FromBody] RouteDTO dto)
+        public ActionResult<RouteGetDTO> CreateRoute([FromBody] RouteCreateDTO dto)
         {
             try
             {
@@ -60,11 +58,11 @@ namespace API.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
-        public ActionResult<Route> UpdateRoute(Guid id, [FromBody] RouteDTO dto)
+        public ActionResult<RouteCreateDTO> UpdateRoute(Guid id, [FromBody] RouteCreateDTO dto)
         {
             try
             {
-                return _routeservice.UpdateRoute(dto, id);
+                return _routeservice.UpdateRoute(id, dto);
             }
             catch (Exception ex)
             {

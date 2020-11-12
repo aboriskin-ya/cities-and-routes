@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="CityOfMapStyle">
+        <Setter Property="Ellipse.Width" Value="{Binding ElementName=mControl, Path=SettingsMap.VertexSize}"/>
+        <Setter Property="Ellipse.Height" Value="{Binding ElementName=mControl, Path=SettingsMap.VertexSize}"/>
+        <Setter Property="Canvas.Left" Value="{Binding RelativeSource={RelativeSource Self}, Path=ActualWidth, 
+                                            Converter={StaticResource CenterOffsetConverter}}"/>
+        <Setter Property="Canvas.Top" Value="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, 
+                                            Converter={StaticResource CenterOffsetConverter}}"/>
+    </Style>
+
+    <Style BasedOn="{StaticResource CityOfMapStyle}" x:Key="CityStyle">
+        <Setter Property="Ellipse.Fill" Value="{Binding ElementName=mControl, Path=SettingsMap.VertexColor, 
+                                            Converter={StaticResource StringToColorConverter}}" />
+    </Style>
+
+    <Style BasedOn="{StaticResource CityOfMapStyle}" x:Key="GreenPointStyle">
+        <Setter Property="Ellipse.Fill" Value="LightGreen" />
+    </Style>
+
+</ResourceDictionary>

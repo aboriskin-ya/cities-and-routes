@@ -59,7 +59,7 @@ namespace DesktopApp.UserControllers
             Mouse.Capture(this);
             this.Cursor = Cursors.Hand;
             
-            if(IsAbleToSetCity)
+            if(AppState.IsAbleToSetCity)
                 MapControl_SetCity();
         }
         private void MapControl_MouseUp(object sender, MouseButtonEventArgs e)
@@ -265,6 +265,8 @@ namespace DesktopApp.UserControllers
 
         #endregion
 
+        #region CityProperties
+
         public ObservableCollection<City> CityCollection
         {
             get { return (ObservableCollection<City>)GetValue(CityCollectionProperty); }
@@ -283,6 +285,32 @@ namespace DesktopApp.UserControllers
         public static readonly DependencyProperty SelectedCityProperty =
             DependencyProperty.Register(nameof(SelectedCity), typeof(City), typeof(MapControl));
 
+
+        #endregion
+
+        #region RouteProperties
+
+        public ObservableCollection<Route> RouteCollection
+        {
+            get { return (ObservableCollection<Route>)GetValue(RouteCollectionProperty); }
+            set { SetValue(RouteCollectionProperty, value); }
+        }
+
+        public static readonly DependencyProperty RouteCollectionProperty =
+        DependencyProperty.Register(nameof(RouteCollection), typeof(ObservableCollection<Route>), typeof(MapControl));
+
+        public Route SelectedRoute
+        {
+            get { return (Route)GetValue(SelectedRouteProperty); }
+            set { SetValue(SelectedRouteProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedRouteProperty =
+            DependencyProperty.Register(nameof(SelectedRoute), typeof(Route), typeof(MapControl));
+
+
+        #endregion
+
         public Settings SettingsMap
         {
             get { return (Settings)GetValue(SettingsMapProperty); }
@@ -292,31 +320,15 @@ namespace DesktopApp.UserControllers
         public static readonly DependencyProperty SettingsMapProperty =
             DependencyProperty.Register(nameof(SettingsMap), typeof(Settings), typeof(MapControl));
 
-        #region IsAbleToCreateCity
-
-        public bool IsAbleToCreateCity
+        public States AppState
         {
-            get { return (bool)GetValue(IsAbleToCreateCityProperty); }
-            set { SetValue(IsAbleToCreateCityProperty, value); }
+            get { return (States)GetValue(AppStateProperty); }
+            set { SetValue(AppStateProperty, value); }
         }
 
-        public static readonly DependencyProperty IsAbleToCreateCityProperty =
-            DependencyProperty.Register(nameof(IsAbleToCreateCity), typeof(bool), typeof(MapControl));
+        public static readonly DependencyProperty AppStateProperty =
+            DependencyProperty.Register(nameof(AppState), typeof(States), typeof(MapControl));
 
-        #endregion
-
-        #region IsAbleToSetCity
-        public bool IsAbleToSetCity
-        {
-            get { return (bool)GetValue(IsAbleToSetCityProperty); }
-            set { SetValue(IsAbleToSetCityProperty, value); }
-        }
-
-        public static readonly DependencyProperty IsAbleToSetCityProperty =
-            DependencyProperty.Register(nameof(IsAbleToSetCity), typeof(bool), typeof(MapControl));
-
-        #endregion
-        
         private void MapControl_SetCity()
         {
             SelectedCity = new City() 
@@ -325,9 +337,33 @@ namespace DesktopApp.UserControllers
                 Y = PosY 
             };
 
-            IsAbleToCreateCity = true;
-            IsAbleToSetCity = false;
+            AppState.IsAbleToCreateCity = true;
+            AppState.IsAbleToSetCity = false;
         }
 
+        private void MapControl_SetCityToRoute(City city)
+        {
+            if (SelectedRoute.FirstCity == null)
+            {
+                SelectedRoute.FirstCity = city;
+                AppState.IsAbleToPickSecondCity = true;
+            }
+            else
+            {
+                SelectedRoute.SecondCity = city;
+                AppState.IsAbleToCreateRoute = true;
+                AppState.IsAbleToPickSecondCity = false;
+            }
+        }
+
+        private void City_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!AppState.IsAbleToPickFirstCity)
+                return;
+            Panel panel = sender as Panel;
+            var city = panel.DataContext;
+
+            MapControl_SetCityToRoute(city as City);
+        }
     }
 }

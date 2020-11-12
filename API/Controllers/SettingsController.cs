@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
-using Service;
 using Service.DTO;
 using Service.Services.Interfaces;
 
@@ -77,14 +76,12 @@ namespace API.Controllers
 
         [HttpPut]
         [Route("{id:guid}")]
-        public ActionResult<SettingsDTO> Put(Guid id, [FromBody] SettingsDTO settingsDTO)
+        public ActionResult<SettingsDTO> Put(Guid id, [FromBody] SettingsUpdateDTO settingsDTO)
         {
             try
             {
-                SettingsDTO settings = _service.GetSettings(id);
-
-                _service.UpdateSettings(settings);
-                return settings;
+                var dto = _service.UpdateSettings(id, settingsDTO);
+                return dto;
             }
             catch (Exception ex)
             {

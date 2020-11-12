@@ -22,52 +22,42 @@ namespace Service.Services
             _mapper = Cityper;
         }
 
-        public City CreateCity(CityDTO Dto)
+        public CityGetDTO CreateCity(CityCreateDTO dto)
         {
-            City city = _mapper.Map<City>(Dto);
+            var city = _mapper.Map<City>(dto);
             _repository.Add(city);
             _context.SaveChanges();
-            return city;
+
+            return _mapper.Map<CityGetDTO>(city);
         }
 
-        public IEnumerable<CityDTO> GetCities()
+        public IEnumerable<CityGetDTO> GetCities()
         {
-            List<CityDTO> cityDTOs = new List<CityDTO>();
-            CityDTO cityDTOTemp = new CityDTO();
-            foreach (var item in _repository.GetAll())
-            {
-                _mapper.Map<City, CityDTO>(item, cityDTOTemp);
-                cityDTOs.Add(cityDTOTemp);
-            }
-            return cityDTOs;
+            return _mapper.Map<IEnumerable<City>, IEnumerable<CityGetDTO>>(_repository.GetAll());
         }
 
-        public CityDTO GetCity(Guid id)
+        public CityGetDTO GetCity(Guid id)
         {
-            return _mapper.Map<City, CityDTO>(_repository.Get(id));
+            return _mapper.Map<City, CityGetDTO>(_repository.Get(id));
         }
 
-        public bool DeleteCity(Guid Id)
+        public bool DeleteCity(Guid id)
         {
-            bool result;
-            if (result = _repository.Delete(Id))
-            {
+            bool flag = _repository.Delete(id);
+            if (flag)
                 _context.SaveChanges();
-                return result;
-            }
-            else
-            {
-                return result;
-            }
+            return flag;
         }
 
-        public City UpdateCity(Guid Id, CityDTO Dto)
+        public CityCreateDTO UpdateCity(Guid id, CityCreateDTO dto)
         {
-            City City = _repository.Get(Id);
-            _mapper.Map<CityDTO, City>(Dto, City);
-            City = _repository.Update(City);
+            var city = _repository.Get(id);
+            _mapper.Map(dto, city);
+            city = _repository.Update(city);
             _context.SaveChanges();
-            return City;
+
+            _mapper.Map(city, dto);
+            return dto;
         }
     }
 }

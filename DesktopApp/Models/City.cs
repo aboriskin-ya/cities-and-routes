@@ -1,12 +1,15 @@
 ﻿using GalaSoft.MvvmLight;
+using System;
 
 namespace DesktopApp.Models
 {
-    public class City : ViewModelBase
+    public class City : ViewModelBase, System.ComponentModel.IDataErrorInfo
     {
-        private string name;
+        public Guid Id { get; set; }
+
+        public Guid MapId { get; set; }
+
         private double x = -100;
-        private double y = -100;
         public double X
         {
             get { return x; }
@@ -16,6 +19,8 @@ namespace DesktopApp.Models
                 RaisePropertyChanged(nameof(X));
             }
         }
+
+        private string name;
         public string Name
         {
             get { return name; }
@@ -25,6 +30,8 @@ namespace DesktopApp.Models
                 RaisePropertyChanged(nameof(Name));
             }
         }
+
+        private double y = -100;
         public double Y
         {
             get { return y; }
@@ -35,5 +42,24 @@ namespace DesktopApp.Models
             }
         }
 
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = String.Empty;
+                switch (columnName)
+                {
+                    case nameof(Name):
+                        if (string.IsNullOrWhiteSpace(Name))
+                            error = "Name of a city cannot be empty.";
+                        break;
+                }
+                return error;
+            }
+        }
+        public string Error
+        {
+            get { return null; }
+        }
     }
 }
