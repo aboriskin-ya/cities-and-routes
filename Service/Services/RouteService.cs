@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace Service.Services
 {
-    class RouteService : IRouteService
+    public class RouteService : IRouteService
     {
         public IMapper _mapper;
         private IRouteRepository _repository;
@@ -22,52 +22,42 @@ namespace Service.Services
             _context = context;
         }
 
-        public IEnumerable<RouteDTO> GetRoutes()
+        public IEnumerable<RouteGetDTO> GetRoutes()
         {
-            List<RouteDTO> routeDTOs = new List<RouteDTO>();
-            RouteDTO routeDTOTemp = new RouteDTO();
-            foreach (var item in _repository.GetAll())
-            {
-                _mapper.Map<Route, RouteDTO>(item, routeDTOTemp);
-                routeDTOs.Add(routeDTOTemp);
-            }
-            return routeDTOs;
+            return _mapper.Map<IEnumerable<Route>, IEnumerable<RouteGetDTO>>(_repository.GetAll());
         }
 
-        public RouteDTO GetRoute(Guid id)
+        public RouteGetDTO GetRoute(Guid id)
         {
-            return _mapper.Map<Route, RouteDTO>(_repository.Get(id));
+            return _mapper.Map<Route, RouteGetDTO>(_repository.Get(id));
         }
 
-        public Route CreateRoute(RouteDTO dto)
+        public RouteGetDTO CreateRoute(RouteCreateDTO dto)
         {
-            Route route = _mapper.Map<Route>(dto);
+            var route = _mapper.Map<Route>(dto);
             _repository.Add(route);
             _context.SaveChanges();
-            return route;
+
+            return _mapper.Map<RouteGetDTO>(route);
         }
 
-        public Route UpdateRoute(RouteDTO dto, Guid id)
+        public RouteCreateDTO UpdateRoute(Guid id, RouteCreateDTO dto)
         {
-            Route route = _repository.Get(id);
-            _mapper.Map<RouteDTO, Route>(dto, route);
+            var route = _repository.Get(id);
+            _mapper.Map(dto, route);
             route = _repository.Update(route);
             _context.SaveChanges();
-            return route;
+
+            _mapper.Map(route, dto);
+            return dto;
         }
 
         public bool DeleteRoute(Guid id)
         {
-            bool result;
-            if (result = _repository.Delete(id))
-            {
+            bool flag = _repository.Delete(id);
+            if (flag)
                 _context.SaveChanges();
-                return result;
-            }
-            else
-            {
-                return result;
-            }
+            return flag;
         }
     }
 }

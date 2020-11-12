@@ -2,18 +2,12 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:converters="clr-namespace:DesktopApp.Services.Converters"
-             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:beh="clr-namespace:DesktopApp.Services"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              x:Name="mControl">
-    <UserControl.Resources>
-        <converters:StringToColorBrushConverter x:Key="StringToColorConverter"/>
-        <converters:CenterOffsetConverter x:Key="CenterOffsetConverter"/>
-    </UserControl.Resources>
     <Grid ClipToBounds="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.1*" />
@@ -39,13 +33,13 @@
                                         Y="{Binding ElementName=mControl, Path=OffsetValue.Y}"/>
                 </TransformGroup>
             </Grid.RenderTransform>
-            
+
             <Grid.Style>
                 <Style TargetType="{x:Type Grid}">
                     <Style.Triggers>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding ElementName=mControl, Path=IsAbleToSetCity}" Value="True"/>
+                                <Condition Binding="{Binding ElementName=mControl, Path=AppState.IsAbleToSetCity}" Value="True"/>
                             </MultiDataTrigger.Conditions>
                             <MultiDataTrigger.Setters>
                                 <Setter Property="Cursor" Value="Hand" />
@@ -54,12 +48,12 @@
                     </Style.Triggers>
                 </Style>
             </Grid.Style>
-
             <i:Interaction.Behaviors>
                 <beh:MouseBehaviour 
                 MouseX="{Binding ElementName=mControl, Path=PosX, Mode=OneWayToSource}"
                 MouseY="{Binding ElementName=mControl, Path=PosY, Mode=OneWayToSource}" />
             </i:Interaction.Behaviors>
+
 
             <Image
                 RenderTransformOrigin="{Binding ElementName=mControl, Path=TransformPosition}"
@@ -68,71 +62,72 @@
                 >
             </Image>
 
-            <Canvas x:Name="MapCanvas">
-                <Canvas.Resources>
-                    <dxmvvm:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-                </Canvas.Resources>
+            <Canvas x:Name="MapCanvas"
+                    Width="{Binding ElementName=mControl, Path=ActualWidth}"
+                    Height="{Binding ElementName=mControl, Path=ActualHeight}">
                 <Canvas Canvas.Left="{Binding ElementName=mControl, Path=PosX}"
                         Canvas.Top="{Binding ElementName=mControl, Path=PosY}">
-                    <Ellipse Fill="LightGreen"
-                             Visibility="{Binding ElementName=mControl, Path=IsAbleToSetCity, 
-                                Converter={StaticResource BooleanToVisibilityConverter}}"
-                             Width="{Binding ElementName=mControl, Path=SettingsMap.VertexSize}"
-                             Height="{Binding ElementName=mControl, Path=SettingsMap.VertexSize}"
-                             Canvas.Left="{Binding RelativeSource={RelativeSource Self}, Path=ActualWidth, 
-                                Converter={StaticResource CenterOffsetConverter}}"
-                             Canvas.Top="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, 
-                                Converter={StaticResource CenterOffsetConverter}}"
+                    <Ellipse Visibility="{Binding ElementName=mControl, Path=AppState.IsAbleToSetCity, 
+                                Converter={StaticResource BooleanToVisibilityConverter}}"                           
+                             Style="{StaticResource GreenPointStyle}"
                              x:Name="GreenCursor"/>
                 </Canvas>
                 <Canvas Canvas.Left="{Binding ElementName=mControl, Path=SelectedCity.X}"
                         Canvas.Top="{Binding ElementName=mControl, Path=SelectedCity.Y}">
-                <Ellipse Fill="{Binding ElementName=GreenCursor, Path=Fill}"
-                         Width="{Binding ElementName=mControl, Path=SettingsMap.VertexSize}"
-                         Height="{Binding ElementName=mControl, Path=SettingsMap.VertexSize}"
-                         Canvas.Left="{Binding RelativeSource={RelativeSource Self}, Path=ActualWidth, 
-                            Converter={StaticResource CenterOffsetConverter}}"
-                         Canvas.Top="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, 
-                            Converter={StaticResource CenterOffsetConverter}}"
-                         x:Name="GreenPoint"/>
+                    <Ellipse Fill="{Binding ElementName=GreenCursor, Path=Fill}"
+                            Style="{StaticResource GreenPointStyle}"
+                            x:Name="GreenPoint"/>
                 </Canvas>
+                
+                <Line Visibility="{Binding ElementName=mControl, Path=AppState.IsAbleToPickSecondCity, 
+                          Converter={StaticResource BooleanToVisibilityConverter}}"
+                      Style="{StaticResource LineAnimation}"/>
+                <Line Visibility="{Binding ElementName=mControl, Path=AppState.IsAbleToCreateRoute, 
+                          Converter={StaticResource BooleanToVisibilityConverter}}"
+                      Style="{StaticResource LineAttemptToLoad}"/>
+                 
                 <ItemsControl 
-                    ItemsSource="{Binding ElementName=mControl, 
-                    Path=CityCollection}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
+                    ItemsSource="{Binding ElementName=mControl, Path=RouteCollection}"
+                    ItemsPanel="{StaticResource CanvasPanelTemplate}">
                     
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Canvas>
-                                <Ellipse Name="city" Fill="{Binding ElementName=mControl, Path=SettingsMap.VertexColor, 
-                                            Converter={StaticResource StringToColorConverter}}" 
-                                         Width="{Binding ElementName=mControl, Path=SettingsMap.VertexSize}"
-                                         Height="{Binding ElementName=mControl, Path=SettingsMap.VertexSize}"
-                                         Canvas.Left="{Binding RelativeSource={RelativeSource Self}, Path=ActualWidth, 
-                                            Converter={StaticResource CenterOffsetConverter}}"
-                                         Canvas.Top="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, 
-                                            Converter={StaticResource CenterOffsetConverter}}"/>
-                                <Label Content="{Binding Name}"
-                                       Canvas.Bottom="{Binding ElementName=city, Path=ActualHeight}"
+                                <Line Style="{StaticResource LineRoute}"/>
+                            </Canvas>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <ItemsControl 
+                    ItemsSource="{Binding ElementName=mControl, Path=CityCollection}"
+                    ItemsPanel="{StaticResource CanvasPanelTemplate}">
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Canvas Height="2" Width="2" 
+                                    Style="{StaticResource GrowAnimation}"
+                                    MouseDown="City_MouseDown">
+                                <Ellipse x:Name="city"
+                                         Style="{StaticResource CityStyle}"/>
+
+                                <Label Content="{Binding Name}" 
+                                       Padding="{Binding ElementName=city, Path=ActualHeight}"
+                                       Canvas.Bottom="0"
                                        FontWeight="ExtraBlack"
                                        Canvas.Left="{Binding RelativeSource={RelativeSource Self}, Path=ActualWidth,
                                             Converter={StaticResource CenterOffsetConverter}}"/>
                             </Canvas>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
-                    
+
                     <ItemsControl.ItemContainerStyle>
                         <Style>
                             <Setter Property="Canvas.Top" Value="{Binding Path=Y}" />
-                            <Setter Property="Canvas.Left" Value="{Binding Path=X}" /> 
+                            <Setter Property="Canvas.Left" Value="{Binding Path=X}" />
                         </Style>
                     </ItemsControl.ItemContainerStyle>
                 </ItemsControl>
-
             </Canvas>
         </Grid>
 

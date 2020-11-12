@@ -7,8 +7,8 @@ namespace Service.DTO
     {
         public string Name { get; set; }
         public Guid ImageId { get; set; }
-        public List<RouteDTO> RouteDTOs { get; set; }
-        public List<CityDTO> CityDTOs { get; set; }
+        public List<RouteCreateDTO> RouteDTOs { get; set; }
+        public List<CityCreateDTO> CityDTOs { get; set; }
         public SettingsDTO SettingsDTO { get; set; }
     }
 }
