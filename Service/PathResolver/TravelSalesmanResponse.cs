@@ -10,5 +10,7 @@ namespace Service.PathResolver
         public string NameAlghorithm { get; set; }
 
         public double CalculatedDistance { get; set; }
+
+        public string ProcessDuration { get; set; }
     }
 }
