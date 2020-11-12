@@ -9,6 +9,6 @@ namespace Service.PathResolver
 
         public string NameAlghorithm { get; set; }
 
-        public int CalculatedDistance { get; set; }
+        public double CalculatedDistance { get; set; }
     }
 }

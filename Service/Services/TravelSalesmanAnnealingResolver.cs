@@ -10,16 +10,16 @@ namespace Service
     public class TravelSalesmanAnnealingResolver : ITravelSalesmanAnnealingResolver
     {
         #region fields
-        private int _result;
+        private double _result;
         private IEnumerable<string> _preferableSequnce;
         private double _temperature = 100;
-        private int _deltaWeight;
-        private int _minWeightValue;
-        private int _previosWeightValue;
+        private double _deltaWeight;
+        private double _minWeightValue;
+        private double _previosWeightValue;
         private double _currentProbability;
         private int _minLimit;
         private int _maxLimit;
-        private int _currentWeightValue = 0;
+        private double _currentWeightValue = 0;
         private string[] _currentSequence;
         #endregion
         public TravelSalesmanResponse Resolve(Graph graph)
@@ -97,7 +97,7 @@ namespace Service
             return rand.NextDouble() * 100;
         }
 
-        private int GetDeltaWeight(int currentWeightValue, int previosWeightValue) => currentWeightValue - previosWeightValue;
+        private double GetDeltaWeight(double currentWeightValue, double previosWeightValue) => currentWeightValue - previosWeightValue;
 
         private bool ComparePropabilities(double comparablePropability) => _currentProbability > comparablePropability;
         private void MatchSequencesAndWeights(string[] changedSequence)

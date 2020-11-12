@@ -7,8 +7,8 @@ namespace Service.Services.Interfaces
 {
     public class TravelSalesmanNearestNeighbor : ITravelSalesmanNearestNeighbor
     {
-        private int _result = 0;
-        private int _minWeightValue = int.MaxValue;
+        private double _result = 0;
+        private double _minWeightValue = double.MaxValue;
         private bool _allVisited = false;
         private List<Guid> _sequence;
         private GraphVertex _currentVertex;
