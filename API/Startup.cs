@@ -57,7 +57,7 @@ namespace API
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
-            //app.UseMiddleware<BasicAuthenthicationMiddleware>();
+            app.UseMiddleware<BasicAuthenthicationMiddleware>();
 
             app.UseRouting();
 
