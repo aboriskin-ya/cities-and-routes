@@ -1,3 +1,4 @@
+using API.Middlewares;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -54,7 +55,7 @@ namespace API
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
-            //app.UseMiddleware<BasicAuthenthicationMiddleware>();
+            app.UseMiddleware<BasicAuthenthicationMiddleware>();
 
             app.UseRouting();
 

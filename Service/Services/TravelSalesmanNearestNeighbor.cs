@@ -37,9 +37,13 @@ namespace Service.Services.Interfaces
                 }
                 _currentVertex.IsUnvisited = false;
                 vertex = _currentVertex;
-                _result += _minWeightValue;
+                if (_sequence.Count != graph.Vertices.Count)
+                    _result += _minWeightValue;
                 _minWeightValue = int.MaxValue;
-                if (_sequence.Count == graph.Vertices.Count && _currentVertex.IsUnvisited == false) _allVisited = true;
+                if (_sequence.Count == graph.Vertices.Count && _currentVertex.IsUnvisited == false)
+                {
+                    _allVisited = true;
+                }
             }
             var response = new TravelSalesmanResponse()
             {

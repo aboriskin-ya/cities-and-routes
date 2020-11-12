@@ -8,6 +8,7 @@ using Service.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Service.Services
 {
@@ -42,24 +43,24 @@ namespace Service.Services
             List<Guid> Path = new ShortestPathResolverService().FindShortestPath(PathDto, CityFromId.ToString(), CityToId.ToString());
             return Path;
         }
-        public TravelSalesmanResponse SolveAnnealingTravelSalesman(TravelSalesmanRequest request)
+        public async Task<TravelSalesmanResponse> SolveAnnealingTravelSalesman(TravelSalesmanRequest request)
         {
             Map map = _mapRepository.GetWholeMap(request.MapId);
             if (request.SelectedCities.Count() > 0 && map != null)
             {
                 Graph graph = _pathToGraphService.MapToGraph(map, request.SelectedCities);
-                return _annealingResolver.Resolve(graph);
+                return await Task.Run(() => _annealingResolver.Resolve(graph));
             }
             return default;
         }
 
-        public TravelSalesmanResponse SolveNearestNeghborTravelSalesman(TravelSalesmanRequest requestBody)
+        public async Task<TravelSalesmanResponse> SolveNearestNeghborTravelSalesman(TravelSalesmanRequest requestBody)
         {
             Map map = _mapRepository.GetWholeMap(requestBody.MapId);
             if (requestBody.SelectedCities.Count() > 0 && map != null)
             {
                 Graph graph = _pathToGraphService.MapToGraph(map, requestBody.SelectedCities);
-                return _nearestResolver.Solve(graph);
+                return await Task.Run(() => _nearestResolver.Solve(graph));
             }
             return default;
         }

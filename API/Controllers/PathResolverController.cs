@@ -27,18 +27,18 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("solve-travel-salesman-annealing")]
-        public IActionResult SolveTravelSalesmanAnnealing([FromBody] TravelSalesmanRequest BodyRequest)
+        public async Task<IActionResult> SolveTravelSalesmanAnnealing([FromBody] TravelSalesmanRequest BodyRequest)
         {
-            var response = _algorithmService.SolveAnnealingTravelSalesman(BodyRequest);
+            var response = await _algorithmService.SolveAnnealingTravelSalesman(BodyRequest);
             if (response == default) return BadRequest();
             return Ok(response);
 
         }
         [HttpPost]
         [Route("solve-travel-salesman-nearest")]
-        public IActionResult SolveTravelSalesmanNearest([FromBody] TravelSalesmanRequest BodyRequest)
+        public async Task<IActionResult> SolveTravelSalesmanNearest([FromBody] TravelSalesmanRequest BodyRequest)
         {
-            var response = _algorithmService.SolveNearestNeghborTravelSalesman(BodyRequest);
+            var response = await _algorithmService.SolveNearestNeghborTravelSalesman(BodyRequest);
             if (response == default) return BadRequest();
             return Ok(response);
         }
@@ -48,8 +48,8 @@ namespace API.Controllers
         {
             TravelSalesmanResponse response = new TravelSalesmanResponse(); ;
             var taskArr = new Task[] {
-                new Task(() => response= _algorithmService.SolveAnnealingTravelSalesman(BodyRequest)),
-                new Task(() => response= _algorithmService.SolveNearestNeghborTravelSalesman(BodyRequest))
+               new Task(async ()=>  response=await _algorithmService.SolveNearestNeghborTravelSalesman(BodyRequest)),
+               new Task(async () => response=await _algorithmService.SolveAnnealingTravelSalesman(BodyRequest))
             };
             foreach (var task in taskArr)
             {
