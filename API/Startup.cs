@@ -8,10 +8,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Repository;
 using Repository.Storage;
 using Serilog;
+using Serilog.Exceptions;
 using Service;
 using Service.Services;
 using Service.Services.Interfaces;
 using System;
+using System.Reflection.PortableExecutable;
+using System.Threading;
 
 namespace API
 {
@@ -32,6 +35,10 @@ namespace API
 
             Log.Logger = new LoggerConfiguration()
             .WriteTo.Seq("http://localhost:5341/")
+            .Enrich.WithExceptionDetails()
+            .Enrich.FromLogContext()
+            .Enrich.WithMachineName()
+            .Enrich.WithThreadId()
             .CreateLogger();
 
             services.AddSingleton<Serilog.ILogger>(Log.Logger);
@@ -64,6 +71,7 @@ namespace API
             app.UseStaticFiles();
 
             app.UseMiddleware<BasicAuthenthicationMiddleware>();
+            app.UseMiddleware<SerilogExceptionMiddleware>();
 
             app.UseRouting();
 
