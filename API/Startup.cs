@@ -32,15 +32,7 @@ namespace API
         {
             services.AddControllers();
             string connection = _configuration.GetConnectionString("DefaultConnection");
-
-            Log.Logger = new LoggerConfiguration()
-            .WriteTo.Seq("http://localhost:5341/")
-            .Enrich.WithExceptionDetails()
-            .Enrich.FromLogContext()
-            .Enrich.WithMachineName()
-            .Enrich.WithThreadId()
-            .CreateLogger();
-
+            
             services.AddSingleton<Serilog.ILogger>(Log.Logger);
 
             services.AddDbContext<CityRouteContext>(options =>
@@ -71,7 +63,6 @@ namespace API
             app.UseStaticFiles();
 
             app.UseMiddleware<BasicAuthenthicationMiddleware>();
-            app.UseMiddleware<SerilogExceptionMiddleware>();
 
             app.UseRouting();
 

@@ -1,5 +1,6 @@
 ﻿using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Service.Services.Interfaces;
 using System;
@@ -26,7 +27,6 @@ namespace API.Controllers
         [Route("upload")]
         public async Task<ActionResult<Guid>> UploadImage()
         {
-            Log.Information("Image upload started");
             try
             {
                 var file = Request.Form.Files[0];
@@ -48,8 +48,7 @@ namespace API.Controllers
                         Data = bytes,
                         ContentType = contentType
                     };
-                    _service.StoreImage(img);
-                    Log.Information("Image upload finished");
+                    _service.StoreImage(img);                 
                     return img.Id;
                 }
                 else
@@ -67,12 +66,10 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public IActionResult GetImage(Guid id)
         {
-            Log.Information("Image get started");
             Image img = _service.GetImage(id);
             if (img == null)
                 return NotFound();
 
-            Log.Information("Image get finished");
             return File(img.Data, img.ContentType);
         }
 
@@ -80,7 +77,6 @@ namespace API.Controllers
         [Route("getall")]
         public IActionResult GetImage()
         {
-            Log.Information("All images get started");
             IEnumerable<Image> ImageList = _service.GetImages();
 
             if (ImageList.Count() == 0)
@@ -88,7 +84,6 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            Log.Information("All images get finished");
             return Ok(ImageList);
         }
 
