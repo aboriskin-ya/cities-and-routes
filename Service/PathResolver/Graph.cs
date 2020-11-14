@@ -6,7 +6,7 @@ namespace PathResolver
     {
         public List<GraphVertex> Vertices { get; }
 
-        public List<GraphEdge> Edges { get;  }
+        public List<GraphEdge> Edges { get; }
         public Graph()
         {
             Vertices = new List<GraphVertex>();
@@ -18,9 +18,9 @@ namespace PathResolver
             Vertices.Add(new GraphVertex(VertexName));
         }
 
-        public GraphEdge GetEdge(string FirstVertexName,string SecondVertexName)
+        public GraphEdge GetEdge(string FirstVertexName, string SecondVertexName)
         {
-            foreach(var item in Edges)
+            foreach (var item in Edges)
             {
                 if (FirstVertexName.Equals(item.FirstVertex.Name) && SecondVertexName.Equals(item.SecondVertex.Name)) return item;
             }
@@ -51,6 +51,6 @@ namespace PathResolver
                 SecondVertex.AddEdge(FirstVertex, weight);
             }
         }
-       
+
     }
 }

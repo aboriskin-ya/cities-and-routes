@@ -1,6 +1,5 @@
 ﻿using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using Service.Services.Interfaces;
 using System;
@@ -48,7 +47,7 @@ namespace API.Controllers
                         Data = bytes,
                         ContentType = contentType
                     };
-                    _service.StoreImage(img);                 
+                    _service.StoreImage(img);
                     return img.Id;
                 }
                 else

@@ -1,8 +1,8 @@
-﻿using Service.DTO;
-using DataAccess.Models;
+﻿using DataAccess.Models;
 using PathResolver;
-using System.Collections.Generic;
+using Service.DTO;
 using System;
+using System.Collections.Generic;
 
 namespace Service.Services.Interfaces
 {

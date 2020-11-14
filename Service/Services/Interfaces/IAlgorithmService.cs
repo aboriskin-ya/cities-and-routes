@@ -1,6 +1,4 @@
-﻿using DataAccess.DTO;
-using Service.DTO;
-using Service.PathResolver;
+﻿using Service.PathResolver;
 using System;
 using System.Collections.Generic;
 

@@ -8,13 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Repository;
 using Repository.Storage;
 using Serilog;
-using Serilog.Exceptions;
 using Service;
 using Service.Services;
 using Service.Services.Interfaces;
 using System;
-using System.Reflection.PortableExecutable;
-using System.Threading;
 
 namespace API
 {
@@ -32,7 +29,7 @@ namespace API
         {
             services.AddControllers();
             string connection = _configuration.GetConnectionString("DefaultConnection");
-            
+
             services.AddSingleton<Serilog.ILogger>(Log.Logger);
 
             services.AddDbContext<CityRouteContext>(options =>

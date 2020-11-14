@@ -1,10 +1,10 @@
-using Xunit;
-using System.Collections.Generic;
-using Service.Services.Interfaces;
 using Moq;
 using Service.PathResolver;
+using Service.Services.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Xunit;
 
 namespace Tests
 {

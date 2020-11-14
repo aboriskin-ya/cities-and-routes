@@ -1,22 +1,24 @@
 ﻿using AutoMapper;
 using DataAccess.Models;
-using Service.DTO;
-using AutoMapper;
+using Microsoft.Extensions.Logging;
 using PathResolver;
-using System.Collections.Generic;
-using System;
-using System.Linq;
+using Service.DTO;
 using Service.Services.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Service.Services
 {
     public class PathToGraphService : IPathToGraphService
     {
         private readonly IMapper _mapper;
+        private readonly ILogger<PathToGraphService> _logger;
 
-        public PathToGraphService(IMapper mapper)
+        public PathToGraphService(IMapper mapper, ILogger<PathToGraphService> logger)
         {
             _mapper = mapper;
+            _logger = logger;
         }
         public ShortPathResolverDTO MapToResolver(Map Map)
         {
@@ -25,9 +27,10 @@ namespace Service.Services
         }
         public Graph MapToGraph(Map map, IEnumerable<Guid> SelectedCities)
         {
+            _logger.LogInformation("Map to graph started");
             var citiesArr = SelectedCities.ToArray();
             var graph = new Graph();
-            foreach(var item in SelectedCities)
+            foreach (var item in SelectedCities)
             {
                 graph.AddVertex(item.ToString());
             }
@@ -41,6 +44,7 @@ namespace Service.Services
                     graph.AddEdge(route.FirstCityId.ToString(), route.SecondCityId.ToString(), route.Distance);
                 }
             }
+            _logger.LogInformation("Map to graph finished");
             return graph;
         }
 

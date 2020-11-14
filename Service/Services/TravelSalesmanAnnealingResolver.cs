@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Logging;
 using PathResolver;
 using System;
 using System.Collections.Generic;
@@ -19,9 +20,15 @@ namespace Service
         private int _maxLimit;
         private double _currentWeightValue = 0;
         private string[] _currentSequence;
+        private readonly ILogger<TravelSalesmanAnnealingResolver> _logger;
         #endregion
+        public TravelSalesmanAnnealingResolver(ILogger<TravelSalesmanAnnealingResolver> logger)
+        {
+            _logger = logger;
+        }
         public IEnumerable<Guid> Resolve(Graph graph)
         {
+            _logger.LogInformation("Resolve TravelSalesmanAnnealingResolver started");
             Initialize(graph);
             if (CheckExecuting(_minWeightValue)) return null;
             while (_temperature >= 0.05)
@@ -38,6 +45,7 @@ namespace Service
                     MatchSequencesAndWeights(changedSequence);
                 _previosWeightValue = _currentWeightValue;
             }
+            _logger.LogInformation("Resolve TravelSalesmanAnnealingResolver finished");
             return _preferableSequnce.Select(Guid.Parse);
         }
         #region Supporting functionallity

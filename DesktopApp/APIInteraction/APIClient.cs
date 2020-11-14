@@ -11,7 +11,7 @@ namespace DesktopApp.APIInteraction
         {
             Client = new HttpClient();
             Client.BaseAddress = new Uri(baseUri);
-            Client.DefaultRequestHeaders.Authorization = 
+            Client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Basic", Convert.ToBase64String(System.Text.ASCIIEncoding.UTF8.GetBytes("Admin:Cities_Pass")));
         }
     }
