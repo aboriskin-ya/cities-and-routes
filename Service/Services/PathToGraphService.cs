@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DataAccess.Models;
+using Microsoft.Extensions.Logging;
 using PathResolver;
 using Service.DTO;
 using Service.Services.Interfaces;
@@ -12,9 +13,12 @@ namespace Service.Services
     public class PathToGraphService : IPathToGraphService
     {
         private readonly IMapper _mapper;
-        public PathToGraphService(IMapper mapper)
+        private readonly ILogger<PathToGraphService> _logger;
+
+        public PathToGraphService(IMapper mapper, ILogger<PathToGraphService> logger)
         {
             _mapper = mapper;
+            _logger = logger;
         }
         public ShortPathResolverDTO MapToResolver(Map Map)
         {
@@ -23,6 +27,7 @@ namespace Service.Services
         }
         public Graph MapToGraph(Map map, IEnumerable<Guid> SelectedCities)
         {
+            _logger.LogInformation("Map to graph started");
             var citiesArr = SelectedCities.ToArray();
             var graph = new Graph();
             foreach (var item in SelectedCities)
@@ -48,6 +53,7 @@ namespace Service.Services
                     }
                 }
             }
+            _logger.LogInformation("Map to graph finished");
             return graph;
         }
 

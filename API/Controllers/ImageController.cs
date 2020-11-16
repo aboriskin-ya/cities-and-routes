@@ -1,5 +1,6 @@
 ﻿using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using Service.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [Route("image")]
+    [Route("{controller}")]
     [ApiController]
     public class ImageController : ControllerBase
     {
@@ -47,7 +48,6 @@ namespace API.Controllers
                         ContentType = contentType
                     };
                     _service.StoreImage(img);
-
                     return img.Id;
                 }
                 else
@@ -57,6 +57,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(ex, ex.ToString());
                 return StatusCode(500, ex.Message);
             }
         }

@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using Microsoft.Extensions.Logging;
 using PathResolver;
 using Service.DTO;
 using Service.Services.Interfaces;
@@ -10,9 +11,20 @@ namespace Service.Services
     public class ShortestPathResolverService : IShortestPathResolverService
     {
         public Graph Graph;
+        private readonly ILogger<ShortestPathResolverService> _logger;
+
+        public ShortestPathResolverService(ILogger<ShortestPathResolverService> logger)
+        {
+            _logger = logger;
+        }
+
+        public ShortestPathResolverService()
+        {
+        }
 
         public List<Guid> FindShortestPath(ShortPathResolverDTO PathResolverDTO, string startName, string finishName)
         {
+            _logger.LogInformation("Find shortest path started");
             Graph = new Graph();
             foreach (City City in PathResolverDTO.Cities)
             {
@@ -29,12 +41,14 @@ namespace Service.Services
 
         public List<Guid> FindShortestPath(Graph Graph, string startName, string finishName)
         {
+            _logger.LogInformation("Find shortest path started");
             this.Graph = Graph;
             return FindShortestPath(Graph.FindVertex(startName), Graph.FindVertex(finishName));
         }
 
         public List<Guid> FindShortestPath(GraphVertex startVertex, GraphVertex finishVertex)
         {
+            _logger.LogInformation("Find shortest path started");
             startVertex.EdgesWeightSum = 0;
             while (true)
             {
