@@ -18,6 +18,10 @@ namespace Service.Services
             _logger = logger;
         }
 
+        public ShortestPathResolverService()
+        {
+        }
+
         public List<Guid> FindShortestPath(ShortPathResolverDTO PathResolverDTO, string startName, string finishName)
         {
             _logger.LogInformation("Find shortest path started");
