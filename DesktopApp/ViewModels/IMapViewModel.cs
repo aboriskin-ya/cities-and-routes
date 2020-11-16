@@ -19,7 +19,11 @@ namespace DesktopApp.ViewModels
 
         CreateCityCommand CreateNewCityCommand { get; }
 
+        UpdateCityCommand UpdateCityCommand { get; }
+
         CancelCreatingCityCommand CancelCreatingCityCommand { get; }
+
+        DeleteCityCommand DeleteCityCommand { get; }
 
         CancelCreatingRouteCommand CancelCreatingRouteCommand { get; }
 

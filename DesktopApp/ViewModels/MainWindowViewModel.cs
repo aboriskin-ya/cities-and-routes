@@ -75,6 +75,24 @@ namespace DesktopApp.ViewModels
 
         #endregion
 
+        #region UpdateCityCommand
+
+        public ICommand UpdateCityCommand => new CreateCityCommand(p => OnCanUpdateCityExecuted(p), p => OnUpdateCityExecuted(p));
+
+        private void OnUpdateCityExecuted(object p)
+        {
+            MapViewModel.UpdateCityCommand.Execute(p);
+            AppState.IsAbleToCreateCity = false;
+            AppState.IsAbleToSetCity = false;
+            AppState.IsAbleToUpdateCity = false;
+            if (MapViewModel.CityWasSaved())
+                AppState.IsSuccess = true;
+        }
+
+        private bool OnCanUpdateCityExecuted(object p) => AppState.IsAbleToUpdateCity;
+
+        #endregion
+
         #region AddNewRouteCommand
 
         public ICommand AddNewRouteCommand => new AddNewRouteCommand(p => OnCanAddNewRouteExecute(p), p => OnAddNewRoute(p));
@@ -117,6 +135,19 @@ namespace DesktopApp.ViewModels
         }
 
         private bool OnCanCancelCreatingCityExecuted(object p) => AppState.IsAbleToCreateCity;
+        #endregion
+
+        #region DeleteCityCommand
+        public ICommand DeleteCityCommand => new DeleteCityCommand(p => OnCanDeleteCityExecuted(p), p => DeleteCityCommandExecuted(p));
+
+        private void DeleteCityCommandExecuted(object p)
+        {
+            MapViewModel.DeleteCityCommand.Execute(p);
+            AppState.IsAbleToUpdateCity = false;
+            AppState.IsSuccess = true;
+        }
+
+        private bool OnCanDeleteCityExecuted(object p) => AppState.IsAbleToUpdateCity;
         #endregion
 
         #region CancelCreatingNewCityCommand

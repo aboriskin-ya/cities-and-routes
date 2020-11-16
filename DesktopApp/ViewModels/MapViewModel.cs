@@ -79,6 +79,23 @@ namespace DesktopApp.ViewModels
         }
         private bool OnCanAddCityCollection() => true;
 
+        public UpdateCityCommand UpdateCityCommand { get => new UpdateCityCommand(p => OnCanUpdateCityCollection(), async m => await OnUpdateCityCollectionAsync()); }
+        private async Task OnUpdateCityCollectionAsync()
+        {
+            try
+            {
+                var res = await _cityAPIService.UpdateCityAsync(SelectedCity);
+                if (!res.IsSuccessful)
+                    throw new Exception();
+            }
+            catch (Exception ex)
+            {
+                _messageBoxService.ShowError(ex, "An error occured. Please try it again.");
+            }
+        }
+
+        private bool OnCanUpdateCityCollection() => true;
+
         public CancelCreatingCityCommand CancelCreatingCityCommand { get => new CancelCreatingCityCommand(p => OnCanRemoveCityFromCollection(), m => OnRemoveCityFromCollection()); }
         private void OnRemoveCityFromCollection()
         {
@@ -86,6 +103,26 @@ namespace DesktopApp.ViewModels
             SelectedCity = new City();
         }
         private bool OnCanRemoveCityFromCollection() => true;
+
+        public DeleteCityCommand DeleteCityCommand { get => new DeleteCityCommand(p => OnCanDeleteCityFromCollection(), m => OnDeleteCityFromCollection()); }
+        private async Task OnDeleteCityFromCollection()
+        {
+            try
+            {
+                var res = await _cityAPIService.DeleteCityAsync(SelectedCity);
+                if (!res.IsSuccessful)
+                    throw new Exception();
+                CityCollection.Remove(SelectedCity);
+                SelectedCity = new City();
+            }
+            catch (Exception ex)
+            {
+                _messageBoxService.ShowError(ex, "An error occured. Please try it again.");
+                OnRemoveCityFromCollection();
+            }
+
+        }
+        private bool OnCanDeleteCityFromCollection() => true;
 
         #endregion
 

@@ -32,6 +32,22 @@ namespace DesktopApp.Models
 
         #endregion
 
+
+        #region UpdateCityPossibility
+
+        private bool _isAbleToUpdateCity = false;
+        public bool IsAbleToUpdateCity
+        {
+            get => _isAbleToUpdateCity;
+            set
+            {
+                _isAbleToUpdateCity = value;
+                RaisePropertyChanged(nameof(IsAbleToUpdateCity));
+            }
+        }
+
+        #endregion
+
         #region SetCityPossibility
 
         private bool _isAbleToSetCity = false;
