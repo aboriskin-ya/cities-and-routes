@@ -14,6 +14,7 @@
         }
         public GraphEdge(GraphVertex FirstVert, GraphVertex SecondVert, int Weight)
         {
+            ConnectedVertex = FirstVert;
             FirstVertex = FirstVert;
             SecondVertex = SecondVert;
             EdgeWeight = Weight;

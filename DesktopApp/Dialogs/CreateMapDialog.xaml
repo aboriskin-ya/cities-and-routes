@@ -68,7 +68,7 @@
             Content="Create"
             Grid.Row="2"            
             Command="{Binding CreateCommand}"
-            ToolTip="Add new map">             
+            ToolTip="Add new map">
         </Button>
     </Grid>
 </Window>

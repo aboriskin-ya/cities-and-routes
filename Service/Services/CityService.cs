@@ -25,61 +25,55 @@ namespace Service.Services
             _logger = logger;
         }
 
-        public City CreateCity(CityDTO Dto)
+        public CityGetDTO CreateCity(CityCreateDTO dto)
         {
             _logger.LogInformation("City create started");
-            City city = _mapper.Map<City>(Dto);
+            var city = _mapper.Map<City>(dto);
             _repository.Add(city);
             _context.SaveChanges();
             _logger.LogInformation("City create finished");
-            return city;
+            return _mapper.Map<CityGetDTO>(city);
         }
 
-        public IEnumerable<CityDTO> GetCities()
+        public IEnumerable<CityGetDTO> GetCities()
         {
             _logger.LogInformation("Get cities started");
-            List<CityDTO> cityDTOs = new List<CityDTO>();
-            CityDTO cityDTOTemp = new CityDTO();
-            foreach (var item in _repository.GetAll())
-            {
-                _mapper.Map<City, CityDTO>(item, cityDTOTemp);
-                cityDTOs.Add(cityDTOTemp);
-            }
-            return cityDTOs;
+            return _mapper.Map<IEnumerable<City>, IEnumerable<CityGetDTO>>(_repository.GetAll());
         }
 
-        public CityDTO GetCity(Guid id)
+        public CityGetDTO GetCity(Guid id)
         {
             _logger.LogInformation("Get city started");
-            return _mapper.Map<City, CityDTO>(_repository.Get(id));
+            return _mapper.Map<City, CityGetDTO>(_repository.Get(id));
         }
 
-        public bool DeleteCity(Guid Id)
+        public bool DeleteCity(Guid id)
         {
             _logger.LogInformation("Delete city started");
-            bool result;
-            if (result = _repository.Delete(Id))
+            bool flag;
+            if (flag = _repository.Delete(id))
             {
                 _context.SaveChanges();
                 _logger.LogInformation("Delete city finished");
-                return result;
+                return flag;
             }
             else
             {
                 _logger.LogInformation("Delete city not finished");
-                return result;
+                return flag;
             }
         }
 
-        public City UpdateCity(Guid Id, CityDTO Dto)
+        public CityCreateDTO UpdateCity(Guid id, CityCreateDTO dto)
         {
             _logger.LogInformation("Update city started");
-            City City = _repository.Get(Id);
-            _mapper.Map<CityDTO, City>(Dto, City);
-            City = _repository.Update(City);
+            var city = _repository.Get(id);
+            _mapper.Map(dto, city);
+            city = _repository.Update(city);
             _context.SaveChanges();
+            _mapper.Map(city, dto);
             _logger.LogInformation("Update city finished");
-            return City;
+            return dto;
         }
     }
 }

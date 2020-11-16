@@ -1,6 +1,7 @@
 ﻿using Service.PathResolver;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Service.Services.Interfaces
 {
@@ -8,6 +9,8 @@ namespace Service.Services.Interfaces
     {
         List<Guid> FindShortestPath(Guid MapId, Guid CityToId, Guid CityFromId);
 
-        IEnumerable<Guid> SolveTravelSalesman(TravelSalesmanRequest requestBody);
+        Task<TravelSalesmanResponse> SolveAnnealingTravelSalesman(TravelSalesmanRequest requestBody);
+
+        Task<TravelSalesmanResponse> SolveNearestNeghborTravelSalesman(TravelSalesmanRequest requestBody);
     }
 }

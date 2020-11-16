@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:DesktopApp.Services.Converters"
+                    xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm">
+    
+    <converters:StringToColorBrushConverter x:Key="StringToColorConverter"/>
+    <converters:CenterOffsetConverter x:Key="CenterOffsetConverter"/>
+    <dxmvvm:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    
+</ResourceDictionary>

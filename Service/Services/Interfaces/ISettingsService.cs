@@ -9,8 +9,8 @@ namespace Service.Services.Interfaces
         IEnumerable<SettingsDTO> GetSettings();
         SettingsDTO GetSettings(Guid id);
         SettingsDTO GetSettingsOfMap(Guid id);
-        void CreateSettings(SettingsDTO settingsDTO);
-        SettingsDTO UpdateSettings(SettingsDTO settingsDTO);
+        SettingsDTO CreateSettings(SettingsDTO settingsDTO);
+        SettingsDTO UpdateSettings(Guid Id, SettingsUpdateDTO settingsDTO);
         bool DeleteSettings(Guid id);
     }
 }

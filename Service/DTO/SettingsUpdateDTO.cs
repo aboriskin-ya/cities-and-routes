@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Service.DTO
+﻿namespace Service.DTO
 {
-    public class SettingsDTO
+    public class SettingsUpdateDTO
     {
         public bool DisplayingImage { get; set; }
         public bool DisplayingGraph { get; set; }
@@ -10,6 +8,5 @@ namespace Service.DTO
         public string VertexColor { get; set; }
         public double EdgeSize { get; set; }
         public string EdgeColor { get; set; }
-        public Guid MapId { get; set; }
     }
 }

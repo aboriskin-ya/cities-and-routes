@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using PathResolver;
+using Service.PathResolver;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Service
@@ -10,6 +12,7 @@ namespace Service
     public class TravelSalesmanAnnealingResolver : ITravelSalesmanAnnealingResolver
     {
         #region fields
+        private double _result;
         private IEnumerable<string> _preferableSequnce;
         private double _temperature = 100;
         private double _deltaWeight;
@@ -20,15 +23,10 @@ namespace Service
         private int _maxLimit;
         private double _currentWeightValue = 0;
         private string[] _currentSequence;
-        private readonly ILogger<TravelSalesmanAnnealingResolver> _logger;
+        private Stopwatch _timeCounter;
         #endregion
-        public TravelSalesmanAnnealingResolver(ILogger<TravelSalesmanAnnealingResolver> logger)
+        public TravelSalesmanResponse Resolve(Graph graph)
         {
-            _logger = logger;
-        }
-        public IEnumerable<Guid> Resolve(Graph graph)
-        {
-            _logger.LogInformation("Resolve TravelSalesmanAnnealingResolver started");
             Initialize(graph);
             if (CheckExecuting(_minWeightValue)) return null;
             while (_temperature >= 0.05)
@@ -45,8 +43,15 @@ namespace Service
                     MatchSequencesAndWeights(changedSequence);
                 _previosWeightValue = _currentWeightValue;
             }
-            _logger.LogInformation("Resolve TravelSalesmanAnnealingResolver finished");
-            return _preferableSequnce.Select(Guid.Parse);
+            _timeCounter.Stop();
+            var response = new TravelSalesmanResponse()
+            {
+                PreferableSequenceOfCities = _preferableSequnce.Select(Guid.Parse),
+                CalculatedDistance = _result,
+                NameAlghorithm = nameof(TravelSalesmanAnnealingResolver),
+                ProcessDuration = GetProcessDuration(_timeCounter.Elapsed)
+            };
+            return response;
         }
         #region Supporting functionallity
         public string[] SwapVertexSequence(string[] sequence, int[] changedIndexes)
@@ -57,14 +62,14 @@ namespace Service
             sequence[changedIndexes[1]] = buf;
             return sequence;
         }
-        private double GetEdgeSum(string[] currentSequence, Graph graph)
+        private int GetEdgeSum(string[] currentSequence, Graph graph)
         {
-            if (currentSequence.Length == 1) return double.MaxValue;
-            double weightValue = 0;
+            if (currentSequence.Length == 1) return int.MaxValue;
+            int weightValue = 0;
             for (int i = 0; i < graph.Vertices.Count - 1; i++)
             {
                 var CurrentEdge = graph.GetEdge(currentSequence[i], currentSequence[i + 1]);
-                if (CurrentEdge == null) return double.MaxValue;
+                if (CurrentEdge == null) return int.MaxValue;
                 weightValue += CurrentEdge.EdgeWeight;
             }
             weightValue += graph.GetEdge(currentSequence[currentSequence.Length - 1], currentSequence[0]).EdgeWeight;
@@ -77,7 +82,6 @@ namespace Service
             var probability = 100 * Math.Pow(Math.E, (-deltaWeight) / temperature);
             return probability;
         }
-
         private int[] GetRandomIndexVertices(int initIndex, int lastIndex)
         {
             var rand = new Random();
@@ -105,6 +109,7 @@ namespace Service
             if (_currentWeightValue < _minWeightValue)
             {
                 _minWeightValue = _currentWeightValue;
+                _result += _minWeightValue;
                 _preferableSequnce = changedSequence;
             }
         }
@@ -116,9 +121,18 @@ namespace Service
             _maxLimit = _currentSequence.IndexOf(_currentSequence.Last());
             _minWeightValue = GetEdgeSum(_currentSequence, graph);
             _preferableSequnce = _currentSequence;
+            _timeCounter = new Stopwatch();
+            _timeCounter.Start();
         }
-        #endregion
+        
 
         private bool CheckExecuting(double criticalValue) => criticalValue.Equals(double.MaxValue);
+        private string GetProcessDuration(TimeSpan timeSpan)
+        {
+            var seconds = timeSpan.Seconds.ToString();
+            var milliSeconds = timeSpan.Milliseconds;
+            return $"{seconds}s,{milliSeconds}ms.";
+        }
+        #endregion
     }
 }

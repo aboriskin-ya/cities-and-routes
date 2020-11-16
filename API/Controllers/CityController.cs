@@ -1,10 +1,9 @@
-﻿using DataAccess.Models;
+﻿using System;
+using System.Linq;
+using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Service.DTO;
 using Service.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace API.Controllers
 {
@@ -21,9 +20,9 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public ActionResult<CityDTO> GetCity(Guid id)
+        public ActionResult<CityGetDTO> GetCity(Guid id)
         {
-            CityDTO city = _Cityservice.GetCity(id);
+            var city = _Cityservice.GetCity(id);
             if (city == null)
             {
                 return NotFound();
@@ -36,7 +35,7 @@ namespace API.Controllers
         [Route("getall")]
         public IActionResult GetCity()
         {
-            IEnumerable<CityDTO> CityList = _Cityservice.GetCities();
+            var CityList = _Cityservice.GetCities();
 
             if (CityList.Count() == 0)
             {
@@ -47,7 +46,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<City> CreateCity([FromBody] CityDTO dto)
+        public ActionResult<CityGetDTO> CreateCity([FromBody] CityCreateDTO dto)
         {
             try
             {
@@ -61,7 +60,7 @@ namespace API.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
-        public ActionResult<City> UpdateCity(Guid id, [FromBody] CityDTO city)
+        public ActionResult<CityCreateDTO> UpdateCity(Guid id, [FromBody] CityCreateDTO city)
         {
             try
             {
@@ -76,7 +75,7 @@ namespace API.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
-        public ActionResult<City> DeleteCity(Guid id)
+        public ActionResult DeleteCity(Guid id)
         {
             if (_Cityservice.DeleteCity(id))
             {

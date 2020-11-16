@@ -36,12 +36,21 @@ namespace Service.Services
             }
             for (int i = 0; i < citiesArr.Count(); i++)
             {
+                var vertex = graph.Vertices[i];
                 for (int j = 0; j < citiesArr.Count(); j++)
                 {
                     if (i == j) continue;
                     var route = map.Routes.FirstOrDefault(t => t.FirstCityId == citiesArr[i] && t.SecondCityId == citiesArr[j]);
                     if (route == null) continue;
                     graph.AddEdge(route.FirstCityId.ToString(), route.SecondCityId.ToString(), route.Distance);
+                    if (vertex.Name.Equals(route.FirstCityId.ToString()))
+                    {
+                        var secondVertex = graph.FindVertex(route.SecondCityId.ToString());
+                        vertex.AddNextVertex(secondVertex);
+                        secondVertex.AddNextVertex(vertex);
+                        vertex.AddEdge(vertex, secondVertex, route.Distance);
+                        secondVertex.AddEdge(secondVertex, vertex, route.Distance);
+                    }
                 }
             }
             _logger.LogInformation("Map to graph finished");

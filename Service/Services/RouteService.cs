@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace Service.Services
 {
-    class RouteService : IRouteService
+    public class RouteService : IRouteService
     {
         public IMapper _mapper;
         private IRouteRepository _repository;
@@ -25,60 +25,54 @@ namespace Service.Services
             _logger = logger;
         }
 
-        public IEnumerable<RouteDTO> GetRoutes()
+        public IEnumerable<RouteGetDTO> GetRoutes()
         {
             _logger.LogInformation("Get routes started");
-            List<RouteDTO> routeDTOs = new List<RouteDTO>();
-            RouteDTO routeDTOTemp = new RouteDTO();
-            foreach (var item in _repository.GetAll())
-            {
-                _mapper.Map<Route, RouteDTO>(item, routeDTOTemp);
-                routeDTOs.Add(routeDTOTemp);
-            }
-            return routeDTOs;
+            return _mapper.Map<IEnumerable<Route>, IEnumerable<RouteGetDTO>>(_repository.GetAll());
         }
 
-        public RouteDTO GetRoute(Guid id)
+        public RouteGetDTO GetRoute(Guid id)
         {
             _logger.LogInformation("Get rout started");
-            return _mapper.Map<Route, RouteDTO>(_repository.Get(id));
+            return _mapper.Map<Route, RouteGetDTO>(_repository.Get(id));
         }
 
-        public Route CreateRoute(RouteDTO dto)
+        public RouteGetDTO CreateRoute(RouteCreateDTO dto)
         {
-            _logger.LogInformation("Create route started");
-            Route route = _mapper.Map<Route>(dto);
+             _logger.LogInformation("Create route started");
+            var route = _mapper.Map<Route>(dto);
             _repository.Add(route);
             _context.SaveChanges();
             _logger.LogInformation("Create route finished");
-            return route;
+            return _mapper.Map<RouteGetDTO>(route);
         }
 
-        public Route UpdateRoute(RouteDTO dto, Guid id)
+        public RouteCreateDTO UpdateRoute(Guid id, RouteCreateDTO dto)
         {
             _logger.LogInformation("Update route started");
-            Route route = _repository.Get(id);
-            _mapper.Map<RouteDTO, Route>(dto, route);
+            var route = _repository.Get(id);
+            _mapper.Map(dto, route);
             route = _repository.Update(route);
             _context.SaveChanges();
             _logger.LogInformation("Update route finished");
-            return route;
+            _mapper.Map(route, dto);
+            return dto;
         }
 
         public bool DeleteRoute(Guid id)
         {
             _logger.LogInformation("Delete route started");
-            bool result;
-            if (result = _repository.Delete(id))
+            bool flag;
+            if (flag = _repository.Delete(id))
             {
                 _logger.LogInformation("Delete route finished");
                 _context.SaveChanges();
-                return result;
+                return flag;
             }
             else
             {
                 _logger.LogInformation("Delete route not finished");
-                return result;
+                return flag;
             }
         }
     }
