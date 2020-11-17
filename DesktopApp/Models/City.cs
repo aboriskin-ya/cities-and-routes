@@ -7,7 +7,13 @@ namespace DesktopApp.Models
     {
         public Guid Id { get; set; }
 
-        public Guid MapId { get; set; }
+        public Guid MapId
+        {
+            get
+            {
+                return Guid.Parse("dff6f7c0-26c7-47ad-2b04-08d889ea1d26");
+            }
+        }
 
         private double x = -100;
         public double X

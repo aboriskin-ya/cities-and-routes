@@ -55,7 +55,7 @@ namespace DesktopApp.ViewModels
             AppState.IsAbleToSetCity = true;
         }
 
-        private bool OnCanAddNewCityExecute(object p) => !AppState.IsAbleToSetCity && !AppState.IsAbleToCreateCity;//&& Map != null;
+        private bool OnCanAddNewCityExecute(object p) => !AppState.IsAbleToSetCity && !AppState.IsAbleToCreateCity && !AppState.IsAbleToUpdateCity;//&& Map != null;
         #endregion
        
 
@@ -142,9 +142,13 @@ namespace DesktopApp.ViewModels
 
         private void DeleteCityCommandExecuted(object p)
         {
-            MapViewModel.DeleteCityCommand.Execute(p);
-            AppState.IsAbleToUpdateCity = false;
-            AppState.IsSuccess = true;
+            MessageBoxResult DialogResult = MessageBox.Show("Are you sure, you want to delete your city?", "Confirm action", MessageBoxButton.YesNo);
+            if (DialogResult == MessageBoxResult.Yes && AppState.IsAbleToUpdateCity)
+            {
+                MapViewModel.DeleteCityCommand.Execute(p);
+                AppState.IsAbleToUpdateCity = false;
+                AppState.IsSuccess = true;
+            }
         }
 
         private bool OnCanDeleteCityExecuted(object p) => AppState.IsAbleToUpdateCity;

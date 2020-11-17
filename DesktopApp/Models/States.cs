@@ -43,6 +43,7 @@ namespace DesktopApp.Models
             {
                 _isAbleToUpdateCity = value;
                 RaisePropertyChanged(nameof(IsAbleToUpdateCity));
+                State = CityStatusUpdate();
             }
         }
 
@@ -138,6 +139,9 @@ namespace DesktopApp.Models
 
             if (IsAbleToCreateCity)
                 return StateLine.Show(StateLineStatus.CreateCity);
+
+            if (IsAbleToUpdateCity)
+                return StateLine.Show(StateLineStatus.UpdateCity);
 
             return StateLine.Show(StateLineStatus.Empty);
         }

@@ -5,6 +5,7 @@
         Empty,
         SetCity,
         CreateCity,
+        UpdateCity,
         SelectFirstCity,
         SelectSecondCity,
         CreateRoute,
@@ -20,6 +21,8 @@
                     return "Please click on the map to create a new city";
                 case StateLineStatus.CreateCity:
                     return "Please enter the name of the new city";
+                case StateLineStatus.UpdateCity:
+                    return "Please, update the name of your city";
                 case StateLineStatus.SelectFirstCity:
                     return "Please select the first city";
                 case StateLineStatus.SelectSecondCity:

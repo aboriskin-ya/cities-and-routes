@@ -106,30 +106,29 @@
                     </Grid.ColumnDefinitions>
 
                     <Label
-                        Content="City Name: "
-                        Target="{Binding cityNameUpdate}"/>
+                        Content="Update the name: "
+                        Target="{Binding cityNameUpdate}" Grid.ColumnSpan="2" Margin="0,-2,10,44" Grid.RowSpan="2"/>
 
                     <TextBox 
                         DataContext="{Binding MapViewModel}"
-                        Grid.Column="1"
                         Text="{Binding SelectedCity.Name, NotifyOnValidationError=true, ValidatesOnDataErrors=True}"
                         Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
                         Style="{StaticResource StyleValidation}"
-                        x:Name="cityNameUpdate"/>
+                        x:Name="cityNameUpdate" Margin="1,20,1,37" Grid.ColumnSpan="2" Grid.Row="1" Height="25"/>
 
                     <Button
                         Grid.Row="1"
                         Content="Update"
-                        Command="{Binding UpdateCityCommand}" Margin="-1,0,2,0">
+                        Command="{Binding UpdateCityCommand}" Margin="-1,51,2,10" Height="22">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
-                                <Setter Property="IsEnabled" Value="False"/>
+                                <Setter Property="IsEnabled" Value="True"/>
                                 <Style.Triggers>
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding (Validation.HasError), ElementName=cityNameUpdate}" Value="False"/>
+                                            <Condition Binding="{Binding Text.Length, ElementName=cityNameUpdate, UpdateSourceTrigger=PropertyChanged}" Value="0"/>
                                         </MultiDataTrigger.Conditions>
-                                        <Setter Property="IsEnabled" Value="True"/>
+                                        <Setter Property="IsEnabled" Value="False"/>
                                     </MultiDataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -140,7 +139,7 @@
                         Grid.Column="1"
                         Grid.Row="1"
                         Content="Delete"
-                        Command="{Binding DeleteCityCommand}"/>
+                        Command="{Binding DeleteCityCommand}" Margin="0,51,0,0" VerticalAlignment="Top" Height="22"/>
                 </Grid>
 
                 <Grid x:Name="CreatingRoutePanel"
