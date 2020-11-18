@@ -142,8 +142,8 @@ namespace DesktopApp.ViewModels
 
         private void DeleteCityCommandExecuted(object p)
         {
-            var message = "Are you sure, you want to delete {0} city?";
-            MessageBoxResult DialogResult = MessageBox.Show(string.Format(message, MapViewModel.SelectedCity.Name), "Confirm action", MessageBoxButton.YesNo);
+            var Message = "Are you sure, you want to delete {0} city?";
+            MessageBoxResult DialogResult = MessageBox.Show(string.Format(Message, MapViewModel.SelectedCity.Name), "Confirm action", MessageBoxButton.YesNo);
             if (DialogResult == MessageBoxResult.Yes && AppState.IsAbleToUpdateCity)
             {
                 MapViewModel.DeleteCityCommand.Execute(p);
