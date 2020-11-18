@@ -55,7 +55,7 @@ namespace DesktopApp.ViewModels
             AppState.IsAbleToSetCity = true;
         }
 
-        private bool OnCanAddNewCityExecute(object p) => !AppState.IsAbleToSetCity && !AppState.IsAbleToCreateCity;//&& Map != null;
+        private bool OnCanAddNewCityExecute(object p) => !AppState.IsAbleToSetCity && !AppState.IsAbleToCreateCity && !AppState.IsAbleToUpdateCity;//&& Map != null;
         #endregion
        
 
@@ -72,6 +72,24 @@ namespace DesktopApp.ViewModels
         }
 
         private bool OnCanCreateNewCityExecuted(object p) => AppState.IsAbleToCreateCity;
+
+        #endregion
+
+        #region UpdateCityCommand
+
+        public ICommand UpdateCityCommand => new CreateCityCommand(p => OnCanUpdateCityExecuted(p), p => OnUpdateCityExecuted(p));
+
+        private void OnUpdateCityExecuted(object p)
+        {
+            MapViewModel.UpdateCityCommand.Execute(p);
+            AppState.IsAbleToCreateCity = false;
+            AppState.IsAbleToSetCity = false;
+            AppState.IsAbleToUpdateCity = false;
+            if (MapViewModel.CityWasSaved())
+                AppState.IsSuccess = true;
+        }
+
+        private bool OnCanUpdateCityExecuted(object p) => AppState.IsAbleToUpdateCity;
 
         #endregion
 
@@ -117,6 +135,24 @@ namespace DesktopApp.ViewModels
         }
 
         private bool OnCanCancelCreatingCityExecuted(object p) => AppState.IsAbleToCreateCity;
+        #endregion
+
+        #region DeleteCityCommand
+        public ICommand DeleteCityCommand => new DeleteCityCommand(p => OnCanDeleteCityExecuted(p), p => DeleteCityCommandExecuted(p));
+
+        private void DeleteCityCommandExecuted(object p)
+        {
+            var Message = "Are you sure, you want to delete {0} city?";
+            MessageBoxResult DialogResult = MessageBox.Show(string.Format(Message, MapViewModel.SelectedCity.Name), "Confirm action", MessageBoxButton.YesNo);
+            if (DialogResult == MessageBoxResult.Yes && AppState.IsAbleToUpdateCity)
+            {
+                MapViewModel.DeleteCityCommand.Execute(p);
+                AppState.IsAbleToUpdateCity = false;
+                AppState.IsSuccess = true;
+            }
+        }
+
+        private bool OnCanDeleteCityExecuted(object p) => AppState.IsAbleToUpdateCity;
         #endregion
 
         #region CancelCreatingNewCityCommand
