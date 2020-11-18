@@ -35,6 +35,9 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("RouteId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTimeOffset>("UpdatedOnUTC")
                         .HasColumnType("datetimeoffset");
 
@@ -117,10 +120,16 @@ namespace Repository.Migrations
                     b.Property<Guid>("FirstCityId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("FirstCityId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("MapId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("SecondCityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("SecondCityId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("UpdatedOnUTC")
@@ -128,11 +137,11 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FirstCityId");
+                    b.HasIndex("FirstCityId1");
 
                     b.HasIndex("MapId");
 
-                    b.HasIndex("SecondCityId");
+                    b.HasIndex("SecondCityId1");
 
                     b.ToTable("Route");
                 });
@@ -208,9 +217,7 @@ namespace Repository.Migrations
                 {
                     b.HasOne("DataAccess.Models.City", "FirstCity")
                         .WithMany()
-                        .HasForeignKey("FirstCityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FirstCityId1");
 
                     b.HasOne("DataAccess.Models.Map", "Map")
                         .WithMany("Routes")
@@ -220,9 +227,7 @@ namespace Repository.Migrations
 
                     b.HasOne("DataAccess.Models.City", "SecondCity")
                         .WithMany()
-                        .HasForeignKey("SecondCityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SecondCityId1");
                 });
 
             modelBuilder.Entity("DataAccess.Models.Settings", b =>

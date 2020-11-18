@@ -114,7 +114,7 @@ namespace DesktopApp.ViewModels
                 System.Drawing.Image img = System.Drawing.Image.FromFile(fullPath);
 
                 if (Enum.IsDefined(typeof(AllowExtensions), Path.GetExtension(dropPath[0]).Trim('.')) &&
-                    img.Width >= 1000 && img.Height >= 1000)
+                    img.Width >= 1000 && img.Height >= 900)
                 {
                     InitializeProperties(Path.GetFileNameWithoutExtension(dropPath[0]), fullPath, true);
                 }

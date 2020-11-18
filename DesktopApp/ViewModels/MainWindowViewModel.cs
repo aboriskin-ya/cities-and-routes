@@ -6,7 +6,6 @@ using DesktopApp.Services.Helper;
 using DesktopApp.Services.Utils;
 using DesktopApp.UserControllers;
 using System;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -57,7 +56,6 @@ namespace DesktopApp.ViewModels
 
         private bool OnCanAddNewCityExecute(object p) => !AppState.IsAbleToSetCity && !AppState.IsAbleToCreateCity;//&& Map != null;
         #endregion
-       
 
         #region CreateNewCityCommand
 

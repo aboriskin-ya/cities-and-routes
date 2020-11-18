@@ -11,6 +11,7 @@ namespace DataAccess.Models
         public double Y { get; set; }
         public Map Map { get; set; }
         public Guid MapId { get; set; }
+        public Guid RouteId { get; set; }
 
     }
 }

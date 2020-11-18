@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Repository.Migrations
 {
-    public partial class CreateNewDb : Migration
+    public partial class NewMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -51,9 +51,10 @@ namespace Repository.Migrations
                     CreateOnUTC = table.Column<DateTimeOffset>(nullable: false),
                     UpdatedOnUTC = table.Column<DateTimeOffset>(nullable: false),
                     Name = table.Column<string>(nullable: false),
-                    X = table.Column<int>(nullable: false),
-                    Y = table.Column<int>(nullable: false),
-                    MapId = table.Column<Guid>(nullable: false)
+                    X = table.Column<double>(nullable: false),
+                    Y = table.Column<double>(nullable: false),
+                    MapId = table.Column<Guid>(nullable: false),
+                    RouteId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -92,29 +93,52 @@ namespace Repository.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_City_MapId",
-                table: "City",
-                column: "MapId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Map_ImageId",
-                table: "Map",
-                column: "ImageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Settings_MapId",
-                table: "Settings",
-                column: "MapId");
+            migrationBuilder.CreateTable(
+                name: "Route",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreateOnUTC = table.Column<DateTimeOffset>(nullable: false),
+                    UpdatedOnUTC = table.Column<DateTimeOffset>(nullable: false),
+                    Distance = table.Column<int>(nullable: false),
+                    FirstCityId = table.Column<Guid>(nullable: false),
+                    SecondCityId = table.Column<Guid>(nullable: false),
+                    MapId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Route", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Route_City_FirstCityId1",
+                        column: x => x.FirstCityId,
+                        principalTable: "City",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Route_Map_MapId",
+                        column: x => x.MapId,
+                        principalTable: "Map",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Route_City_SecondCityId1",
+                        column: x => x.SecondCityId,
+                        principalTable: "City",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "City");
+                name: "Route");
 
             migrationBuilder.DropTable(
                 name: "Settings");
+
+            migrationBuilder.DropTable(
+                name: "City");
 
             migrationBuilder.DropTable(
                 name: "Map");
