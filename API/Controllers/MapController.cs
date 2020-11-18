@@ -55,7 +55,7 @@ namespace API.Controllers
             return Ok(MapList);
         }
 
-        [ProducesResponseType(typeof(Map), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(MapGetDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -65,7 +65,7 @@ namespace API.Controllers
             return Ok(_Mapservice.CreateMap(dto));
         }
 
-        [ProducesResponseType(typeof(Map), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(MapGetDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
