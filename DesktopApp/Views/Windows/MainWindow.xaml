@@ -202,7 +202,7 @@
             </StackPanel>
         </DockPanel>
         <DockPanel 
-            DockPanel.Dock="Top" Width="674">
+            DockPanel.Dock="Top">
             <StatusBar DockPanel.Dock="Top"
                        Panel.ZIndex="2">
                 <StatusBarItem BorderBrush="#FFCCCCCC" BorderThickness="1,1,1,1">

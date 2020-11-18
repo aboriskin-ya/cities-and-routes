@@ -82,15 +82,10 @@ namespace DesktopApp.ViewModels
         public UpdateCityCommand UpdateCityCommand { get => new UpdateCityCommand(p => OnCanUpdateCityCollection(), async m => await OnUpdateCityCollectionAsync()); }
         private async Task OnUpdateCityCollectionAsync()
         {
-            try
+            var res = await _cityAPIService.UpdateCityAsync(SelectedCity);
+            if (!res.IsSuccessful)
             {
-                var res = await _cityAPIService.UpdateCityAsync(SelectedCity);
-                if (!res.IsSuccessful)
-                    throw new Exception();
-            }
-            catch (Exception ex)
-            {
-                _messageBoxService.ShowError(ex, "An error occured. Please try it again.");
+                _messageBoxService.ShowError("An error occured. Please try it again.", "Error occured");
             }
         }
 
@@ -107,20 +102,17 @@ namespace DesktopApp.ViewModels
         public DeleteCityCommand DeleteCityCommand { get => new DeleteCityCommand(p => OnCanDeleteCityFromCollection(), m => OnDeleteCityFromCollection()); }
         private async Task OnDeleteCityFromCollection()
         {
-            try
+            var res = await _cityAPIService.DeleteCityAsync(SelectedCity);
+            if (res.IsSuccessful)
             {
-                var res = await _cityAPIService.DeleteCityAsync(SelectedCity);
-                if (!res.IsSuccessful)
-                    throw new Exception();
                 CityCollection.Remove(SelectedCity);
                 SelectedCity = new City();
             }
-            catch (Exception ex)
+            else
             {
-                _messageBoxService.ShowError(ex, "An error occured. Please try it again.");
+                _messageBoxService.ShowError("An error occured. Please try it again.", "Error occured");
                 OnRemoveCityFromCollection();
             }
-
         }
         private bool OnCanDeleteCityFromCollection() => true;
 
