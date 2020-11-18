@@ -43,14 +43,14 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
         [Route("{id:Guid}")]
-        public ActionResult<RouteGetDTO> GetRoute(Guid id)
+        public IActionResult GetRoute(Guid id)
         {
             var route = _routeservice.GetRoute(id);
             if (route == null)
             {
                 return NotFound();
             }
-            return route;
+            return (IActionResult)route;
         }
 
         [ProducesResponseType(typeof(RouteGetDTO), StatusCodes.Status200OK)]
@@ -58,9 +58,9 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        public ActionResult<RouteGetDTO> CreateRoute([FromBody] RouteCreateDTO dto)
+        public IActionResult CreateRoute([FromBody] RouteCreateDTO dto)
         {
-            return _routeservice.CreateRoute(dto);
+            return (IActionResult)_routeservice.CreateRoute(dto);
         }
 
         [ProducesResponseType(typeof(RouteGetDTO), StatusCodes.Status200OK)]
@@ -69,9 +69,9 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut]
         [Route("{id:Guid}")]
-        public ActionResult<RouteCreateDTO> UpdateRoute(Guid id, [FromBody] RouteCreateDTO dto)
+        public IActionResult UpdateRoute(Guid id, [FromBody] RouteCreateDTO dto)
         {
-            return _routeservice.UpdateRoute(id, dto);
+            return (IActionResult)_routeservice.UpdateRoute(id, dto);
         }
     }
 }

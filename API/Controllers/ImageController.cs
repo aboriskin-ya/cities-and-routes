@@ -29,7 +29,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost, DisableRequestSizeLimit]
         [Route("upload")]
-        public async Task<ActionResult<Guid>> UploadImage()
+        public async Task<IActionResult> UploadImage()
         {
             var file = Request.Form.Files[0];
 
@@ -51,7 +51,7 @@ namespace API.Controllers
                     ContentType = contentType
                 };
                 _service.StoreImage(img);
-                return img.Id;
+                return Ok(img.Id);
             }
             else
             {

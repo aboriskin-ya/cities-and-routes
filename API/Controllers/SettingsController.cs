@@ -25,7 +25,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
         [Route("getall")]
-        public ActionResult Get()
+        public IActionResult Get()
         {
             IEnumerable<SettingsDTO> settings = _service.GetSettings();
 
@@ -43,7 +43,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
         [Route("{id:guid}")]
-        public ActionResult<SettingsDTO> Get(Guid id)
+        public IActionResult Get(Guid id)
         {
             SettingsDTO settings = _service.GetSettings(id);
 
@@ -52,7 +52,7 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            return settings;
+            return (IActionResult)settings;
         }
 
         [ProducesResponseType(typeof(SettingsDTO), StatusCodes.Status200OK)]
@@ -61,7 +61,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
         [Route("~/map/{id:guid}/settings")]
-        public ActionResult<SettingsDTO> GetMap(Guid id)
+        public IActionResult GetMap(Guid id)
         {
             SettingsDTO settings = _service.GetSettingsOfMap(id);
 
@@ -70,7 +70,7 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            return settings;
+            return (IActionResult)settings;
         }
 
         [ProducesResponseType(typeof(SettingsDTO), StatusCodes.Status200OK)]
@@ -78,10 +78,10 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        public ActionResult<SettingsDTO> Post([FromBody] SettingsDTO settingsDTO)
+        public IActionResult Post([FromBody] SettingsDTO settingsDTO)
         {
             _service.CreateSettings(settingsDTO);
-            return settingsDTO;
+            return (IActionResult)settingsDTO;
         }
 
         [ProducesResponseType(typeof(SettingsDTO), StatusCodes.Status200OK)]
@@ -90,10 +90,10 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut]
         [Route("{id:guid}")]
-        public ActionResult<SettingsDTO> Put(Guid id, [FromBody] SettingsUpdateDTO settingsDTO)
+        public IActionResult Put(Guid id, [FromBody] SettingsUpdateDTO settingsDTO)
         {
             var dto = _service.UpdateSettings(id, settingsDTO);
-            return dto;
+            return (IActionResult)dto;
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]

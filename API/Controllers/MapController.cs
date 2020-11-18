@@ -29,14 +29,14 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
         [Route("{id:Guid}")]
-        public ActionResult<MapGetDTO> GetMap(Guid id)
+        public IActionResult GetMap(Guid id)
         {
             MapGetDTO map = _Mapservice.GetMap(id);
             if (map == null)
             {
                 return NotFound();
             }
-            return map;
+            return (IActionResult)map;
         }
 
         [ProducesResponseType(typeof(IEnumerable<MapGetDTO>), StatusCodes.Status200OK)]
@@ -60,9 +60,9 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        public ActionResult<MapGetDTO> CreateMap([FromBody] MapCreateDTO dto)
+        public IActionResult CreateMap([FromBody] MapCreateDTO dto)
         {
-            return _Mapservice.CreateMap(dto);
+            return (IActionResult)_Mapservice.CreateMap(dto);
         }
 
         [ProducesResponseType(typeof(Map), StatusCodes.Status200OK)]
@@ -71,9 +71,9 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut]
         [Route("{id:Guid}")]
-        public ActionResult<MapGetDTO> UpdateMap(Guid id, [FromBody] MapCreateDTO dto)
+        public IActionResult UpdateMap(Guid id, [FromBody] MapCreateDTO dto)
         {
-            return _Mapservice.UpdateMap(dto, id);
+            return (IActionResult)_Mapservice.UpdateMap(dto, id);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
