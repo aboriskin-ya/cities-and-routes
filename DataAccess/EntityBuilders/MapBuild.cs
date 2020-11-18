@@ -9,7 +9,7 @@ namespace DataAccess.EntityBuilders
         {
             entityBuilder.HasKey(m => m.Id);
             entityBuilder.Property(m => m.Name).IsRequired();
-            entityBuilder.HasOne(m => m.Image).WithMany().HasForeignKey("ImageId");
+            entityBuilder.HasOne(m => m.Image).WithMany();
         }
     }
 }
