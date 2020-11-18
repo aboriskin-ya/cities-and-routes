@@ -54,23 +54,23 @@ namespace API.Controllers
             return Ok(CityList);
         }
 
-        [ProducesResponseType(typeof(CityCreateDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CityGetDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        public ActionResult<CityCreateDTO> CreateCity([FromBody] CityCreateDTO dto)
+        public ActionResult<CityGetDTO> CreateCity([FromBody] CityCreateDTO dto)
         {
             return _Cityservice.CreateCity(dto);
         }
 
-        [ProducesResponseType(typeof(CityCreateDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CityGetDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut]
         [Route("{id:Guid}")]
-        public ActionResult<CityCreateDTO> UpdateCity(Guid id, [FromBody] CityCreateDTO city)
+        public ActionResult<CityGetDTO> UpdateCity(Guid id, [FromBody] CityCreateDTO city)
         {
             return _Cityservice.UpdateCity(id, city);
         }
@@ -81,7 +81,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete]
         [Route("{id:Guid}")]
-        public ActionResult DeleteCity(Guid id)
+        public IActionResult DeleteCity(Guid id)
         {
             if (_Cityservice.DeleteCity(id))
             {

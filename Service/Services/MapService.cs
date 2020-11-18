@@ -25,14 +25,14 @@ namespace Service.Services
             _logger = logger;
         }
 
-        public Map CreateMap(MapCreateDTO dto)
+        public MapGetDTO CreateMap(MapCreateDTO dto)
         {
             _logger.LogInformation("Create map started");
             Map map = _mapper.Map<Map>(dto);
             _repository.Add(map);
             _context.SaveChanges();
             _logger.LogInformation("Create map finished");
-            return map;
+            return _mapper.Map<Map, MapGetDTO>(map);
         }
 
         public IEnumerable<MapGetDTO> GetMaps()
@@ -71,7 +71,7 @@ namespace Service.Services
             }
         }
 
-        public Map UpdateMap(MapCreateDTO dto, Guid id)
+        public MapGetDTO UpdateMap(MapCreateDTO dto, Guid id)
         {
             _logger.LogInformation("Update map started");
             Map map = _repository.Get(id);
@@ -79,7 +79,7 @@ namespace Service.Services
             map = _repository.Update(map);
             _context.SaveChanges();
             _logger.LogInformation("Update map finished");
-            return map;
+            return _mapper.Map<Map, MapGetDTO>(map);
         }
     }
 }

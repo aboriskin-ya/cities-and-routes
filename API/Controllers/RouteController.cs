@@ -5,6 +5,7 @@ using DataAccess.Models;
 using Service.Services.Interfaces;
 using Service.DTO;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
 namespace API.Controllers
 {
@@ -19,7 +20,7 @@ namespace API.Controllers
             _routeservice = Routeservice;
         }
 
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<RouteGetDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
