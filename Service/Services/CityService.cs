@@ -64,16 +64,15 @@ namespace Service.Services
             }
         }
 
-        public CityCreateDTO UpdateCity(Guid id, CityCreateDTO dto)
+        public CityGetDTO UpdateCity(Guid id, CityCreateDTO dto)
         {
             _logger.LogInformation("Update city started");
             var city = _repository.Get(id);
             _mapper.Map(dto, city);
             city = _repository.Update(city);
             _context.SaveChanges();
-            _mapper.Map(city, dto);
             _logger.LogInformation("Update city finished");
-            return dto;
+            return _mapper.Map<CityGetDTO>(city);
         }
     }
 }
