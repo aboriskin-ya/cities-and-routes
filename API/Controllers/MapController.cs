@@ -36,7 +36,7 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-            return (IActionResult)map;
+            return Ok(map);
         }
 
         [ProducesResponseType(typeof(IEnumerable<MapGetDTO>), StatusCodes.Status200OK)]
@@ -62,7 +62,7 @@ namespace API.Controllers
         [HttpPost]
         public IActionResult CreateMap([FromBody] MapCreateDTO dto)
         {
-            return (IActionResult)_Mapservice.CreateMap(dto);
+            return Ok(_Mapservice.CreateMap(dto));
         }
 
         [ProducesResponseType(typeof(Map), StatusCodes.Status200OK)]
@@ -73,7 +73,7 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public IActionResult UpdateMap(Guid id, [FromBody] MapCreateDTO dto)
         {
-            return (IActionResult)_Mapservice.UpdateMap(dto, id);
+            return Ok(_Mapservice.UpdateMap(dto, id));
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]

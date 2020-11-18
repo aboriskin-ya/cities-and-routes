@@ -52,7 +52,7 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            return (IActionResult)settings;
+            return Ok(settings);
         }
 
         [ProducesResponseType(typeof(SettingsDTO), StatusCodes.Status200OK)]
@@ -70,7 +70,7 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            return (IActionResult)settings;
+            return Ok(settings);
         }
 
         [ProducesResponseType(typeof(SettingsDTO), StatusCodes.Status200OK)]
@@ -81,7 +81,7 @@ namespace API.Controllers
         public IActionResult Post([FromBody] SettingsDTO settingsDTO)
         {
             _service.CreateSettings(settingsDTO);
-            return (IActionResult)settingsDTO;
+            return Ok(settingsDTO);
         }
 
         [ProducesResponseType(typeof(SettingsDTO), StatusCodes.Status200OK)]
@@ -93,7 +93,7 @@ namespace API.Controllers
         public IActionResult Put(Guid id, [FromBody] SettingsUpdateDTO settingsDTO)
         {
             var dto = _service.UpdateSettings(id, settingsDTO);
-            return (IActionResult)dto;
+            return Ok(dto);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
