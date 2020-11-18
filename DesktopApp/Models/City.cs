@@ -6,7 +6,6 @@ namespace DesktopApp.Models
     public class City : ViewModelBase, System.ComponentModel.IDataErrorInfo
     {
         public Guid Id { get; set; }
-
         public Guid MapId { get; set; }
 
         private double x = -100;

@@ -32,6 +32,23 @@ namespace DesktopApp.Models
 
         #endregion
 
+
+        #region UpdateCityPossibility
+
+        private bool _isAbleToUpdateCity = false;
+        public bool IsAbleToUpdateCity
+        {
+            get => _isAbleToUpdateCity;
+            set
+            {
+                _isAbleToUpdateCity = value;
+                RaisePropertyChanged(nameof(IsAbleToUpdateCity));
+                State = CityStatusUpdate();
+            }
+        }
+
+        #endregion
+
         #region SetCityPossibility
 
         private bool _isAbleToSetCity = false;
@@ -122,6 +139,9 @@ namespace DesktopApp.Models
 
             if (IsAbleToCreateCity)
                 return StateLine.Show(StateLineStatus.CreateCity);
+
+            if (IsAbleToUpdateCity)
+                return StateLine.Show(StateLineStatus.UpdateCity);
 
             return StateLine.Show(StateLineStatus.Empty);
         }
