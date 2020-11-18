@@ -226,7 +226,7 @@
                            AppState="{Binding AppState, Mode=TwoWay}"
                            SettingsMap="{Binding MapViewModel.SettingsMap, Mode=TwoWay}"
                            PosX="{Binding PositionViewModel.PanelX, Mode=TwoWay}"
-                           PosY="{Binding PositionViewModel.PanelY, Mode=TwoWay}" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Width="670" BorderBrush="Black"/>
+                           PosY="{Binding PositionViewModel.PanelY, Mode=TwoWay}" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" BorderBrush="Black"/>
         </DockPanel>
     </DockPanel>
 
