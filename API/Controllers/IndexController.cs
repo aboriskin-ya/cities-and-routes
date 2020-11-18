@@ -6,11 +6,11 @@ namespace API.Controllers
     [ApiController]
     public class IndexController : ControllerBase
     {
-        public string ApiIsRuning()
+        /*public string ApiIsRuning()
         {
             return "API Running...";
             //Todo: maybe add AspNetCore.RouteAnalyzer
-        }
+        }*/
 
     }
 }

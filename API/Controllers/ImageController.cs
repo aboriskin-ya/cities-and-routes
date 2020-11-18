@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Service.Services.Interfaces;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [Route("{controller}")]
+    [Route("image")]
     [ApiController]
     public class ImageController : ControllerBase
     {
@@ -22,45 +23,46 @@ namespace API.Controllers
             _service = service;
         }
 
+        [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost, DisableRequestSizeLimit]
         [Route("upload")]
         public async Task<ActionResult<Guid>> UploadImage()
         {
-            try
+            var file = Request.Form.Files[0];
+
+            if (file.Length > 0)
             {
-                var file = Request.Form.Files[0];
+                var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                var contentType = file.ContentType;
 
-                if (file.Length > 0)
+                byte[] bytes = null;
+                using (var str = new MemoryStream())
                 {
-                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                    var contentType = file.ContentType;
-
-                    byte[] bytes = null;
-                    using (var str = new MemoryStream())
-                    {
-                        await file.CopyToAsync(str);
-                        bytes = str.ToArray();
-                    }
-
-                    var img = new Image()
-                    {
-                        Data = bytes,
-                        ContentType = contentType
-                    };
-                    _service.StoreImage(img);
-                    return img.Id;
+                    await file.CopyToAsync(str);
+                    bytes = str.ToArray();
                 }
-                else
+
+                var img = new Image()
                 {
-                    return BadRequest();
-                }
+                    Data = bytes,
+                    ContentType = contentType
+                };
+                _service.StoreImage(img);
+                return img.Id;
             }
-            catch (Exception ex)
+            else
             {
-                Log.Error(ex, ex.ToString());
-                return StatusCode(500, ex.Message);
+                return BadRequest();
             }
         }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
         [Route("{id:Guid}")]
         public IActionResult GetImage(Guid id)
@@ -72,6 +74,10 @@ namespace API.Controllers
             return File(img.Data, img.ContentType);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
         [Route("getall")]
         public IActionResult GetImage()

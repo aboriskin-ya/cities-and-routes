@@ -8,7 +8,7 @@ namespace Service.Services.Interfaces
     {
         IEnumerable<CityGetDTO> GetCities();
         CityGetDTO GetCity(Guid id);
-        CityGetDTO CreateCity(CityCreateDTO city);
+        CityCreateDTO CreateCity(CityCreateDTO city);
         CityCreateDTO UpdateCity(Guid id, CityCreateDTO city);
         bool DeleteCity(Guid id);
     }

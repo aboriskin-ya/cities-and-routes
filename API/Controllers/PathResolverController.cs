@@ -1,5 +1,6 @@
 ﻿using DataAccess.DTO;
 using DataAccess.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.PathResolver;
 using Service.Services.Interfaces;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [Route("{controller}")]
+    [Route("pathresolver")]
     [ApiController]
     public class PathResolverController : ControllerBase
     {
@@ -18,6 +19,10 @@ namespace API.Controllers
             _algorithmService = AlgorithmService;
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
         [Route("FindShortestPath")]
         public IActionResult FindShortestPath([FromBody] PathResolverDTO Dto)
@@ -25,6 +30,10 @@ namespace API.Controllers
             return Ok(_algorithmService.FindShortestPath(Dto.MapId, Dto.CityFromId, Dto.CityToId));
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
         [Route("solve-travel-salesman-annealing")]
         public async Task<IActionResult> SolveTravelSalesmanAnnealing([FromBody] TravelSalesmanRequest BodyRequest)
@@ -34,6 +43,11 @@ namespace API.Controllers
             return Ok(response);
 
         }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
         [Route("solve-travel-salesman-nearest")]
         public async Task<IActionResult> SolveTravelSalesmanNearest([FromBody] TravelSalesmanRequest BodyRequest)
@@ -42,6 +56,11 @@ namespace API.Controllers
             if (response == default) return BadRequest();
             return Ok(response);
         }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
         [Route("experiment")]
         public IActionResult Experiment([FromBody] TravelSalesmanRequest BodyRequest)
