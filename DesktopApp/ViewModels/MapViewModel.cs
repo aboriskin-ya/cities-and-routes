@@ -4,6 +4,8 @@ using DesktopApp.Service;
 using DesktopApp.Services.Commands;
 using System;
 using System.Collections.ObjectModel;
+using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DesktopApp.ViewModels
@@ -22,6 +24,7 @@ namespace DesktopApp.ViewModels
             _routeAPIService = routeAPIService;
 
             CityCollection = new ObservableCollection<City>();
+            SelectedCities = new ObservableCollection<City>();
             SelectedCity = new City();
             RouteCollection = new ObservableCollection<Route>();
             SelectedRoute = new Route();
@@ -36,14 +39,25 @@ namespace DesktopApp.ViewModels
 
         public ObservableCollection<City> CityCollection { get; set; }
         public ObservableCollection<Route> RouteCollection { get; set; }
-
+        public ObservableCollection<City> SelectedCities { get; set; }
         private City _SelectedCity;
         public City SelectedCity
         {
             get => _SelectedCity;
             set => Set<City>(ref _SelectedCity, value, nameof(SelectedCity));
         }
-
+        private City _highlightedCity;
+        public City HighLightedCity
+        {
+            get => _highlightedCity;
+            set => Set<City>(ref _highlightedCity, value);
+        }
+        private bool _canSelected = false;
+        public bool CanSelected
+        {
+            get => _canSelected;
+            set => Set<bool>(ref _canSelected, value);
+        }
         private Route _SelectedRoute;
         public Route SelectedRoute
         {
@@ -59,6 +73,18 @@ namespace DesktopApp.ViewModels
         }
 
         #region CityCommands
+        public SelectCityCommand SelectCityCommand { get => new SelectCityCommand(p => OnCanSelectCityExecute(p), p => OnSelectCityExecuted(p)); }
+
+        private void OnSelectCityExecuted(object p)
+        {
+            if (p is City)
+                HighLightedCity = (City)p;
+            SelectedCities.Add(HighLightedCity);
+        }
+
+        private bool OnCanSelectCityExecute(object p) => CanSelected;
+           
+        
 
         public CreateCityCommand CreateNewCityCommand { get => new CreateCityCommand(p => OnCanAddCityCollection(), async m => await OnAddCityCollectionAsync()); }
         private async Task OnAddCityCollectionAsync()

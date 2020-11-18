@@ -107,7 +107,8 @@
                         <DataTemplate>
                             <Canvas Height="2" Width="2" 
                                     Style="{StaticResource GrowAnimation}"
-                                    MouseDown="City_MouseDown">
+                                    MouseDown="City_MouseDown"
+                                    MouseRightButtonDown="Canvas_MouseRightButtonDown">
                                 <Ellipse x:Name="city"
                                          Style="{StaticResource CityStyle}"/>
 

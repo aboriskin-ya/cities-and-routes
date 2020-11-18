@@ -188,7 +188,7 @@
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
-                        <ToggleButton Content="Select cities" Margin="2"/>
+                        <ToggleButton Content="Select cities" Margin="2" />
                         <Button Content="Solve travelsalesman" Grid.Column="1" Margin="2"/>
                         <Button Content="Cancel" Grid.ColumnSpan="2" Grid.Row="1" Margin="2"/>
                     </Grid>
@@ -222,7 +222,7 @@
                            AppState="{Binding AppState, Mode=TwoWay}"
                            SettingsMap="{Binding MapViewModel.SettingsMap, Mode=TwoWay}"
                            PosX="{Binding PositionViewModel.PanelX, Mode=TwoWay}"
-                           PosY="{Binding PositionViewModel.PanelY, Mode=TwoWay}" 
+                           PosY="{Binding PositionViewModel.PanelY, Mode=TwoWay}"
                            DockPanel.Dock="Left"/>
     </DockPanel>
 </Window>

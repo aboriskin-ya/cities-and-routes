@@ -11,6 +11,10 @@ namespace DesktopApp.ViewModels
 
         ObservableCollection<Route> RouteCollection { get; set; }
 
+        bool CanSelected { get; set; }
+        ObservableCollection<City> SelectedCities { get; set; }
+        City HighLightedCity { get; set; }
+
         City SelectedCity { get; set; }
 
         Route SelectedRoute { get; set; }
@@ -18,7 +22,7 @@ namespace DesktopApp.ViewModels
         Settings SettingsMap { get; set; }
 
         CreateCityCommand CreateNewCityCommand { get; }
-
+        SelectCityCommand SelectCityCommand { get; }
         CancelCreatingCityCommand CancelCreatingCityCommand { get; }
 
         CancelCreatingRouteCommand CancelCreatingRouteCommand { get; }

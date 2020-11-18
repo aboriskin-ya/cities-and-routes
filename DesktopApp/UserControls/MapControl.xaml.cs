@@ -211,6 +211,22 @@ namespace DesktopApp.UserControllers
 
         #endregion
 
+        #region SelectCityCommand
+
+
+        public ICommand SelectCityCommand
+        {
+            get { return (ICommand)GetValue(SelectCityCommandProperty); }
+            set { SetValue(SelectCityCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for SelectCityCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SelectCityCommandProperty =
+            DependencyProperty.Register("SelectCityCommand", typeof(ICommand), typeof(MapControl));
+
+
+        #endregion
+
         #region PixelPerWidth
 
 
@@ -272,6 +288,29 @@ namespace DesktopApp.UserControllers
             get { return (ObservableCollection<City>)GetValue(CityCollectionProperty); }
             set { SetValue(CityCollectionProperty, value); }
         }
+
+
+        public City HighlightedCity
+        {
+            get { return (City)GetValue(HighlightedCityProperty); }
+            set { SetValue(HighlightedCityProperty, value); }
+        }
+
+        public static readonly DependencyProperty HighlightedCityProperty =
+            DependencyProperty.Register("HighlightedCity", typeof(City), typeof(MapControl));
+
+
+
+        public ObservableCollection<City> SelectedCities
+        {
+            get { return (ObservableCollection<City>)GetValue(SelectedCitiesProperty); }
+            set { SetValue(SelectedCitiesProperty, value); }
+        }
+        public static readonly DependencyProperty SelectedCitiesProperty =
+            DependencyProperty.Register("SelectedCities", typeof(ObservableCollection<City>), typeof(MapControl));
+
+
+
 
         public static readonly DependencyProperty CityCollectionProperty =
         DependencyProperty.Register(nameof(CityCollection), typeof(ObservableCollection<City>), typeof(MapControl));
@@ -364,6 +403,12 @@ namespace DesktopApp.UserControllers
             var city = panel.DataContext;
 
             MapControl_SetCityToRoute(city as City);
+        }
+
+        private void Canvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var city = (sender as Panel).DataContext;
+            SelectCityCommand.Execute(city);
         }
     }
 }
