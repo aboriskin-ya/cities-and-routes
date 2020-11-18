@@ -43,6 +43,12 @@ namespace Service.Services
 
         public bool DeleteCity(Guid id)
         {
+            var routes = _repository.GetRoutes(id);
+            foreach (var route in routes)
+            {
+                _context.Remove(route);
+            }
+
             bool flag = _repository.Delete(id);
             if (flag)
                 _context.SaveChanges();
@@ -56,8 +62,7 @@ namespace Service.Services
             city = _repository.Update(city);
             _context.SaveChanges();
 
-            _mapper.Map(city, dto);
-            return dto;
+            return _mapper.Map(city, dto);
         }
     }
 }

@@ -15,6 +15,7 @@ namespace Repository
             new MapBuild(modelBuilder.Entity<Map>());
             new SettingsBuild(modelBuilder.Entity<Settings>());
             new CityBuild(modelBuilder.Entity<City>());
+            new RouteBuild(modelBuilder.Entity<Route>());
         }
     }
 }

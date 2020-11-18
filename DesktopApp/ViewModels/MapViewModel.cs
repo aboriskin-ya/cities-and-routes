@@ -1,6 +1,6 @@
 ﻿using DesktopApp.APIInteraction;
 using DesktopApp.Models;
-using DesktopApp.Service;
+using DesktopApp.Services;
 using DesktopApp.Services.Commands;
 using System;
 using System.Collections.ObjectModel;
@@ -12,7 +12,6 @@ namespace DesktopApp.ViewModels
     {
         private readonly ICityAPIService _cityAPIService;
         private readonly IRouteAPIService _routeAPIService;
-
         private readonly IMessageBoxService _messageBoxService;
 
         public MapViewModel(ICityAPIService cityAPIService, IMessageBoxService messageBoxService, IRouteAPIService routeAPIService)
@@ -21,41 +20,35 @@ namespace DesktopApp.ViewModels
             _messageBoxService = messageBoxService;
             _routeAPIService = routeAPIService;
 
-            CityCollection = new ObservableCollection<City>();
-            SelectedCity = new City();
-            RouteCollection = new ObservableCollection<Route>();
-            SelectedRoute = new Route();
-            SettingsMap = new Settings()
+            WholeMap = new WholeMap()
             {
-                VertexColor = "#ff0000",
-                VertexSize = 10,
-                EdgeColor = "#dde3ed",
-                EdgeSize = 3
+                Cities = new ObservableCollection<City>(),
+                Routes = new ObservableCollection<Route>(),
+                Settings = new Settings()
             };
+            SelectedCity = new City();
+            SelectedRoute = new Route();
         }
 
-        public ObservableCollection<City> CityCollection { get; set; }
-        public ObservableCollection<Route> RouteCollection { get; set; }
+        private WholeMap wholeMap;
+        public WholeMap WholeMap
+        {
+            get => wholeMap;
+            set => Set(ref wholeMap, value, nameof(WholeMap));
+        }
 
-        private City _SelectedCity;
+        private City selectedCity;
         public City SelectedCity
         {
-            get => _SelectedCity;
-            set => Set<City>(ref _SelectedCity, value, nameof(SelectedCity));
+            get => selectedCity;
+            set => Set(ref selectedCity, value, nameof(SelectedCity));
         }
 
-        private Route _SelectedRoute;
+        private Route selectedRoute;
         public Route SelectedRoute
         {
-            get => _SelectedRoute;
-            set => Set<Route>(ref _SelectedRoute, value, nameof(SelectedRoute));
-        }
-
-        private Settings _SettingsMap;
-        public Settings SettingsMap
-        {
-            get => _SettingsMap;
-            set => Set<Settings>(ref _SettingsMap, value, nameof(SettingsMap));
+            get => selectedRoute;
+            set => Set(ref selectedRoute, value, nameof(SelectedRoute));
         }
 
         #region CityCommands
@@ -65,15 +58,19 @@ namespace DesktopApp.ViewModels
         {
             try
             {
+                SelectedCity.MapId = WholeMap.Id;
                 var res = await _cityAPIService.CreateCityAsync(SelectedCity);
                 if (!res.IsSuccessful)
                     throw new Exception();
                 SelectedCity = res.Payload;
-                CityCollection.Add(SelectedCity);
+                WholeMap.Cities.Add(SelectedCity);
             }
             catch (Exception ex)
             {
                 _messageBoxService.ShowError(ex, "An error occured. Please try it again.");
+            }
+            finally
+            {
                 OnRemoveCityFromCollection();
             }
         }
@@ -82,7 +79,6 @@ namespace DesktopApp.ViewModels
         public CancelCreatingCityCommand CancelCreatingCityCommand { get => new CancelCreatingCityCommand(p => OnCanRemoveCityFromCollection(), m => OnRemoveCityFromCollection()); }
         private void OnRemoveCityFromCollection()
         {
-            CityCollection.Remove(SelectedCity);
             SelectedCity = new City();
         }
         private bool OnCanRemoveCityFromCollection() => true;
@@ -96,18 +92,21 @@ namespace DesktopApp.ViewModels
         {
             try
             {
+                SelectedRoute.MapId = WholeMap.Id;
                 var res = await _routeAPIService.CreateRouteAsync(SelectedRoute);
                 if (!res.IsSuccessful)
                     throw new Exception();
                 SelectedRoute = res.Payload;
-                RouteCollection.Add(SelectedRoute);
+                WholeMap.Routes.Add(SelectedRoute);
             }
             catch (Exception ex)
             {
                 _messageBoxService.ShowError(ex, "An error occured. Please try it again.");
-                OnRemoveCityFromCollection();
             }
-            SelectedRoute = new Route();
+            finally
+            {
+                OnRemoveRouteFromCollection();
+            }
         }
 
         private bool OnCanAddRouteCollection() => true;
@@ -115,21 +114,22 @@ namespace DesktopApp.ViewModels
         public CancelCreatingRouteCommand CancelCreatingRouteCommand { get => new CancelCreatingRouteCommand(p => OnCanRemoveRouteFromCollection(), m => OnRemoveRouteFromCollection()); }
         private void OnRemoveRouteFromCollection()
         {
-            RouteCollection.Remove(SelectedRoute);
             SelectedRoute = new Route();
         }
         private bool OnCanRemoveRouteFromCollection() => true;
 
         #endregion
 
-        public int CitiesCount() => CityCollection.Count;
+        public int CitiesCount() => WholeMap.Cities.Count;
 
-        public int RoutesCount() => RouteCollection.Count;
+        public int RoutesCount() => WholeMap.Routes.Count;
 
         public bool IsRouteHasBothCities() => SelectedRoute.FirstCity != null && SelectedRoute.SecondCity != null;
 
-        public bool RouteWasSaved() => RouteCollection.Contains(SelectedRoute);
+        public bool RouteWasSaved() => WholeMap.Routes.Contains(SelectedRoute);
 
-        public bool CityWasSaved() => CityCollection.Contains(SelectedCity);
+        public bool CityWasSaved() => WholeMap.Cities.Contains(SelectedCity);
+
+        public bool IsHaveMap() => WholeMap.Id != Guid.Empty;
     }
 }

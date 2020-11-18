@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Repository;
 using Repository.Storage;
 using Service;
@@ -30,7 +31,8 @@ namespace API
             string connection = _configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<CityRouteContext>(options =>
             {
-                options.UseSqlServer(connection);
+                options.UseSqlServer(connection)
+                .UseLoggerFactory(LoggerFactory.Create(buider => buider.AddConsole()));
             });
             services.AddScoped(typeof(IMapRepository), typeof(MapRepository));
             services.AddScoped(typeof(IImageRepository), typeof(ImageRepository));
@@ -57,7 +59,7 @@ namespace API
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
-            app.UseMiddleware<BasicAuthenthicationMiddleware>();
+            //app.UseMiddleware<BasicAuthenthicationMiddleware>();
 
             app.UseRouting();
 

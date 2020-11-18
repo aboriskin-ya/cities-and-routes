@@ -1,5 +1,4 @@
 ﻿using DesktopApp.APIInteraction;
-using DesktopApp.Service;
 using GongSolutions.Wpf.DragDrop;
 using System;
 using System.ComponentModel;
@@ -7,45 +6,48 @@ using System.IO;
 using System.Linq.Expressions;
 using System.Windows;
 using System.Windows.Input;
+using DesktopApp.Dialogs.Commands;
+using DesktopApp.Services;
+using System.Threading.Tasks;
+using DesktopApp.Models;
 
 namespace DesktopApp.ViewModels
 {
     public enum AllowExtensions { jpg, png };
     public class CreateMapViewModel : INotifyPropertyChanged, IDropTarget
     {
-
-        private string mapName;
-        private string mapPath;
-        private bool isAvailableForDownload;
-
         private readonly IMessageBoxService _messageBoxService;
+        private readonly IOpenImageDialogService _openImageDialogService;
         private readonly IImageAPIService _imageAPIService;
-        public CreateMapViewModel(IMessageBoxService messageBoxService, IImageAPIService imageAPIService)
+        private readonly IMapAPIService _mapAPIService;
+
+        public CreateMapViewModel(IMessageBoxService messageBoxService, IOpenImageDialogService openImageDialogService, IImageAPIService imageAPIService, IMapAPIService mapAPIService)
         {
             _messageBoxService = messageBoxService;
+            _openImageDialogService = openImageDialogService;
             _imageAPIService = imageAPIService;
+            _mapAPIService = mapAPIService;
             InitializeProperties();
-
-            CreateCommand = new RelayCommand(
-                p => CreateNewMap(),
-                b => { return !string.IsNullOrEmpty(MapName) && IsAvailableForDownload; });
         }
 
-        public void InitializeProperties(string name = "", string path = "/Resources/Icons/uploadIcon.png", bool isAvailable = false)
+        public void InitializeProperties(string name = "", string path = "")
         {
-            MapName = name;
+            NewMap = new Map() { Name = name };
             MapPath = path;
-            isAvailableForDownload = isAvailable;
         }
-        public bool IsAvailableForDownload
+
+        private Map newMap;
+        public Map NewMap
         {
-            get { return isAvailableForDownload; }
+            get { return newMap; }
             set
             {
-                isAvailableForDownload = value;
-                FirePropertyChanged(p => p.IsAvailableForDownload);
+                newMap = value;
+                FirePropertyChanged(p => p.NewMap);
             }
         }
+
+        private string mapPath;
         public string MapPath
         {
             get { return mapPath; }
@@ -55,40 +57,50 @@ namespace DesktopApp.ViewModels
                 FirePropertyChanged(p => p.MapPath);
             }
         }
-        public string MapName
-        {
-            get { return mapName; }
-            set
-            {
-                mapName = value;
-                FirePropertyChanged(p => p.MapName);
-            }
-        }
 
-        public ICommand CreateCommand { get; }
-        private async void CreateNewMap()
+        #region CreateMapCommand
+
+        public ICommand CreateMapCommand => new CreateMapCommand(p => OnCanCreateMapExecuted(p), async p => await OnCreateMapExecuted(p));
+
+        private async Task OnCreateMapExecuted(object p)
         {
             try
             {
-                var res = await _imageAPIService.UploadImage(MapPath);
-                if (res != null)
+                NewMap.ImageId = await AddNewImage();
+
+                if (!AddNewMap().IsFaulted)
                 {
-                    _messageBoxService.ShowInfo($"We have new map \"{MapName}\" with id = {res}", "Success");
+                    _messageBoxService.ShowInfo($"We have a new map \"{NewMap.Name}\".", "Success");
                     InitializeProperties();
                 }
-                else
-                    _messageBoxService.ShowError("Oops! Some server problems", "Error");
-            }
-            catch (System.Net.Http.HttpRequestException rex)
-            {
-                _messageBoxService.ShowError(rex, "Server is not found.");
             }
             catch (Exception ex)
             {
-                _messageBoxService.ShowError(ex, ex.Message);
+                _messageBoxService.ShowError(ex, "An error occured. Please try it again.");
             }
-
         }
+
+        private async Task AddNewMap()
+        {
+            var res = await _mapAPIService.CreateMapAsync(NewMap);
+            if (!res.IsSuccessful)
+                throw new Exception("A map was not added.");
+        }
+
+        private async Task<Guid> AddNewImage()
+        {
+            var res = await _imageAPIService.UploadImage(MapPath);
+            if (!res.IsSuccessful)
+                throw new Exception("An image was not added.");
+            else
+                return res.Payload;
+        }
+
+        private bool OnCanCreateMapExecuted(object p) => !string.IsNullOrEmpty(NewMap.Name) && !string.IsNullOrEmpty(MapPath);
+
+        #endregion
+
+        #region DragDropFile
 
         public void DragOver(IDropInfo dropInfo)
         {
@@ -116,7 +128,7 @@ namespace DesktopApp.ViewModels
                 if (Enum.IsDefined(typeof(AllowExtensions), Path.GetExtension(dropPath[0]).Trim('.')) &&
                     img.Width >= 1000 && img.Height >= 1000)
                 {
-                    InitializeProperties(Path.GetFileNameWithoutExtension(dropPath[0]), fullPath, true);
+                    InitializeProperties(Path.GetFileNameWithoutExtension(dropPath[0]), fullPath);
                 }
                 else
                 {
@@ -129,6 +141,27 @@ namespace DesktopApp.ViewModels
                 _messageBoxService.ShowError(ex, "Some error here:");
             }
         }
+
+        #endregion
+
+        #region OpenFileDialogCommand
+
+        public ICommand DownloadImageCommand => new DownloadImageCommand(p => OnCanDownloadImageExecuted(p), p => OnDownloadImageExecuted(p));
+
+        private void OnDownloadImageExecuted(object p)
+        {
+            var res = _openImageDialogService.ShowDialog();
+            if (res != null)
+            {
+                System.Drawing.Image img = System.Drawing.Image.FromFile(res);
+                InitializeProperties(Path.GetFileNameWithoutExtension(res), res);
+            }
+        }
+
+        private bool OnCanDownloadImageExecuted(object p) => true;
+
+        #endregion
+
         private void FirePropertyChanged<TValue>(Expression<Func<CreateMapViewModel, TValue>> propertySelector)
         {
             if (PropertyChanged == null)

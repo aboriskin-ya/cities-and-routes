@@ -10,8 +10,8 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(CityRouteContext))]
-    [Migration("20201028081335_CreateNewDb")]
-    partial class CreateNewDb
+    [Migration("20201118203106_CreateNewDB")]
+    partial class CreateNewDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -40,11 +40,11 @@ namespace Repository.Migrations
                     b.Property<DateTimeOffset>("UpdatedOnUTC")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("X")
-                        .HasColumnType("int");
+                    b.Property<double>("X")
+                        .HasColumnType("float");
 
-                    b.Property<int>("Y")
-                        .HasColumnType("int");
+                    b.Property<double>("Y")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -99,9 +99,45 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ImageId");
+                    b.HasIndex("ImageId")
+                        .IsUnique();
 
                     b.ToTable("Map");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.Route", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreateOnUTC")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("Distance")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("FirstCityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MapId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SecondCityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("UpdatedOnUTC")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FirstCityId");
+
+                    b.HasIndex("MapId");
+
+                    b.HasIndex("SecondCityId");
+
+                    b.ToTable("Route");
                 });
 
             modelBuilder.Entity("DataAccess.Models.Settings", b =>
@@ -141,7 +177,8 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MapId");
+                    b.HasIndex("MapId")
+                        .IsUnique();
 
                     b.ToTable("Settings");
                 });
@@ -149,7 +186,7 @@ namespace Repository.Migrations
             modelBuilder.Entity("DataAccess.Models.City", b =>
                 {
                     b.HasOne("DataAccess.Models.Map", "Map")
-                        .WithMany()
+                        .WithMany("Cities")
                         .HasForeignKey("MapId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -158,17 +195,38 @@ namespace Repository.Migrations
             modelBuilder.Entity("DataAccess.Models.Map", b =>
                 {
                     b.HasOne("DataAccess.Models.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId")
+                        .WithOne()
+                        .HasForeignKey("DataAccess.Models.Map", "ImageId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DataAccess.Models.Route", b =>
+                {
+                    b.HasOne("DataAccess.Models.City", "FirstCity")
+                        .WithMany("RoutesWhenThisFirst")
+                        .HasForeignKey("FirstCityId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DataAccess.Models.Map", "Map")
+                        .WithMany("Routes")
+                        .HasForeignKey("MapId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataAccess.Models.City", "SecondCity")
+                        .WithMany("RoutesWhenThisSecond")
+                        .HasForeignKey("SecondCityId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("DataAccess.Models.Settings", b =>
                 {
                     b.HasOne("DataAccess.Models.Map", "Map")
-                        .WithMany()
-                        .HasForeignKey("MapId")
+                        .WithOne("Settings")
+                        .HasForeignKey("DataAccess.Models.Settings", "MapId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -11,18 +11,18 @@ namespace API.Controllers
     [ApiController]
     public class CityController : ControllerBase
     {
-        private readonly ICityService _Cityservice;
+        private readonly ICityService _service;
 
         public CityController(ICityService CityService)
         {
-            _Cityservice = CityService;
+            _service = CityService;
         }
 
         [HttpGet]
         [Route("{id:Guid}")]
         public ActionResult<CityGetDTO> GetCity(Guid id)
         {
-            var city = _Cityservice.GetCity(id);
+            var city = _service.GetCity(id);
             if (city == null)
             {
                 return NotFound();
@@ -35,7 +35,7 @@ namespace API.Controllers
         [Route("getall")]
         public IActionResult GetCity()
         {
-            var CityList = _Cityservice.GetCities();
+            var CityList = _service.GetCities();
 
             if (CityList.Count() == 0)
             {
@@ -50,7 +50,7 @@ namespace API.Controllers
         {
             try
             {
-                return _Cityservice.CreateCity(dto);
+                return _service.CreateCity(dto);
             }
             catch (Exception ex)
             {
@@ -64,7 +64,7 @@ namespace API.Controllers
         {
             try
             {
-                return _Cityservice.UpdateCity(id, city);
+                return _service.UpdateCity(id, city);
             }
             catch (Exception ex)
             {
@@ -77,7 +77,7 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public ActionResult DeleteCity(Guid id)
         {
-            if (_Cityservice.DeleteCity(id))
+            if (_service.DeleteCity(id))
             {
                 return Ok();
             }
@@ -87,6 +87,4 @@ namespace API.Controllers
             }
         }
     }
-
-
 }

@@ -16,13 +16,16 @@ namespace DesktopApp.APIInteraction.Mapper
                         X = source.X,
                         Y = source.Y
                     }));
-
             CreateMap<CityGetDTO, City>()
                 .ForMember("X", opt => opt.MapFrom(src => src.Position.X))
                 .ForMember("Y", opt => opt.MapFrom(src => src.Position.Y));
 
             CreateMap<Route, RouteCreateDTO>();
             CreateMap<RouteGetDTO, Route>();
+
+            CreateMap<Map, MapCreateDTO>();
+            CreateMap<MapIdNameGetDTO, Map>();
+            CreateMap<MapGetDTO, WholeMap>();
         }
     }
 }

@@ -27,8 +27,7 @@ namespace Service.Services
             _repository.Add(settings);
             _context.SaveChanges();
 
-            _mapper.Map(settings, settingsDTO);
-            return settingsDTO;
+            return _mapper.Map(settings, settingsDTO);
         }
 
         public bool DeleteSettings(Guid id)

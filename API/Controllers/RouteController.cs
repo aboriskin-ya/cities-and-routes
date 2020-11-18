@@ -11,18 +11,18 @@ namespace API.Controllers
     [ApiController]
     public class RouteController : ControllerBase
     {
-        private readonly IRouteService _routeservice;
+        private readonly IRouteService _service;
 
         public RouteController(IRouteService Routeservice)
         {
-            _routeservice = Routeservice;
+            _service = Routeservice;
         }
 
         [HttpGet]
         [Route("getall")]
         public IActionResult GetRoute()
         {
-            var RouteList = _routeservice.GetRoutes();
+            var RouteList = _service.GetRoutes();
 
             if (RouteList.Count() == 0)
             {
@@ -35,7 +35,7 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public ActionResult<RouteGetDTO> GetRoute(Guid id)
         {
-            var route = _routeservice.GetRoute(id);
+            var route = _service.GetRoute(id);
             if (route == null)
             {
                 return NotFound();
@@ -48,7 +48,7 @@ namespace API.Controllers
         {
             try
             {
-                return _routeservice.CreateRoute(dto);
+                return _service.CreateRoute(dto);
             }
             catch (Exception ex)
             {
@@ -62,11 +62,25 @@ namespace API.Controllers
         {
             try
             {
-                return _routeservice.UpdateRoute(id, dto);
+                return _service.UpdateRoute(id, dto);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public ActionResult DeleteRoute(Guid id)
+        {
+            if (_service.DeleteRoute(id))
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
             }
         }
     }

@@ -5,8 +5,8 @@ using DesktopApp.Services.Commands;
 using DesktopApp.Services.Helper;
 using DesktopApp.Services.Utils;
 using DesktopApp.UserControllers;
-using System;
-using System.Threading.Tasks;
+using GalaSoft.MvvmLight.Messaging;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -20,22 +20,62 @@ namespace DesktopApp.ViewModels
     }
     internal class MainWindowViewModel : BaseViewModel
     {
-        public IMapViewModel MapViewModel { get; }
+        private IMapViewModel mapViewModel;
+        public IMapViewModel MapViewModel
+        {
+            get => mapViewModel;
+            set => Set(ref mapViewModel, value, nameof(MapViewModel));
+        }
 
         public ICursorPositionViewModel PositionViewModel { get; }
 
         public MainWindowViewModel(IMapViewModel viewModel, ICursorPositionViewModel positionViewModel)
         {
-            MapImageSource = new BitmapImage(new Uri(@"Resources\Maps\USAMap.jpg", UriKind.Relative));
-            ImageHeight = (MapImageSource as BitmapImage).PixelHeight;
-            ImageWidth = (MapImageSource as BitmapImage).PixelWidth;
-            AppState = new States();
-
             MapViewModel = viewModel;
             PositionViewModel = positionViewModel;
+            AppState = new States();
+            Messenger.Default.Register<WholeMap>(this, map => ReceiveMessageSelectExistingMap(map));
         }
 
-        #region ShowCreateMapDialog     
+        private object ReceiveMessageSelectExistingMap(WholeMap map)
+        {
+            InitializeMapViewModel(map);
+            InitializeMapImageSource(map.Image.Data);
+            return map;
+        }
+
+        #region Initializers
+        private void InitializeMapViewModel(WholeMap map)
+        {
+            //MapViewModel.CityCollection = new ObservableCollection<City>(map.Cities);
+            //MapViewModel.RouteCollection = new ObservableCollection<Route>(map.Routes);
+            //MapViewModel.SettingsMap = map.Settings ?? new Settings();
+            MapViewModel.WholeMap = map;
+            MapViewModel.WholeMap.Settings = map.Settings ?? new Settings();
+        }
+
+        public void InitializeMapImageSource(byte[] image)
+        {
+            var btmp = new BitmapImage();
+            var memoryStream = new MemoryStream();
+
+            memoryStream.Write(image);
+
+            btmp.BeginInit();
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            btmp.StreamSource = memoryStream;
+            btmp.EndInit();
+
+            MapImageSource = btmp;
+            ImageHeight = (MapImageSource as BitmapImage).PixelHeight;
+            ImageWidth = (MapImageSource as BitmapImage).PixelWidth;
+        }
+
+        #endregion
+
+        #region ShowCreateMapDialog 
+
         public ICommand ShowCreateMapDialogCommand => new ShowCreateMapDialogCommand(null, p => ShowDialog(p));
 
         private void ShowDialog(object p)
@@ -45,6 +85,21 @@ namespace DesktopApp.ViewModels
             view.Owner = App.Current.MainWindow;
             view.Show();
         }
+
+        #endregion
+
+        #region ShowCreateMapDialog
+
+        public ICommand ShowSelectExistingMapDialogCommand => new ShowCreateMapDialogCommand(null, p => ShowDialog1(p));
+
+        private void ShowDialog1(object p)
+        {
+            var model = RegisterServices.Configure().Resolve<SelectExistingMapViewModel>();
+            var view = new SelectExistingMapDialog { DataContext = model };
+            view.Owner = App.Current.MainWindow;
+            view.Show();
+        }
+
         #endregion
 
         #region AddNewCityCommand
@@ -55,9 +110,8 @@ namespace DesktopApp.ViewModels
             AppState.IsAbleToSetCity = true;
         }
 
-        private bool OnCanAddNewCityExecute(object p) => !AppState.IsAbleToSetCity && !AppState.IsAbleToCreateCity;//&& Map != null;
+        private bool OnCanAddNewCityExecute(object p) => !AppState.IsAbleToSetCity && !AppState.IsAbleToCreateCity && MapViewModel.IsHaveMap();
         #endregion
-       
 
         #region CreateNewCityCommand
 
@@ -65,9 +119,9 @@ namespace DesktopApp.ViewModels
 
         private void OnCreateNewCityExecuted(object p)
         {
-            MapViewModel.CreateNewCityCommand.Execute(p);                
+            MapViewModel.CreateNewCityCommand.Execute(p);
             AppState.IsAbleToCreateCity = false;
-            if(MapViewModel.CityWasSaved())
+            if (MapViewModel.CityWasSaved())
                 AppState.IsSuccess = true;
         }
 
@@ -84,9 +138,9 @@ namespace DesktopApp.ViewModels
             AppState.IsAbleToPickFirstCity = true;
         }
 
-        private bool OnCanAddNewRouteExecute(object p) => !AppState.IsAbleToCreateRoute 
+        private bool OnCanAddNewRouteExecute(object p) => !AppState.IsAbleToCreateRoute
             && !AppState.IsAbleToPickFirstCity
-            && MapViewModel.CitiesCount() >= 2 
+            && MapViewModel.CitiesCount() >= 2
             && MapViewModel.RoutesCount() < MathUtils.BinomialCoefficient((uint)MapViewModel.CitiesCount(), 2);
 
         #endregion
@@ -217,9 +271,9 @@ namespace DesktopApp.ViewModels
 
         private void OnNavigateExecuted(object p)
         {
-            
+
             OffsetValue = (Point)p;
-         
+
         }
 
         private bool OnCanNavigateExecute(object p) => true;

@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using DesktopApp.Resources;
+using GalaSoft.MvvmLight;
 
 namespace DesktopApp.Models
 {
@@ -26,7 +27,7 @@ namespace DesktopApp.Models
             }
         }
 
-        private double vertexSize;
+        private double vertexSize = DefaultSettings.vertexSize;
         public double VertexSize
         {
             get { return vertexSize; }
@@ -37,7 +38,7 @@ namespace DesktopApp.Models
             }
         }
 
-        private string vertexColor;
+        private string vertexColor = DefaultSettings.vertexColor;
         public string VertexColor
         {
             get { return vertexColor; }
@@ -48,7 +49,7 @@ namespace DesktopApp.Models
             }
         }
 
-        private double edgeSize;
+        private double edgeSize = DefaultSettings.edgeSize;
         public double EdgeSize
         {
             get { return edgeSize; }
@@ -59,7 +60,7 @@ namespace DesktopApp.Models
             }
         }
 
-        private string edgeColor;
+        private string edgeColor = DefaultSettings.edgeColor;
         public string EdgeColor
         {
             get { return edgeColor; }

@@ -10,5 +10,7 @@ namespace Service.Services.Interfaces
         RouteGetDTO GetRoute(Guid id);
         RouteGetDTO CreateRoute(RouteCreateDTO dto);
         RouteCreateDTO UpdateRoute(Guid id, RouteCreateDTO dto);
+
+        bool DeleteRoute(Guid id);
     }
 }

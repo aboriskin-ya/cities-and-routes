@@ -28,7 +28,7 @@ namespace DesktopApp.APIInteraction
                 IsSuccessful = response.IsSuccessStatusCode ? true : false
             };
             var routeGetDTO = await response.Content.ReadAsAsync<RouteGetDTO>();
-            responsePayload.Payload = AppMapper.GetAppMapper().Mapper.Map(routeGetDTO, route);
+            responsePayload.Payload = AppMapper.GetAppMapper().Mapper.Map<Route>(routeGetDTO);
 
             return responsePayload;
         }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DesktopApp.Service
+namespace DesktopApp.Services
 {
     public interface IMessageBoxService
     {

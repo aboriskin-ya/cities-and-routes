@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Service.DTO;
 using Service.Services.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace API.Controllers
@@ -13,12 +12,12 @@ namespace API.Controllers
     [ApiController]
     public class MapController : ControllerBase
     {
-        private readonly IMapService _Mapservice;
+        private readonly IMapService _service;
         private readonly IMapper _mapper;
 
         public MapController(IMapService MapService, IMapper Mapper)
         {
-            _Mapservice = MapService;
+            _service = MapService;
             _mapper = Mapper;
         }
 
@@ -26,7 +25,7 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public ActionResult<MapGetDTO> GetMap(Guid id)
         {
-            MapGetDTO map = _Mapservice.GetMap(id);
+            MapGetDTO map = _service.GetMap(id);
             if (map == null)
             {
                 return NotFound();
@@ -38,7 +37,19 @@ namespace API.Controllers
         [Route("getall")]
         public IActionResult GetMap()
         {
-            IEnumerable<MapGetDTO> MapList = _Mapservice.GetMaps();
+            var MapList = _service.GetMaps();
+            if (MapList.Count() == 0)
+            {
+                return NotFound();
+            }
+            return Ok(MapList);
+        }
+
+        [HttpGet]
+        [Route("getallnames")]
+        public IActionResult GetMapName()
+        {
+            var MapList = _service.GetMapsNames();
             if (MapList.Count() == 0)
             {
                 return NotFound();
@@ -47,11 +58,11 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Map> CreateMap([FromBody] MapCreateDTO dto)
+        public ActionResult<MapGetDTO> CreateMap([FromBody] MapCreateDTO dto)
         {
             try
             {
-                return _Mapservice.CreateMap(dto);
+                return _service.CreateMap(dto);
             }
             catch (Exception ex)
             {
@@ -61,11 +72,11 @@ namespace API.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
-        public ActionResult<Map> UpdateMap(Guid id, [FromBody] MapCreateDTO dto)
+        public ActionResult<MapCreateDTO> UpdateMap(Guid id, [FromBody] MapCreateDTO dto)
         {
             try
             {
-                return _Mapservice.UpdateMap(dto, id);
+                return _service.UpdateMap(id, dto);
             }
             catch (Exception ex)
             {
@@ -76,9 +87,9 @@ namespace API.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
-        public ActionResult<Map> DeleteMap(Guid id)
+        public ActionResult DeleteMap(Guid id)
         {
-            if (_Mapservice.DeleteMap(id))
+            if (_service.DeleteMap(id))
             {
                 return Ok();
             }
@@ -88,6 +99,4 @@ namespace API.Controllers
             }
         }
     }
-
-
 }

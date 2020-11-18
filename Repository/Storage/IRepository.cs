@@ -8,7 +8,7 @@ namespace Repository.Storage
     {
         T Get(Guid id);
         IEnumerable<T> GetAll();
-        void Add(T obj);
+        Guid Add(T obj);
         T Update(T obj);
         bool Delete(Guid id);
     }

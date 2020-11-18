@@ -3,23 +3,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DesktopApp"
+        xmlns:fa="http://schemas.fontawesome.com/icons/"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
         mc:Ignorable="d"
         Title="CreateMapDialog" Height="450" Width="450">
     <Window.Resources>
         <ResourceDictionary Source="..\Resources\Styles\CreateMapDialogStyles.xaml" />
-        
     </Window.Resources>
 
     <Grid Style="{StaticResource GridStyle}">
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="0.1*"/>
             <RowDefinition Height="0.8*"/>
             <RowDefinition Height="0.1*"/>
         </Grid.RowDefinitions>
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.5*"/>
             <ColumnDefinition/>
@@ -28,46 +28,55 @@
         <DockPanel 
             Grid.ColumnSpan="2" 
             LastChildFill="True">
-            
+
             <Label 
                 DockPanel.Dock="Left" 
                 Style="{StaticResource CommonStyle}"
                 Target="{Binding ElementName=mapName}"
                 Content="Map name:">
             </Label>
-            
-            <TextBox x:Name="map" 
-                Text="{Binding MapName}"/>
+
+            <TextBox 
+                x:Name="map" 
+                Text="{Binding NewMap.Name, UpdateSourceTrigger=PropertyChanged}"/>
         </DockPanel>
 
         <Border
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="2"            
-            ToolTip="Drop new map to here"
-            
+            ToolTip="Drop new map to here"            
             AllowDrop="True" 
             dd:DragDrop.IsDragSource="True"
             dd:DragDrop.IsDropTarget="True"
             dd:DragDrop.DropHandler="{Binding}">
 
-            <ScrollViewer 
-                x:Name="scroll" 
-                VerticalScrollBarVisibility="Auto"
-                HorizontalScrollBarVisibility="Auto">
-                
-                <Image x:Name="newMap"
-                   Source="{Binding MapPath}"
-                   Style="{StaticResource CommonStyle}"
-                   Stretch="None"/>
-            </ScrollViewer>
+            <Grid>
+                <fa:ImageAwesome 
+                    Icon="Solid_Download" 
+                    Foreground="Black"  
+                    Height="60" Width="60" 
+                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Image 
+                    x:Name="newMap"
+                    Source="{Binding MapPath}"
+                    Style="{StaticResource CommonStyle}"
+                    Stretch="Uniform"/>
+            </Grid>
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDown">
+                    <i:InvokeCommandAction
+                            Command="{Binding DownloadImageCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
         </Border>
 
         <Button 
             x:Name="btnCreate"
             Content="Create"
             Grid.Row="2"            
-            Command="{Binding CreateCommand}"
+            Command="{Binding CreateMapCommand}"
             ToolTip="Add new map">
         </Button>
     </Grid>

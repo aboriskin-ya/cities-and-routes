@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace DesktopApp.Service
+namespace DesktopApp.Services
 {
     public class MessageBoxService : IMessageBoxService
     {

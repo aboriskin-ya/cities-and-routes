@@ -31,9 +31,6 @@ namespace Repository.Migrations
                     b.Property<Guid>("MapId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("MapId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -50,8 +47,6 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("MapId");
-
-                    b.HasIndex("MapId1");
 
                     b.ToTable("City");
                 });
@@ -102,7 +97,8 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ImageId");
+                    b.HasIndex("ImageId")
+                        .IsUnique();
 
                     b.ToTable("Map");
                 });
@@ -133,7 +129,11 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FirstCityId");
+
                     b.HasIndex("MapId");
+
+                    b.HasIndex("SecondCityId");
 
                     b.ToTable("Route");
                 });
@@ -163,9 +163,6 @@ namespace Repository.Migrations
                     b.Property<Guid>("MapId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("MapId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTimeOffset>("UpdatedOnUTC")
                         .HasColumnType("datetimeoffset");
 
@@ -178,11 +175,8 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MapId");
-
-                    b.HasIndex("MapId1")
-                        .IsUnique()
-                        .HasFilter("[MapId1] IS NOT NULL");
+                    b.HasIndex("MapId")
+                        .IsUnique();
 
                     b.ToTable("Settings");
                 });
@@ -190,45 +184,49 @@ namespace Repository.Migrations
             modelBuilder.Entity("DataAccess.Models.City", b =>
                 {
                     b.HasOne("DataAccess.Models.Map", "Map")
-                        .WithMany()
+                        .WithMany("Cities")
                         .HasForeignKey("MapId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("DataAccess.Models.Map", null)
-                        .WithMany("Cities")
-                        .HasForeignKey("MapId1");
                 });
 
             modelBuilder.Entity("DataAccess.Models.Map", b =>
                 {
                     b.HasOne("DataAccess.Models.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId")
+                        .WithOne()
+                        .HasForeignKey("DataAccess.Models.Map", "ImageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("DataAccess.Models.Route", b =>
                 {
+                    b.HasOne("DataAccess.Models.City", "FirstCity")
+                        .WithMany("RoutesWhenThisFirst")
+                        .HasForeignKey("FirstCityId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("DataAccess.Models.Map", "Map")
                         .WithMany("Routes")
                         .HasForeignKey("MapId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataAccess.Models.City", "SecondCity")
+                        .WithMany("RoutesWhenThisSecond")
+                        .HasForeignKey("SecondCityId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("DataAccess.Models.Settings", b =>
                 {
                     b.HasOne("DataAccess.Models.Map", "Map")
-                        .WithMany()
-                        .HasForeignKey("MapId")
+                        .WithOne("Settings")
+                        .HasForeignKey("DataAccess.Models.Settings", "MapId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("DataAccess.Models.Map", null)
-                        .WithOne("Settings")
-                        .HasForeignKey("DataAccess.Models.Settings", "MapId1");
                 });
 #pragma warning restore 612, 618
         }
