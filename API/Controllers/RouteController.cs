@@ -13,11 +13,11 @@ namespace API.Controllers
     [ApiController]
     public class RouteController : ControllerBase
     {
-        private readonly IRouteService _routeservice;
+        private readonly IRouteService _service;
 
         public RouteController(IRouteService Routeservice)
         {
-            _routeservice = Routeservice;
+            _service = Routeservice;
         }
 
         [ProducesResponseType(typeof(IEnumerable<RouteGetDTO>), StatusCodes.Status200OK)]
@@ -28,7 +28,7 @@ namespace API.Controllers
         [Route("getall")]
         public IActionResult GetRoute()
         {
-            var RouteList = _routeservice.GetRoutes();
+            var RouteList = _service.GetRoutes();
 
             if (RouteList.Count() == 0)
             {
@@ -45,7 +45,7 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public IActionResult GetRoute(Guid id)
         {
-            var route = _routeservice.GetRoute(id);
+            var route = _service.GetRoute(id);
             if (route == null)
             {
                 return NotFound();
@@ -60,7 +60,7 @@ namespace API.Controllers
         [HttpPost]
         public IActionResult CreateRoute([FromBody] RouteCreateDTO dto)
         {
-            return Ok(_routeservice.CreateRoute(dto));
+            return Ok(_service.CreateRoute(dto));
         }
 
         [ProducesResponseType(typeof(RouteGetDTO), StatusCodes.Status200OK)]
@@ -71,7 +71,21 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public IActionResult UpdateRoute(Guid id, [FromBody] RouteCreateDTO dto)
         {
-            return Ok(_routeservice.UpdateRoute(id, dto));
+            return Ok(_service.UpdateRoute(id, dto));
+        }
+
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public ActionResult DeleteRoute(Guid id)
+        {
+            if (_service.DeleteRoute(id))
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }

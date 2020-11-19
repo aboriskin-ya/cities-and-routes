@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Repository;
 using Repository.Storage;
 using Serilog;
@@ -34,11 +35,12 @@ namespace API
 
             string connection = _configuration.GetConnectionString("DefaultConnection");
 
-            services.AddSingleton<Serilog.ILogger>(Log.Logger);
+            //services.AddSingleton<Serilog.ILogger>(Log.Logger);
 
             services.AddDbContext<CityRouteContext>(options =>
             {
-                options.UseSqlServer(connection);
+                options.UseSqlServer(connection)
+                .UseLoggerFactory(LoggerFactory.Create(buider => buider.AddConsole()));
             });
             services.AddScoped(typeof(IMapRepository), typeof(MapRepository));
             services.AddScoped(typeof(IImageRepository), typeof(ImageRepository));
@@ -66,11 +68,11 @@ namespace API
             app.UseStaticFiles();
             app.UseSwagger();
 
-            app.UseMiddleware<BasicAuthenthicationMiddleware>();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cities and Routes API V1");
-            });
+            //app.UseMiddleware<BasicAuthenthicationMiddleware>();
+            //app.UseSwaggerUI(c =>
+            //{
+            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cities and Routes API V1");
+            //});
 
             app.UseRouting();
 

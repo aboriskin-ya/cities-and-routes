@@ -14,12 +14,12 @@ namespace API.Controllers
     [ApiController]
     public class MapController : ControllerBase
     {
-        private readonly IMapService _Mapservice;
+        private readonly IMapService _service;
         private readonly IMapper _mapper;
 
         public MapController(IMapService MapService, IMapper Mapper)
         {
-            _Mapservice = MapService;
+            _service = MapService;
             _mapper = Mapper;
         }
 
@@ -31,7 +31,7 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public IActionResult GetMap(Guid id)
         {
-            MapGetDTO map = _Mapservice.GetMap(id);
+            MapGetDTO map = _service.GetMap(id);
             if (map == null)
             {
                 return NotFound();
@@ -47,7 +47,19 @@ namespace API.Controllers
         [Route("getall")]
         public IActionResult GetMap()
         {
-            IEnumerable<MapGetDTO> MapList = _Mapservice.GetMaps();
+            var MapList = _service.GetMaps();
+            if (MapList.Count() == 0)
+            {
+                return NotFound();
+            }
+            return Ok(MapList);
+        }
+
+        [HttpGet]
+        [Route("getallnames")]
+        public IActionResult GetMapName()
+        {
+            var MapList = _service.GetMapsNames();
             if (MapList.Count() == 0)
             {
                 return NotFound();
@@ -62,7 +74,7 @@ namespace API.Controllers
         [HttpPost]
         public IActionResult CreateMap([FromBody] MapCreateDTO dto)
         {
-            return Ok(_Mapservice.CreateMap(dto));
+            return Ok(_service.CreateMap(dto));
         }
 
         [ProducesResponseType(typeof(MapGetDTO), StatusCodes.Status200OK)]
@@ -73,7 +85,7 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public IActionResult UpdateMap(Guid id, [FromBody] MapCreateDTO dto)
         {
-            return Ok(_Mapservice.UpdateMap(dto, id));
+            return Ok(_service.UpdateMap(dto, id));
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -84,7 +96,7 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public IActionResult DeleteMap(Guid id)
         {
-            if (_Mapservice.DeleteMap(id))
+            if (_service.DeleteMap(id))
             {
                 return Ok();
             }
@@ -94,6 +106,4 @@ namespace API.Controllers
             }
         }
     }
-
-
 }

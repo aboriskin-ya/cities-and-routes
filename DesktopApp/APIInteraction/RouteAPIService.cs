@@ -18,9 +18,9 @@ namespace DesktopApp.APIInteraction
             {
                 response = await APIClient.Client.PostAsJsonAsync("route", routeDTO);
             }
-            catch (HttpRequestException ex)
+            catch
             {
-                throw ex;
+                return new HttpResponsePayload<Route>() { IsSuccessful = false };
             }
 
             HttpResponsePayload<Route> responsePayload = new HttpResponsePayload<Route>()
@@ -28,7 +28,7 @@ namespace DesktopApp.APIInteraction
                 IsSuccessful = response.IsSuccessStatusCode ? true : false
             };
             var routeGetDTO = await response.Content.ReadAsAsync<RouteGetDTO>();
-            responsePayload.Payload = AppMapper.GetAppMapper().Mapper.Map(routeGetDTO, route);
+            responsePayload.Payload = AppMapper.GetAppMapper().Mapper.Map<Route>(routeGetDTO);
 
             return responsePayload;
         }

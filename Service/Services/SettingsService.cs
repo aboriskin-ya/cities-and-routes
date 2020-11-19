@@ -32,8 +32,7 @@ namespace Service.Services
             _repository.Add(settings);
             _context.SaveChanges();
             _logger.LogInformation("Create settings finished");
-            _mapper.Map(settings, settingsDTO);
-            return settingsDTO;
+            return _mapper.Map(settings, settingsDTO);
         }
 
         public bool DeleteSettings(Guid id)
@@ -46,9 +45,7 @@ namespace Service.Services
                 _logger.LogInformation("Delete settings finished");
             }
             else
-            {
                 _logger.LogInformation("Delete settings not finished");
-            }
             return flag;
         }
 

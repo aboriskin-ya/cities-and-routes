@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.StaticFiles;
+using System;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ namespace DesktopApp.APIInteraction
 {
     public class ImageAPIService : IImageAPIService
     {
-        public async Task<string> UploadImage(string path)
+        public async Task<HttpResponsePayload<Guid>> UploadImage(string path)
         {
             var content = new MultipartFormDataContent();
 
@@ -25,14 +26,37 @@ namespace DesktopApp.APIInteraction
 
             HttpResponseMessage response = await APIClient.Client.PostAsync("image/upload", content);
 
-            string data = null;
-            if (response.IsSuccessStatusCode)
+            var responsePayload = new HttpResponsePayload<Guid>()
             {
-                data = await response.Content.ReadAsStringAsync();
-            }
-            return data;
+                IsSuccessful = response.IsSuccessStatusCode ? true : false,
+                Payload = await response.Content.ReadAsAsync<Guid>()
+            };
+            return responsePayload;
         }
 
+        public async Task<byte[]> GetImageAsync(Guid guid)
+        {
+            HttpResponseMessage response;
+
+            try
+            {
+                response = await APIClient.Client.GetAsync($"image/{guid}");
+            }
+            catch (HttpRequestException ex)
+            {
+                throw ex;
+            }
+
+            var image = await response.Content.ReadAsStreamAsync();
+
+            byte[] buffer = null;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                await image.CopyToAsync(ms);
+                buffer = ms.ToArray();
+            }
+
+            return buffer;
+        }
     }
 }
-

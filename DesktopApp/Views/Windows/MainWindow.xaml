@@ -1,9 +1,9 @@
 ﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"       
-        xmlns:uc="clr-namespace:DesktopApp.UserControllers"
-        xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" x:Class="DesktopApp.MainWindow"
-        Title="MainWindow" Height="450" Width="833">
+        xmlns:uc="clr-namespace:DesktopApp.UserControls"
+        x:Class="DesktopApp.MainWindow"
+        Title="MainWindow" Height="720" Width="1280" WindowStartupLocation="CenterScreen">
     <DockPanel x:Name="praparent">
         <Menu DockPanel.Dock="Top" 
             Height="25" 
@@ -15,7 +15,9 @@
                     Header="Create new" 
                     Command="{Binding ShowCreateMapDialogCommand}"/>
                 <MenuItem 
-                    Header="Select existing" />
+                    Header="Select existing"
+                    Command="{Binding ShowSelectExistingMapDialogCommand}">
+                </MenuItem>
             </MenuItem>
         </Menu>
         <DockPanel DockPanel.Dock="Right" Width="156">
@@ -172,7 +174,8 @@
                         Text="{Binding SelectedRoute.Distance, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                         Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
                         Style="{StaticResource StyleValidation}"
-                        x:Name="routeDistance"/>
+                        x:Name="routeDistance">
+                    </TextBox>
 
                     <Button
                         Grid.Row="2"
@@ -199,6 +202,7 @@
                         Content="Cancel"
                         Command="{Binding CancelCreatingRouteCommand}"/>
                 </Grid>
+                <TextBlock Text="{Binding WholeMap.Name}"/>
             </StackPanel>
         </DockPanel>
         <DockPanel 
@@ -219,15 +223,15 @@
                            Offset="{Binding Offset, Mode=TwoWay}"
                            PPW="{Binding PPW, Mode=TwoWay}"
                            PPH="{Binding PPH, Mode=TwoWay}"
-                           CityCollection ="{Binding MapViewModel.CityCollection, IsAsync=True, Mode=TwoWay}"
+                           CityCollection ="{Binding MapViewModel.WholeMap.Cities, Mode=TwoWay, IsAsync=True}"
                            SelectedCity="{Binding MapViewModel.SelectedCity, Mode=TwoWay}"
-                           RouteCollection ="{Binding MapViewModel.RouteCollection, IsAsync=True, Mode=TwoWay}"
+                           RouteCollection ="{Binding MapViewModel.WholeMap.Routes, Mode=TwoWay, IsAsync=True}"
                            SelectedRoute="{Binding MapViewModel.SelectedRoute, Mode=TwoWay}"
                            AppState="{Binding AppState, Mode=TwoWay}"
-                           SettingsMap="{Binding MapViewModel.SettingsMap, Mode=TwoWay}"
+                           SettingsMap="{Binding MapViewModel.WholeMap.Settings, Mode=TwoWay}"
                            PosX="{Binding PositionViewModel.PanelX, Mode=TwoWay}"
-                           PosY="{Binding PositionViewModel.PanelY, Mode=TwoWay}" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" BorderBrush="Black"/>
+                           PosY="{Binding PositionViewModel.PanelY, Mode=TwoWay}"/>
         </DockPanel>
     </DockPanel>
-
+    
 </Window>

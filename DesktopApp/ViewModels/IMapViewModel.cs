@@ -1,21 +1,15 @@
-﻿
-using DesktopApp.Models;
+﻿using DesktopApp.Models;
 using DesktopApp.Services.Commands;
-using System.Collections.ObjectModel;
 
 namespace DesktopApp.ViewModels
 {
     internal interface IMapViewModel
     {
-        ObservableCollection<City> CityCollection { get; set; }
-
-        ObservableCollection<Route> RouteCollection { get; set; }
+        WholeMap WholeMap { get; set; }
 
         City SelectedCity { get; set; }
 
         Route SelectedRoute { get; set; }
-
-        Settings SettingsMap { get; set; }
 
         CreateCityCommand CreateNewCityCommand { get; }
 
@@ -38,5 +32,7 @@ namespace DesktopApp.ViewModels
         bool RouteWasSaved();
 
         bool CityWasSaved();
+
+        bool IsHaveMap();
     }
 }

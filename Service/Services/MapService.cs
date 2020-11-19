@@ -28,24 +28,22 @@ namespace Service.Services
         public MapGetDTO CreateMap(MapCreateDTO dto)
         {
             _logger.LogInformation("Create map started");
-            Map map = _mapper.Map<Map>(dto);
+            var map = _mapper.Map<Map>(dto);
             _repository.Add(map);
             _context.SaveChanges();
             _logger.LogInformation("Create map finished");
-            return _mapper.Map<Map, MapGetDTO>(map);
+            return _mapper.Map<MapGetDTO>(map);
         }
 
         public IEnumerable<MapGetDTO> GetMaps()
         {
             _logger.LogInformation("Get maps started");
-            List<MapGetDTO> mapGetDTOs = new List<MapGetDTO>();
-            MapGetDTO mapGetTemp = new MapGetDTO();
-            foreach (var item in _repository.GetAll())
-            {
-                _mapper.Map<Map, MapGetDTO>(item, mapGetTemp);
-                mapGetDTOs.Add(mapGetTemp);
-            }
-            return mapGetDTOs;
+            return _mapper.Map<IEnumerable<Map>, IEnumerable<MapGetDTO>>(_repository.GetAll());
+        }
+
+        public IEnumerable<MapIdNameGetDTO> GetMapsNames()
+        {
+            return _mapper.Map<IEnumerable<Map>, IEnumerable<MapIdNameGetDTO>>(_repository.GetAll());
         }
 
         public MapGetDTO GetMap(Guid id)
@@ -57,29 +55,26 @@ namespace Service.Services
         public bool DeleteMap(Guid id)
         {
             _logger.LogInformation("Delete map started");
-            bool result;
-            if (result = _repository.Delete(id))
+            bool flag = _repository.Delete(id);
+            if (flag)
             {
-                _logger.LogInformation("Delete map finished");
                 _context.SaveChanges();
-                return result;
+                _logger.LogInformation("Delete map finished");
             }
             else
-            {
                 _logger.LogInformation("Delete map not finished");
-                return result;
-            }
+            return flag;
         }
 
         public MapGetDTO UpdateMap(MapCreateDTO dto, Guid id)
         {
             _logger.LogInformation("Update map started");
-            Map map = _repository.Get(id);
-            _mapper.Map<MapCreateDTO, Map>(dto, map);
+            var map = _repository.Get(id);
+            _mapper.Map(dto, map);
             map = _repository.Update(map);
             _context.SaveChanges();
             _logger.LogInformation("Update map finished");
-            return _mapper.Map<Map, MapGetDTO>(map);
+            return _mapper.Map<MapGetDTO>(map);
         }
     }
 }

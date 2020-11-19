@@ -13,7 +13,10 @@ namespace Repository.Storage
 
         public new Route Get(Guid id)
         {
-            return _entity.Include(p => p.Map).SingleOrDefault(p => p.Id == id);
+            return _entity.Include(r => r.Map)
+                .Include(r => r.FirstCity)
+                .Include(r => r.SecondCity)
+                .SingleOrDefault(r => r.Id == id);
         }
     }
 }

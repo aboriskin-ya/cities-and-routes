@@ -1,9 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace DesktopApp.APIInteraction
 {
     public interface IImageAPIService
     {
-        Task<string> UploadImage(string path);
+        Task<HttpResponsePayload<Guid>> UploadImage(string path);
+
+        Task<byte[]> GetImageAsync(Guid guid);
     }
 }
