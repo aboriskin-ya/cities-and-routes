@@ -14,11 +14,10 @@ namespace Repository.Storage
             _entity = context.Set<T>();
         }
 
-        public Guid Add(T obj)
+        public void Add(T obj)
         {
             obj.CreateOnUTC = DateTimeOffset.Now;
             _entity.Add(obj);
-            return obj.Id;
         }
 
         public T Get(Guid id)

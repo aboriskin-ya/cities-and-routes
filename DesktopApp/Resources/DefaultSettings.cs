@@ -2,12 +2,12 @@
 {
     public static class DefaultSettings
     {
-        public const double vertexSize = 10;
+        public const double VertexSize = 10;
 
-        public const string vertexColor = "#ff0000";
+        public const string VertexColor = "#ff0000";
 
-        public const double edgeSize = 3;
+        public const double EdgeSize = 3;
 
-        public const string edgeColor = "#00ff00";
+        public const string EdgeColor = "#00ff00";
     }
 }

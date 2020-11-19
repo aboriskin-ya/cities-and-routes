@@ -11,13 +11,15 @@ namespace Service.Services
 {
     public class CityService : ICityService
     {
-        private ICityRepository _repository;
+        private ICityRepository _cityRepository;
+        private IRouteRepository _routeRepository;
         protected readonly CityRouteContext _context;
         private readonly IMapper _mapper;
 
-        public CityService(ICityRepository Repository, CityRouteContext context, IMapper Cityper)
+        public CityService(ICityRepository cityRepository, IRouteRepository routeRepository, CityRouteContext context, IMapper Cityper)
         {
-            _repository = Repository;
+            _cityRepository = cityRepository;
+            _routeRepository = routeRepository;
             _context = context;
             _mapper = Cityper;
         }
@@ -25,7 +27,7 @@ namespace Service.Services
         public CityGetDTO CreateCity(CityCreateDTO dto)
         {
             var city = _mapper.Map<City>(dto);
-            _repository.Add(city);
+            _cityRepository.Add(city);
             _context.SaveChanges();
 
             return _mapper.Map<CityGetDTO>(city);
@@ -33,23 +35,23 @@ namespace Service.Services
 
         public IEnumerable<CityGetDTO> GetCities()
         {
-            return _mapper.Map<IEnumerable<City>, IEnumerable<CityGetDTO>>(_repository.GetAll());
+            return _mapper.Map<IEnumerable<City>, IEnumerable<CityGetDTO>>(_cityRepository.GetAll());
         }
 
         public CityGetDTO GetCity(Guid id)
         {
-            return _mapper.Map<City, CityGetDTO>(_repository.Get(id));
+            return _mapper.Map<City, CityGetDTO>(_cityRepository.Get(id));
         }
 
         public bool DeleteCity(Guid id)
         {
-            var routes = _repository.GetRoutes(id);
+            var routes = _cityRepository.GetRoutes(id);
             foreach (var route in routes)
             {
-                _context.Remove(route);
+                _routeRepository.Delete(route.Id);
             }
 
-            bool flag = _repository.Delete(id);
+            bool flag = _cityRepository.Delete(id);
             if (flag)
                 _context.SaveChanges();
             return flag;
@@ -57,9 +59,9 @@ namespace Service.Services
 
         public CityCreateDTO UpdateCity(Guid id, CityCreateDTO dto)
         {
-            var city = _repository.Get(id);
+            var city = _cityRepository.Get(id);
             _mapper.Map(dto, city);
-            city = _repository.Update(city);
+            city = _cityRepository.Update(city);
             _context.SaveChanges();
 
             return _mapper.Map(city, dto);

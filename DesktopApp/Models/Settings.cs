@@ -27,7 +27,7 @@ namespace DesktopApp.Models
             }
         }
 
-        private double vertexSize = DefaultSettings.vertexSize;
+        private double vertexSize = DefaultSettings.VertexSize;
         public double VertexSize
         {
             get { return vertexSize; }
@@ -38,7 +38,7 @@ namespace DesktopApp.Models
             }
         }
 
-        private string vertexColor = DefaultSettings.vertexColor;
+        private string vertexColor = DefaultSettings.VertexColor;
         public string VertexColor
         {
             get { return vertexColor; }
@@ -49,7 +49,7 @@ namespace DesktopApp.Models
             }
         }
 
-        private double edgeSize = DefaultSettings.edgeSize;
+        private double edgeSize = DefaultSettings.EdgeSize;
         public double EdgeSize
         {
             get { return edgeSize; }
@@ -60,7 +60,7 @@ namespace DesktopApp.Models
             }
         }
 
-        private string edgeColor = DefaultSettings.edgeColor;
+        private string edgeColor = DefaultSettings.EdgeColor;
         public string EdgeColor
         {
             get { return edgeColor; }

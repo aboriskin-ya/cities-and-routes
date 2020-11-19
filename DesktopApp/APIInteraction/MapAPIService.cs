@@ -21,9 +21,9 @@ namespace DesktopApp.APIInteraction
             {
                 response = await APIClient.Client.PostAsJsonAsync("map", mapDTO);
             }
-            catch (HttpRequestException ex)
+            catch
             {
-                throw ex;
+                return new HttpResponsePayload<Map>() { IsSuccessful = false };
             }
 
             var responsePayload = new HttpResponsePayload<Map>()
@@ -44,9 +44,9 @@ namespace DesktopApp.APIInteraction
             {
                 response = await APIClient.Client.GetAsync("map/getallnames");
             }
-            catch (HttpRequestException ex)
+            catch
             {
-                throw ex;
+                return new HttpResponsePayload<List<Map>>() { IsSuccessful = false };
             }
 
             var responsePayload = new HttpResponsePayload<List<Map>>()
@@ -67,9 +67,9 @@ namespace DesktopApp.APIInteraction
             {
                 response = await APIClient.Client.DeleteAsync($"map/{guid}");
             }
-            catch (HttpRequestException ex)
+            catch
             {
-                throw ex;
+                return false;
             }
 
             return response.IsSuccessStatusCode ? true : false;
@@ -83,9 +83,9 @@ namespace DesktopApp.APIInteraction
             {
                 response = await APIClient.Client.GetAsync($"map/{guid}");
             }
-            catch (HttpRequestException ex)
+            catch
             {
-                throw ex;
+                return new HttpResponsePayload<WholeMap>() { IsSuccessful = false };
             }
 
             var responsePayload = new HttpResponsePayload<WholeMap>()

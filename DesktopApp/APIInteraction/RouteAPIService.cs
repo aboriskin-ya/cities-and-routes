@@ -18,9 +18,9 @@ namespace DesktopApp.APIInteraction
             {
                 response = await APIClient.Client.PostAsJsonAsync("route", routeDTO);
             }
-            catch (HttpRequestException ex)
+            catch
             {
-                throw ex;
+                return new HttpResponsePayload<Route>() { IsSuccessful = false };
             }
 
             HttpResponsePayload<Route> responsePayload = new HttpResponsePayload<Route>()

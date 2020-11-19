@@ -3,7 +3,6 @@ using DesktopApp.Dialogs.Commands;
 using DesktopApp.Models;
 using DesktopApp.Services;
 using GalaSoft.MvvmLight.Messaging;
-using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -42,17 +41,11 @@ namespace DesktopApp.ViewModels
 
         private async void OnGetAllMapExecuted(object p)
         {
-            try
-            {
-                var res = await _mapAPIService.GetAllNamesMapAsync();
-                if (!res.IsSuccessful)
-                    throw new Exception();
+            var res = await _mapAPIService.GetAllNamesMapAsync();
+            if (!res.IsSuccessful)
+                _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
+            else
                 MapCollection = new ObservableCollection<Map>(res.Payload);
-            }
-            catch (Exception ex)
-            {
-                _messageBoxService.ShowError(ex, "An error occured. Please try it again.");
-            }
         }
 
         private bool OnCanGetAllMapExecuted(object p) => true;
@@ -65,17 +58,11 @@ namespace DesktopApp.ViewModels
 
         private async void OnDeleteMapExecuted(object p)
         {
-            try
-            {
-                var res = await _mapAPIService.DeleteMapAsync(SelectedMap.Id);
-                if (!res)
-                    throw new Exception();
+            var res = await _mapAPIService.DeleteMapAsync(SelectedMap.Id);
+            if (!res)
+                _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
+            else
                 MapCollection.Remove(SelectedMap);
-            }
-            catch (Exception ex)
-            {
-                _messageBoxService.ShowError(ex, "An error occured. Please try it again.");
-            }
         }
 
         private bool OnCanDeleteMapExecuted(object p) => true;
@@ -88,18 +75,12 @@ namespace DesktopApp.ViewModels
 
         private async void OnLoadMapExecuted(object p)
         {
-            try
-            {
-                var res = await _mapAPIService.GetMapAsync(SelectedMap.Id);
-                res.Payload.Image = new Image() { Data = await _imageAPIService.GetImageAsync(res.Payload.ImageId) };
-                if (!res.IsSuccessful)
-                    throw new Exception();
+            var res = await _mapAPIService.GetMapAsync(SelectedMap.Id);
+            res.Payload.Image = new Image() { Data = await _imageAPIService.GetImageAsync(res.Payload.ImageId) };
+            if (!res.IsSuccessful)
+                _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
+            else
                 Messenger.Default.Send(res.Payload);
-            }
-            catch (Exception ex)
-            {
-                _messageBoxService.ShowError(ex, "An error occured. Please try it again.");
-            }
         }
 
         private bool OnCanLoadMapExecuted(object p) => true;

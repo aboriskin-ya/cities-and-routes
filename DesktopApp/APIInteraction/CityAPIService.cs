@@ -18,9 +18,9 @@ namespace DesktopApp.APIInteraction
             {
                 response = await APIClient.Client.PostAsJsonAsync("city", cityDTO);
             }
-            catch (HttpRequestException ex)
+            catch
             {
-                throw ex;
+                return new HttpResponsePayload<City>() { IsSuccessful = false };
             }
 
             HttpResponsePayload<City> responsePayload = new HttpResponsePayload<City>()

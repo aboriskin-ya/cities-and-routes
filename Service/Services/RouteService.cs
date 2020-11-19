@@ -35,10 +35,10 @@ namespace Service.Services
         public RouteGetDTO CreateRoute(RouteCreateDTO dto)
         {
             var route = _mapper.Map<Route>(dto);
-            var idRoute = _repository.Add(route);
+            _repository.Add(route);
             _context.SaveChanges();
 
-            return _mapper.Map<Route, RouteGetDTO>(_repository.Get(idRoute));
+            return _mapper.Map<Route, RouteGetDTO>(_repository.Get(route.Id));
         }
 
         public RouteCreateDTO UpdateRoute(Guid id, RouteCreateDTO dto)

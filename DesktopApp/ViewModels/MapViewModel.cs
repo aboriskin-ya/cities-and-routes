@@ -56,23 +56,17 @@ namespace DesktopApp.ViewModels
         public CreateCityCommand CreateNewCityCommand { get => new CreateCityCommand(p => OnCanAddCityCollection(), async m => await OnAddCityCollectionAsync()); }
         private async Task OnAddCityCollectionAsync()
         {
-            try
+            SelectedCity.MapId = WholeMap.Id;
+            var res = await _cityAPIService.CreateCityAsync(SelectedCity);
+            if (!res.IsSuccessful)
+                _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
+            else
             {
-                SelectedCity.MapId = WholeMap.Id;
-                var res = await _cityAPIService.CreateCityAsync(SelectedCity);
-                if (!res.IsSuccessful)
-                    throw new Exception();
                 SelectedCity = res.Payload;
                 WholeMap.Cities.Add(SelectedCity);
             }
-            catch (Exception ex)
-            {
-                _messageBoxService.ShowError(ex, "An error occured. Please try it again.");
-            }
-            finally
-            {
-                OnRemoveCityFromCollection();
-            }
+
+            OnRemoveCityFromCollection();
         }
         private bool OnCanAddCityCollection() => true;
 
@@ -90,23 +84,17 @@ namespace DesktopApp.ViewModels
         public CreateRouteCommand CreateNewRouteCommand { get => new CreateRouteCommand(p => OnCanAddRouteCollection(), async m => await OnAddRouteCollectionAsync()); }
         private async Task OnAddRouteCollectionAsync()
         {
-            try
+            SelectedRoute.MapId = WholeMap.Id;
+            var res = await _routeAPIService.CreateRouteAsync(SelectedRoute);
+            if (!res.IsSuccessful)
+                _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
+            else
             {
-                SelectedRoute.MapId = WholeMap.Id;
-                var res = await _routeAPIService.CreateRouteAsync(SelectedRoute);
-                if (!res.IsSuccessful)
-                    throw new Exception();
                 SelectedRoute = res.Payload;
                 WholeMap.Routes.Add(SelectedRoute);
             }
-            catch (Exception ex)
-            {
-                _messageBoxService.ShowError(ex, "An error occured. Please try it again.");
-            }
-            finally
-            {
-                OnRemoveRouteFromCollection();
-            }
+
+            OnRemoveRouteFromCollection();
         }
 
         private bool OnCanAddRouteCollection() => true;

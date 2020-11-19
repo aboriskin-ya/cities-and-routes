@@ -47,9 +47,6 @@ namespace DesktopApp.ViewModels
         #region Initializers
         private void InitializeMapViewModel(WholeMap map)
         {
-            //MapViewModel.CityCollection = new ObservableCollection<City>(map.Cities);
-            //MapViewModel.RouteCollection = new ObservableCollection<Route>(map.Routes);
-            //MapViewModel.SettingsMap = map.Settings ?? new Settings();
             MapViewModel.WholeMap = map;
             MapViewModel.WholeMap.Settings = map.Settings ?? new Settings();
         }
@@ -76,9 +73,9 @@ namespace DesktopApp.ViewModels
 
         #region ShowCreateMapDialog 
 
-        public ICommand ShowCreateMapDialogCommand => new ShowCreateMapDialogCommand(null, p => ShowDialog(p));
+        public ICommand ShowCreateMapDialogCommand => new ShowCreateMapDialogCommand(null, p => ShowCreateMapDialog(p));
 
-        private void ShowDialog(object p)
+        private void ShowCreateMapDialog(object p)
         {
             var model = RegisterServices.Configure().Resolve<CreateMapViewModel>();
             var view = new CreateMapDialog { DataContext = model };
@@ -92,7 +89,7 @@ namespace DesktopApp.ViewModels
 
         public ICommand ShowSelectExistingMapDialogCommand => new ShowCreateMapDialogCommand(null, p => ShowDialog1(p));
 
-        private void ShowDialog1(object p)
+        private void ShowSelectExistingMapDialog(object p)
         {
             var model = RegisterServices.Configure().Resolve<SelectExistingMapViewModel>();
             var view = new SelectExistingMapDialog { DataContext = model };
