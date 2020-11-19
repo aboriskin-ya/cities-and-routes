@@ -11,6 +11,6 @@ namespace DesktopApp.APIInteraction
     public interface ICityAPIService
     {
         Task<HttpResponsePayload<City>> CreateCityAsync(City city);
-        Task<HttpResponsePayload<CityGetDTO>> GetCity(Guid id)
+        Task<HttpResponsePayload<CityGetDTO>> GetCity(Guid id);
     }
 }

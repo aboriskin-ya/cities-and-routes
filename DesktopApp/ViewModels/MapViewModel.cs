@@ -133,6 +133,7 @@ namespace DesktopApp.ViewModels
             if (p is City)
                 HighLightedCity = (City)p;
             SelectedCities.Add(HighLightedCity);
+            ConsoleText += $"{HighLightedCity.Name} ";
         }
 
         private bool OnCanSelectCityExecute(object p) => CanSelected;
@@ -209,7 +210,7 @@ namespace DesktopApp.ViewModels
             IEnumerable<Guid> idCollection = SelectedCities.Select(t => t.Id);
             var model = await _travelSalesmanService.PostCities(idCollection, SelectedMethodIndex);
             var builder = new StringBuilder();
-            builder.Append($"Algorithm: {model.Payload.NameAlghorithm}\n" +
+            builder.Append($"\nAlgorithm: {model.Payload.NameAlghorithm}\n" +
                            $"Process` duration: {model.Payload.ProcessDuration}\n" +
                            $"Calculated distance: {model.Payload.CalculatedDistance}\n" +
                            $"Preferable sequence: ");
@@ -218,16 +219,28 @@ namespace DesktopApp.ViewModels
                 var city = await _cityAPIService.GetCity(cityId);
                 builder.Append($"{city.Payload.Name} ");
             }
-            ConsoleText = builder.ToString();
+            ConsoleText += builder.ToString();
         }
 
         private bool OnCanResolveExecute(object p) => SelectedCities.Count() > 1;
         #endregion
 
-        #region CancelCitiesSelecting
-        public CancelCitiesSelecting CancelCitiesSelecting
+        #region ClearConsoleCommand
+        public ClearConsoleCommand ClearConsoleCommand { get => new ClearConsoleCommand(p => OnCanClearConsoleExecute(p), p => OnConsoleClearExecuted(p)); }
+
+        private void OnConsoleClearExecuted(object p)
         {
-            get => new CancelCitiesSelecting(p => OnCanCancelSelectingExecute(p),
+            var text = p as string;
+            text = "";
+        }
+
+        private bool OnCanClearConsoleExecute(object p) => !string.IsNullOrEmpty(ConsoleText);
+        #endregion
+
+        #region CancelCitiesSelecting
+        public CancelCitiesSelectingCommand CancelCitiesSelecting
+        {
+            get => new CancelCitiesSelectingCommand(p => OnCanCancelSelectingExecute(p),
                                            p => OnCancelSelectingExecuted(p));
         }
 

@@ -20,7 +20,7 @@ namespace DesktopApp.ViewModels
         Route SelectedRoute { get; set; }
 
         Settings SettingsMap { get; set; }
-
+        ClearConsoleCommand ClearConsoleCommand { get; }
         CreateCityCommand CreateNewCityCommand { get; }
         SelectCityCommand SelectCityCommand { get; }
         CancelCreatingCityCommand CancelCreatingCityCommand { get; }

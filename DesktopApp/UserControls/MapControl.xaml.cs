@@ -1,5 +1,7 @@
-﻿using DesktopApp.Models;
+﻿using System;
+using DesktopApp.Models;
 using DesktopApp.Services.Helper;
+using DesktopApp.Resources;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,7 +9,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace DesktopApp.UserControllers
+namespace DesktopApp.UserControls
 {
     public partial class MapControl : UserControl
     {
@@ -142,8 +144,6 @@ namespace DesktopApp.UserControllers
             DependencyProperty.Register("Offset", typeof(Offset), typeof(MapControl));
 
 
-
-
         #endregion
 
         #region ImageHeight
@@ -220,7 +220,6 @@ namespace DesktopApp.UserControllers
             set { SetValue(SelectCityCommandProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for SelectCityCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SelectCityCommandProperty =
             DependencyProperty.Register("SelectCityCommand", typeof(ICommand), typeof(MapControl));
 
