@@ -36,5 +36,18 @@ namespace DesktopApp.APIInteraction
 
             return responsePayload;
         }
+        public async Task<HttpResponsePayload<CityGetDTO>> GetCity(Guid id)
+        {
+            var response = await APIClient.Client.GetAsync($"city/{id}");
+            HttpResponsePayload<CityGetDTO> payload = new HttpResponsePayload<CityGetDTO>();
+            payload.IsSuccessful = response.IsSuccessStatusCode;
+            if (payload.IsSuccessful)
+            {
+                var city = await response.Content.ReadAsAsync<City>();
+                payload.Payload = AppMapper.GetAppMapper().Mapper.Map<City, CityGetDTO>(city);
+            }
+            return payload;
+            
+        }
     }
 }

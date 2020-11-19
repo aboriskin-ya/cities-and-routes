@@ -169,12 +169,12 @@
             </Grid>
         </StackPanel>
             </TabItem>
-            <TabItem Header="Travelsalesman">
+            <TabItem Header="Travelsalesman" DataContext="{Binding MapViewModel}">
                 <DockPanel>
                     <StatusBar DockPanel.Dock="Top">
-                        <StatusBarItem Content="Check cities"/>
+                        <StatusBarItem Content="{Binding State}"/>
                     </StatusBar>
-                    <ComboBox DockPanel.Dock="Top">
+                    <ComboBox DockPanel.Dock="Top" SelectedIndex="{Binding SelectedMethodIndex}">
                         <ComboBoxItem Content="Annealing method"/>
                         <ComboBoxItem Content="Nearest neighbor method"/>
                         <ComboBoxItem Content="Quickest method"/>
@@ -188,12 +188,27 @@
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
-                        <ToggleButton Content="Select cities" Margin="2" />
-                        <Button Content="Solve travelsalesman" Grid.Column="1" Margin="2"/>
-                        <Button Content="Cancel" Grid.ColumnSpan="2" Grid.Row="1" Margin="2"/>
+                        <ToggleButton Content="Select cities" Margin="2"
+                                      IsChecked="{Binding CanSelected, Mode=TwoWay}"/>
+                        <Button Content="Solve travelsalesman" 
+                                Grid.Column="1" 
+                                Margin="2" 
+                                Command="{Binding ResolveTravelSalesmanCommand}"
+                                />
+                        <Button 
+                            Content="Cancel" 
+                            Grid.ColumnSpan="2" 
+                            Command="{Binding CancelCitiesSelecting}"
+                            Grid.Row="1" 
+                            Margin="2"/>
                     </Grid>
                     <Label Content="Result`s console" DockPanel.Dock="Top"/>
-                    <TextBlock DockPanel.Dock="Top"/>
+                    <Grid DockPanel.Dock="Top">
+                        <Border BorderBrush="Black" BorderThickness="2">
+                            <TextBlock Text="{Binding}"/>
+                        </Border>
+                    </Grid>
+                             
                 </DockPanel>
             </TabItem>
             <TabItem Header="Short path">

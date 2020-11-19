@@ -43,7 +43,7 @@ namespace API.Controllers
             return Ok(response);
         }
         [HttpPost]
-        [Route("experiment")]
+        [Route("solve-travel-salesman-quickest")]
         public IActionResult Experiment([FromBody] TravelSalesmanRequest BodyRequest)
         {
             var taskArr = new Task<TravelSalesmanResponse>[]

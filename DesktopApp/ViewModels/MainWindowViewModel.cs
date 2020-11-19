@@ -5,6 +5,7 @@ using DesktopApp.Services.Commands;
 using DesktopApp.Services.Helper;
 using DesktopApp.Services.Utils;
 using DesktopApp.UserControllers;
+using DevExpress.Mvvm.ModuleInjection.Native;
 using System;
 using System.Windows;
 using System.Windows.Input;
@@ -32,6 +33,13 @@ namespace DesktopApp.ViewModels
 
             MapViewModel = viewModel;
             PositionViewModel = positionViewModel;
+        }
+
+        private bool _canSelected = false;
+        public bool CanSelected
+        {
+            get => _canSelected;
+            set => Set<bool>(ref _canSelected, value);
         }
 
         #region ShowCreateMapDialog     

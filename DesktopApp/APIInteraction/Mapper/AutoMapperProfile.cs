@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DesktopApp.Models;
 using Service.DTO;
+using Service.PathResolver;
 
 namespace DesktopApp.APIInteraction.Mapper
 {
@@ -23,6 +24,7 @@ namespace DesktopApp.APIInteraction.Mapper
 
             CreateMap<Route, RouteCreateDTO>();
             CreateMap<RouteGetDTO, Route>();
+            CreateMap<TravelSalesmanResponse, TravelSalesman>();
         }
     }
 }

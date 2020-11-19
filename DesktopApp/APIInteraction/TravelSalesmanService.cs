@@ -1,23 +1,34 @@
-﻿using System;
+﻿using DesktopApp.APIInteraction.Mapper;
+using DesktopApp.Models;
+using Service.PathResolver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using static DesktopApp.ViewModels.MapViewModel;
 
 namespace DesktopApp.APIInteraction
 {
-    public class TravelSalesmanService
+    public class TravelSalesmanService:ITravelSalesmanService
     {
-        public async Task<IEnumerable<Guid>> PostSelectedCitiesAsync(IEnumerable<Guid> IdCollection)
+        public async Task<HttpResponsePayload<TravelSalesman>> PostCities(IEnumerable<Guid> idCollection, int selectedMethodIndex)
         {
-            var response = await APIClient.Client.PostAsJsonAsync("pathresolver/solve-travel-salesman-annealing", IdCollection);
-            IEnumerable<Guid> resultColection = default;
-            if (response.IsSuccessStatusCode)
+            HttpResponseMessage response = default;
+            switch (selectedMethodIndex)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                resultColection = content.Split(',').Select(Guid.Parse);
+                case 0: response = await APIClient.Client.PostAsJsonAsync("pathresolver/solve-travel-salesman-annealing", idCollection);break;
+                case 1: response = await APIClient.Client.PostAsJsonAsync("pathresolver/solve-travel-salesman-nearest", idCollection); break;
+                case 2: response = await APIClient.Client.PostAsJsonAsync("pathresolver/solve-travel-salesman-quickest", idCollection); break;
             }
-            return IdCollection;
+            HttpResponsePayload<TravelSalesman> payload = new HttpResponsePayload<TravelSalesman>();
+            payload.IsSuccessful = response.IsSuccessStatusCode;
+            if (payload.IsSuccessful)
+            {
+                var returnedContent = await response.Content.ReadAsAsync<TravelSalesmanResponse>();
+                payload.Payload = AppMapper.GetAppMapper().Mapper.Map<TravelSalesmanResponse, TravelSalesman>(returnedContent);
+            }
+            return payload;
         }
     }
 }
