@@ -8,10 +8,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Repository;
 using Repository.Storage;
+using Serilog;
 using Service;
 using Service.Services;
 using Service.Services.Interfaces;
 using System;
+using System.Linq;
 
 namespace API
 {
@@ -28,7 +30,13 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddSwaggerGen();
+
             string connection = _configuration.GetConnectionString("DefaultConnection");
+
+            services.AddSingleton<Serilog.ILogger>(Log.Logger);
+
             services.AddDbContext<CityRouteContext>(options =>
             {
                 options.UseSqlServer(connection)
@@ -58,8 +66,13 @@ namespace API
         {
             app.UseDefaultFiles();
             app.UseStaticFiles();
+            app.UseSwagger();
 
-            //app.UseMiddleware<BasicAuthenthicationMiddleware>();
+            app.UseMiddleware<BasicAuthenthicationMiddleware>();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cities and Routes API V1");
+            });
 
             app.UseRouting();
 

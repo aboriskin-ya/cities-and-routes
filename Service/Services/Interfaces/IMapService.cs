@@ -10,7 +10,7 @@ namespace Service.Services.Interfaces
         IEnumerable<MapIdNameGetDTO> GetMapsNames();
         MapGetDTO GetMap(Guid id);
         MapGetDTO CreateMap(MapCreateDTO dto);
-        MapCreateDTO UpdateMap(Guid id, MapCreateDTO dto);
+        MapGetDTO UpdateMap(MapCreateDTO dto, Guid id);
         bool DeleteMap(Guid id);
     }
 }

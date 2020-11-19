@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using Microsoft.Extensions.Logging;
 using PathResolver;
 using Repository;
 using Repository.Storage;
@@ -20,13 +21,15 @@ namespace Service.Services
         private readonly ICityRepository _cityRepository;
         private readonly IPathToGraphService _pathToGraphService;
         protected readonly CityRouteContext _context;
+        private readonly ILogger<AlgorithmService> _logger;
 
         public AlgorithmService(IMapRepository MapRepository,
                                 ICityRepository CityRepository,
                                 IPathToGraphService PathService,
                                 CityRouteContext Context,
                                 ITravelSalesmanAnnealingResolver Annealingresolver,
-                                ITravelSalesmanNearestNeighbor nearestResolver)
+                                ITravelSalesmanNearestNeighbor nearestResolver,
+                                ILogger<AlgorithmService> logger)
         {
             _context = Context;
             _mapRepository = MapRepository;
@@ -34,17 +37,21 @@ namespace Service.Services
             _pathToGraphService = PathService;
             _annealingResolver = Annealingresolver;
             _nearestResolver = nearestResolver;
+            _logger = logger;
         }
 
         public List<Guid> FindShortestPath(Guid MapId, Guid CityToId, Guid CityFromId)
         {
+            _logger.LogInformation("Find shortest path started");
             Map Map = _mapRepository.GetWholeMap(MapId);
             ShortPathResolverDTO PathDto = _pathToGraphService.MapToResolver(Map);
             List<Guid> Path = new ShortestPathResolverService().FindShortestPath(PathDto, CityFromId.ToString(), CityToId.ToString());
+            _logger.LogInformation("Find shortest path finished");
             return Path;
         }
         public async Task<TravelSalesmanResponse> SolveAnnealingTravelSalesman(TravelSalesmanRequest request)
         {
+            _logger.LogInformation("Solve travel salesman task started");
             Map map = _mapRepository.GetWholeMap(request.MapId);
             if (request.SelectedCities.Count() > 0 && map != null)
             {
@@ -62,6 +69,7 @@ namespace Service.Services
                 Graph graph = _pathToGraphService.MapToGraph(map, requestBody.SelectedCities);
                 return await Task.Run(() => _nearestResolver.Solve(graph));
             }
+            _logger.LogInformation("Solve travel salesman task started");
             return default;
         }
     }

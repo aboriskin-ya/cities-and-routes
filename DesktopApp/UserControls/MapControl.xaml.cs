@@ -339,7 +339,6 @@ namespace DesktopApp.UserControllers
                 X = PosX,
                 Y = PosY
             };
-
             AppState.IsAbleToCreateCity = true;
             AppState.IsAbleToSetCity = false;
         }
@@ -358,16 +357,23 @@ namespace DesktopApp.UserControllers
             {
                 SelectedRoute.SecondCity = city;
                 AppState.IsAbleToCreateRoute = true;
-                AppState.IsAbleToPickSecondCity = false;
+                AppState.IsAbleToPickSecondCity = false;                
+                AppState.IsAbleToUpdateCity = false;
             }
         }
 
         private void City_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (!AppState.IsAbleToPickFirstCity)
-                return;
             Panel panel = sender as Panel;
             var city = panel.DataContext;
+
+            if (!AppState.IsAbleToSetCity && !AppState.IsAbleToPickFirstCity) {
+                AppState.IsAbleToUpdateCity = true;
+                SelectedCity = city as City;
+            }
+
+            if (!AppState.IsAbleToPickFirstCity)
+                return;
 
             MapControl_SetCityToRoute(city as City);
         }

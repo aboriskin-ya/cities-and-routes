@@ -70,12 +70,41 @@ namespace DesktopApp.ViewModels
         }
         private bool OnCanAddCityCollection() => true;
 
+        public UpdateCityCommand UpdateCityCommand { get => new UpdateCityCommand(p => OnCanUpdateCityCollection(), async m => await OnUpdateCityCollectionAsync()); }
+        private async Task OnUpdateCityCollectionAsync()
+        {
+            var res = await _cityAPIService.UpdateCityAsync(SelectedCity);
+            if (!res.IsSuccessful)
+            {
+                _messageBoxService.ShowError("An error occured. Please try it again.", "Error occured");
+            }
+        }
+
+        private bool OnCanUpdateCityCollection() => true;
+
         public CancelCreatingCityCommand CancelCreatingCityCommand { get => new CancelCreatingCityCommand(p => OnCanRemoveCityFromCollection(), m => OnRemoveCityFromCollection()); }
         private void OnRemoveCityFromCollection()
         {
             SelectedCity = new City();
         }
         private bool OnCanRemoveCityFromCollection() => true;
+
+        public DeleteCityCommand DeleteCityCommand { get => new DeleteCityCommand(p => OnCanDeleteCityFromCollection(), m => OnDeleteCityFromCollection()); }
+        private async Task OnDeleteCityFromCollection()
+        {
+            var res = await _cityAPIService.DeleteCityAsync(SelectedCity);
+            if (res.IsSuccessful)
+            {
+                CityCollection.Remove(SelectedCity);
+                SelectedCity = new City();
+            }
+            else
+            {
+                _messageBoxService.ShowError("An error occured. Please try it again.", "Error occured");
+                OnRemoveCityFromCollection();
+            }
+        }
+        private bool OnCanDeleteCityFromCollection() => true;
 
         #endregion
 
