@@ -7,7 +7,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace DesktopApp.UserControllers
+namespace DesktopApp.UserControls
 {
     public partial class MapControl : UserControl
     {

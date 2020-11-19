@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Service.DTO;
 using Service.Services.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace API.Controllers
@@ -73,7 +74,7 @@ namespace API.Controllers
         [HttpPost]
         public IActionResult CreateMap([FromBody] MapCreateDTO dto)
         {
-            return Ok(_Mapservice.CreateMap(dto));
+            return Ok(_service.CreateMap(dto));
         }
 
         [ProducesResponseType(typeof(MapGetDTO), StatusCodes.Status200OK)]
@@ -84,7 +85,7 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public IActionResult UpdateMap(Guid id, [FromBody] MapCreateDTO dto)
         {
-            return Ok(_Mapservice.UpdateMap(dto, id));
+            return Ok(_service.UpdateMap(dto, id));
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]

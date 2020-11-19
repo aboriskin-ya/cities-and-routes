@@ -45,9 +45,7 @@ namespace Service.Services
                 _logger.LogInformation("Delete settings finished");
             }
             else
-            {
                 _logger.LogInformation("Delete settings not finished");
-            }
             return flag;
         }
 

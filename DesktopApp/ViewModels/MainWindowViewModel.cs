@@ -4,7 +4,7 @@ using DesktopApp.Models;
 using DesktopApp.Services.Commands;
 using DesktopApp.Services.Helper;
 using DesktopApp.Services.Utils;
-using DesktopApp.UserControllers;
+using DesktopApp.UserControls;
 using GalaSoft.MvvmLight.Messaging;
 using System.IO;
 using System.Windows;
@@ -87,7 +87,7 @@ namespace DesktopApp.ViewModels
 
         #region ShowCreateMapDialog
 
-        public ICommand ShowSelectExistingMapDialogCommand => new ShowCreateMapDialogCommand(null, p => ShowDialog1(p));
+        public ICommand ShowSelectExistingMapDialogCommand => new ShowCreateMapDialogCommand(null, p => ShowSelectExistingMapDialog(p));
 
         private void ShowSelectExistingMapDialog(object p)
         {

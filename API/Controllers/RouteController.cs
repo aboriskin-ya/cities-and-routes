@@ -60,7 +60,7 @@ namespace API.Controllers
         [HttpPost]
         public IActionResult CreateRoute([FromBody] RouteCreateDTO dto)
         {
-            return Ok(_routeservice.CreateRoute(dto));
+            return Ok(_service.CreateRoute(dto));
         }
 
         [ProducesResponseType(typeof(RouteGetDTO), StatusCodes.Status200OK)]
@@ -71,7 +71,7 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public IActionResult UpdateRoute(Guid id, [FromBody] RouteCreateDTO dto)
         {
-            return Ok(_routeservice.UpdateRoute(id, dto));
+            return Ok(_service.UpdateRoute(id, dto));
         }
 
         [HttpDelete]

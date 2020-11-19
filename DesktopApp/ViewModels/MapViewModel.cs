@@ -89,13 +89,13 @@ namespace DesktopApp.ViewModels
         }
         private bool OnCanRemoveCityFromCollection() => true;
 
-        public DeleteCityCommand DeleteCityCommand { get => new DeleteCityCommand(p => OnCanDeleteCityFromCollection(), m => OnDeleteCityFromCollection()); }
+        public DeleteCityCommand DeleteCityCommand { get => new DeleteCityCommand(p => OnCanDeleteCityFromCollection(), async m => await OnDeleteCityFromCollection()); }
         private async Task OnDeleteCityFromCollection()
         {
             var res = await _cityAPIService.DeleteCityAsync(SelectedCity);
             if (res.IsSuccessful)
             {
-                CityCollection.Remove(SelectedCity);
+                WholeMap.Cities.Remove(SelectedCity);
                 SelectedCity = new City();
             }
             else

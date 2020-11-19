@@ -61,7 +61,8 @@ namespace Service.Services
                 _context.SaveChanges();
                 _logger.LogInformation("Delete map finished");
             }
-            _logger.LogInformation("Delete map not finished");
+            else
+                _logger.LogInformation("Delete map not finished");
             return flag;
         }
 
@@ -73,7 +74,7 @@ namespace Service.Services
             map = _repository.Update(map);
             _context.SaveChanges();
             _logger.LogInformation("Update map finished");
-            return _mapper.Map(map, dto);
+            return _mapper.Map<MapGetDTO>(map);
         }
     }
 }

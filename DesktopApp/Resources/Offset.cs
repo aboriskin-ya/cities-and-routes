@@ -1,4 +1,4 @@
-﻿namespace DesktopApp.UserControllers
+﻿namespace DesktopApp.UserControls
 {
     public struct Offset
     {

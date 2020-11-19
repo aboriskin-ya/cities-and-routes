@@ -47,7 +47,7 @@ namespace Service.Services
             return _mapper.Map<Route, RouteGetDTO>(_repository.Get(route.Id));
         }
 
-        public RouteCreateDTO UpdateRoute(Guid id, RouteCreateDTO dto)
+        public RouteGetDTO UpdateRoute(Guid id, RouteCreateDTO dto)
         {
             _logger.LogInformation("Update route started");
             var route = _repository.Get(id);
@@ -55,18 +55,20 @@ namespace Service.Services
             route = _repository.Update(route);
             _context.SaveChanges();
             _logger.LogInformation("Update route finished");
-            return _mapper.Map(route, dto);
+            return _mapper.Map<RouteGetDTO>(route);
         }
 
         public bool DeleteRoute(Guid id)
         {
+            _logger.LogInformation("Delete route started");
             bool flag = _repository.Delete(id);
             if (flag)
             {
                 _context.SaveChanges();
                 _logger.LogInformation("Delete route finished");
             }
-            _logger.LogInformation("Delete route not finished");
+            else
+                _logger.LogInformation("Delete route not finished");
             return flag;
         }
     }

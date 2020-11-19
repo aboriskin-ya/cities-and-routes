@@ -62,7 +62,7 @@ namespace API.Controllers
         [HttpPost]
         public IActionResult CreateCity([FromBody] CityCreateDTO dto)
         {
-            return Ok(_Cityservice.CreateCity(dto));
+            return Ok(_service.CreateCity(dto));
         }
 
         [ProducesResponseType(typeof(CityGetDTO), StatusCodes.Status200OK)]
@@ -73,7 +73,7 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public IActionResult UpdateCity(Guid id, [FromBody] CityCreateDTO city)
         {
-            return Ok(_Cityservice.UpdateCity(id, city));
+            return Ok(_service.UpdateCity(id, city));
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]

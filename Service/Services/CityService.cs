@@ -57,28 +57,28 @@ namespace Service.Services
                 _routeRepository.Delete(route.Id);
             }
 
-            bool flag;
-            if (flag = _cityRepository.Delete(id))
+            bool flag = _cityRepository.Delete(id);
+            if (flag)
+            { 
                 _context.SaveChanges();
                 _logger.LogInformation("Delete city finished");
-                return flag;
             }
             else
-            {
-                _logger.LogInformation("Delete city not finished");
-                return flag;
-            }
+                _logger.LogInformation("Delete city not finished"); 
+            return flag;
         }
 
         public CityGetDTO UpdateCity(Guid id, CityCreateDTO dto)
         {
             _logger.LogInformation("Update city started");
+
             var city = _cityRepository.Get(id);
             _mapper.Map(dto, city);
             city = _cityRepository.Update(city);
             _context.SaveChanges();
+
             _logger.LogInformation("Update city finished");
-            return _mapper.Map(city, dto);
+            return _mapper.Map<CityGetDTO>(city);
         }
     }
 }

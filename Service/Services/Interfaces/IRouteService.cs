@@ -9,7 +9,7 @@ namespace Service.Services.Interfaces
         IEnumerable<RouteGetDTO> GetRoutes();
         RouteGetDTO GetRoute(Guid id);
         RouteGetDTO CreateRoute(RouteCreateDTO dto);
-        RouteCreateDTO UpdateRoute(Guid id, RouteCreateDTO dto);
+        RouteGetDTO UpdateRoute(Guid id, RouteCreateDTO dto);
 
         bool DeleteRoute(Guid id);
     }
