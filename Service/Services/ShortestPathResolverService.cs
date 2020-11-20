@@ -20,6 +20,7 @@ namespace Service.Services
 
         public ShortestPathResolverService()
         {
+            _logger = new Logger<ShortestPathResolverService>(new LoggerFactory());
         }
 
         public List<Guid> FindShortestPath(ShortPathResolverDTO PathResolverDTO, string startName, string finishName)
