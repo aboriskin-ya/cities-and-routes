@@ -25,7 +25,6 @@ namespace Tests
             Guid voronezh = new Guid("5c08ec62-a464-414e-c5c3-08d88d38ebe9");
             Guid moscow = new Guid("d68e528b-f2b3-4e34-c5c1-08d88d38ebe9");
             Guid saintPetersburg = new Guid("9ce1a4e6-4d54-4b5e-c5c0-08d88d38ebe9");
-            var service = new ShortestPathResolverService();
             Map map = new Map();
             map.Id = new Guid("e6efe688-c2ed-4ce7-2aed-08d88d38c2ca");
             map.Cities = new List<City>
@@ -62,9 +61,7 @@ namespace Tests
                 new Route {FirstCityId = new Guid("85884386-ae41-4354-c5ca-08d88d38ebe9"), SecondCityId = new Guid("86d39825-3c5c-4a4e-c5c9-08d88d38ebe9"), Distance = 472},
                 new Route {FirstCityId = new Guid("36dfc7c6-54df-4b9f-c5c5-08d88d38ebe9"), SecondCityId = new Guid("d01669eb-e5dc-489e-c5c8-08d88d38ebe9"), Distance = 1422}
             };
-            ShortPathResolverDTO testShortPathResolverDTO = new ShortPathResolverDTO();
-            testShortPathResolverDTO.Cities = new List<City>(map.Cities);
-            testShortPathResolverDTO.Routes = new List<Route>(map.Routes);
+            ShortPathResolverDTO testShortPathResolverDTO = new ShortPathResolverDTO { Cities = new List<City>(map.Cities), Routes = new List<Route>(map.Routes) };
 
             List<Guid> expectedResultPath = new List<Guid>
             {
@@ -78,15 +75,13 @@ namespace Tests
             var mockMapRepository = new Mock<IMapRepository>();
             mockMapRepository.Setup(_mapRepository => _mapRepository.GetWholeMap(new Guid())).Returns(map);
             var mockPathToGraphService = new Mock<IPathToGraphService>();
-            mockPathToGraphService.Setup(_pathToGraphService => _pathToGraphService.MapToResolver(map)).Returns(testShortPathResolverDTO);
+            mockPathToGraphService.Setup(_pathToGraphService => _pathToGraphService.MapToResolver(It.IsAny<Map>()))
+                .Returns(testShortPathResolverDTO);
             AlgorithmService testAlgorithmService = new AlgorithmService(mockMapRepository.Object, null, mockPathToGraphService.Object, 
                 null, null, null, new Logger<AlgorithmService>(new LoggerFactory()));
-
-            ShortestPathResolverService shortestPathResolverService = new ShortestPathResolverService();
             //Act
             //Path from Rostov to SaintPetersburg
-            //var result = shortestPathResolverService.FindShortestPath(testShortPathResolverDTO, rostovOnDon.ToString(), saintPetersburg.ToString());
-            var result = testAlgorithmService.FindShortestPath(map.Id, rostovOnDon, saintPetersburg);
+            var result = testAlgorithmService.FindShortestPath(map.Id, saintPetersburg, rostovOnDon);
             //Assert
             Assert.Equal(expectedResultPath, result.Path);
             Assert.Equal(expectedResultDistance, result.FinalDistance);
