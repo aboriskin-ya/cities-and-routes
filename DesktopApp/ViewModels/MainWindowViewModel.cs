@@ -105,6 +105,7 @@ namespace DesktopApp.ViewModels
         private void OnAddNewCity(object p)
         {
             AppState.IsAbleToSetCity = true;
+            AppState.IsAbleToUpdateRoute = false;
         }
 
         private bool OnCanAddNewCityExecute(object p) => !AppState.IsAbleToSetCity && !AppState.IsAbleToCreateCity && !AppState.IsAbleToUpdateCity && MapViewModel.IsHaveMap();
@@ -151,6 +152,8 @@ namespace DesktopApp.ViewModels
         private void OnAddNewRoute(object p)
         {
             AppState.IsAbleToPickFirstCity = true;
+            AppState.IsAbleToUpdateCity = false;
+            AppState.IsAbleToUpdateRoute = false;
         }
 
         private bool OnCanAddNewRouteExecute(object p) => !AppState.IsAbleToCreateRoute
@@ -173,6 +176,44 @@ namespace DesktopApp.ViewModels
         }
 
         private bool OnCanCreateNewRouteExecuted(object p) => MapViewModel.IsRouteHasBothCities();
+
+        #endregion
+
+        #region UpdateRouteCommand
+
+        public ICommand UpdateRouteCommand => new CreateRouteCommand(p => OnCanUpdateRouteExecuted(p), p => OnUpdateRouteExecuted(p));
+
+        private void OnUpdateRouteExecuted(object p)
+        {
+            MapViewModel.UpdateRouteCommand.Execute(p);
+            AppState.IsAbleToCreateCity = false;
+            AppState.IsAbleToSetCity = false;
+            AppState.IsAbleToUpdateRoute = false;
+            if (MapViewModel.RouteWasSaved())
+                AppState.IsSuccess = true;
+        }
+
+        private bool OnCanUpdateRouteExecuted(object p) => AppState.IsAbleToUpdateRoute;
+
+        #endregion
+
+        #region UpdateRouteCommand
+
+        public ICommand DeleteRouteCommand => new DeleteRouteCommand(p => OnCanDeleteRouteExecuted(p), p => OnDeleteRouteExecuted(p));
+
+        private void OnDeleteRouteExecuted(object p)
+        {
+            var Message = "Are you sure, you want to delete the route?";
+            MessageBoxResult DialogResult = MessageBox.Show(Message, "Confirm action", MessageBoxButton.YesNo);
+            if (DialogResult == MessageBoxResult.Yes && AppState.IsAbleToUpdateRoute)
+            {
+                MapViewModel.DeleteRouteCommand.Execute(p);
+                AppState.IsAbleToUpdateRoute = false;
+                AppState.IsSuccess = true;
+            }
+        }
+
+        private bool OnCanDeleteRouteExecuted(object p) => AppState.IsAbleToUpdateRoute;
 
         #endregion
 

@@ -75,7 +75,8 @@
 
             <Image
                 RenderTransformOrigin="{Binding ElementName=mControl, Path=TransformPosition}"
-                Source="{Binding ElementName=mControl, Path=MapImageSource}"            
+                Source="{Binding ElementName=mControl, Path=MapImageSource}"                
+                MouseDown="Map_MouseDown"
                 Stretch="Fill" Name="Image" 
                 Grid.RowSpan="3">
             </Image>
@@ -110,7 +111,7 @@
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Canvas>
+                            <Canvas MouseDown="Route_MouseDown">
                                 <Line Style="{StaticResource LineRoute}"/>
                             </Canvas>
                         </DataTemplate>

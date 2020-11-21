@@ -61,8 +61,6 @@ namespace DesktopApp.APIInteraction
 
         public async Task<HttpResponsePayload<City>> DeleteCityAsync(City city)
         {
-            var cityDTO = AppMapper.GetAppMapper().Mapper.Map<CityCreateDTO>(city);
-
             HttpResponseMessage response;
 
             try

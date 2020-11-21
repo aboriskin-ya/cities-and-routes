@@ -362,20 +362,46 @@ namespace DesktopApp.UserControls
             }
         }
 
+        private void Map_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Right)
+            {
+                AppState.IsAbleToCreateRoute = false;
+                AppState.IsAbleToUpdateRoute = false;
+                AppState.IsAbleToCreateCity = false;
+                AppState.IsAbleToUpdateCity = false;
+                AppState.IsAbleToPickSecondCity = false;
+                AppState.IsAbleToPickFirstCity = false;
+                SelectedCity = new City();
+                SelectedRoute = new Route();
+            }
+
+        }
+
         private void City_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Panel panel = sender as Panel;
-            var city = panel.DataContext;
+            var City = panel.DataContext;
 
             if (!AppState.IsAbleToSetCity && !AppState.IsAbleToPickFirstCity) {
                 AppState.IsAbleToUpdateCity = true;
-                SelectedCity = city as City;
+                AppState.IsAbleToUpdateRoute = false;
+                SelectedCity = City as City;
             }
 
             if (!AppState.IsAbleToPickFirstCity)
                 return;
 
-            MapControl_SetCityToRoute(city as City);
+            MapControl_SetCityToRoute(City as City);
+        }
+
+        private void Route_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Panel panel = sender as Panel;
+            var Route = panel.DataContext;
+            AppState.IsAbleToUpdateRoute = true;
+            AppState.IsAbleToUpdateCity = false;
+            SelectedRoute = Route as Route;
         }
 
         #endregion
