@@ -35,8 +35,6 @@ namespace API
 
             string connection = _configuration.GetConnectionString("DefaultConnection");
 
-            //services.AddSingleton<Serilog.ILogger>(Log.Logger);
-
             services.AddDbContext<CityRouteContext>(options =>
             {
                 options.UseSqlServer(connection)
@@ -67,12 +65,12 @@ namespace API
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cities and Routes API V1");
+            });
 
-            //app.UseMiddleware<BasicAuthenthicationMiddleware>();
-            //app.UseSwaggerUI(c =>
-            //{
-            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cities and Routes API V1");
-            //});
+            app.UseMiddleware<BasicAuthenthicationMiddleware>();
 
             app.UseRouting();
 
