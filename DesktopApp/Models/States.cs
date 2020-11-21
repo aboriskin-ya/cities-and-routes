@@ -109,6 +109,22 @@ namespace DesktopApp.Models
 
         #endregion
 
+        #region UpdateRoutePossibility
+
+        private bool _isAbleToUpdateRoute = false;
+        public bool IsAbleToUpdateRoute
+        {
+            get => _isAbleToUpdateRoute;
+            set
+            {
+                _isAbleToUpdateRoute = value;
+                RaisePropertyChanged(nameof(IsAbleToUpdateRoute));
+                State = RouteStatusUpdate();
+            }
+        }
+
+        #endregion
+
         #region SuccessfulCreating
 
         private bool _isSuccess;

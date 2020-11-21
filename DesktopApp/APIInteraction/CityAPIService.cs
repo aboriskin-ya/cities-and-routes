@@ -43,9 +43,9 @@ namespace DesktopApp.APIInteraction
             {
                 response = await APIClient.Client.PutAsJsonAsync("city/" + city.Id, cityDTO);
             }
-            catch (HttpRequestException ex)
+            catch
             {
-                throw ex;
+                return new HttpResponsePayload<City>() { IsSuccessful = false };
             }
 
             HttpResponsePayload<City> responsePayload = new HttpResponsePayload<City>()
@@ -61,17 +61,15 @@ namespace DesktopApp.APIInteraction
 
         public async Task<HttpResponsePayload<City>> DeleteCityAsync(City city)
         {
-            var cityDTO = AppMapper.GetAppMapper().Mapper.Map<CityCreateDTO>(city);
-
             HttpResponseMessage response;
 
             try
             {
                 response = await APIClient.Client.DeleteAsync("city/" + city.Id);
             }
-            catch (HttpRequestException ex)
+            catch
             {
-                throw ex;
+                return new HttpResponsePayload<City>() { IsSuccessful = false };
             }
 
             HttpResponsePayload<City> responsePayload = new HttpResponsePayload<City>()

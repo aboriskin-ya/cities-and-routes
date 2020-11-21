@@ -135,6 +135,36 @@ namespace DesktopApp.ViewModels
         }
         private bool OnCanRemoveRouteFromCollection() => true;
 
+        public UpdateRouteCommand UpdateRouteCommand { get => new UpdateRouteCommand(p => OnCanUpdateRouteCollection(), async m => await OnUpdateRouteCollectionAsync()); }
+        private async Task OnUpdateRouteCollectionAsync()
+        {
+            var res = await _routeAPIService.UpdateRouteAsync(SelectedRoute);
+            if (!res.IsSuccessful)
+            {
+                _messageBoxService.ShowError("An error occured. Please try it again.", "Error occured");
+            }
+        }
+
+        private bool OnCanUpdateRouteCollection() => true;
+
+        public DeleteRouteCommand DeleteRouteCommand { get => new DeleteRouteCommand(p => OnCanDeleteRouteFromCollection(), async m => await OnDeleteRouteFromCollection()); }
+        private async Task OnDeleteRouteFromCollection()
+        {
+            var res = await _routeAPIService.DeleteRouteAsync(SelectedRoute);
+            if (res.IsSuccessful)
+            {
+                WholeMap.Routes.Remove(SelectedRoute);
+                SelectedRoute = new Route();
+            }
+            else
+            {
+                _messageBoxService.ShowError("An error occured. Please try it again.", "Error occured");
+                OnRemoveRouteFromCollection();
+            }
+        }
+        private bool OnCanDeleteRouteFromCollection() => true;
+
+
         #endregion
 
         public int CitiesCount() => WholeMap.Cities.Count;
