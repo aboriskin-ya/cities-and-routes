@@ -23,6 +23,10 @@ namespace DesktopApp.ViewModels
 
         CreateRouteCommand CreateNewRouteCommand { get; }
 
+        UpdateRouteCommand UpdateRouteCommand { get; }
+
+        DeleteRouteCommand DeleteRouteCommand { get; }
+
         int CitiesCount();
 
         int RoutesCount();
