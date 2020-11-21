@@ -40,7 +40,7 @@ namespace Service.Services
             _logger = logger;
         }
 
-        public ShortestPathResponseDTO FindShortestPath(Guid MapId, Guid CityToId, Guid CityFromId)
+        public ShortestPathResponseDTO FindShortestPath(Guid MapId, Guid CityFromId, Guid CityToId)
         {
             _logger.LogInformation("Find shortest path started");
             Map Map = _mapRepository.GetWholeMap(MapId);

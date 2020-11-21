@@ -8,7 +8,7 @@ namespace Service.Services.Interfaces
 {
     public interface IAlgorithmService
     {
-        ShortestPathResponseDTO FindShortestPath(Guid MapId, Guid CityToId, Guid CityFromId);
+        ShortestPathResponseDTO FindShortestPath(Guid MapId, Guid CityFromId, Guid CityToId);
 
         Task<TravelSalesmanResponse> SolveAnnealingTravelSalesman(TravelSalesmanRequest requestBody);
 
