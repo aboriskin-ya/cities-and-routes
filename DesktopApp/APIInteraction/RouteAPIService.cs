@@ -43,9 +43,9 @@ namespace DesktopApp.APIInteraction
             {
                 response = await APIClient.Client.PutAsJsonAsync("route/" + Route.Id, RouteDTO);
             }
-            catch (HttpRequestException ex)
+            catch
             {
-                throw ex;
+                return new HttpResponsePayload<Route>() { IsSuccessful = false };
             }
 
             HttpResponsePayload<Route> responsePayload = new HttpResponsePayload<Route>()
@@ -68,9 +68,9 @@ namespace DesktopApp.APIInteraction
             {
                 response = await APIClient.Client.DeleteAsync("route/" + Route.Id);
             }
-            catch (HttpRequestException ex)
+            catch
             {
-                throw ex;
+                return new HttpResponsePayload<Route>() { IsSuccessful = false };
             }
 
             HttpResponsePayload<Route> responsePayload = new HttpResponsePayload<Route>()
