@@ -1,4 +1,5 @@
-﻿using Service.PathResolver;
+﻿using Service.DTO;
+using Service.PathResolver;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ namespace Service.Services.Interfaces
 {
     public interface IAlgorithmService
     {
-        List<Guid> FindShortestPath(Guid MapId, Guid CityToId, Guid CityFromId);
+        ShortestPathResponseDTO FindShortestPath(Guid MapId, Guid CityToId, Guid CityFromId);
 
         Task<TravelSalesmanResponse> SolveAnnealingTravelSalesman(TravelSalesmanRequest requestBody);
 
