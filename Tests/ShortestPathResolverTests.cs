@@ -79,7 +79,7 @@ namespace Tests
             int expectedResultDistance = 1796;
 
             var mockMapRepository = new Mock<IMapRepository>();
-            mockMapRepository.Setup(_mapRepository => _mapRepository.GetWholeMap(new Guid("e6efe688-c2ed-4ce7-2aed-08d88d38c2ca"))).Returns(map);
+            mockMapRepository.Setup(_mapRepository => _mapRepository.GetWholeMap(mapId)).Returns(map);
             var mockPathToGraphService = new Mock<IPathToGraphService>();
             mockPathToGraphService.Setup(_pathToGraphService => _pathToGraphService.MapToResolver(map))
                 .Returns(testShortPathResolverDTO);
