@@ -40,14 +40,14 @@ namespace Service.Services
             _logger = logger;
         }
 
-        public List<Guid> FindShortestPath(Guid MapId, Guid CityToId, Guid CityFromId)
+        public ShortestPathResponseDTO FindShortestPath(Guid MapId, Guid CityFromId, Guid CityToId)
         {
             _logger.LogInformation("Find shortest path started");
             Map Map = _mapRepository.GetWholeMap(MapId);
             ShortPathResolverDTO PathDto = _pathToGraphService.MapToResolver(Map);
-            List<Guid> Path = new ShortestPathResolverService().FindShortestPath(PathDto, CityFromId.ToString(), CityToId.ToString());
+            ShortestPathResponseDTO shortestPathResponseDTO = new ShortestPathResolverService().FindShortestPath(PathDto, CityFromId.ToString(), CityToId.ToString());
             _logger.LogInformation("Find shortest path finished");
-            return Path;
+            return shortestPathResponseDTO;
         }
         public async Task<TravelSalesmanResponse> SolveAnnealingTravelSalesman(TravelSalesmanRequest request)
         {
