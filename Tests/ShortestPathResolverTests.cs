@@ -69,14 +69,35 @@ namespace Tests
             };
             ShortPathResolverDTO testShortPathResolverDTO = new ShortPathResolverDTO { Cities = new List<City>(map.Cities), Routes = new List<Route>(map.Routes) };
 
-            List<Guid> expectedResultPath = new List<Guid>
+            var expectedResultFromRostovToSaintPetersburg = new ShortestPathResponseDTO
             {
-                rostovOnDonId, //RostovOnDon
-                voronezhId, //Voronezh 
-                moscowId, //Moscow
-                saintPetersburgId //SaintPetersburg
+                Path = new List<Guid> { rostovOnDonId, voronezhId, moscowId, saintPetersburgId },
+                FinalDistance = 1796
             };
-            int expectedResultDistance = 1796;
+
+            var expectedResultFromSmolenskToEkaterinburg = new ShortestPathResponseDTO
+            {
+                Path = new List<Guid> { smolenskId, moscowId, kazanId, ekaterinburgId },
+                FinalDistance = 2196
+            };
+
+            var expectedResultFromArchangelskToVolgograd = new ShortestPathResponseDTO
+            {
+                Path = new List<Guid> { archangelskId, kazanId, saratovId, volgogradId },
+                FinalDistance = 2473
+            };
+
+            var expectedResultFromSaintPetersburgToSamara = new ShortestPathResponseDTO
+            {
+                Path = new List<Guid> { saintPetersburgId, moscowId, kazanId, samaraId},
+                FinalDistance = 1882
+            };
+
+            var expectedResultFromEkaterinburgToVoronezh = new ShortestPathResponseDTO
+            {
+                Path = new List<Guid> { ekaterinburgId, samaraId, saratovId, voronezhId },
+                FinalDistance = 1905
+            };
 
             var mockMapRepository = new Mock<IMapRepository>();
             mockMapRepository.Setup(_mapRepository => _mapRepository.GetWholeMap(mapId)).Returns(map);
@@ -86,11 +107,28 @@ namespace Tests
             AlgorithmService testAlgorithmService = new AlgorithmService(mockMapRepository.Object, null, mockPathToGraphService.Object, 
                 null, null, null, new Logger<AlgorithmService>(new LoggerFactory()));
             //Act
-            //Path from Rostov to SaintPetersburg
-            var result = testAlgorithmService.FindShortestPath(map.Id, rostovOnDonId, saintPetersburgId);
+            var resultFromRostovToSaintPetersburg = testAlgorithmService.FindShortestPath(map.Id, rostovOnDonId, saintPetersburgId);
+            var resultFromSmolenskToEkaterinburg = testAlgorithmService.FindShortestPath(map.Id, smolenskId, ekaterinburgId);
+            var resultFromArchangelskToVolgograd = testAlgorithmService.FindShortestPath(map.Id, archangelskId, volgogradId);
+            var resultFromSaintPetersburgToSamara = testAlgorithmService.FindShortestPath(map.Id, saintPetersburgId, samaraId);
+            var resultFromEkaterinburgToVoronezh = testAlgorithmService.FindShortestPath(map.Id, ekaterinburgId, voronezhId);
+
             //Assert
-            Assert.Equal(expectedResultPath, result.Path);
-            Assert.Equal(expectedResultDistance, result.FinalDistance);
+            Assert.Equal(expectedResultFromRostovToSaintPetersburg.Path, resultFromRostovToSaintPetersburg.Path);
+            Assert.Equal(expectedResultFromRostovToSaintPetersburg.FinalDistance, resultFromRostovToSaintPetersburg.FinalDistance);
+
+            Assert.Equal(expectedResultFromSmolenskToEkaterinburg.Path, resultFromSmolenskToEkaterinburg.Path);
+            Assert.Equal(expectedResultFromSmolenskToEkaterinburg.FinalDistance, resultFromSmolenskToEkaterinburg.FinalDistance);
+
+            Assert.Equal(expectedResultFromArchangelskToVolgograd.Path, resultFromArchangelskToVolgograd.Path);
+            Assert.Equal(expectedResultFromArchangelskToVolgograd.FinalDistance, resultFromArchangelskToVolgograd.FinalDistance);
+
+            Assert.Equal(expectedResultFromSaintPetersburgToSamara.Path, resultFromSaintPetersburgToSamara.Path);
+            Assert.Equal(expectedResultFromSaintPetersburgToSamara.FinalDistance, resultFromSaintPetersburgToSamara.FinalDistance);
+
+            Assert.Equal(expectedResultFromEkaterinburgToVoronezh.Path, resultFromEkaterinburgToVoronezh.Path);
+            Assert.Equal(expectedResultFromEkaterinburgToVoronezh.FinalDistance, resultFromEkaterinburgToVoronezh.FinalDistance);
+
         }
     }
 }
