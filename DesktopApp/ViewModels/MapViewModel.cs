@@ -26,8 +26,7 @@ namespace DesktopApp.ViewModels
                 Routes = new ObservableCollection<Route>(),
                 Settings = new Settings()
             };
-            SelectedCity = new City();
-            SelectedRoute = new Route();
+            InitializeModels();
         }
 
         private WholeMap wholeMap;
@@ -53,7 +52,7 @@ namespace DesktopApp.ViewModels
 
         #region CityCommands
 
-        public CreateCityCommand CreateNewCityCommand { get => new CreateCityCommand(p => OnCanAddCityCollection(), async m => await OnAddCityCollectionAsync()); }
+        public CreateCityCommandAsync CreateNewCityCommand { get => new CreateCityCommandAsync(p => OnCanAddCityCollection(), async m => await OnAddCityCollectionAsync()); }
         private async Task OnAddCityCollectionAsync()
         {
             SelectedCity.MapId = WholeMap.Id;
@@ -65,8 +64,6 @@ namespace DesktopApp.ViewModels
                 SelectedCity = res.Payload;
                 WholeMap.Cities.Add(SelectedCity);
             }
-
-            OnRemoveCityFromCollection();
         }
         private bool OnCanAddCityCollection() => true;
 
@@ -110,7 +107,7 @@ namespace DesktopApp.ViewModels
 
         #region RouteCommands
 
-        public CreateRouteCommand CreateNewRouteCommand { get => new CreateRouteCommand(p => OnCanAddRouteCollection(), async m => await OnAddRouteCollectionAsync()); }
+        public CreateRouteCommandAsync CreateNewRouteCommand { get => new CreateRouteCommandAsync(p => OnCanAddRouteCollection(), async m => await OnAddRouteCollectionAsync()); }
         private async Task OnAddRouteCollectionAsync()
         {
             SelectedRoute.MapId = WholeMap.Id;
@@ -122,8 +119,6 @@ namespace DesktopApp.ViewModels
                 SelectedRoute = res.Payload;
                 WholeMap.Routes.Add(SelectedRoute);
             }
-
-            OnRemoveRouteFromCollection();
         }
 
         private bool OnCanAddRouteCollection() => true;
@@ -178,5 +173,11 @@ namespace DesktopApp.ViewModels
         public bool CityWasSaved() => WholeMap.Cities.Contains(SelectedCity);
 
         public bool IsHaveMap() => WholeMap.Id != Guid.Empty;
+
+        public void InitializeModels()
+        {
+            SelectedCity = new City();
+            SelectedRoute = new Route();
+        }
     }
 }

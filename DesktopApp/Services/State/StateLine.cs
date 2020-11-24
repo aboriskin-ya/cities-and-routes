@@ -9,7 +9,8 @@
         SelectFirstCity,
         SelectSecondCity,
         CreateRoute,
-        SaveChanges
+        SaveChanges,
+        FindShortestPath
     }  
     public static class StateLine
     {
@@ -20,9 +21,9 @@
                 case StateLineStatus.SetCity:
                     return "Please click on the map to create a new city";
                 case StateLineStatus.CreateCity:
-                    return "Please enter the name of the new city";
+                    return "Please enter the name of a new city";
                 case StateLineStatus.UpdateCity:
-                    return "Please, update the name of the city";
+                    return "Please update the name of the city";
                 case StateLineStatus.SelectFirstCity:
                     return "Please select the first city";
                 case StateLineStatus.SelectSecondCity:
@@ -31,6 +32,8 @@
                     return "Please set a distance between the cities";
                 case StateLineStatus.SaveChanges:
                     return "All changes were saved";
+                case StateLineStatus.FindShortestPath:
+                    return "Please select two cities to colculate the shortest path";
             }
             return "";
         }

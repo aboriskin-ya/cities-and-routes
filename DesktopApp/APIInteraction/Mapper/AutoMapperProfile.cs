@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DataAccess.DTO;
 using DesktopApp.Models;
 using Service.DTO;
 
@@ -26,6 +27,9 @@ namespace DesktopApp.APIInteraction.Mapper
             CreateMap<Map, MapCreateDTO>();
             CreateMap<MapIdNameGetDTO, Map>();
             CreateMap<MapGetDTO, WholeMap>();
+
+            CreateMap<PathModel, PathResolverDTO>();
+            CreateMap<ShortestPathResponseDTO, ShortestPath>();
         }
     }
 }
