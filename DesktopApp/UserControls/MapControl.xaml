@@ -84,6 +84,21 @@
             <Canvas x:Name="MapCanvas"
                     Width="{Binding ElementName=mControl, Path=ActualWidth}"
                     Height="{Binding ElementName=mControl, Path=ActualHeight}">
+                
+                <Canvas.Resources>
+                    <PathGeometry x:Key="shortestPathGeometry">
+                        <PathGeometry.Figures>
+                            <PathFigure StartPoint="{Binding ElementName=mControl, Path=CitiesPositionOfPath[0], Converter={StaticResource PointsToPathConverter}}">
+                                <PathFigure.Segments>
+                                    <PathSegmentCollection>
+                                        <PolyLineSegment Points="{Binding ElementName=mControl, Path=CitiesPositionOfPath, Converter={StaticResource PointsToPathConverter}}" IsStroked="True"/>
+                                    </PathSegmentCollection>
+                                </PathFigure.Segments>
+                            </PathFigure>
+                        </PathGeometry.Figures>
+                    </PathGeometry>
+                </Canvas.Resources>
+                
                 <Canvas Canvas.Left="{Binding ElementName=mControl, Path=PosX}"
                         Canvas.Top="{Binding ElementName=mControl, Path=PosY}">
                     <Ellipse Visibility="{Binding ElementName=mControl, Path=AppState.IsAbleToSetCity, 
@@ -118,6 +133,11 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
+                <Path StrokeThickness="{Binding ElementName=mControl, Path=SettingsMap.EdgeSize}"
+                      Stroke="{Binding ElementName=mControl, Path=SettingsMap.EdgeColor, Converter={StaticResource StringToColorInvertConverter}}"
+                      Data="{StaticResource shortestPathGeometry}">
+                </Path>
+                
                 <ItemsControl 
                     ItemsSource="{Binding ElementName=mControl, Path=CityCollection}"
                     ItemsPanel="{StaticResource CanvasPanelTemplate}">

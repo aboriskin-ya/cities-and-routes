@@ -8,12 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Repository;
 using Repository.Storage;
-using Serilog;
 using Service;
 using Service.Services;
 using Service.Services.Interfaces;
 using System;
-using System.Linq;
 
 namespace API
 {
