@@ -62,7 +62,7 @@ namespace DesktopApp.APIInteraction
         public async Task<HttpResponsePayload<City>> DeleteCityAsync(City city)
         {
             HttpResponseMessage response;
-
+            return new HttpResponsePayload<City>() { IsSuccessful = true };
             try
             {
                 response = await APIClient.Client.DeleteAsync("city/" + city.Id);

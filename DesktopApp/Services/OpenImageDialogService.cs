@@ -9,7 +9,7 @@ namespace DesktopApp.Services
         public OpenImageDialogService()
         {
             _ofd = new OpenFileDialog();
-            _ofd.Filter = "Image files (*.png;*.jpeg)|*.png;*.jpeg|All files (*.*)|*.*";
+            _ofd.Filter = "Image files (*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg|All files (*.*)|*.*";
         }
         public string ShowDialog()
         {

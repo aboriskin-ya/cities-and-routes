@@ -83,7 +83,9 @@
 
             <Canvas x:Name="MapCanvas"
                     Width="{Binding ElementName=mControl, Path=ActualWidth}"
-                    Height="{Binding ElementName=mControl, Path=ActualHeight}">
+                    Height="{Binding ElementName=mControl, Path=ActualHeight}"
+                    
+                    >
                 
                 <Canvas.Resources>
                     <PathGeometry x:Key="shortestPathGeometry">

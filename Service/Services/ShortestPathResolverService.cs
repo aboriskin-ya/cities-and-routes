@@ -112,7 +112,11 @@ namespace Service.Services
             while (startVertex != endVertex)
             {              
                 ResultList.Add(Guid.Parse(endVertex.ToString()));
-                endVertex = endVertex.PreviousVertex;              
+                if (endVertex.PreviousVertex == null)
+                {
+                    return null;
+                }
+                endVertex = endVertex.PreviousVertex;       
             }
             ResultList.Add(Guid.Parse(startVertex.ToString()));
             ResultList.Reverse();

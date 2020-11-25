@@ -29,7 +29,15 @@ namespace API.Controllers
         [Route("FindShortestPath")]
         public IActionResult FindShortestPath([FromBody] PathResolverDTO Dto)
         {
-            return Ok(_algorithmService.FindShortestPath(Dto.MapId, Dto.CityFromId, Dto.CityToId));
+            var result = _algorithmService.FindShortestPath(Dto.MapId, Dto.CityFromId, Dto.CityToId);
+            if (result != null)
+            {
+                return Ok(result);
+            } else 
+            {
+                return Conflict(result);
+            }
+
         }
 
         [ProducesResponseType(typeof(TravelSalesmanResponse), StatusCodes.Status200OK)]

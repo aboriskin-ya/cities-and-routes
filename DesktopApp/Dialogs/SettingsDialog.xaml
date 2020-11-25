@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:DesktopApp.Dialogs" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
       mc:Ignorable="d" 
       d:DesignHeight="500" d:DesignWidth="800"
-      Title="SettingsDialog">
+      Title="Settings">
 
     <Grid>
         <Grid.RowDefinitions>

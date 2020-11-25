@@ -5,6 +5,7 @@ using DesktopApp.Services;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.Windows;
 
 namespace DesktopApp.ViewModels
 {
@@ -80,7 +81,16 @@ namespace DesktopApp.ViewModels
             if (!res.IsSuccessful)
                 _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
             else
+            {
                 Messenger.Default.Send(res.Payload);
+                foreach (Window item in Application.Current.Windows)
+                {
+                    if (item.DataContext == this)
+                    {
+                        item.Close();
+                    }
+                }
+            }
         }
 
         private bool OnCanLoadMapExecuted(object p) => true;
