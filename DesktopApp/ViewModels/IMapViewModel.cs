@@ -11,7 +11,7 @@ namespace DesktopApp.ViewModels
 
         Route SelectedRoute { get; set; }
 
-        CreateCityCommandAsync CreateNewCityCommand { get; }
+        RelayCommandAsync CreateNewCityCommand { get; }
 
         UpdateCityCommand UpdateCityCommand { get; }
 
@@ -21,7 +21,7 @@ namespace DesktopApp.ViewModels
 
         CancelCreatingRouteCommand CancelCreatingRouteCommand { get; }
 
-        CreateRouteCommandAsync CreateNewRouteCommand { get; }
+        RelayCommandAsync CreateNewRouteCommand { get; }
 
         UpdateRouteCommand UpdateRouteCommand { get; }
 

@@ -3,11 +3,10 @@ using System.Windows.Input;
 
 namespace DesktopApp
 {
-
     public class RelayCommand : ICommand
     {
         private Action<object> execute;
-        private Func<object, bool> canExecute;
+        private Predicate<object> canExecute;
 
         public event EventHandler CanExecuteChanged
         {
@@ -15,7 +14,7 @@ namespace DesktopApp
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
+        public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
         {
             this.execute = execute;
             this.canExecute = canExecute;

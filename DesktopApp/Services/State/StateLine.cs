@@ -33,7 +33,7 @@
                 case StateLineStatus.SaveChanges:
                     return "All changes were saved";
                 case StateLineStatus.FindShortestPath:
-                    return "Please select two cities to colculate the shortest path";
+                    return "Please select two cities to calculate the shortest path";
             }
             return "";
         }

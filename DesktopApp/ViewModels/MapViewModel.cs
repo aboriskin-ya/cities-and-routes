@@ -2,7 +2,6 @@
 using DesktopApp.Models;
 using DesktopApp.Services;
 using DesktopApp.Services.Commands;
-using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
@@ -52,7 +51,7 @@ namespace DesktopApp.ViewModels
 
         #region CityCommands
 
-        public CreateCityCommandAsync CreateNewCityCommand { get => new CreateCityCommandAsync(p => OnCanAddCityCollection(), async m => await OnAddCityCollectionAsync()); }
+        public RelayCommandAsync CreateNewCityCommand { get => new RelayCommandAsync(p => OnCanAddCityCollection(), async m => await OnAddCityCollectionAsync()); }
         private async Task OnAddCityCollectionAsync()
         {
             SelectedCity.MapId = WholeMap.Id;
@@ -107,7 +106,7 @@ namespace DesktopApp.ViewModels
 
         #region RouteCommands
 
-        public CreateRouteCommandAsync CreateNewRouteCommand { get => new CreateRouteCommandAsync(p => OnCanAddRouteCollection(), async m => await OnAddRouteCollectionAsync()); }
+        public RelayCommandAsync CreateNewRouteCommand { get => new RelayCommandAsync(p => OnCanAddRouteCollection(), async m => await OnAddRouteCollectionAsync()); }
         private async Task OnAddRouteCollectionAsync()
         {
             SelectedRoute.MapId = WholeMap.Id;
@@ -172,7 +171,7 @@ namespace DesktopApp.ViewModels
 
         public bool CityWasSaved() => WholeMap.Cities.Contains(SelectedCity);
 
-        public bool IsHaveMap() => WholeMap.Id != Guid.Empty;
+        public bool IsHaveMap() => WholeMap.Id != default;
 
         public void InitializeModels()
         {

@@ -7,7 +7,7 @@ namespace DesktopApp.ViewModels
     {
         ShortestPath ShortestPath { get; set; }
 
-        ICommand ColculateShortestPathCommand { get; }
+        ICommand CalculateShortestPathCommand { get; }
 
         void InitializeModels();
     }

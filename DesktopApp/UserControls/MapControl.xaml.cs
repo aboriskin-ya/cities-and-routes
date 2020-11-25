@@ -417,7 +417,7 @@ namespace DesktopApp.UserControls
 
             if (AppState.IsAbleToFindShortestPath)
             {
-                if (Path.CityFromId == Guid.Empty)
+                if (Path.CityFromId == default)
                     Path.CityFromId = ((City)City).Id;
                 else
                 {

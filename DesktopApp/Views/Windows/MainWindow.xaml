@@ -235,8 +235,8 @@
                             <Run Text="{Binding ShortestPathViewModel.ShortestPath.ProcessDuration}"/>
                                 <LineBreak/>
                             </TextBlock>
-                            <Button Content="Colculate the shortest path"
-                                    Command="{Binding ColculateShortestPathCommand}"/>
+                            <Button Content="Calculate the shortest path"
+                                    Command="{Binding CalculateShortestPathCommand}"/>
                         </StackPanel>
                     </TabItem.Content>
                 </TabItem>

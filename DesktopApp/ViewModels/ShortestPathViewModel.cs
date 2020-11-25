@@ -1,7 +1,6 @@
 ﻿using DesktopApp.APIInteraction;
 using DesktopApp.Models;
 using DesktopApp.Services;
-using DesktopApp.Services.Commands;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
@@ -31,9 +30,9 @@ namespace DesktopApp.ViewModels
             set => Set(ref shortestPath, value, nameof(ShortestPath));
         }
 
-        public ICommand ColculateShortestPathCommand => new ColculateShortestPathCommand(p => OnCanColculateShortestPathExecute(p), p => OnColculateShortestPath(p));
+        public ICommand CalculateShortestPathCommand => new RelayCommand(p => OnCalculateShortestPath(p), p => OnCanCalculateShortestPathExecute(p));
 
-        private async void OnColculateShortestPath(object p)
+        private async void OnCalculateShortestPath(object p)
         {
             var path = p as PathModel;
             if (path == null)
@@ -62,7 +61,7 @@ namespace DesktopApp.ViewModels
             ShortestPath.CitiesPosition = cities;
         }
 
-        private bool OnCanColculateShortestPathExecute(object p) => true;
+        private bool OnCanCalculateShortestPathExecute(object p) => true;
 
         public void InitializeModels()
         {

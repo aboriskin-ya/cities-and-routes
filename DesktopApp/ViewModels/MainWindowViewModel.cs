@@ -104,16 +104,16 @@ namespace DesktopApp.ViewModels
 
         private bool OnCanOnAddingCitiesRoutesOpenExecute(object p) => true;
 
-        public ICommand ColculateShortestPathCommand => new ColculateShortestPathCommand(p => OnCanColculateShortestPathExecute(p), p => OnColculateShortestPath(p));
+        public ICommand CalculateShortestPathCommand => new RelayCommand(p => OnCalculateShortestPath(p), p => OnCanCalculateShortestPathExecute(p));
 
-        private void OnColculateShortestPath(object p)
+        private void OnCalculateShortestPath(object p)
         {
             path.MapId = MapViewModel.WholeMap.Id;
-            ShortestPathViewModel.ColculateShortestPathCommand.Execute(path);
+            ShortestPathViewModel.CalculateShortestPathCommand.Execute(path);
             Path = new PathModel();
         }
 
-        private bool OnCanColculateShortestPathExecute(object p) => Path.CityToId != Guid.Empty && Path.CityToId != Path.CityFromId;
+        private bool OnCanCalculateShortestPathExecute(object p) => Path.CityToId != default && Path.CityToId != Path.CityFromId;
 
         #region ShowCreateMapDialog 
 
@@ -157,7 +157,7 @@ namespace DesktopApp.ViewModels
 
         #region CreateNewCityCommand
 
-        public ICommand CreateNewCityCommand => new CreateCityCommand(p => OnCanCreateNewCityExecuted(p), async p => await OnCreateNewCityExecutedAsync(p));
+        public ICommand CreateNewCityCommand => new RelayCommand(async p => await OnCreateNewCityExecutedAsync(p), p => OnCanCreateNewCityExecuted(p));
 
         private async Task OnCreateNewCityExecutedAsync(object p)
         {
@@ -173,7 +173,7 @@ namespace DesktopApp.ViewModels
 
         #region UpdateCityCommand
 
-        public ICommand UpdateCityCommand => new CreateCityCommand(p => OnCanUpdateCityExecuted(p), p => OnUpdateCityExecuted(p));
+        public ICommand UpdateCityCommand => new RelayCommand(p => OnUpdateCityExecuted(p), p => OnCanUpdateCityExecuted(p));
 
         private void OnUpdateCityExecuted(object p)
         {
@@ -209,7 +209,7 @@ namespace DesktopApp.ViewModels
 
         #region CreateNewRouteCommand
 
-        public ICommand CreateNewRouteCommand => new CreateRouteCommand(p => OnCanCreateNewRouteExecuted(p), async p => await OnCreateNewRouteExecutedAsync(p));
+        public ICommand CreateNewRouteCommand => new RelayCommand(async p => await OnCreateNewRouteExecutedAsync(p), p => OnCanCreateNewRouteExecuted(p));
 
         private async Task OnCreateNewRouteExecutedAsync(object p)
         {
@@ -225,7 +225,7 @@ namespace DesktopApp.ViewModels
 
         #region UpdateRouteCommand
 
-        public ICommand UpdateRouteCommand => new CreateRouteCommand(p => OnCanUpdateRouteExecuted(p), p => OnUpdateRouteExecuted(p));
+        public ICommand UpdateRouteCommand => new RelayCommand(p => OnUpdateRouteExecuted(p), p => OnCanUpdateRouteExecuted(p));
 
         private void OnUpdateRouteExecuted(object p)
         {
