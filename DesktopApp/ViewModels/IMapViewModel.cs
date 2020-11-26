@@ -1,5 +1,6 @@
 ﻿using DesktopApp.Models;
 using DesktopApp.Services.Commands;
+using System.Collections.ObjectModel;
 
 namespace DesktopApp.ViewModels
 {
@@ -13,9 +14,6 @@ namespace DesktopApp.ViewModels
 
         City SelectedCity { get; set; }
 
-        Route SelectedRoute { get; set; }
-
-        Settings SettingsMap { get; set; }
         ClearConsoleCommand ClearConsoleCommand { get; }
         SelectCityCommand SelectCityCommand { get; }
         RelayCommandAsync CreateNewCityCommand { get; }

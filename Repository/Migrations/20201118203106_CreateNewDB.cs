@@ -3,11 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Repository.Migrations
 {
-<<<<<<< HEAD:Repository/Migrations/20201118110050_NewMigration.cs
-    public partial class NewMigration : Migration
-=======
     public partial class CreateNewDB : Migration
->>>>>>> develop:Repository/Migrations/20201118203106_CreateNewDB.cs
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -57,12 +53,7 @@ namespace Repository.Migrations
                     Name = table.Column<string>(nullable: false),
                     X = table.Column<double>(nullable: false),
                     Y = table.Column<double>(nullable: false),
-<<<<<<< HEAD:Repository/Migrations/20201118110050_NewMigration.cs
-                    MapId = table.Column<Guid>(nullable: false),
-                    RouteId = table.Column<Guid>(nullable: false)
-=======
                     MapId = table.Column<Guid>(nullable: false)
->>>>>>> develop:Repository/Migrations/20201118203106_CreateNewDB.cs
                 },
                 constraints: table =>
                 {
@@ -117,11 +108,7 @@ namespace Repository.Migrations
                 {
                     table.PrimaryKey("PK_Route", x => x.Id);
                     table.ForeignKey(
-<<<<<<< HEAD:Repository/Migrations/20201118110050_NewMigration.cs
-                        name: "FK_Route_City_FirstCityId1",
-=======
                         name: "FK_Route_City_FirstCityId",
->>>>>>> develop:Repository/Migrations/20201118203106_CreateNewDB.cs
                         column: x => x.FirstCityId,
                         principalTable: "City",
                         principalColumn: "Id",
@@ -133,19 +120,12 @@ namespace Repository.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-<<<<<<< HEAD:Repository/Migrations/20201118110050_NewMigration.cs
-                        name: "FK_Route_City_SecondCityId1",
-=======
                         name: "FK_Route_City_SecondCityId",
->>>>>>> develop:Repository/Migrations/20201118203106_CreateNewDB.cs
                         column: x => x.SecondCityId,
                         principalTable: "City",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
-<<<<<<< HEAD:Repository/Migrations/20201118110050_NewMigration.cs
-=======
-
             migrationBuilder.CreateIndex(
                 name: "IX_City_MapId",
                 table: "City",
@@ -177,7 +157,6 @@ namespace Repository.Migrations
                 table: "Settings",
                 column: "MapId",
                 unique: true);
->>>>>>> develop:Repository/Migrations/20201118203106_CreateNewDB.cs
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

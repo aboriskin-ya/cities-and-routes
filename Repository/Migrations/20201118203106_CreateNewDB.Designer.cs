@@ -10,13 +10,8 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(CityRouteContext))]
-<<<<<<< HEAD:Repository/Migrations/20201118110050_NewMigration.Designer.cs
-    [Migration("20201118110050_NewMigration")]
-    partial class NewMigration
-=======
     [Migration("20201118203106_CreateNewDB")]
     partial class CreateNewDB
->>>>>>> develop:Repository/Migrations/20201118203106_CreateNewDB.Designer.cs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -144,20 +139,11 @@ namespace Repository.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
-
-<<<<<<< HEAD:Repository/Migrations/20201118110050_NewMigration.Designer.cs
-                    b.HasIndex("FirstCityId1");
-
-                    b.HasIndex("MapId");
-
-                    b.HasIndex("SecondCityId1");
-=======
                     b.HasIndex("FirstCityId");
 
                     b.HasIndex("MapId");
 
                     b.HasIndex("SecondCityId");
->>>>>>> develop:Repository/Migrations/20201118203106_CreateNewDB.Designer.cs
 
                     b.ToTable("Route");
                 });
@@ -226,15 +212,10 @@ namespace Repository.Migrations
             modelBuilder.Entity("DataAccess.Models.Route", b =>
                 {
                     b.HasOne("DataAccess.Models.City", "FirstCity")
-<<<<<<< HEAD:Repository/Migrations/20201118110050_NewMigration.Designer.cs
-                        .WithMany()
-                        .HasForeignKey("FirstCityId1");
-=======
                         .WithMany("RoutesWhenThisFirst")
                         .HasForeignKey("FirstCityId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
->>>>>>> develop:Repository/Migrations/20201118203106_CreateNewDB.Designer.cs
 
                     b.HasOne("DataAccess.Models.Map", "Map")
                         .WithMany("Routes")
@@ -243,15 +224,10 @@ namespace Repository.Migrations
                         .IsRequired();
 
                     b.HasOne("DataAccess.Models.City", "SecondCity")
-<<<<<<< HEAD:Repository/Migrations/20201118110050_NewMigration.Designer.cs
-                        .WithMany()
-                        .HasForeignKey("SecondCityId1");
-=======
                         .WithMany("RoutesWhenThisSecond")
                         .HasForeignKey("SecondCityId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
->>>>>>> develop:Repository/Migrations/20201118203106_CreateNewDB.Designer.cs
                 });
 
             modelBuilder.Entity("DataAccess.Models.Settings", b =>

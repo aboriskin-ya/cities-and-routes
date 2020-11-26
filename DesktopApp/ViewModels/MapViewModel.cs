@@ -39,9 +39,7 @@ namespace DesktopApp.ViewModels
 
             SelectedCities = new ObservableCollection<City>();
             SelectedCity = new City();
-            SelectedRoute = new Route();
             State = StateLine.GetStatus(StateBar.PushButton);
-            SettingsMap = new Settings()
             WholeMap = new WholeMap()
             {
                 Cities = new ObservableCollection<City>(),
@@ -106,7 +104,7 @@ namespace DesktopApp.ViewModels
         #endregion
 
         private Route _SelectedRoute;
-        public Route SelectedRoute
+        public Route SelectedRoute;
         private City selectedCity;
         public City SelectedCity
         {
@@ -114,12 +112,6 @@ namespace DesktopApp.ViewModels
             set => Set(ref selectedCity, value, nameof(SelectedCity));
         }
 
-        private Route selectedRoute;
-        public Route SelectedRoute
-        {
-            get => selectedRoute;
-            set => Set(ref selectedRoute, value, nameof(SelectedRoute));
-        }
         private string _state;
         public string State
         {
@@ -266,7 +258,7 @@ namespace DesktopApp.ViewModels
                            $"Preferable sequence: ");
             foreach (var cityId in model.Payload.PreferableSequenceOfCities)
             {
-                var city = await _cityAPIService.GetCity(cityId);
+                var city = await _cityAPIService.GetCityAsync(cityId);
                 builder.Append($"{city.Payload.Name} ");
             }
             ConsoleText += builder.ToString();

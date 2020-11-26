@@ -5,10 +5,7 @@ using DesktopApp.Services.Commands;
 using DesktopApp.Services.Helper;
 using DesktopApp.Services.Utils;
 using DesktopApp.Resources;
-using System;
-using DesktopApp.UserControls;
 using GalaSoft.MvvmLight.Messaging;
-using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -102,8 +99,6 @@ namespace DesktopApp.ViewModels
             set => Set<bool>(ref _canSelected, value);
         }
 
-        #region ShowCreateMapDialog     
-        public ICommand ShowCreateMapDialogCommand => new ShowCreateMapDialogCommand(null, p => ShowDialog(p));
         private bool OnCanPathResolverOpenExecute(object p) => MapViewModel.IsHaveMap() && MapViewModel.RoutesCount() > 0;
 
         public ICommand AddingCitiesRoutesOpenCommand => new AddingCitiesRoutesOpenCommand(p => OnCanOnAddingCitiesRoutesOpenExecute(p), p => OnAddingCitiesRoutesOpen(p));
