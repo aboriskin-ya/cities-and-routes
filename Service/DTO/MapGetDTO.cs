@@ -5,10 +5,11 @@ namespace Service.DTO
 {
     public class MapGetDTO
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public Guid ImageId { get; set; }
-        public List<RouteCreateDTO> RouteDTOs { get; set; }
-        public List<CityCreateDTO> CityDTOs { get; set; }
-        public SettingsDTO SettingsDTO { get; set; }
+        public List<RouteGetDTO> Routes { get; set; }
+        public List<CityGetDTO> Cities { get; set; }
+        public SettingsDTO Settings { get; set; }
     }
 }

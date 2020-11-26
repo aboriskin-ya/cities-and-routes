@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DataAccess.Models;
+using Microsoft.Extensions.Logging;
 using Repository;
 using Repository.Storage;
 using Service.DTO;
@@ -14,60 +15,66 @@ namespace Service.Services
         private readonly IMapRepository _repository;
         protected readonly CityRouteContext _context;
         private readonly IMapper _mapper;
+        private readonly ILogger<MapService> _logger;
 
-        public MapService(IMapRepository repository, CityRouteContext context, IMapper mapper)
+        public MapService(IMapRepository repository, CityRouteContext context, IMapper mapper, ILogger<MapService> logger)
         {
             _repository = repository;
             _context = context;
             _mapper = mapper;
+            _logger = logger;
         }
 
-        public Map CreateMap(MapCreateDTO dto)
+        public MapGetDTO CreateMap(MapCreateDTO dto)
         {
-            Map map = _mapper.Map<Map>(dto);
+            _logger.LogInformation("Create map started");
+            var map = _mapper.Map<Map>(dto);
             _repository.Add(map);
             _context.SaveChanges();
-            return map;
+            _logger.LogInformation("Create map finished");
+            return _mapper.Map<MapGetDTO>(map);
         }
 
         public IEnumerable<MapGetDTO> GetMaps()
         {
-            List<MapGetDTO> mapGetDTOs = new List<MapGetDTO>();
-            MapGetDTO mapGetTemp = new MapGetDTO();
-            foreach (var item in _repository.GetAll())
-            {
-                _mapper.Map<Map, MapGetDTO>(item, mapGetTemp);
-                mapGetDTOs.Add(mapGetTemp);
-            }
-            return mapGetDTOs;
+            _logger.LogInformation("Get maps started");
+            return _mapper.Map<IEnumerable<Map>, IEnumerable<MapGetDTO>>(_repository.GetAll());
+        }
+
+        public IEnumerable<MapIdNameGetDTO> GetMapsNames()
+        {
+            return _mapper.Map<IEnumerable<Map>, IEnumerable<MapIdNameGetDTO>>(_repository.GetAll());
         }
 
         public MapGetDTO GetMap(Guid id)
         {
+            _logger.LogInformation("Get map started");
             return _mapper.Map<Map, MapGetDTO>(_repository.GetWholeMap(id));
         }
 
         public bool DeleteMap(Guid id)
         {
-            bool result;
-            if (result = _repository.Delete(id))
+            _logger.LogInformation("Delete map started");
+            bool flag = _repository.Delete(id);
+            if (flag)
             {
                 _context.SaveChanges();
-                return result;
+                _logger.LogInformation("Delete map finished");
             }
             else
-            {
-                return result;
-            }
+                _logger.LogInformation("Delete map not finished");
+            return flag;
         }
 
-        public Map UpdateMap(MapCreateDTO dto, Guid id)
+        public MapGetDTO UpdateMap(MapCreateDTO dto, Guid id)
         {
-            Map map = _repository.Get(id);
-            _mapper.Map<MapCreateDTO, Map>(dto, map);
+            _logger.LogInformation("Update map started");
+            var map = _repository.Get(id);
+            _mapper.Map(dto, map);
             map = _repository.Update(map);
             _context.SaveChanges();
-            return map;
+            _logger.LogInformation("Update map finished");
+            return _mapper.Map<MapGetDTO>(map);
         }
     }
 }

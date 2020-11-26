@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DataAccess.EntityBuilders
@@ -9,7 +10,9 @@ namespace DataAccess.EntityBuilders
         {
             entityBuilder.HasKey(m => m.Id);
             entityBuilder.Property(m => m.Name).IsRequired();
-            entityBuilder.HasOne(m => m.Image).WithMany();
+            entityBuilder.HasOne(m => m.Image)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

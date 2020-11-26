@@ -2,9 +2,6 @@
 using DesktopApp.Models;
 using Service.DTO;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -22,9 +19,9 @@ namespace DesktopApp.APIInteraction
             {
                 response = await APIClient.Client.PostAsJsonAsync("city", cityDTO);
             }
-            catch (HttpRequestException ex)
+            catch
             {
-                throw ex;
+                return new HttpResponsePayload<City>() { IsSuccessful = false };
             }
 
             HttpResponsePayload<City> responsePayload = new HttpResponsePayload<City>()
@@ -36,18 +33,74 @@ namespace DesktopApp.APIInteraction
 
             return responsePayload;
         }
-        public async Task<HttpResponsePayload<CityGetDTO>> GetCity(Guid id)
+
+        public async Task<HttpResponsePayload<City>> UpdateCityAsync(City city)
         {
-            var response = await APIClient.Client.GetAsync($"city/{id}");
-            HttpResponsePayload<CityGetDTO> payload = new HttpResponsePayload<CityGetDTO>();
-            payload.IsSuccessful = response.IsSuccessStatusCode;
-            if (payload.IsSuccessful)
+            var cityDTO = AppMapper.GetAppMapper().Mapper.Map<CityCreateDTO>(city);
+
+            HttpResponseMessage response;
+
+            try
             {
-                var city = await response.Content.ReadAsAsync<City>();
-                payload.Payload = AppMapper.GetAppMapper().Mapper.Map<City, CityGetDTO>(city);
+                response = await APIClient.Client.PutAsJsonAsync("city/" + city.Id, cityDTO);
             }
-            return payload;
-            
+            catch
+            {
+                return new HttpResponsePayload<City>() { IsSuccessful = false };
+            }
+
+            HttpResponsePayload<City> responsePayload = new HttpResponsePayload<City>()
+            {
+                IsSuccessful = response.IsSuccessStatusCode ? true : false
+            };
+            var cityGetDTO = await response.Content.ReadAsAsync<CityGetDTO>();
+            responsePayload.Payload = AppMapper.GetAppMapper().Mapper.Map<City>(cityGetDTO);
+
+            return responsePayload;
+        }
+
+        public async Task<HttpResponsePayload<City>> DeleteCityAsync(City city)
+        {
+            HttpResponseMessage response;
+
+            try
+            {
+                response = await APIClient.Client.DeleteAsync("city/" + city.Id);
+            }
+            catch
+            {
+                return new HttpResponsePayload<City>() { IsSuccessful = false };
+            }
+
+            HttpResponsePayload<City> responsePayload = new HttpResponsePayload<City>()
+            {
+                IsSuccessful = response.IsSuccessStatusCode ? true : false
+            };
+
+            return responsePayload;
+        }
+
+        public async Task<HttpResponsePayload<City>> GetCityAsync(Guid guid)
+        {
+            HttpResponseMessage response;
+
+            try
+            {
+                response = await APIClient.Client.GetAsync($"city/{guid}");
+            }
+            catch
+            {
+                return new HttpResponsePayload<City>() { IsSuccessful = false };
+            }
+
+            var responsePayload = new HttpResponsePayload<City>()
+            {
+                IsSuccessful = response.IsSuccessStatusCode ? true : false
+            };
+            var cityGetDTO = await response.Content.ReadAsAsync<CityGetDTO>();
+            responsePayload.Payload = AppMapper.GetAppMapper().Mapper.Map<City>(cityGetDTO);
+
+            return responsePayload;
         }
     }
 }

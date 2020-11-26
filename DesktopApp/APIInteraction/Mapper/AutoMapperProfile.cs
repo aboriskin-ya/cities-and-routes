@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DataAccess.DTO;
 using DesktopApp.Models;
 using Service.DTO;
 using Service.PathResolver;
@@ -17,7 +18,6 @@ namespace DesktopApp.APIInteraction.Mapper
                         X = source.X,
                         Y = source.Y
                     }));
-
             CreateMap<CityGetDTO, City>()
                 .ForMember("X", opt => opt.MapFrom(src => src.Position.X))
                 .ForMember("Y", opt => opt.MapFrom(src => src.Position.Y));
@@ -25,6 +25,13 @@ namespace DesktopApp.APIInteraction.Mapper
             CreateMap<Route, RouteCreateDTO>();
             CreateMap<RouteGetDTO, Route>();
             CreateMap<TravelSalesmanResponse, TravelSalesman>();
+
+            CreateMap<Map, MapCreateDTO>();
+            CreateMap<MapIdNameGetDTO, Map>();
+            CreateMap<MapGetDTO, WholeMap>();
+
+            CreateMap<PathModel, PathResolverDTO>();
+            CreateMap<ShortestPathResponseDTO, ShortestPath>();
         }
     }
 }

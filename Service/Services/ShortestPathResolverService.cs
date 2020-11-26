@@ -1,18 +1,41 @@
 ﻿using DataAccess.Models;
+using Microsoft.Extensions.Logging;
 using PathResolver;
 using Service.DTO;
 using Service.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Service.Services
 {
     public class ShortestPathResolverService : IShortestPathResolverService
     {
         public Graph Graph;
+        ShortestPathResponseDTO result;
+        Stopwatch _timeCounter;
+        private readonly ILogger<ShortestPathResolverService> _logger;
 
-        public List<Guid> FindShortestPath(ShortPathResolverDTO PathResolverDTO, string startName, string finishName)
+        public ShortestPathResolverService(ILogger<ShortestPathResolverService> logger)
         {
+            _logger = logger;
+            result = new ShortestPathResponseDTO();
+            result.FinalDistance = 0;
+            _timeCounter = new Stopwatch();
+        }
+
+        public ShortestPathResolverService()
+        {
+            _logger = new Logger<ShortestPathResolverService>(new LoggerFactory());
+            result = new ShortestPathResponseDTO();
+            result.FinalDistance = 0;
+            _timeCounter = new Stopwatch();
+        }
+
+        public ShortestPathResponseDTO FindShortestPath(ShortPathResolverDTO PathResolverDTO, string startName, string finishName)
+        {
+            _logger.LogInformation("Find shortest path first function started");
+            _timeCounter.Start();
             Graph = new Graph();
             foreach (City City in PathResolverDTO.Cities)
             {
@@ -27,14 +50,16 @@ namespace Service.Services
             return FindShortestPath(Graph.FindVertex(startName), Graph.FindVertex(finishName));
         }
 
-        public List<Guid> FindShortestPath(Graph Graph, string startName, string finishName)
+        public ShortestPathResponseDTO FindShortestPath(Graph Graph, string startName, string finishName)
         {
+            _logger.LogInformation("Find shortest path second function started");
             this.Graph = Graph;
             return FindShortestPath(Graph.FindVertex(startName), Graph.FindVertex(finishName));
         }
 
-        public List<Guid> FindShortestPath(GraphVertex startVertex, GraphVertex finishVertex)
+        public ShortestPathResponseDTO FindShortestPath(GraphVertex startVertex, GraphVertex finishVertex)
         {
+            _logger.LogInformation("Find shortest path third function started");
             startVertex.EdgesWeightSum = 0;
             while (true)
             {
@@ -46,7 +71,7 @@ namespace Service.Services
 
                 SetSumToNextVertex(current);
             }
-
+            
             return GetPath(startVertex, finishVertex);
         }
 
@@ -80,17 +105,28 @@ namespace Service.Services
             }
         }
 
-        List<Guid> GetPath(GraphVertex startVertex, GraphVertex endVertex)
+        ShortestPathResponseDTO GetPath(GraphVertex startVertex, GraphVertex endVertex)
         {
-            var path = endVertex.ToString();
             List<Guid> ResultList = new List<Guid>();
+            result.FinalDistance = endVertex.EdgesWeightSum;
             while (startVertex != endVertex)
-            {
-                endVertex = endVertex.PreviousVertex;
+            {              
                 ResultList.Add(Guid.Parse(endVertex.ToString()));
+                endVertex = endVertex.PreviousVertex;              
             }
+            ResultList.Add(Guid.Parse(startVertex.ToString()));
+            ResultList.Reverse();
+            result.Path = ResultList;
+            _timeCounter.Stop();
+            result.ProcessDuration = GetProcessDuration(_timeCounter.Elapsed);
+            return result;
+        }
 
-            return ResultList;
+        private string GetProcessDuration(TimeSpan timeSpan)
+        {
+            var seconds = timeSpan.Seconds.ToString();
+            var milliSeconds = timeSpan.Milliseconds;
+            return $"{seconds}s,{milliSeconds}ms.";
         }
     }
 }

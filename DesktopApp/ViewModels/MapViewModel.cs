@@ -1,6 +1,6 @@
 ﻿using DesktopApp.APIInteraction;
 using DesktopApp.Models;
-using DesktopApp.Service;
+using DesktopApp.Services;
 using DesktopApp.Services.Commands;
 using DesktopApp.Services.State;
 using System;
@@ -37,19 +37,18 @@ namespace DesktopApp.ViewModels
             _travelSalesmanService = travelSalesmanService;
             
 
-            CityCollection = new ObservableCollection<City>();
             SelectedCities = new ObservableCollection<City>();
             SelectedCity = new City();
-            RouteCollection = new ObservableCollection<Route>();
             SelectedRoute = new Route();
             State = StateLine.GetStatus(StateBar.PushButton);
             SettingsMap = new Settings()
+            WholeMap = new WholeMap()
             {
-                VertexColor = "#ff0000",
-                VertexSize = 10,
-                EdgeColor = "#dde3ed",
-                EdgeSize = 3
+                Cities = new ObservableCollection<City>(),
+                Routes = new ObservableCollection<Route>(),
+                Settings = new Settings()
             };
+            InitializeModels();
         }
 
         #region SelectedMethodIndex
@@ -64,12 +63,12 @@ namespace DesktopApp.ViewModels
         public ObservableCollection<City> CityCollection { get; set; }
         public ObservableCollection<Route> RouteCollection { get; set; }
         public ObservableCollection<City> SelectedCities { get; set; }
-        private City _SelectedCity;
 
-        public City SelectedCity
+        private WholeMap wholeMap;
+        public WholeMap WholeMap
         {
-            get => _SelectedCity;
-            set => Set<City>(ref _SelectedCity, value, nameof(SelectedCity));
+            get => wholeMap;
+            set => Set(ref wholeMap, value, nameof(WholeMap));
         }
 
         #region HighlitedCity
@@ -108,16 +107,18 @@ namespace DesktopApp.ViewModels
 
         private Route _SelectedRoute;
         public Route SelectedRoute
+        private City selectedCity;
+        public City SelectedCity
         {
-            get => _SelectedRoute;
-            set => Set<Route>(ref _SelectedRoute, value, nameof(SelectedRoute));
+            get => selectedCity;
+            set => Set(ref selectedCity, value, nameof(SelectedCity));
         }
 
-        private Settings _SettingsMap;
-        public Settings SettingsMap
+        private Route selectedRoute;
+        public Route SelectedRoute
         {
-            get => _SettingsMap;
-            set => Set<Settings>(ref _SettingsMap, value, nameof(SettingsMap));
+            get => selectedRoute;
+            set => Set(ref selectedRoute, value, nameof(SelectedRoute));
         }
         private string _state;
         public string State
@@ -137,54 +138,74 @@ namespace DesktopApp.ViewModels
         }
 
         private bool OnCanSelectCityExecute(object p) => CanSelected;
-        public CreateCityCommand CreateNewCityCommand { get => new CreateCityCommand(p => OnCanAddCityCollection(), async m => await OnAddCityCollectionAsync()); }
+    
+        public RelayCommandAsync CreateNewCityCommand { get => new RelayCommandAsync(p => OnCanAddCityCollection(), async m => await OnAddCityCollectionAsync()); }
         private async Task OnAddCityCollectionAsync()
         {
-            try
+            SelectedCity.MapId = WholeMap.Id;
+            var res = await _cityAPIService.CreateCityAsync(SelectedCity);
+            if (!res.IsSuccessful)
+                _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
+            else
             {
-                var res = await _cityAPIService.CreateCityAsync(SelectedCity);
-                if (!res.IsSuccessful)
-                    throw new Exception();
                 SelectedCity = res.Payload;
-                CityCollection.Add(SelectedCity);
-            }
-            catch (Exception ex)
-            {
-                _messageBoxService.ShowError(ex, "An error occured. Please try it again.");
-                OnRemoveCityFromCollection();
+                WholeMap.Cities.Add(SelectedCity);
             }
         }
         private bool OnCanAddCityCollection() => true;
 
+        public UpdateCityCommand UpdateCityCommand { get => new UpdateCityCommand(p => OnCanUpdateCityCollection(), async m => await OnUpdateCityCollectionAsync()); }
+        private async Task OnUpdateCityCollectionAsync()
+        {
+            var res = await _cityAPIService.UpdateCityAsync(SelectedCity);
+            if (!res.IsSuccessful)
+            {
+                _messageBoxService.ShowError("An error occured. Please try it again.", "Error occured");
+            }
+        }
+
+        private bool OnCanUpdateCityCollection() => true;
+
         public CancelCreatingCityCommand CancelCreatingCityCommand { get => new CancelCreatingCityCommand(p => OnCanRemoveCityFromCollection(), m => OnRemoveCityFromCollection()); }
         private void OnRemoveCityFromCollection()
         {
-            CityCollection.Remove(SelectedCity);
             SelectedCity = new City();
         }
         private bool OnCanRemoveCityFromCollection() => true;
+
+        public DeleteCityCommand DeleteCityCommand { get => new DeleteCityCommand(p => OnCanDeleteCityFromCollection(), async m => await OnDeleteCityFromCollection()); }
+        private async Task OnDeleteCityFromCollection()
+        {
+            var res = await _cityAPIService.DeleteCityAsync(SelectedCity);
+            if (res.IsSuccessful)
+            {
+                WholeMap.Cities.Remove(SelectedCity);
+                SelectedCity = new City();
+            }
+            else
+            {
+                _messageBoxService.ShowError("An error occured. Please try it again.", "Error occured");
+                OnRemoveCityFromCollection();
+            }
+        }
+        private bool OnCanDeleteCityFromCollection() => true;
 
         #endregion
 
         #region RouteCommands
 
-        public CreateRouteCommand CreateNewRouteCommand { get => new CreateRouteCommand(p => OnCanAddRouteCollection(), async m => await OnAddRouteCollectionAsync()); }
+        public RelayCommandAsync CreateNewRouteCommand { get => new RelayCommandAsync(p => OnCanAddRouteCollection(), async m => await OnAddRouteCollectionAsync()); }
         private async Task OnAddRouteCollectionAsync()
         {
-            try
+            SelectedRoute.MapId = WholeMap.Id;
+            var res = await _routeAPIService.CreateRouteAsync(SelectedRoute);
+            if (!res.IsSuccessful)
+                _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
+            else
             {
-                var res = await _routeAPIService.CreateRouteAsync(SelectedRoute);
-                if (!res.IsSuccessful)
-                    throw new Exception();
                 SelectedRoute = res.Payload;
-                RouteCollection.Add(SelectedRoute);
+                WholeMap.Routes.Add(SelectedRoute);
             }
-            catch (Exception ex)
-            {
-                _messageBoxService.ShowError(ex, "An error occured. Please try it again.");
-                OnRemoveCityFromCollection();
-            }
-            SelectedRoute = new Route();
         }
 
         private bool OnCanAddRouteCollection() => true;
@@ -192,10 +213,39 @@ namespace DesktopApp.ViewModels
         public CancelCreatingRouteCommand CancelCreatingRouteCommand { get => new CancelCreatingRouteCommand(p => OnCanRemoveRouteFromCollection(), m => OnRemoveRouteFromCollection()); }
         private void OnRemoveRouteFromCollection()
         {
-            RouteCollection.Remove(SelectedRoute);
             SelectedRoute = new Route();
         }
         private bool OnCanRemoveRouteFromCollection() => true;
+
+        public UpdateRouteCommand UpdateRouteCommand { get => new UpdateRouteCommand(p => OnCanUpdateRouteCollection(), async m => await OnUpdateRouteCollectionAsync()); }
+        private async Task OnUpdateRouteCollectionAsync()
+        {
+            var res = await _routeAPIService.UpdateRouteAsync(SelectedRoute);
+            if (!res.IsSuccessful)
+            {
+                _messageBoxService.ShowError("An error occured. Please try it again.", "Error occured");
+            }
+        }
+
+        private bool OnCanUpdateRouteCollection() => true;
+
+        public DeleteRouteCommand DeleteRouteCommand { get => new DeleteRouteCommand(p => OnCanDeleteRouteFromCollection(), async m => await OnDeleteRouteFromCollection()); }
+        private async Task OnDeleteRouteFromCollection()
+        {
+            var res = await _routeAPIService.DeleteRouteAsync(SelectedRoute);
+            if (res.IsSuccessful)
+            {
+                WholeMap.Routes.Remove(SelectedRoute);
+                SelectedRoute = new Route();
+            }
+            else
+            {
+                _messageBoxService.ShowError("An error occured. Please try it again.", "Error occured");
+                OnRemoveRouteFromCollection();
+            }
+        }
+        private bool OnCanDeleteRouteFromCollection() => true;
+
 
         #endregion
 
@@ -258,14 +308,22 @@ namespace DesktopApp.ViewModels
         private bool OnCanCancelSelectingExecute(object p) => SelectedCities.Count > 0;
         #endregion
 
-        public int CitiesCount() => CityCollection.Count;
+        public int CitiesCount() => WholeMap.Cities.Count;
 
-        public int RoutesCount() => RouteCollection.Count;
+        public int RoutesCount() => WholeMap.Routes.Count;
 
         public bool IsRouteHasBothCities() => SelectedRoute.FirstCity != null && SelectedRoute.SecondCity != null;
 
-        public bool RouteWasSaved() => RouteCollection.Contains(SelectedRoute);
+        public bool RouteWasSaved() => WholeMap.Routes.Contains(SelectedRoute);
 
-        public bool CityWasSaved() => CityCollection.Contains(SelectedCity);
+        public bool CityWasSaved() => WholeMap.Cities.Contains(SelectedCity);
+
+        public bool IsHaveMap() => WholeMap.Id != default;
+
+        public void InitializeModels()
+        {
+            SelectedCity = new City();
+            SelectedRoute = new Route();
+        }
     }
 }

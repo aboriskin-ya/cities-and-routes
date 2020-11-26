@@ -32,6 +32,23 @@ namespace DesktopApp.Models
 
         #endregion
 
+
+        #region UpdateCityPossibility
+
+        private bool _isAbleToUpdateCity = false;
+        public bool IsAbleToUpdateCity
+        {
+            get => _isAbleToUpdateCity;
+            set
+            {
+                _isAbleToUpdateCity = value;
+                RaisePropertyChanged(nameof(IsAbleToUpdateCity));
+                State = CityStatusUpdate();
+            }
+        }
+
+        #endregion
+
         #region SetCityPossibility
 
         private bool _isAbleToSetCity = false;
@@ -92,7 +109,39 @@ namespace DesktopApp.Models
 
         #endregion
 
-        #region SuccessfulCreating
+        #region UpdateRoutePossibility
+
+        private bool _isAbleToUpdateRoute = false;
+        public bool IsAbleToUpdateRoute
+        {
+            get => _isAbleToUpdateRoute;
+            set
+            {
+                _isAbleToUpdateRoute = value;
+                RaisePropertyChanged(nameof(IsAbleToUpdateRoute));
+                State = RouteStatusUpdate();
+            }
+        }
+
+        #endregion
+
+        #region FindShortestPathPossibility
+
+        private bool _isAbleToFindShortestPath = false;
+        public bool IsAbleToFindShortestPath
+        {
+            get => _isAbleToFindShortestPath;
+            set
+            {
+                _isAbleToFindShortestPath = value;
+                RaisePropertyChanged(nameof(IsAbleToFindShortestPath));
+                State = PathStatusUpdate();
+            }
+        }
+
+        #endregion
+
+        #region SuccessfulAction
 
         private bool _isSuccess;
         public bool IsSuccess
@@ -123,6 +172,9 @@ namespace DesktopApp.Models
             if (IsAbleToCreateCity)
                 return StateLine.Show(StateLineStatus.CreateCity);
 
+            if (IsAbleToUpdateCity)
+                return StateLine.Show(StateLineStatus.UpdateCity);
+
             return StateLine.Show(StateLineStatus.Empty);
         }
 
@@ -138,6 +190,14 @@ namespace DesktopApp.Models
                 return StateLine.Show(StateLineStatus.CreateRoute);
 
              return StateLine.Show(StateLineStatus.Empty);
+        }
+
+        private string PathStatusUpdate()
+        {
+            if (IsAbleToFindShortestPath)
+                return StateLine.Show(StateLineStatus.FindShortestPath);
+
+            return StateLine.Show(StateLineStatus.Empty);
         }
     }
 }

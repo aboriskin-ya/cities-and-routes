@@ -8,10 +8,13 @@ namespace DataAccess.EntityBuilders
     {
         public CityBuild(EntityTypeBuilder<City> entityBuilder)
         {
-            entityBuilder.HasKey(m => m.Id);
-            entityBuilder.Property(m => m.Name).IsRequired();
-            entityBuilder.Property(m => m.X).IsRequired();
-            entityBuilder.Property(m => m.Y).IsRequired();
+            entityBuilder.HasKey(c => c.Id);
+            entityBuilder.Property(c => c.Name).IsRequired();
+            entityBuilder.Property(c => c.X).IsRequired();
+            entityBuilder.Property(c => c.Y).IsRequired();
+            entityBuilder.HasOne(c => c.Map)
+                .WithMany(m => m.Cities)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

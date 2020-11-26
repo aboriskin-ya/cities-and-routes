@@ -4,7 +4,9 @@
                     xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm">
     
     <converters:StringToColorBrushConverter x:Key="StringToColorConverter"/>
+    <converters:StringToColorInvertConverter x:Key="StringToColorInvertConverter"/>
     <converters:CenterOffsetConverter x:Key="CenterOffsetConverter"/>
+    <converters:PointsToPathConverter x:Key="PointsToPathConverter"/>
     <dxmvvm:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     
 </ResourceDictionary>

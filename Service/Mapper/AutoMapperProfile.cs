@@ -8,16 +8,23 @@ namespace Service.Mapper
     {
         public AutoMapperProfile()
         {
-            CreateMap<MapGetDTO, Map>();
+            CreateMap<MapCreateDTO, Map>();
             CreateMap<Map, MapGetDTO>();
-            CreateMap<Map, MapCreateDTO>();
-            CreateMap<CityCreateDTO, City>().ForMember("X", opt => opt.MapFrom(src => src.Position.X)).ForMember("Y", opt => opt.MapFrom(src => src.Position.Y));
-            CreateMap<City, CityGetDTO>().ForPath(dest => dest.Position.X, opt => opt.MapFrom(src => src.X)).ForPath(dest => dest.Position.Y, opt => opt.MapFrom(src => src.Y));
+            CreateMap<Map, MapIdNameGetDTO>();
+
+            CreateMap<CityCreateDTO, City>()
+                .ForMember("X", opt => opt.MapFrom(src => src.Position.X))
+                .ForMember("Y", opt => opt.MapFrom(src => src.Position.Y));
+            CreateMap<City, CityGetDTO>()
+                .ForPath(dest => dest.Position.X, opt => opt.MapFrom(src => src.X))
+                .ForPath(dest => dest.Position.Y, opt => opt.MapFrom(src => src.Y));
+
             CreateMap<RouteCreateDTO, Route>();
             CreateMap<Route, RouteGetDTO>();
+
             CreateMap<SettingsUpdateDTO, Settings>();
-            CreateMap<SettingsDTO, Settings>();
-            CreateMap<Settings, SettingsDTO>();
+            CreateMap<SettingsDTO, Settings>().ReverseMap();
+
             CreateMap<Map, ShortPathResolverDTO>();
         }
     }
