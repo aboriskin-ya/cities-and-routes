@@ -91,25 +91,25 @@ namespace Tests
                     new Route {FirstCityId = tomskId, SecondCityId = irkutskId, Distance = 1633}
                 }
             };
-
+            testShortPathResolverDTO = new ShortPathResolverDTO() { Cities = map.Cities, Routes = map.Routes };
             travelSalesmanAnnealingResolver = new TravelSalesmanAnnealingResolver();
 
             graph = new Graph();
             graph.AddVertex(voronezhId.ToString());
             graph.AddVertex(moscowId.ToString());
             graph.AddVertex(smolenskId.ToString());
+            graph.AddVertex(kazanId.ToString());
             graph.AddEdge(voronezhId.ToString(), smolenskId.ToString(), 690);
-            graph.AddEdge(voronezhId.ToString(), moscowId.ToString(), 525);
+            graph.AddEdge(voronezhId.ToString(), kazanId.ToString(), 1057);
             graph.AddEdge(moscowId.ToString(), smolenskId.ToString(), 398);
-
-
+            graph.AddEdge(moscowId.ToString(), kazanId.ToString(), 822);
         }
         [Fact]
         public void CheckSalesmanAnnealingVoronezSmolenskMoscow()
         {
             //Arrange
             TravelSalesmanResponse expectedResult = new TravelSalesmanResponse
-            { CalculatedDistance = 1913, PreferableSequenceOfCities = new List<Guid> { voronezhId, smolenskId, moscowId } };
+            { CalculatedDistance = 2967, PreferableSequenceOfCities = new List<Guid> { voronezhId, smolenskId, moscowId, kazanId } };
 
             //Act
             var result = travelSalesmanAnnealingResolver.Resolve(graph);

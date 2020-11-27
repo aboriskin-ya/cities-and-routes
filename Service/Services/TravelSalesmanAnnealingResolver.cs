@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using PathResolver;
+using Service.DTO;
 using Service.PathResolver;
+using Service.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,9 +26,13 @@ namespace Service
         private double _currentWeightValue = 0;
         private string[] _currentSequence;
         private Stopwatch _timeCounter;
+        ShortPathResolverDTO _pathResolverDTO;
+        Graph _graph;
+
         #endregion
         public TravelSalesmanResponse Resolve(Graph graph)
         {
+            _graph = graph;
             Initialize(graph);
             if (CheckExecuting(_minWeightValue)) return null;
             while (_temperature >= 0.05)
@@ -69,10 +75,25 @@ namespace Service
             for (int i = 0; i < graph.Vertices.Count - 1; i++)
             {
                 var CurrentEdge = graph.GetEdge(currentSequence[i], currentSequence[i + 1]);
-                if (CurrentEdge == null) return int.MaxValue;
-                weightValue += CurrentEdge.EdgeWeight;
+                if (CurrentEdge == null)
+                {
+                    weightValue += new ShortestPathResolverService().FindShortestPath(_graph, currentSequence[i], currentSequence[i + 1]).FinalDistance;
+                }
+                else
+                {
+                    weightValue += CurrentEdge.EdgeWeight;
+                } 
             }
-            weightValue += graph.GetEdge(currentSequence[currentSequence.Length - 1], currentSequence[0]).EdgeWeight;
+            var LastEdge = graph.GetEdge(currentSequence[currentSequence.Length - 1], currentSequence[0]);
+            if (LastEdge == null)
+            {
+                weightValue += new ShortestPathResolverService().FindShortestPath(_graph, currentSequence[currentSequence.Length - 1], currentSequence[0]).FinalDistance;
+            }
+            else
+            {
+                weightValue += graph.GetEdge(currentSequence[currentSequence.Length - 1], currentSequence[0]).EdgeWeight;
+            }
+            
             return weightValue;
         }
         private void ChangeTemperature() => _temperature *= 0.75;
