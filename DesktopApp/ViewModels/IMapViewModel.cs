@@ -11,7 +11,7 @@ namespace DesktopApp.ViewModels
 
         Route SelectedRoute { get; set; }
 
-        CreateCityCommand CreateNewCityCommand { get; }
+        RelayCommandAsync CreateNewCityCommand { get; }
 
         UpdateCityCommand UpdateCityCommand { get; }
 
@@ -21,7 +21,7 @@ namespace DesktopApp.ViewModels
 
         CancelCreatingRouteCommand CancelCreatingRouteCommand { get; }
 
-        CreateRouteCommand CreateNewRouteCommand { get; }
+        RelayCommandAsync CreateNewRouteCommand { get; }
 
         UpdateRouteCommand UpdateRouteCommand { get; }
 
@@ -38,5 +38,7 @@ namespace DesktopApp.ViewModels
         bool CityWasSaved();
 
         bool IsHaveMap();
+
+        void InitializeModels();
     }
 }

@@ -125,7 +125,23 @@ namespace DesktopApp.Models
 
         #endregion
 
-        #region SuccessfulCreating
+        #region FindShortestPathPossibility
+
+        private bool _isAbleToFindShortestPath = false;
+        public bool IsAbleToFindShortestPath
+        {
+            get => _isAbleToFindShortestPath;
+            set
+            {
+                _isAbleToFindShortestPath = value;
+                RaisePropertyChanged(nameof(IsAbleToFindShortestPath));
+                State = PathStatusUpdate();
+            }
+        }
+
+        #endregion
+
+        #region SuccessfulAction
 
         private bool _isSuccess;
         public bool IsSuccess
@@ -174,6 +190,14 @@ namespace DesktopApp.Models
                 return StateLine.Show(StateLineStatus.CreateRoute);
 
              return StateLine.Show(StateLineStatus.Empty);
+        }
+
+        private string PathStatusUpdate()
+        {
+            if (IsAbleToFindShortestPath)
+                return StateLine.Show(StateLineStatus.FindShortestPath);
+
+            return StateLine.Show(StateLineStatus.Empty);
         }
     }
 }

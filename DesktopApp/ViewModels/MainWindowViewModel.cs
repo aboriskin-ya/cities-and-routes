@@ -6,7 +6,9 @@ using DesktopApp.Services.Helper;
 using DesktopApp.Services.Utils;
 using DesktopApp.UserControls;
 using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -29,16 +31,23 @@ namespace DesktopApp.ViewModels
 
         public ICursorPositionViewModel PositionViewModel { get; }
 
-        public MainWindowViewModel(IMapViewModel viewModel, ICursorPositionViewModel positionViewModel)
+        public IShortestPathViewModel ShortestPathViewModel { get; }
+
+        public MainWindowViewModel(IMapViewModel viewModel, ICursorPositionViewModel positionViewModel, IShortestPathViewModel shortestPathViewModel)
         {
             MapViewModel = viewModel;
             PositionViewModel = positionViewModel;
-            AppState = new States();
+            ShortestPathViewModel = shortestPathViewModel;
+
+            InitializeModels();
             Messenger.Default.Register<WholeMap>(this, map => ReceiveMessageSelectExistingMap(map));
         }
 
         private object ReceiveMessageSelectExistingMap(WholeMap map)
         {
+            ShortestPathViewModel.InitializeModels();
+            MapViewModel.InitializeModels();
+            InitializeModels();
             InitializeMapViewModel(map);
             InitializeMapImageSource(map.Image.Data);
             return map;
@@ -51,7 +60,7 @@ namespace DesktopApp.ViewModels
             MapViewModel.WholeMap.Settings = map.Settings ?? new Settings();
         }
 
-        public void InitializeMapImageSource(byte[] image)
+        private void InitializeMapImageSource(byte[] image)
         {
             var btmp = new BitmapImage();
             var memoryStream = new MemoryStream();
@@ -69,7 +78,42 @@ namespace DesktopApp.ViewModels
             ImageWidth = (MapImageSource as BitmapImage).PixelWidth;
         }
 
+        private void InitializeModels()
+        {
+            AppState = new States();
+            Path = new PathModel();
+        }
+
         #endregion
+
+        public ICommand PathResolverOpenCommand => new PathResolverOpenCommand(p => OnCanPathResolverOpenExecute(p), p => OnPathResolverOpen(p));
+
+        private void OnPathResolverOpen(object p)
+        {
+            AppState.IsAbleToFindShortestPath = true;
+        }
+
+        private bool OnCanPathResolverOpenExecute(object p) => MapViewModel.IsHaveMap() && MapViewModel.RoutesCount() > 0;
+
+        public ICommand AddingCitiesRoutesOpenCommand => new AddingCitiesRoutesOpenCommand(p => OnCanOnAddingCitiesRoutesOpenExecute(p), p => OnAddingCitiesRoutesOpen(p));
+
+        private void OnAddingCitiesRoutesOpen(object p)
+        {
+            AppState.IsAbleToFindShortestPath = false;
+        }
+
+        private bool OnCanOnAddingCitiesRoutesOpenExecute(object p) => true;
+
+        public ICommand CalculateShortestPathCommand => new RelayCommand(p => OnCalculateShortestPath(p), p => OnCanCalculateShortestPathExecute(p));
+
+        private void OnCalculateShortestPath(object p)
+        {
+            path.MapId = MapViewModel.WholeMap.Id;
+            ShortestPathViewModel.CalculateShortestPathCommand.Execute(path);
+            Path = new PathModel();
+        }
+
+        private bool OnCanCalculateShortestPathExecute(object p) => Path.CityToId != default && Path.CityToId != Path.CityFromId;
 
         #region ShowCreateMapDialog 
 
@@ -113,11 +157,11 @@ namespace DesktopApp.ViewModels
 
         #region CreateNewCityCommand
 
-        public ICommand CreateNewCityCommand => new CreateCityCommand(p => OnCanCreateNewCityExecuted(p), p => OnCreateNewCityExecuted(p));
+        public ICommand CreateNewCityCommand => new RelayCommand(async p => await OnCreateNewCityExecutedAsync(p), p => OnCanCreateNewCityExecuted(p));
 
-        private void OnCreateNewCityExecuted(object p)
+        private async Task OnCreateNewCityExecutedAsync(object p)
         {
-            MapViewModel.CreateNewCityCommand.Execute(p);
+            await MapViewModel.CreateNewCityCommand.ExecuteAsync(p);
             AppState.IsAbleToCreateCity = false;
             if (MapViewModel.CityWasSaved())
                 AppState.IsSuccess = true;
@@ -129,7 +173,7 @@ namespace DesktopApp.ViewModels
 
         #region UpdateCityCommand
 
-        public ICommand UpdateCityCommand => new CreateCityCommand(p => OnCanUpdateCityExecuted(p), p => OnUpdateCityExecuted(p));
+        public ICommand UpdateCityCommand => new RelayCommand(p => OnUpdateCityExecuted(p), p => OnCanUpdateCityExecuted(p));
 
         private void OnUpdateCityExecuted(object p)
         {
@@ -165,11 +209,11 @@ namespace DesktopApp.ViewModels
 
         #region CreateNewRouteCommand
 
-        public ICommand CreateNewRouteCommand => new CreateRouteCommand(p => OnCanCreateNewRouteExecuted(p), p => OnCreateNewRouteExecuted(p));
+        public ICommand CreateNewRouteCommand => new RelayCommand(async p => await OnCreateNewRouteExecutedAsync(p), p => OnCanCreateNewRouteExecuted(p));
 
-        private void OnCreateNewRouteExecuted(object p)
+        private async Task OnCreateNewRouteExecutedAsync(object p)
         {
-            MapViewModel.CreateNewRouteCommand.Execute(p);
+            await MapViewModel.CreateNewRouteCommand.ExecuteAsync(p);
             AppState.IsAbleToCreateRoute = false;
             if (MapViewModel.RouteWasSaved())
                 AppState.IsSuccess = true;
@@ -181,7 +225,7 @@ namespace DesktopApp.ViewModels
 
         #region UpdateRouteCommand
 
-        public ICommand UpdateRouteCommand => new CreateRouteCommand(p => OnCanUpdateRouteExecuted(p), p => OnUpdateRouteExecuted(p));
+        public ICommand UpdateRouteCommand => new RelayCommand(p => OnUpdateRouteExecuted(p), p => OnCanUpdateRouteExecuted(p));
 
         private void OnUpdateRouteExecuted(object p)
         {
@@ -392,11 +436,22 @@ namespace DesktopApp.ViewModels
         }
         #endregion
 
+        #region ApplicationState
+
         private States appState;
         public States AppState
         {
             get => appState;
             set => Set<States>(ref appState, value, nameof(AppState));
+        }
+
+        #endregion
+
+        private PathModel path;
+        public PathModel Path
+        {
+            get => path;
+            set => Set(ref path, value, nameof(Path));
         }
     }
 }
