@@ -101,8 +101,11 @@ namespace Tests
             graph.AddVertex(kazanId.ToString());
             graph.AddEdge(voronezhId.ToString(), smolenskId.ToString(), 690);
             graph.AddEdge(voronezhId.ToString(), kazanId.ToString(), 1057);
+            //graph.AddEdge(voronezhId.ToString(), moscowId.ToString(), 525);
             graph.AddEdge(moscowId.ToString(), smolenskId.ToString(), 398);
             graph.AddEdge(moscowId.ToString(), kazanId.ToString(), 822);
+            //graph.AddEdge(smolenskId.ToString(), kazanId.ToString(), 1223);
+
         }
         [Fact]
         public void CheckSalesmanAnnealingVoronezSmolenskMoscow()
@@ -115,7 +118,10 @@ namespace Tests
             var result = travelSalesmanAnnealingResolver.Resolve(graph);
             //Assert
             Assert.Equal(expectedResult.CalculatedDistance, result.CalculatedDistance);
-            Assert.Equal(expectedResult.PreferableSequenceOfCities, result.PreferableSequenceOfCities);
+            foreach (var city in expectedResult.PreferableSequenceOfCities)
+            {
+                Assert.Contains(city, result.PreferableSequenceOfCities);
+            }
         }
     }
 }
