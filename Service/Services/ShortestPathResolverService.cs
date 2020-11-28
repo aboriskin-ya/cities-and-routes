@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using PathResolver;
 using Service.DTO;
+using Service.PathResolver;
 using Service.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace Service.Services
         ShortestPathResponseDTO result;
         Stopwatch _timeCounter;
         private readonly ILogger<ShortestPathResolverService> _logger;
+        Dictionary<GraphVertex, GraphVertexAddition> _vertexAddition;
 
         public ShortestPathResolverService(ILogger<ShortestPathResolverService> logger)
         {
@@ -22,6 +24,7 @@ namespace Service.Services
             result = new ShortestPathResponseDTO();
             result.FinalDistance = 0;
             _timeCounter = new Stopwatch();
+            _vertexAddition = new Dictionary<GraphVertex, GraphVertexAddition>();
         }
 
         public ShortestPathResolverService()
@@ -30,6 +33,7 @@ namespace Service.Services
             result = new ShortestPathResponseDTO();
             result.FinalDistance = 0;
             _timeCounter = new Stopwatch();
+            _vertexAddition = new Dictionary<GraphVertex, GraphVertexAddition>();
         }
 
         public ShortestPathResponseDTO FindShortestPath(ShortPathResolverDTO PathResolverDTO, string startName, string finishName)
@@ -54,17 +58,23 @@ namespace Service.Services
         {
             _logger.LogInformation("Find shortest path second function started");
             this.Graph = Graph;
+            foreach (var vertex in Graph.Vertices)
+            {
+                _vertexAddition.Add(vertex, new GraphVertexAddition());
+            }
             return FindShortestPath(Graph.FindVertex(startName), Graph.FindVertex(finishName));
         }
 
         public ShortestPathResponseDTO FindShortestPath(GraphVertex startVertex, GraphVertex finishVertex)
         {
             _logger.LogInformation("Find shortest path third function started");
-            startVertex.EdgesWeightSum = 0;
+            //startVertex.EdgesWeightSum = 0;
+            _vertexAddition[startVertex].EdgesWeightSum = 0;
             while (true)
             {
                 var current = FindUnvisitedVertexWithMinSum();
-                if (current == null)
+                //var current = FindUnvisitedVertexWithMinSum();
+                if (current.Key == null)
                 {
                     break;
                 }
@@ -75,25 +85,35 @@ namespace Service.Services
             return GetPath(startVertex, finishVertex);
         }
 
-        public GraphVertex FindUnvisitedVertexWithMinSum()
+        private KeyValuePair<GraphVertex, GraphVertexAddition> FindUnvisitedVertexWithMinSum()
         {
             var minValue = int.MaxValue;
             GraphVertex minVertexInfo = null;
+            GraphVertexAddition minVertexInfoAdd = null;
+            KeyValuePair<GraphVertex, GraphVertexAddition> pair = 
+                new KeyValuePair<GraphVertex, GraphVertexAddition>(minVertexInfo, minVertexInfoAdd);
             foreach (var Vertex in Graph.Vertices)
             {
-                if (Vertex.IsUnvisited && Vertex.EdgesWeightSum < minValue)
+                /*if (Vertex.IsUnvisited && Vertex.EdgesWeightSum < minValue)
                 {
                     minVertexInfo = Vertex;
                     minValue = Vertex.EdgesWeightSum;
+                }*/
+                if (_vertexAddition[Vertex].IsUnvisited && _vertexAddition[Vertex].EdgesWeightSum < minValue)
+                {
+                    minVertexInfo = Vertex;
+                    minVertexInfoAdd = _vertexAddition[Vertex];
+                    minValue = _vertexAddition[Vertex].EdgesWeightSum;
                 }
             }
 
-            return minVertexInfo;
+            return pair;
         }
-        void SetSumToNextVertex(GraphVertex info)
+        void SetSumToNextVertex(KeyValuePair<GraphVertex, GraphVertexAddition> info)
         {
-            info.IsUnvisited = false;
-            foreach (var Edge in info.Edges)
+            info.Value.IsUnvisited = false;
+            //info.IsUnvisited = false;
+            foreach (var Edge in info.Key.Edges)
             {
                 var nextInfo = Edge.ConnectedVertex;
                 var sum = info.EdgesWeightSum + Edge.EdgeWeight;
@@ -119,6 +139,13 @@ namespace Service.Services
             result.Path = ResultList;
             _timeCounter.Stop();
             result.ProcessDuration = GetProcessDuration(_timeCounter.Elapsed);
+            foreach (var vertex in Graph.Vertices)
+            {
+                vertex.EdgesWeightSum = int.MaxValue;
+                vertex.IsUnvisited = true;
+                vertex.NextVertices = new List<GraphVertex>();
+                vertex.PreviousVertex = null;
+            }
             return result;
         }
 

@@ -6,26 +6,26 @@ namespace PathResolver
     {
         public string Name { get; }
         public List<GraphEdge> Edges { get; }
-        public bool IsUnvisited { get; set; }
-        public int EdgesWeightSum { get; set; }
-        public GraphVertex PreviousVertex { get; set; }
+        //public bool IsUnvisited { get; set; }
+        //public int EdgesWeightSum { get; set; }
+        //public GraphVertex PreviousVertex { get; set; }
 
-        public List<GraphVertex> NextVertices { get; }
+        //public List<GraphVertex> NextVertices { get; set; }
 
         public GraphVertex(string VertexName)
         {
             Name = VertexName;
             Edges = new List<GraphEdge>();
-            IsUnvisited = true;
-            EdgesWeightSum = int.MaxValue;
-            PreviousVertex = null;
-            NextVertices = new List<GraphVertex>();
+            //IsUnvisited = true;
+            //EdgesWeightSum = int.MaxValue;
+            //PreviousVertex = null;
+            //NextVertices = new List<GraphVertex>();
         }
-        public void AddNextVertex(GraphVertex secondVertex)
+        /*public void AddNextVertex(GraphVertex secondVertex)
         {
             secondVertex.PreviousVertex = this;
             NextVertices.Add(secondVertex);
-        }
+        }*/
         public void AddEdge(GraphEdge NewEdge)
         {
             Edges.Add(NewEdge);
