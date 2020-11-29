@@ -6,11 +6,11 @@ namespace Service.Services.Interfaces
 {
     public interface ISettingsService
     {
-        IEnumerable<SettingsDTO> GetSettings();
-        SettingsDTO GetSettings(Guid id);
-        SettingsDTO GetSettingsOfMap(Guid id);
-        SettingsDTO CreateSettings(SettingsDTO settingsDTO);
-        SettingsDTO UpdateSettings(Guid Id, SettingsUpdateDTO settingsDTO);
+        IEnumerable<SettingsGetDTO> GetSettings();
+        SettingsGetDTO GetSettings(Guid id);
+        SettingsGetDTO GetSettingsOfMap(Guid id);
+        SettingsGetDTO CreateSettings(SettingsCreateDTO settingsDTO);
+        SettingsGetDTO UpdateSettings(Guid Id, SettingsUpdateDTO settingsDTO);
         bool DeleteSettings(Guid id);
     }
 }

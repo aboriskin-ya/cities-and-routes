@@ -1,92 +1,141 @@
-﻿<Page x:Class="DesktopApp.Dialogs.SettingsDialog"
+﻿<Window x:Class="DesktopApp.Dialogs.SettingsDialog"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:DesktopApp.Dialogs" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+      xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
       mc:Ignorable="d" 
-      d:DesignHeight="500" d:DesignWidth="800"
-      Title="SettingsDialog">
-
-    <Grid>
+      Height="450" Width="500" ResizeMode="NoResize"
+      Title="Settings" x:Name="settingsDialog">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction 
+                Command="{Binding CancelCommand}"
+                CommandParameter="{Binding ElementName=settingsDialog}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*"/>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="0.3*"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0"
+              Margin="0 0 0 10">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="180px"/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Rectangle Grid.Row="0" Grid.ColumnSpan="2" Height="30" VerticalAlignment="Top" ></Rectangle>
-            <TextBlock Grid.Row="0"  Text="Display the image" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <TextBlock Grid.Row="1" Text="Display the graph" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <CheckBox Grid.Row="0" Grid.Column="1" HorizontalContentAlignment="Center"  Background="GreenYellow" VerticalAlignment="Center"></CheckBox>
-            <CheckBox  Grid.Row="1" Grid.Column="1" HorizontalContentAlignment="Left"  IsChecked="True" Background="Red" VerticalAlignment="Center"></CheckBox>
-
-
+            <CheckBox VerticalAlignment="Center" Margin="0,0,352,0"
+                      IsChecked="{Binding Settings.DisplayingImage}">
+                <CheckBox.Content>
+                    <TextBlock Text="Display the image" Width="110"/>
+                </CheckBox.Content>
+            </CheckBox>
+            <CheckBox Grid.Row="1" VerticalAlignment="Center" Margin="0,0,352,0"
+                      IsChecked="{Binding Settings.DisplayingGraph}">
+                <CheckBox.Content>
+                    <TextBlock Text="Display the graph" Width="110"/>
+                </CheckBox.Content>
+            </CheckBox>
         </Grid>
 
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="15px"/>
+                <RowDefinition Height="20px"/>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*"/>
                 <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="490px"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Rectangle Grid.ColumnSpan="3" Grid.RowSpan="3" Margin="15 20 15 10" Stroke="Black" StrokeThickness="2"></Rectangle>
-            <TextBlock Grid.Column="0" Grid.Row="0" Text="City settings" FontWeight="Bold" HorizontalAlignment="Center"/>
+            <Rectangle Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="2" Stroke="Gray" StrokeThickness="2"></Rectangle>
+            <TextBlock Grid.Column="0" Grid.Row="0" Text="City settings"/>
             <TextBlock Grid.Column="0" Grid.Row="1" Text="Size" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Slider x:Name="sldLineUp" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" ValueChanged="sldLineUp_ValueChanged" Maximum="10" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"></Slider>
-            <xctk:ColorPicker SelectedColor="Wheat"  x:Name="_colorPickerUp" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Top" Width="20"/>
+            <Slider x:Name="sizeCity" 
+                    Grid.Column="1" Grid.Row="1" 
+                    VerticalAlignment="Center"
+                    Minimum="5" Maximum="20" 
+                    TickPlacement="BottomRight" 
+                    TickFrequency="1"
+                    Value="{Binding Settings.VertexSize}"/>
+            <xctk:ColorPicker x:Name="colorCity" 
+                              Grid.Column="1" Grid.Row="2" 
+                              HorizontalAlignment="Left" VerticalAlignment="Top" 
+                              Width="45"
+                              SelectedColor="{Binding Settings.VertexColor}"/>
             <TextBlock Grid.Column="0" Grid.Row="2" Text="Color" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-            <Ellipse x:Name="ellips" Grid.Column="3" Grid.Row="3" Stroke="Black" Width="20" Height="20" VerticalAlignment="Top" DataContext="{Binding ElementName=sldLineUp, Path=Value}">
+            <Ellipse x:Name="ellips" 
+                     Grid.Column="2" Grid.RowSpan="2" Grid.Row="1" 
+                     Width="{Binding ElementName=sizeCity, Path=Value}" 
+                     Height="{Binding ElementName=sizeCity, Path=Value}" 
+                     VerticalAlignment="Center">
                 <Ellipse.Fill>
-                    <SolidColorBrush Color="{Binding ElementName=_colorPickerUp, Path=SelectedColor}"/>
+                    <SolidColorBrush Color="{Binding ElementName=colorCity, Path=SelectedColor}"/>
                 </Ellipse.Fill>
             </Ellipse>
         </Grid>
 
         <Grid Grid.Row="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="15px"/>
+                <RowDefinition Height="20px"/>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*"/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="490px"/>
             </Grid.ColumnDefinitions>
-            <Rectangle Grid.ColumnSpan="3" Grid.RowSpan="3" Margin="15 20 15 10" Stroke="Black" StrokeThickness="2"></Rectangle>
-            <TextBlock Grid.Column="0" Grid.Row="0" Text="Route settings" FontWeight="Bold" HorizontalAlignment="Center"/>
+            <Rectangle Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="2" Stroke="Gray" StrokeThickness="2"></Rectangle>
+            <TextBlock Grid.Column="0" Grid.Row="0" Text="Route settings"/>
             <TextBlock Grid.Column="0" Grid.Row="1" Text="Size" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Slider x:Name="sldLineDown" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" ValueChanged="sldLine_ValueChanged" Maximum="5" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True"></Slider>
-            <xctk:ColorPicker SelectedColor="Wheat" x:Name="_colorPickerDown" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Top" Width="20"/>
+            <Slider x:Name="sizeRoute" 
+                    Grid.Column="1" 
+                    Grid.Row="1" 
+                    VerticalAlignment="Center"
+                    Minimum="1" Maximum="6" 
+                    TickPlacement="BottomRight" 
+                    TickFrequency="0.2"
+                    Value="{Binding Settings.EdgeSize}"/>
+            <xctk:ColorPicker x:Name="colorRoute"
+                              Grid.Column="1" Grid.Row="2" 
+                              HorizontalAlignment="Left" VerticalAlignment="Top" 
+                              Width="45"
+                              SelectedColor="{Binding Settings.EdgeColor}"/>
             <TextBlock Grid.Column="0" Grid.Row="2" Text="Color" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
-            <Line x:Name="lineColor" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Center" X1="40" Y1="0" X2="130" Y2="40" VerticalAlignment="Center" StrokeThickness="{Binding ElementName=sldLineDown}">
+            <Line x:Name="lineColor" 
+                  Grid.Column="2" 
+                  Grid.Row="1" 
+                  Grid.RowSpan="2" 
+                  HorizontalAlignment="Center" 
+                  X1="40" Y1="0" X2="130" Y2="40" 
+                  VerticalAlignment="Center"
+                  StrokeThickness="{Binding ElementName=sizeRoute, Path=Value}">
                 <Line.Stroke>
-                    <SolidColorBrush Color="{Binding ElementName=_colorPickerDown, Path=SelectedColor}"/>
+                    <SolidColorBrush Color="{Binding ElementName=colorRoute, Path=SelectedColor}"/>
                 </Line.Stroke>
             </Line>
         </Grid>
 
+        <Button Grid.Row="3" 
+                Content="Save and Apply" 
+                HorizontalAlignment="Left" VerticalAlignment="Center"
+                Command="{Binding SaveSettingsCommand}"
+                CommandParameter="{Binding ElementName=settingsDialog}"/>
 
-        <Button Grid.Row="3" Content="Save and Apply" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30" FontWeight="Bold"/>
+        <Button Grid.Row="3" 
+                Content="Cancel"
+                HorizontalAlignment="Right" VerticalAlignment="Center"
+                Command="{Binding CancelCommand}"
+                CommandParameter="{Binding ElementName=settingsDialog}"/>
 
     </Grid>
-</Page>
+</Window>

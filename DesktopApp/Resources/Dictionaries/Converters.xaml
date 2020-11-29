@@ -8,5 +8,5 @@
     <converters:CenterOffsetConverter x:Key="CenterOffsetConverter"/>
     <converters:PointsToPathConverter x:Key="PointsToPathConverter"/>
     <dxmvvm:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-    
+
 </ResourceDictionary>
