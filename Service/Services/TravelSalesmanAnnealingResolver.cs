@@ -26,6 +26,7 @@ namespace Service
         private double _currentWeightValue = 0;
         private string[] _currentSequence;
         private Stopwatch _timeCounter;
+        ShortPathResolverDTO _pathResolverDTO;
         Graph _graph;
 
         #endregion
@@ -146,7 +147,7 @@ namespace Service
         }
         
 
-        private bool CheckExecuting(double criticalValue) => criticalValue.Equals(int.MaxValue);
+        private bool CheckExecuting(double criticalValue) => criticalValue.Equals(double.MaxValue);
         private string GetProcessDuration(TimeSpan timeSpan)
         {
             var seconds = timeSpan.Seconds.ToString();
