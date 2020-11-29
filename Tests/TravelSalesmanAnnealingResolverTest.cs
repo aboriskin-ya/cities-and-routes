@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 using Service.PathResolver;
+using AutoMapper;
 
 namespace Tests
 {
@@ -34,12 +35,9 @@ namespace Tests
         private readonly Guid irkutskId = Guid.NewGuid();
         private readonly Guid surgutId = Guid.NewGuid();
         private readonly Map map;
-        private readonly ShortPathResolverDTO testShortPathResolverDTO;
-        private readonly Mock<IMapRepository> mockMapRepository;
-        private readonly Mock<IPathToGraphService> mockPathToGraphService;
-        private readonly AlgorithmService testAlgorithmService;
         private readonly TravelSalesmanAnnealingResolver travelSalesmanAnnealingResolver;
         private readonly Graph graph;
+
 
         public TravelSalesmanAnnealingResolverTest()
         {
@@ -91,34 +89,34 @@ namespace Tests
                     new Route {FirstCityId = tomskId, SecondCityId = irkutskId, Distance = 1633}
                 }
             };
-            testShortPathResolverDTO = new ShortPathResolverDTO() { Cities = map.Cities, Routes = map.Routes };
             travelSalesmanAnnealingResolver = new TravelSalesmanAnnealingResolver();
 
             graph = new Graph();
-            graph.AddVertex(voronezhId.ToString());
-            graph.AddVertex(moscowId.ToString());
-            graph.AddVertex(smolenskId.ToString());
-            graph.AddVertex(kazanId.ToString());
-            graph.AddEdge(voronezhId.ToString(), smolenskId.ToString(), 690);
-            graph.AddEdge(voronezhId.ToString(), kazanId.ToString(), 1057);
-            //graph.AddEdge(voronezhId.ToString(), moscowId.ToString(), 525);
-            graph.AddEdge(moscowId.ToString(), smolenskId.ToString(), 398);
-            graph.AddEdge(moscowId.ToString(), kazanId.ToString(), 822);
-            //graph.AddEdge(smolenskId.ToString(), kazanId.ToString(), 1223);
-
+            foreach (var city in map.Cities)
+            {
+                graph.AddVertex(city.Id.ToString());
+            }
+            foreach (var route in map.Routes)
+            {
+                graph.AddEdge(route.FirstCityId.ToString(), route.SecondCityId.ToString(), route.Distance);
+            }
         }
         [Fact]
         public void CheckSalesmanAnnealingVoronezSmolenskMoscow()
         {
             //Arrange
-            TravelSalesmanResponse expectedResult = new TravelSalesmanResponse
-            { CalculatedDistance = 2967, PreferableSequenceOfCities = new List<Guid> { voronezhId, smolenskId, moscowId, kazanId } };
-
+            var PreferableSequenceOfCities = new List<Guid>();
+            foreach (var city in map.Cities)
+            {
+                PreferableSequenceOfCities.Add(city.Id);
+            }
+            var minCalculatedDistance = 25000;
+            var maxCalculatedDistance = 40000;
             //Act
             var result = travelSalesmanAnnealingResolver.Resolve(graph);
             //Assert
-            Assert.Equal(expectedResult.CalculatedDistance, result.CalculatedDistance);
-            foreach (var city in expectedResult.PreferableSequenceOfCities)
+            Assert.InRange(result.CalculatedDistance, minCalculatedDistance, maxCalculatedDistance);
+            foreach (var city in PreferableSequenceOfCities)
             {
                 Assert.Contains(city, result.PreferableSequenceOfCities);
             }

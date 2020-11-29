@@ -34,6 +34,7 @@ namespace Service
             _graph = graph;
             Initialize(graph);
             if (CheckExecuting(_minWeightValue)) return null;
+            _result = _minWeightValue;
             while (_temperature >= 0.05)
             {
                 var changedIndexes = GetRandomIndexVertices(_minLimit, _maxLimit);
@@ -129,7 +130,7 @@ namespace Service
             if (_currentWeightValue < _minWeightValue)
             {
                 _minWeightValue = _currentWeightValue;
-                _result += _minWeightValue;
+                _result = _minWeightValue;
                 _preferableSequnce = changedSequence;
             }
         }
@@ -139,7 +140,7 @@ namespace Service
             _currentSequence = graph.Vertices.Select(t => t.Name).ToArray();
             _minLimit = _currentSequence.IndexOf(_currentSequence.First());
             _maxLimit = _currentSequence.IndexOf(_currentSequence.Last());
-            _minWeightValue = GetEdgeSum(_currentSequence, graph);
+            _minWeightValue = GetEdgeSum(_currentSequence, graph) * 2;
             _preferableSequnce = _currentSequence;
             _timeCounter = new Stopwatch();
             _timeCounter.Start();

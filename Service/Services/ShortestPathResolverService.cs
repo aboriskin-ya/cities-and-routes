@@ -119,6 +119,13 @@ namespace Service.Services
             result.Path = ResultList;
             _timeCounter.Stop();
             result.ProcessDuration = GetProcessDuration(_timeCounter.Elapsed);
+            foreach (var vertex in Graph.Vertices)
+            {
+                vertex.EdgesWeightSum = int.MaxValue;
+                vertex.IsUnvisited = true;
+                vertex.NextVertices = new List<GraphVertex>();
+                vertex.PreviousVertex = null;
+            }
             return result;
         }
 
