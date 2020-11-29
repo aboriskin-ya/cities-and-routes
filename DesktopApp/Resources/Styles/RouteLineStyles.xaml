@@ -6,26 +6,121 @@
                          Converter={StaticResource StringToColorConverter}}"/>
         <Setter Property="Line.StrokeThickness" Value="{Binding ElementName=mControl, Path=SettingsMap.EdgeSize}"/>
     </Style>
-
     <Style BasedOn="{StaticResource RouteOfMapStyle}" x:Key="LineAnimation">
-        <Setter Property="Line.X1" Value="{Binding ElementName=mControl, Path=SelectedRoute.FirstCity.X}"/>
-        <Setter Property="Line.Y1" Value="{Binding ElementName=mControl, Path=SelectedRoute.FirstCity.Y}"/>
-        <Setter Property="Line.X2" Value="{Binding ElementName=mControl, Path=PosX}"/>
-        <Setter Property="Line.Y2" Value="{Binding ElementName=mControl, Path=PosY}"/>
+        <Setter Property="Line.X1">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource PositionCorrectorConverter}">
+                    <Binding ElementName="mControl" Path="SelectedRoute.FirstCity.X"/>
+                    <Binding ElementName="mControl" Path="ActualHeight"/>
+                    <Binding ElementName="mControl" Path="InitialHeight"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Line.Y1">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource PositionCorrectorConverter}">
+                    <Binding ElementName="mControl" Path="SelectedRoute.FirstCity.Y"/>
+                    <Binding ElementName="mControl" Path="ActualWidth"/>
+                    <Binding ElementName="mControl" Path="InitialWidth"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Line.X2">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource PositionCorrectorConverter}">
+                    <Binding ElementName="mControl" Path="PosX"/>
+                    <Binding ElementName="mControl" Path="ActualHeight"/>
+                    <Binding ElementName="mControl" Path="InitialHeight"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Line.Y2">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource PositionCorrectorConverter}">
+                    <Binding ElementName="mControl" Path="PosY"/>
+                    <Binding ElementName="mControl" Path="ActualWidth"/>
+                    <Binding ElementName="mControl" Path="InitialWidth"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style BasedOn="{StaticResource RouteOfMapStyle}" x:Key="LineAttemptToLoad">
-        <Setter Property="Line.X1" Value="{Binding ElementName=mControl, Path=SelectedRoute.FirstCity.X}"/>
-        <Setter Property="Line.Y1" Value="{Binding ElementName=mControl, Path=SelectedRoute.FirstCity.Y}"/>
-        <Setter Property="Line.X2" Value="{Binding ElementName=mControl, Path=SelectedRoute.SecondCity.X}"/>
-        <Setter Property="Line.Y2" Value="{Binding ElementName=mControl, Path=SelectedRoute.SecondCity.Y}"/>
+        <Setter Property="Line.X1">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource PositionCorrectorConverter}">
+                    <Binding ElementName="mControl" Path="SelectedRoute.FirstCity.X"/>
+                    <Binding ElementName="mControl" Path="ActualHeight"/>
+                    <Binding ElementName="mControl" Path="InitialHeight"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Line.Y1">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource PositionCorrectorConverter}">
+                    <Binding ElementName="mControl" Path="SelectedRoute.FirstCity.Y"/>
+                    <Binding ElementName="mControl" Path="ActualWidth"/>
+                    <Binding ElementName="mControl" Path="InitialWidth"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Line.X2">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource PositionCorrectorConverter}">
+                    <Binding ElementName="mControl" Path="SelectedRoute.SecondCity.X"/>
+                    <Binding ElementName="mControl" Path="ActualHeight"/>
+                    <Binding ElementName="mControl" Path="InitialHeight"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Line.Y2">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource PositionCorrectorConverter}">
+                    <Binding ElementName="mControl" Path="SelectedRoute.SecondCity.Y"/>
+                    <Binding ElementName="mControl" Path="ActualWidth"/>
+                    <Binding ElementName="mControl" Path="InitialWidth"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style BasedOn="{StaticResource RouteOfMapStyle}" x:Key="LineRoute">
-        <Setter Property="Line.X1" Value="{Binding Path=FirstCity.X}"/>
-        <Setter Property="Line.Y1" Value="{Binding Path=FirstCity.Y}"/>
-        <Setter Property="Line.X2" Value="{Binding Path=SecondCity.X}"/>
-        <Setter Property="Line.Y2" Value="{Binding Path=SecondCity.Y}"/>
+        <Setter Property="Line.Y1">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource PositionCorrectorConverter}">
+                    <Binding Path="FirstCity.Y"/>
+                    <Binding ElementName="mControl" Path="ActualHeight"/>
+                    <Binding ElementName="mControl" Path="InitialHeight"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Line.X1">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource PositionCorrectorConverter}">
+                    <Binding Path="FirstCity.X"/>
+                    <Binding ElementName="mControl" Path="ActualWidth"/>
+                    <Binding ElementName="mControl" Path="InitialWidth"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Line.Y2">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource PositionCorrectorConverter}">
+                    <Binding Path="SecondCity.Y"/>
+                    <Binding ElementName="mControl" Path="ActualHeight"/>
+                    <Binding ElementName="mControl" Path="InitialHeight"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Line.X2">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource PositionCorrectorConverter}">
+                    <Binding Path="SecondCity.X"/>
+                    <Binding ElementName="mControl" Path="ActualWidth"/>
+                    <Binding ElementName="mControl" Path="InitialWidth"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>
     
