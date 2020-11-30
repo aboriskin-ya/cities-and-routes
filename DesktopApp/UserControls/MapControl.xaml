@@ -132,6 +132,16 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+                <ItemsControl ItemsSource="{Binding ElementName=mControl, Path=SelectedRoutes}"
+                              ItemsPanel="{StaticResource CanvasPanelTemplate}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Canvas>
+                                <Line Style="{StaticResource SelectedRoute}"/>
+                            </Canvas>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
                 <Path StrokeThickness="{Binding ElementName=mControl, Path=SettingsMap.EdgeSize}"
                       Stroke="{Binding ElementName=mControl, Path=SettingsMap.EdgeColor, Converter={StaticResource StringToColorInvertConverter}}"
@@ -147,7 +157,7 @@
                             <Canvas Height="2" Width="2" 
                                     Style="{StaticResource GrowAnimation}"
                                     MouseDown="City_MouseDown"
-                                    MouseRightButtonDown="Canvas_MouseRightButtonDown">
+                                   >
                                 <Ellipse x:Name="city"
                                          Style="{StaticResource CityStyle}"/>
 

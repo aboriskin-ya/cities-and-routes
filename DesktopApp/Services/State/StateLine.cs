@@ -1,6 +1,4 @@
-﻿using System.Net.Http;
-
-namespace DesktopApp.Services.State
+﻿namespace DesktopApp.Services.State
 {
     public enum StateLineStatus
     {
@@ -13,7 +11,7 @@ namespace DesktopApp.Services.State
         CreateRoute,
         SaveChanges,
         FindShortestPath
-    }  
+    }
     public enum StateBar
     {
         PushButton,
@@ -52,8 +50,8 @@ namespace DesktopApp.Services.State
             {
                 case StateBar.PushButton: return "Press button 'Select cities' to begin procedure choicing cities";
                 case StateBar.SelectCities: return "Select cities for resolving goal";
-                case StateBar.ResolvingGoal:return "Resolving travelsalesman for selected routes";
-                case StateBar.Done:return "Goal was resolved. Check console above here";
+                case StateBar.ResolvingGoal: return "Resolving travelsalesman for selected routes";
+                case StateBar.Done: return "Goal was resolved. Check console above here";
             }
             return "";
         }

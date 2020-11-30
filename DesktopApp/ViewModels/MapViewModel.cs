@@ -2,14 +2,7 @@
 using DesktopApp.Models;
 using DesktopApp.Services;
 using DesktopApp.Services.Commands;
-using DesktopApp.Services.State;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DesktopApp.ViewModels
@@ -18,14 +11,8 @@ namespace DesktopApp.ViewModels
     {
         private readonly ICityAPIService _cityAPIService;
         private readonly IRouteAPIService _routeAPIService;
-        private readonly ITravelSalesmanService _travelSalesmanService;
         private readonly IMessageBoxService _messageBoxService;
-        public enum SelectedMethod
-        {
-            Annealing,
-            Nearest,
-            Quickest
-        }
+
         public MapViewModel(ICityAPIService cityAPIService,
                IMessageBoxService messageBoxService,
                IRouteAPIService routeAPIService,
@@ -34,12 +21,9 @@ namespace DesktopApp.ViewModels
             _cityAPIService = cityAPIService;
             _messageBoxService = messageBoxService;
             _routeAPIService = routeAPIService;
-            _travelSalesmanService = travelSalesmanService;
-            
 
-            SelectedCities = new ObservableCollection<City>();
             SelectedCity = new City();
-            State = StateLine.GetStatus(StateBar.PushButton);
+
             WholeMap = new WholeMap()
             {
                 Cities = new ObservableCollection<City>(),
@@ -48,18 +32,6 @@ namespace DesktopApp.ViewModels
             };
             InitializeModels();
         }
-
-        #region SelectedMethodIndex
-       
-        private int _selectedMethodIndex;
-        public int SelectedMethodIndex
-        {
-            get => _selectedMethodIndex;
-            set => Set<int>(ref _selectedMethodIndex, value);
-        }
-        #endregion
-        public ObservableCollection<City> CityCollection { get; set; }
-        public ObservableCollection<Route> RouteCollection { get; set; }
         public ObservableCollection<City> SelectedCities { get; set; }
 
         private WholeMap wholeMap;
@@ -69,42 +41,12 @@ namespace DesktopApp.ViewModels
             set => Set(ref wholeMap, value, nameof(WholeMap));
         }
 
-        #region HighlitedCity
-        private City _highlightedCity;
-        public City HighLightedCity
+        private Route _selectedRoute;
+        public Route SelectedRoute
         {
-            get => _highlightedCity;
-            set => Set<City>(ref _highlightedCity, value);
+            get => _selectedRoute;
+            set => Set<Route>(ref _selectedRoute, value);
         }
-        #endregion
-
-        #region CanSelectCities
-        private bool _canSelected = false;
-        public bool CanSelected
-        {
-            get => _canSelected;
-            set
-            {
-                if(value==false)
-                    State = StateLine.GetStatus(StateBar.PushButton);
-                else State = StateLine.GetStatus(StateBar.SelectCities);
-                Set<bool>(ref _canSelected, value);
-                
-            }
-        }
-        #endregion
-
-        #region ConsoleText
-        private string _consoleText;
-        public string ConsoleText
-        {
-            get => _consoleText;
-            set => Set<string>(ref _consoleText, value);
-        }
-        #endregion
-
-        private Route _SelectedRoute;
-        public Route SelectedRoute;
         private City selectedCity;
         public City SelectedCity
         {
@@ -112,25 +54,8 @@ namespace DesktopApp.ViewModels
             set => Set(ref selectedCity, value, nameof(SelectedCity));
         }
 
-        private string _state;
-        public string State
-        {
-            get => _state;
-            set => Set<string>(ref _state, value);
-        }
+
         #region CityCommands
-        public SelectCityCommand SelectCityCommand { get => new SelectCityCommand(p => OnCanSelectCityExecute(p), p => OnSelectCityExecuted(p)); }
-
-        private void OnSelectCityExecuted(object p)
-        {
-            if (p is City)
-                HighLightedCity = (City)p;
-            SelectedCities.Add(HighLightedCity);
-            ConsoleText += $"{HighLightedCity.Name} ";
-        }
-
-        private bool OnCanSelectCityExecute(object p) => CanSelected;
-    
         public RelayCommandAsync CreateNewCityCommand { get => new RelayCommandAsync(p => OnCanAddCityCollection(), async m => await OnAddCityCollectionAsync()); }
         private async Task OnAddCityCollectionAsync()
         {
@@ -238,66 +163,6 @@ namespace DesktopApp.ViewModels
         }
         private bool OnCanDeleteRouteFromCollection() => true;
 
-
-        #endregion
-
-        #region TravelSalesmanCommand
-        public ResolveTravelSalesmanCommand ResolveTravelSalesmanCommand { get => new ResolveTravelSalesmanCommand(p => OnCanResolveExecute(p),
-                                                                            async p => await OnResolveExecuted());
-        }
-        
-        private async Task OnResolveExecuted()
-        {
-            State = StateLine.GetStatus(StateBar.ResolvingGoal);
-            IEnumerable<Guid> idCollection = SelectedCities.Select(t => t.Id);
-            var model = await _travelSalesmanService.PostCities(idCollection, SelectedMethodIndex);
-            var builder = new StringBuilder();
-            builder.Append($"\nAlgorithm: {model.Payload.NameAlghorithm}\n" +
-                           $"Process` duration: {model.Payload.ProcessDuration}\n" +
-                           $"Calculated distance: {model.Payload.CalculatedDistance}\n" +
-                           $"Preferable sequence: ");
-            foreach (var cityId in model.Payload.PreferableSequenceOfCities)
-            {
-                var city = await _cityAPIService.GetCityAsync(cityId);
-                builder.Append($"{city.Payload.Name} ");
-            }
-            ConsoleText += builder.ToString();
-        }
-
-        private bool OnCanResolveExecute(object p) => SelectedCities.Count() > 1;
-        #endregion
-
-        #region ClearConsoleCommand
-        public ClearConsoleCommand ClearConsoleCommand { get => new ClearConsoleCommand(p => OnCanClearConsoleExecute(p), p => OnConsoleClearExecuted(p)); }
-
-        private void OnConsoleClearExecuted(object p)
-        {
-            var text = p as string;
-            text = "";
-        }
-
-        private bool OnCanClearConsoleExecute(object p) => !string.IsNullOrEmpty(ConsoleText);
-        #endregion
-
-        #region CancelCitiesSelecting
-        public CancelCitiesSelectingCommand CancelCitiesSelecting
-        {
-            get => new CancelCitiesSelectingCommand(p => OnCanCancelSelectingExecute(p),
-                                           p => OnCancelSelectingExecuted(p));
-        }
-
-        private void OnCancelSelectingExecuted(object p)
-        {
-            foreach (var city in SelectedCities)
-            {
-                SelectedCities.Remove(city);
-            }
-            HighLightedCity = null;
-            State = StateLine.GetStatus(StateBar.PushButton);
-            CanSelected = false;
-        }
-
-        private bool OnCanCancelSelectingExecute(object p) => SelectedCities.Count > 0;
         #endregion
 
         public int CitiesCount() => WholeMap.Cities.Count;

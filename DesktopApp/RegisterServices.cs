@@ -16,6 +16,7 @@ namespace DesktopApp
             builder.RegisterType<ImageAPIService>().As<IImageAPIService>();
             builder.RegisterType<MapAPIService>().As<IMapAPIService>();
             builder.RegisterType<PathResolverAPIService>().As<IPathResolverAPIService>();
+            builder.RegisterType<TravelSalesmanViewModel>().As<ITravelSalesmanViewModel>();
             builder.RegisterType<MapViewModel>().As<IMapViewModel>();
             builder.RegisterType<ShortestPathViewModel>().As<IShortestPathViewModel>();
             builder.RegisterType<CursorPositionViewModel>().As<ICursorPositionViewModel>();

@@ -43,7 +43,6 @@ namespace API.Controllers
             var response = await _algorithmService.SolveAnnealingTravelSalesman(BodyRequest);
             if (response == default) return BadRequest();
             return Ok(response);
-
         }
 
         [ProducesResponseType(typeof(TravelSalesmanResponse), StatusCodes.Status200OK)]

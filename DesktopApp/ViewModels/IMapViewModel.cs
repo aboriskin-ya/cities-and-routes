@@ -8,14 +8,10 @@ namespace DesktopApp.ViewModels
     {
         WholeMap WholeMap { get; set; }
 
-        bool CanSelected { get; set; }
         ObservableCollection<City> SelectedCities { get; set; }
-        City HighLightedCity { get; set; }
 
         City SelectedCity { get; set; }
 
-        ClearConsoleCommand ClearConsoleCommand { get; }
-        SelectCityCommand SelectCityCommand { get; }
         RelayCommandAsync CreateNewCityCommand { get; }
 
         UpdateCityCommand UpdateCityCommand { get; }

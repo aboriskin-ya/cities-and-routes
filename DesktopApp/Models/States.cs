@@ -32,7 +32,6 @@ namespace DesktopApp.Models
 
         #endregion
 
-
         #region UpdateCityPossibility
 
         private bool _isAbleToUpdateCity = false;
@@ -182,14 +181,14 @@ namespace DesktopApp.Models
         {
             if (IsAbleToPickSecondCity)
                 return StateLine.Show(StateLineStatus.SelectSecondCity);
-            
+
             if (IsAbleToPickFirstCity)
                 return StateLine.Show(StateLineStatus.SelectFirstCity);
 
             if (IsAbleToCreateRoute)
                 return StateLine.Show(StateLineStatus.CreateRoute);
 
-             return StateLine.Show(StateLineStatus.Empty);
+            return StateLine.Show(StateLineStatus.Empty);
         }
 
         private string PathStatusUpdate()

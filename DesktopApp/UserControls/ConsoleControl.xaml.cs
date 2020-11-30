@@ -14,13 +14,18 @@ namespace DesktopApp.UserControls
         }
 
 
+
+
         public string ConsoleContent
         {
             get { return (string)GetValue(ConsoleContentProperty); }
             set { SetValue(ConsoleContentProperty, value); }
         }
+
         public static readonly DependencyProperty ConsoleContentProperty =
-            DependencyProperty.Register("ConsoleContent", typeof(string), typeof(ConsoleControl));
+            DependencyProperty.Register(nameof(ConsoleContent), typeof(string), typeof(ConsoleControl));
+
+
 
 
         public ICommand ClearConsoleCommand

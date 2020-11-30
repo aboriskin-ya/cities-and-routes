@@ -27,5 +27,16 @@
         <Setter Property="Line.X2" Value="{Binding Path=SecondCity.X}"/>
         <Setter Property="Line.Y2" Value="{Binding Path=SecondCity.Y}"/>
     </Style>
+    <Style BasedOn="{StaticResource LineRoute}" TargetType="Line" x:Key="SelectedRoute">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ElementName=mControl, Path=CanDisplay}" Value="true">
+                <Setter Property="Stroke" Value="Black"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ElementName=mControl, Path=CanDisplay}" Value="false">
+                <Setter Property="Stroke"  Value="{Binding ElementName=mControl, Path=SettingsMap.EdgeColor, 
+                         Converter={StaticResource StringToColorConverter}}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>
     

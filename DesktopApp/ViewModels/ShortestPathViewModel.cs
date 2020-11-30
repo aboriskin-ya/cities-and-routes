@@ -44,7 +44,7 @@ namespace DesktopApp.ViewModels
             else
             {
                 await GetCitiesAsync(res.Payload);
-            }            
+            }
         }
 
         private async Task GetCitiesAsync(ShortestPath shortestPath)

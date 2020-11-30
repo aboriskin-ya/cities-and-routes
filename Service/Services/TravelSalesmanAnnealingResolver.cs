@@ -12,7 +12,6 @@ namespace Service
     public class TravelSalesmanAnnealingResolver : ITravelSalesmanAnnealingResolver
     {
         #region fields
-        private double _result;
         private IEnumerable<string> _preferableSequnce;
         private double _temperature = 100;
         private double _deltaWeight;
@@ -47,7 +46,7 @@ namespace Service
             var response = new TravelSalesmanResponse()
             {
                 PreferableSequenceOfCities = _preferableSequnce.Select(Guid.Parse),
-                CalculatedDistance = _result,
+                CalculatedDistance = _minWeightValue,
                 NameAlghorithm = nameof(TravelSalesmanAnnealingResolver),
                 ProcessDuration = GetProcessDuration(_timeCounter.Elapsed)
             };
@@ -109,7 +108,6 @@ namespace Service
             if (_currentWeightValue < _minWeightValue)
             {
                 _minWeightValue = _currentWeightValue;
-                _result += _minWeightValue;
                 _preferableSequnce = changedSequence;
             }
         }

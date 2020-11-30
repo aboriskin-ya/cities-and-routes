@@ -1,10 +1,10 @@
 ﻿using Autofac;
 using DesktopApp.Dialogs;
 using DesktopApp.Models;
+using DesktopApp.Resources;
 using DesktopApp.Services.Commands;
 using DesktopApp.Services.Helper;
 using DesktopApp.Services.Utils;
-using DesktopApp.Resources;
 using GalaSoft.MvvmLight.Messaging;
 using System.IO;
 using System.Threading.Tasks;
@@ -27,19 +27,29 @@ namespace DesktopApp.ViewModels
             get => mapViewModel;
             set => Set(ref mapViewModel, value, nameof(MapViewModel));
         }
-
+        private ITravelSalesmanViewModel _travelViewModel;
+        public ITravelSalesmanViewModel TravelSalesmanViewModel
+        {
+            get => _travelViewModel;
+            set => Set(ref _travelViewModel, value);
+        }
         public ICursorPositionViewModel PositionViewModel { get; }
 
         public IShortestPathViewModel ShortestPathViewModel { get; }
 
-        public MainWindowViewModel(IMapViewModel viewModel, ICursorPositionViewModel positionViewModel, IShortestPathViewModel shortestPathViewModel)
+        public MainWindowViewModel(IMapViewModel viewModel,
+                                   ICursorPositionViewModel positionViewModel,
+                                   IShortestPathViewModel shortestPathViewModel,
+                                   ITravelSalesmanViewModel travelViewModel)
         {
+            TravelSalesmanViewModel = travelViewModel;
             MapViewModel = viewModel;
             PositionViewModel = positionViewModel;
             ShortestPathViewModel = shortestPathViewModel;
 
             InitializeModels();
             Messenger.Default.Register<WholeMap>(this, map => ReceiveMessageSelectExistingMap(map));
+            TravelSalesmanViewModel.WasChanged += TravelSalesmanViewModel_WasChanged;
         }
 
         private object ReceiveMessageSelectExistingMap(WholeMap map)
@@ -91,8 +101,10 @@ namespace DesktopApp.ViewModels
         {
             AppState.IsAbleToFindShortestPath = true;
         }
-
-        private bool _canSelected = false;
+        #region SelectCity
+        public ICommand SelectCityCommand { get => TravelSalesmanViewModel.SelectCityCommand; }
+        #endregion
+        private bool _canSelected;
         public bool CanSelected
         {
             get => _canSelected;
@@ -309,6 +321,34 @@ namespace DesktopApp.ViewModels
         private bool OnCanCancelCreatingRouteExecuted(object p) => AppState.IsAbleToCreateRoute;
         #endregion
 
+        #region ResolveTravelSalesmanCommand
+        public ICommand ResolveTravelSalesmanCommand { get => new RelayCommand(p => OnResolveTravelsalesmanExecuted(p), p => OnCanResolveTravelsalesmanExecute(p)); }
+
+        private bool OnCanResolveTravelsalesmanExecute(object p)
+        {
+            return TravelSalesmanViewModel.ResolveTravelSalesmanCommand.CanExecute(p);
+        }
+
+        private void OnResolveTravelsalesmanExecuted(object p)
+        {
+            AppState.DisplayLineGraph = true;
+        }
+        #endregion
+
+        #region ClearConsoleCommand
+        public ICommand ClearConsoleCommand { get => new RelayCommand(p => OnClearConsoleExecuted(p), p => OnCanClearConsoleExecute(p)); }
+
+        private bool OnCanClearConsoleExecute(object p)
+        {
+            return TravelSalesmanViewModel.ClearConsoleCommand.CanExecute(p);
+        }
+
+        private void OnClearConsoleExecuted(object p)
+        {
+            TravelSalesmanViewModel.ClearConsoleCommand.Execute(p);
+        }
+        #endregion
+
         #region MapImage
         private ImageSource _mapImage;
         public ImageSource MapImageSource
@@ -458,6 +498,11 @@ namespace DesktopApp.ViewModels
         {
             get => path;
             set => Set(ref path, value, nameof(Path));
+        }
+        private void TravelSalesmanViewModel_WasChanged(object sender, System.EventArgs e)
+        {
+            var travelsalesman = sender as TravelSalesmanViewModel;
+            CanSelected = travelsalesman.CanSelectCities;
         }
     }
 }
