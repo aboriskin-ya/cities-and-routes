@@ -110,9 +110,13 @@ namespace Service.Services
             List<Guid> ResultList = new List<Guid>();
             result.FinalDistance = endVertex.EdgesWeightSum;
             while (startVertex != endVertex)
-            {              
+            {
+                if (endVertex.PreviousVertex == null)
+                {
+                    return null;
+                }
                 ResultList.Add(Guid.Parse(endVertex.ToString()));
-                endVertex = endVertex.PreviousVertex;              
+                endVertex = endVertex.PreviousVertex;       
             }
             ResultList.Add(Guid.Parse(startVertex.ToString()));
             ResultList.Reverse();

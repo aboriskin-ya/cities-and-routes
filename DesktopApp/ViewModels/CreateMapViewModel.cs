@@ -72,6 +72,13 @@ namespace DesktopApp.ViewModels
                 {
                     _messageBoxService.ShowInfo($"We have a new map \"{NewMap.Name}\".", "Success");
                     InitializeProperties();
+                    foreach (Window item in Application.Current.Windows)
+                    {
+                        if (item.DataContext == this)
+                        {
+                            item.Close();
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -151,7 +158,7 @@ namespace DesktopApp.ViewModels
         private void OnDownloadImageExecuted(object p)
         {
             var res = _openImageDialogService.ShowDialog();
-            if (res != null)
+            if (!String.IsNullOrEmpty(res))
             {
                 System.Drawing.Image img = System.Drawing.Image.FromFile(res);
                 InitializeProperties(Path.GetFileNameWithoutExtension(res), res);
