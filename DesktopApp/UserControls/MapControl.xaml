@@ -8,7 +8,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              x:Name="mControl">
-    <Grid ClipToBounds="True">
+    <Grid ClipToBounds="True"
+          Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.1*" />
             <ColumnDefinition Width="1*" />
@@ -55,6 +56,7 @@
                     </Style.Triggers>
                 </Style>
             </Grid.Style>
+            
             <i:Interaction.Behaviors>
                 <beh:MouseBehaviour 
                 MouseX="{Binding ElementName=mControl, Path=PosX, Mode=OneWayToSource}"
@@ -71,21 +73,25 @@
                 Padding="10"
                 Content="Please create a new map or load an existing map."
                 Foreground="Gray"
-                FontFamily="Geneva, Arial, Helvetica, sans-serif"/>
+                FontFamily="Geneva, Arial, Helvetica, sans-serif"
+                Visibility="{Binding ElementName=mControl, Path=SettingsMap.DisplayingImage, 
+                                Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
             <Image
                 RenderTransformOrigin="{Binding ElementName=mControl, Path=TransformPosition}"
                 Source="{Binding ElementName=mControl, Path=MapImageSource}"                
                 MouseDown="Map_MouseDown"
                 Stretch="Fill" Name="Image" 
-                Grid.RowSpan="3">
-            </Image>
+                Grid.RowSpan="3"
+                Visibility="{Binding ElementName=mControl, Path=SettingsMap.DisplayingImage, 
+                                Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
             <Canvas x:Name="MapCanvas"
                     Width="{Binding ElementName=mControl, Path=ActualWidth}"
                     Height="{Binding ElementName=mControl, Path=ActualHeight}"
-                  
-                    >                
+                    Visibility="{Binding ElementName=mControl, Path=SettingsMap.DisplayingGraph, 
+                                Converter={StaticResource BooleanToVisibilityConverter}}">
+                
                 <Canvas.Resources>
                     <PathGeometry x:Key="shortestPathGeometry">
                         <PathGeometry.Figures>

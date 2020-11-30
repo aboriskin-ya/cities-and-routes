@@ -9,5 +9,5 @@
     <converters:PointsToPathConverter x:Key="PointsToPathConverter"/>
     <converters:PositionCorrectorConverter x:Key="PositionCorrectorConverter"/>
     <dxmvvm:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-    
+
 </ResourceDictionary>

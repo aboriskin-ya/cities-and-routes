@@ -19,7 +19,7 @@ namespace API.Controllers
             _service = service;
         }
 
-        [ProducesResponseType(typeof(IEnumerable<SettingsDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<SettingsGetDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -27,7 +27,7 @@ namespace API.Controllers
         [Route("getall")]
         public IActionResult Get()
         {
-            IEnumerable<SettingsDTO> settings = _service.GetSettings();
+            var settings = _service.GetSettings();
 
             if (settings.Count() == 0)
             {
@@ -37,7 +37,7 @@ namespace API.Controllers
             return Ok(settings);
         }
 
-        [ProducesResponseType(typeof(SettingsDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(SettingsGetDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -45,7 +45,7 @@ namespace API.Controllers
         [Route("{id:guid}")]
         public IActionResult Get(Guid id)
         {
-            SettingsDTO settings = _service.GetSettings(id);
+            var settings = _service.GetSettings(id);
 
             if (settings == null)
             {
@@ -55,7 +55,7 @@ namespace API.Controllers
             return Ok(settings);
         }
 
-        [ProducesResponseType(typeof(SettingsDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(SettingsGetDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -63,7 +63,7 @@ namespace API.Controllers
         [Route("~/map/{id:guid}/settings")]
         public IActionResult GetMap(Guid id)
         {
-            SettingsDTO settings = _service.GetSettingsOfMap(id);
+            var settings = _service.GetSettingsOfMap(id);
 
             if (settings == null)
             {
@@ -73,18 +73,18 @@ namespace API.Controllers
             return Ok(settings);
         }
 
-        [ProducesResponseType(typeof(SettingsDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(SettingsGetDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        public IActionResult Post([FromBody] SettingsDTO settingsDTO)
+        public IActionResult Post([FromBody] SettingsCreateDTO settingsDTO)
         {
-            _service.CreateSettings(settingsDTO);
-            return Ok(settingsDTO);
+            var dto = _service.CreateSettings(settingsDTO);
+            return Ok(dto);
         }
 
-        [ProducesResponseType(typeof(SettingsDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(SettingsGetDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

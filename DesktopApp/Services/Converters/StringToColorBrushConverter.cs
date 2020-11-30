@@ -10,6 +10,8 @@ namespace DesktopApp.Services.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null)
+                return null;
             var converter = new BrushConverter();
             return (Brush)converter.ConvertFromString(value as string);
         }
