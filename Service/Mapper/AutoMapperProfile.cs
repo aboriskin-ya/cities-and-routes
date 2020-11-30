@@ -23,7 +23,8 @@ namespace Service.Mapper
             CreateMap<Route, RouteGetDTO>();
 
             CreateMap<SettingsUpdateDTO, Settings>();
-            CreateMap<SettingsDTO, Settings>().ReverseMap();
+            CreateMap<SettingsCreateDTO, Settings>();
+            CreateMap<Settings, SettingsGetDTO>();
 
             CreateMap<Map, ShortPathResolverDTO>();
         }

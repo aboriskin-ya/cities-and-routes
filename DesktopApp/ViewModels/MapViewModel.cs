@@ -96,13 +96,19 @@ namespace DesktopApp.ViewModels
             var res = await _cityAPIService.DeleteCityAsync(SelectedCity);
             if (res.IsSuccessful)
             {
+                for (int i = WholeMap.Routes.Count - 1; i >= 0; i--)
+                {
+                    var Route = WholeMap.Routes[i];
+                    if (Route.FirstCity.Id == SelectedCity.Id || Route.SecondCity.Id == SelectedCity.Id) {
+                        WholeMap.Routes.Remove(Route);
+                    }
+                }
                 WholeMap.Cities.Remove(SelectedCity);
-                SelectedCity = new City();
+                OnRemoveCityFromCollection();
             }
             else
             {
                 _messageBoxService.ShowError("An error occured. Please try it again.", "Error occured");
-                OnRemoveCityFromCollection();
             }
         }
         private bool OnCanDeleteCityFromCollection() => true;

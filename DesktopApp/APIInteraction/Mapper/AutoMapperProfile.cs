@@ -30,6 +30,10 @@ namespace DesktopApp.APIInteraction.Mapper
             CreateMap<MapIdNameGetDTO, Map>();
             CreateMap<MapGetDTO, WholeMap>();
 
+            CreateMap<Settings, SettingsUpdateDTO>();
+            CreateMap<Settings, SettingsCreateDTO>();
+            CreateMap<SettingsGetDTO, Settings>();
+
             CreateMap<PathModel, PathResolverDTO>();
             CreateMap<ShortestPathResponseDTO, ShortestPath>();
         }

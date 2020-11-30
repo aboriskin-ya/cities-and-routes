@@ -3,9 +3,12 @@ using DesktopApp.Dialogs;
 using DesktopApp.Models;
 using DesktopApp.Resources;
 using DesktopApp.Services.Commands;
+using DesktopApp.Services.EventAggregator;
 using DesktopApp.Services.Helper;
 using DesktopApp.Services.Utils;
 using GalaSoft.MvvmLight.Messaging;
+using DesktopApp.UserControls;
+using Prism.Events;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -36,11 +39,14 @@ namespace DesktopApp.ViewModels
         public ICursorPositionViewModel PositionViewModel { get; }
 
         public IShortestPathViewModel ShortestPathViewModel { get; }
+        private IEventAggregator _eventAggregator;
 
         public MainWindowViewModel(IMapViewModel viewModel,
                                    ICursorPositionViewModel positionViewModel,
                                    IShortestPathViewModel shortestPathViewModel,
-                                   ITravelSalesmanViewModel travelViewModel)
+                                   ITravelSalesmanViewModel travelViewModel,
+                                   IEventAggregator eventAggregator)
+        
         {
             TravelSalesmanViewModel = travelViewModel;
             MapViewModel = viewModel;
@@ -50,23 +56,30 @@ namespace DesktopApp.ViewModels
             InitializeModels();
             Messenger.Default.Register<WholeMap>(this, map => ReceiveMessageSelectExistingMap(map));
             TravelSalesmanViewModel.WasChanged += TravelSalesmanViewModel_WasChanged;
+            
+            _eventAggregator = eventAggregator;
+            _eventAggregator.GetEvent<SettingsSentEvent>().Subscribe(ReceiveSettings, true);
+            _eventAggregator.GetEvent<WholeMapSentEvent>().Subscribe(ReceiveMessageSelectExistingMap, true);
         }
 
-        private object ReceiveMessageSelectExistingMap(WholeMap map)
+        private void ReceiveSettings(Settings obj)
+        {
+            MapViewModel.WholeMap.Settings = obj;
+        }
+
+        private void ReceiveMessageSelectExistingMap(WholeMap map)
         {
             ShortestPathViewModel.InitializeModels();
             MapViewModel.InitializeModels();
             InitializeModels();
             InitializeMapViewModel(map);
             InitializeMapImageSource(map.Image.Data);
-            return map;
         }
 
         #region Initializers
         private void InitializeMapViewModel(WholeMap map)
         {
             MapViewModel.WholeMap = map;
-            MapViewModel.WholeMap.Settings = map.Settings ?? new Settings();
         }
 
         private void InitializeMapImageSource(byte[] image)
@@ -95,6 +108,7 @@ namespace DesktopApp.ViewModels
 
         #endregion
 
+        #region PathResolver
         public ICommand PathResolverOpenCommand => new PathResolverOpenCommand(p => OnCanPathResolverOpenExecute(p), p => OnPathResolverOpen(p));
 
         private void OnPathResolverOpen(object p)
@@ -133,6 +147,8 @@ namespace DesktopApp.ViewModels
 
         private bool OnCanCalculateShortestPathExecute(object p) => Path.CityToId != default && Path.CityToId != Path.CityFromId;
 
+        #endregion
+
         #region ShowCreateMapDialog 
 
         public ICommand ShowCreateMapDialogCommand => new ShowCreateMapDialogCommand(null, p => ShowCreateMapDialog(p));
@@ -147,18 +163,34 @@ namespace DesktopApp.ViewModels
 
         #endregion
 
-        #region ShowCreateMapDialog
+        #region ShowSelectExistingMapDialog
 
         public ICommand ShowSelectExistingMapDialogCommand => new ShowCreateMapDialogCommand(null, p => ShowSelectExistingMapDialog(p));
 
         private void ShowSelectExistingMapDialog(object p)
         {
-            var model = RegisterServices.Configure().Resolve<SelectExistingMapViewModel>();
+            var model = RegisterServices.Configure().Resolve<SelectExistingMapViewModel>(new NamedParameter("eventAggregator", _eventAggregator));
             var view = new SelectExistingMapDialog { DataContext = model };
             view.Owner = App.Current.MainWindow;
             view.Show();
         }
 
+        #endregion
+
+        #region ShowSettingsDialog
+
+        public ICommand ShowSettingsDialogCommand => new RelayCommand(p => ShowSettingsDialog(p), p => OnCanShowSettingsDialogExecute(p));
+
+        private void ShowSettingsDialog(object p)
+        {
+            var model = RegisterServices.Configure().Resolve<SettingsViewModel>(new NamedParameter ("settings", MapViewModel.WholeMap.Settings),
+                new NamedParameter("eventAggregator", _eventAggregator));
+            var view = new SettingsDialog { DataContext = model };
+            view.Owner = App.Current.MainWindow;
+            view.Show();
+        }
+
+        private bool OnCanShowSettingsDialogExecute(object p) => MapViewModel.IsHaveMap();
         #endregion
 
         #region AddNewCityCommand
@@ -220,8 +252,7 @@ namespace DesktopApp.ViewModels
 
         private bool OnCanAddNewRouteExecute(object p) => !AppState.IsAbleToCreateRoute
             && !AppState.IsAbleToPickFirstCity
-            && MapViewModel.CitiesCount() >= 2
-            && MapViewModel.RoutesCount() < MathUtils.BinomialCoefficient((uint)MapViewModel.CitiesCount(), 2);
+            && MapViewModel.CitiesCount() >= 2;
 
         #endregion
 

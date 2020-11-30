@@ -19,19 +19,28 @@ namespace DesktopApp.UserControls
         #endregion
         public MapControl()
         {
-            InitializeComponent();
+             InitializeComponent();
             TransformPosition = new Point(0.5, 0.5);
             _RelativeTransformPosition = new Vector();
             _RelativeTransformPosition.X += TransformPosition.X;
             _RelativeTransformPosition.Y += TransformPosition.Y;
             this.MouseDown += MapControl_MouseDown;
             this.MouseWheel += MapControl_MouseWheel;
+            this.SizeChanged += MapControl_WindowResize;
 
             SetBinding(ZoomCommandProperty, new Binding("ZoomCommand"));
             SetBinding(NavigateCommandProperty, new Binding("NavigateCommand"));
             SetBinding(SelectCityCommandProperty, new Binding("SelectCityCommand"));
         }
 
+        private void MapControl_WindowResize(object sender, System.EventArgs e)
+        {
+            if (InitialHeight == 0)
+            {
+                InitialHeight = mControl.ActualHeight;
+                InitialWidth = mControl.ActualWidth;
+            }
+        }
         private void MapControl_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (e.Delta > 0)
@@ -98,6 +107,28 @@ namespace DesktopApp.UserControls
         {
             UpdatePosition(e);
         }
+        #endregion
+
+        #region InitialHeight
+        public Double InitialHeight
+        {
+            get { return (Double)GetValue(InitialHeightProperty); }
+            set { SetValue(InitialHeightProperty, value); }
+        }
+
+        public static readonly DependencyProperty InitialHeightProperty =
+            DependencyProperty.Register("InitialHeight", typeof(Double), typeof(MapControl));
+        #endregion
+
+        #region InitialWidth
+        public Double InitialWidth
+        {
+            get { return (Double)GetValue(InitialWidthProperty); }
+            set { SetValue(InitialWidthProperty, value); }
+        }
+
+        public static readonly DependencyProperty InitialWidthProperty =
+            DependencyProperty.Register("InitialWidth", typeof(Double), typeof(MapControl));
         #endregion
 
         #region ImageSource
@@ -440,10 +471,12 @@ namespace DesktopApp.UserControls
         #region SetCityRoute
         private void MapControl_SetCity()
         {
+            var NexPosX = (PosX / (ActualWidth / 100) / 100) * InitialWidth;
+            var NewPosY = (PosY / (ActualHeight / 100) / 100) * InitialHeight;
             SelectedCity = new City()
             {
-                X = PosX,
-                Y = PosY
+                X = NexPosX,
+                Y = NewPosY
             };
             AppState.IsAbleToCreateCity = true;
             AppState.IsAbleToSetCity = false;

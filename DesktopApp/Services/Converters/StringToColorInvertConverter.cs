@@ -10,6 +10,8 @@ namespace DesktopApp.Services.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null)
+                return null;
             var color = (Color)ColorConverter.ConvertFromString(value as string);
             var invertColor = Color.FromArgb(color.A, (byte)~color.R, (byte)~color.G, (byte)~color.B);
             return new SolidColorBrush(invertColor);
