@@ -158,7 +158,7 @@ namespace DesktopApp.ViewModels
         private void OnDownloadImageExecuted(object p)
         {
             var res = _openImageDialogService.ShowDialog();
-            if (res != "")
+            if (!String.IsNullOrEmpty(res))
             {
                 System.Drawing.Image img = System.Drawing.Image.FromFile(res);
                 InitializeProperties(Path.GetFileNameWithoutExtension(res), res);

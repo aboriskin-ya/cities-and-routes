@@ -12,6 +12,11 @@ namespace DesktopApp.Services.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+            if (values[2].GetType().FullName == "MS.Internal.NamedObject")
+            {
+                return null;
+            }
+
             var value = values[0];
             var ActualWidth = (double)values[1];
             var InitialWidth = (double)values[2];
@@ -25,8 +30,8 @@ namespace DesktopApp.Services.Converters
                 foreach (var point in value as List<Point>)
                 {
                     var newPoint = point;
-                    newPoint.X = point.X * ((ActualWidth / (InitialWidth / 100)) / 100);
-                    newPoint.Y = point.Y * ((ActualHeight / (InitialHeight / 100)) / 100);
+                    newPoint.X = point.X * ActualWidth / InitialWidth;
+                    newPoint.Y = point.Y * ActualHeight / InitialHeight;
                     pointCollection.Add(newPoint);
                 }
                 return pointCollection;
@@ -38,6 +43,7 @@ namespace DesktopApp.Services.Converters
                 newPoint.Y = newPoint.Y * ((ActualHeight / (InitialHeight / 100)) / 100);
                 return newPoint;
             }
+
             return null;
         }
 

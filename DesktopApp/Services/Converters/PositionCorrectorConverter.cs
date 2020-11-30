@@ -16,7 +16,7 @@ namespace DesktopApp.Services.Converters
             var XY = (double)values[0];
             var Actual = (double)values[1];
             var Initial = (double)values[2];
-            return XY * ((Actual / (Initial/100)) / 100);
+            return XY * (Actual / Initial);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

@@ -113,7 +113,7 @@ namespace Service.Services
             {
                 if (endVertex.PreviousVertex == null)
                 {
-                    break;
+                    return null;
                 }
                 ResultList.Add(Guid.Parse(endVertex.ToString()));
                 endVertex = endVertex.PreviousVertex;       
