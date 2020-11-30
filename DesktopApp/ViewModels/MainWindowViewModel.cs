@@ -331,7 +331,7 @@ namespace DesktopApp.ViewModels
 
         private void OnResolveTravelsalesmanExecuted(object p)
         {
-            AppState.DisplayLineGraph = true;
+            TravelSalesmanViewModel.ResolveTravelSalesmanCommand.Execute(p);
         }
         #endregion
 
