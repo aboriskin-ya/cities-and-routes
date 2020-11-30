@@ -84,7 +84,16 @@ namespace DesktopApp.ViewModels
             if (!res.IsSuccessful)
                 _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
             else
+            {
                 _eventAggregator.GetEvent<WholeMapSentEvent>().Publish(res.Payload);
+                foreach (Window item in Application.Current.Windows)
+                {
+                    if (item.DataContext == this)
+                    {
+                        item.Close();
+                    }
+                }
+            }
         }
 
         private bool OnCanLoadMapExecuted(object p) => true;
