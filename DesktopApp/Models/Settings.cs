@@ -1,10 +1,13 @@
-﻿using DesktopApp.Resources;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
+using System;
 
 namespace DesktopApp.Models
 {
     public class Settings : ViewModelBase
     {
+        public Guid Id { get; set; }
+        public Guid MapId { get; set; }
+
         private bool displayingImage;
         public bool DisplayingImage
         {
@@ -27,7 +30,7 @@ namespace DesktopApp.Models
             }
         }
 
-        private double vertexSize = DefaultSettings.VertexSize;
+        private double vertexSize;
         public double VertexSize
         {
             get { return vertexSize; }
@@ -38,7 +41,7 @@ namespace DesktopApp.Models
             }
         }
 
-        private string vertexColor = DefaultSettings.VertexColor;
+        private string vertexColor;
         public string VertexColor
         {
             get { return vertexColor; }
@@ -49,7 +52,7 @@ namespace DesktopApp.Models
             }
         }
 
-        private double edgeSize = DefaultSettings.EdgeSize;
+        private double edgeSize;
         public double EdgeSize
         {
             get { return edgeSize; }
@@ -60,7 +63,7 @@ namespace DesktopApp.Models
             }
         }
 
-        private string edgeColor = DefaultSettings.EdgeColor;
+        private string edgeColor;
         public string EdgeColor
         {
             get { return edgeColor; }
@@ -70,5 +73,19 @@ namespace DesktopApp.Models
                 RaisePropertyChanged(nameof(EdgeColor));
             }
         }
+
+        public Settings(Settings settings)
+        {
+            Id = settings.Id;
+            DisplayingGraph = settings.DisplayingGraph;
+            DisplayingImage = settings.DisplayingImage;
+            EdgeColor = settings.EdgeColor;
+            EdgeSize = settings.EdgeSize;
+            MapId = settings.MapId;
+            VertexColor = settings.VertexColor;
+            VertexSize = settings.VertexSize;
+        }
+
+        public Settings() { DisplayingImage = true; }
     }
 }

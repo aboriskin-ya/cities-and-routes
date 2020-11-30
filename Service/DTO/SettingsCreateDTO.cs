@@ -2,7 +2,7 @@
 
 namespace Service.DTO
 {
-    public class SettingsDTO
+    public class SettingsCreateDTO
     {
         public bool DisplayingImage { get; set; }
         public bool DisplayingGraph { get; set; }
