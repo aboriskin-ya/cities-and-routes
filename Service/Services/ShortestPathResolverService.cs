@@ -54,6 +54,13 @@ namespace Service.Services
         {
             _logger.LogInformation("Find shortest path second function started");
             this.Graph = Graph;
+            foreach (var vertex in Graph.Vertices)
+            {
+                vertex.EdgesWeightSum = int.MaxValue;
+                vertex.IsUnvisited = true;
+                vertex.NextVertices = new List<GraphVertex>();
+                vertex.PreviousVertex = null;
+            }
             return FindShortestPath(Graph.FindVertex(startName), Graph.FindVertex(finishName));
         }
 
