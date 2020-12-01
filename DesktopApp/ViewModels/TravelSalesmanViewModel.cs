@@ -56,8 +56,8 @@ namespace DesktopApp.ViewModels
             set
             {
                 if (value == false)
-                    State = StateLine.GetStatus(StateBar.PushButton);
-                else State = StateLine.GetStatus(StateBar.SelectCities);
+                    State = StateLine.GetStatus(StateLineStatus.TravelSalesman_PushButton);
+                else State = StateLine.GetStatus(StateLineStatus.TravelSalesman_SelectCities);
                 Set<bool>(ref _canSelect, value);
                 WasChanged?.Invoke(this, new EventArgs());
             }
@@ -118,7 +118,7 @@ namespace DesktopApp.ViewModels
                 SelectedCities.Remove(city);
             }
             SelectedCity = null;
-            State = StateLine.GetStatus(StateBar.PushButton);
+            State = StateLine.GetStatus(StateLineStatus.TravelSalesman_PushButton);
             CanSelectCities = false;
         }
         #endregion
@@ -133,8 +133,8 @@ namespace DesktopApp.ViewModels
                 MapId = SelectedCities.First().MapId,
                 SelectedCities = SelectedCities.Select(t => t.Id)
             };
-            State = StateLine.GetStatus(StateBar.ResolvingGoal);
-            var model = await _travelSalesmanService.PostCities(request, SelectedMethodIndex);
+            State = StateLine.GetStatus(StateLineStatus.TravelSalesman_ResolvingGoal);
+            var model = await _travelSalesmanService.Resolve(request, SelectedMethodIndex);
             var builder = new StringBuilder();
             builder.Append($"\nAlgorithm: {model.Payload.NameAlghorithm}\n" +
                            $"Process` duration: {model.Payload.ProcessDuration}\n" +
@@ -170,7 +170,7 @@ namespace DesktopApp.ViewModels
         public int CitiesCount { get => SelectedCities.Count; }
         private void Initialize()
         {
-            State = StateLine.GetStatus(StateBar.PushButton);
+            State = StateLine.GetStatus(StateLineStatus.TravelSalesman_PushButton);
             SelectedMethodIndex = -1;
             SelectedCity = new City();
             ConsoleResult = null;

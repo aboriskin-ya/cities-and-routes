@@ -5,9 +5,7 @@ using DesktopApp.Resources;
 using DesktopApp.Services.Commands;
 using DesktopApp.Services.EventAggregator;
 using DesktopApp.Services.Helper;
-using DesktopApp.Services.Utils;
 using GalaSoft.MvvmLight.Messaging;
-using DesktopApp.UserControls;
 using Prism.Events;
 using System.IO;
 using System.Threading.Tasks;
@@ -353,31 +351,11 @@ namespace DesktopApp.ViewModels
         #endregion
 
         #region ResolveTravelSalesmanCommand
-        public ICommand ResolveTravelSalesmanCommand { get => new RelayCommand(p => OnResolveTravelsalesmanExecuted(p), p => OnCanResolveTravelsalesmanExecute(p)); }
-
-        private bool OnCanResolveTravelsalesmanExecute(object p)
-        {
-            return TravelSalesmanViewModel.ResolveTravelSalesmanCommand.CanExecute(p);
-        }
-
-        private void OnResolveTravelsalesmanExecuted(object p)
-        {
-            TravelSalesmanViewModel.ResolveTravelSalesmanCommand.Execute(p);
-        }
+        public ICommand ResolveTravelSalesmanCommand { get => TravelSalesmanViewModel.ResolveTravelSalesmanCommand; }
         #endregion
 
         #region ClearConsoleCommand
-        public ICommand ClearConsoleCommand { get => new RelayCommand(p => OnClearConsoleExecuted(p), p => OnCanClearConsoleExecute(p)); }
-
-        private bool OnCanClearConsoleExecute(object p)
-        {
-            return TravelSalesmanViewModel.ClearConsoleCommand.CanExecute(p);
-        }
-
-        private void OnClearConsoleExecuted(object p)
-        {
-            TravelSalesmanViewModel.ClearConsoleCommand.Execute(p);
-        }
+        public ICommand ClearConsoleCommand { get => TravelSalesmanViewModel.ClearConsoleCommand; }
         #endregion
 
         #region MapImage

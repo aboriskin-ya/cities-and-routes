@@ -110,25 +110,25 @@ namespace DesktopApp.UserControls
         #endregion
 
         #region InitialHeight
-        public Double InitialHeight
+        public double InitialHeight
         {
-            get { return (Double)GetValue(InitialHeightProperty); }
+            get { return (double)GetValue(InitialHeightProperty); }
             set { SetValue(InitialHeightProperty, value); }
         }
 
         public static readonly DependencyProperty InitialHeightProperty =
-            DependencyProperty.Register("InitialHeight", typeof(Double), typeof(MapControl));
+            DependencyProperty.Register("InitialHeight", typeof(double), typeof(MapControl));
         #endregion
 
         #region InitialWidth
-        public Double InitialWidth
+        public double InitialWidth
         {
-            get { return (Double)GetValue(InitialWidthProperty); }
+            get { return (double)GetValue(InitialWidthProperty); }
             set { SetValue(InitialWidthProperty, value); }
         }
 
         public static readonly DependencyProperty InitialWidthProperty =
-            DependencyProperty.Register("InitialWidth", typeof(Double), typeof(MapControl));
+            DependencyProperty.Register("InitialWidth", typeof(double), typeof(MapControl));
         #endregion
 
         #region ImageSource

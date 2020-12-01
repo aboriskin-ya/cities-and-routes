@@ -10,14 +10,11 @@
         SelectSecondCity,
         CreateRoute,
         SaveChanges,
-        FindShortestPath
-    }
-    public enum StateBar
-    {
-        PushButton,
-        SelectCities,
-        ResolvingGoal,
-        Done
+        FindShortestPath,
+        TravelSalesman_PushButton,
+        TravelSalesman_SelectCities,
+        TravelSalesman_ResolvingGoal,
+        TravelSalesman_Done
     }
     public static class StateLine
     {
@@ -44,14 +41,14 @@
             }
             return "";
         }
-        public static string GetStatus(StateBar states)
+        public static string GetStatus(StateLineStatus states)
         {
             switch (states)
             {
-                case StateBar.PushButton: return "Press button 'Select cities' to begin procedure choicing cities";
-                case StateBar.SelectCities: return "Select cities for resolving goal";
-                case StateBar.ResolvingGoal: return "Resolving travelsalesman for selected routes";
-                case StateBar.Done: return "Goal was resolved. Check console above here";
+                case StateLineStatus.TravelSalesman_PushButton: return "Press button 'Select cities' to begin procedure choicing cities";
+                case StateLineStatus.TravelSalesman_SelectCities: return "Select cities for resolving goal";
+                case StateLineStatus.TravelSalesman_ResolvingGoal: return "Resolving travelsalesman for selected routes";
+                case StateLineStatus.TravelSalesman_Done: return "Goal was resolved. Check console above here";
             }
             return "";
         }

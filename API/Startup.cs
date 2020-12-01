@@ -68,7 +68,7 @@ namespace API
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cities and Routes API V1");
             });
 
-            //app.UseMiddleware<BasicAuthenthicationMiddleware>();
+            app.UseMiddleware<BasicAuthenthicationMiddleware>();
 
             app.UseRouting();
 

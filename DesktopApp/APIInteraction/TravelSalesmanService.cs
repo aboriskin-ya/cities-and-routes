@@ -8,7 +8,7 @@ namespace DesktopApp.APIInteraction
 {
     public class TravelSalesmanService : ITravelSalesmanService
     {
-        public async Task<HttpResponsePayload<TravelSalesman>> PostCities(TravelSalesmanRequest request, int selectedMethodIndex)
+        public async Task<HttpResponsePayload<TravelSalesman>> Resolve(TravelSalesmanRequest request, int selectedMethodIndex)
         {
             HttpResponseMessage response = default;
             switch (selectedMethodIndex)
