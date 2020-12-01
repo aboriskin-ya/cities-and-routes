@@ -64,7 +64,6 @@ namespace Service
                     return response;
                 }
             }
-            _result = _minWeightValue;
             while (_temperature >= 0.05)
             {
                 var changedIndexes = GetRandomIndexVertices(_minLimit, _maxLimit);
