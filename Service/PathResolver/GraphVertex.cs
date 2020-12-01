@@ -10,7 +10,7 @@ namespace PathResolver
         public int EdgesWeightSum { get; set; }
         public GraphVertex PreviousVertex { get; set; }
 
-        public List<GraphVertex> NextVertices { get; }
+        public List<GraphVertex> NextVertices { get; set; }
 
         public GraphVertex(string VertexName)
         {
