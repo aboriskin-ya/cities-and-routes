@@ -49,7 +49,10 @@ namespace Service.Services
         public MapGetDTO GetMap(Guid id)
         {
             _logger.LogInformation("Get map started");
-            return _mapper.Map<Map, MapGetDTO>(_repository.GetWholeMap(id));
+            var map = _mapper.Map<Map, MapGetDTO>(_repository.GetWholeMap(id));
+            if (map.Settings == null) 
+                map.Settings = new SettingsGetDTO() { MapId = map.Id };
+            return map;
         }
 
         public bool DeleteMap(Guid id)

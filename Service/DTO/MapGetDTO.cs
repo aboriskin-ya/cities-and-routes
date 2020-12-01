@@ -10,6 +10,6 @@ namespace Service.DTO
         public Guid ImageId { get; set; }
         public List<RouteGetDTO> Routes { get; set; }
         public List<CityGetDTO> Cities { get; set; }
-        public SettingsDTO Settings { get; set; }
+        public SettingsGetDTO Settings { get; set; }
     }
 }

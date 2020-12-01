@@ -2,9 +2,11 @@
 using DesktopApp.Dialogs.Commands;
 using DesktopApp.Models;
 using DesktopApp.Services;
-using GalaSoft.MvvmLight.Messaging;
+using DesktopApp.Services.EventAggregator;
+using Prism.Events;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.Windows;
 
 namespace DesktopApp.ViewModels
 {
@@ -13,12 +15,14 @@ namespace DesktopApp.ViewModels
         private readonly IMapAPIService _mapAPIService;
         private readonly IImageAPIService _imageAPIService;
         private readonly IMessageBoxService _messageBoxService;
+        private IEventAggregator _eventAggregator;
 
-        public SelectExistingMapViewModel(IMapAPIService mapAPIService, IImageAPIService imageAPIService, IMessageBoxService messageBoxService)
+        public SelectExistingMapViewModel(IMapAPIService mapAPIService, IImageAPIService imageAPIService, IMessageBoxService messageBoxService, IEventAggregator eventAggregator)
         {
             _mapAPIService = mapAPIService;
             _imageAPIService = imageAPIService;
             _messageBoxService = messageBoxService;
+            _eventAggregator = eventAggregator;
         }
 
         private ObservableCollection<Map> mapCollection;
@@ -80,7 +84,16 @@ namespace DesktopApp.ViewModels
             if (!res.IsSuccessful)
                 _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
             else
-                Messenger.Default.Send(res.Payload);
+            {
+                _eventAggregator.GetEvent<WholeMapSentEvent>().Publish(res.Payload);
+                foreach (Window item in Application.Current.Windows)
+                {
+                    if (item.DataContext == this)
+                    {
+                        item.Close();
+                    }
+                }
+            }
         }
 
         private bool OnCanLoadMapExecuted(object p) => true;
