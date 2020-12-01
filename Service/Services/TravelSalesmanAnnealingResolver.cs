@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.Extensions.Logging;
 using PathResolver;
-using Service.DTO;
 using Service.PathResolver;
 using Service.Services;
 using System;
@@ -111,7 +109,7 @@ namespace Service
                 else
                 {
                     weightValue += CurrentEdge.EdgeWeight;
-                } 
+                }
             }
             var LastEdge = graph.GetEdge(currentSequence[currentSequence.Length - 1], currentSequence[0]);
             if (LastEdge == null)
@@ -122,7 +120,7 @@ namespace Service
             {
                 weightValue += graph.GetEdge(currentSequence[currentSequence.Length - 1], currentSequence[0]).EdgeWeight;
             }
-            
+
             return weightValue;
         }
         private void ChangeTemperature() => _temperature *= 0.75;
@@ -173,7 +171,7 @@ namespace Service
             _timeCounter = new Stopwatch();
             _timeCounter.Start();
         }
-        
+
 
         private bool CheckExecuting(double criticalValue) => criticalValue.Equals(0);
         private string GetProcessDuration(TimeSpan timeSpan)

@@ -5,8 +5,8 @@ using DesktopApp.Services;
 using DesktopApp.Services.EventAggregator;
 using Prism.Events;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 using System.Windows;
+using System.Windows.Input;
 
 namespace DesktopApp.ViewModels
 {

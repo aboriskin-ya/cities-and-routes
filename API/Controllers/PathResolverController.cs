@@ -33,7 +33,8 @@ namespace API.Controllers
             if (result != null)
             {
                 return Ok(result);
-            } else 
+            }
+            else
             {
                 return Conflict(result);
             }
@@ -79,7 +80,7 @@ namespace API.Controllers
                 _algorithmService.SolveNearestNeghborTravelSalesman(BodyRequest),
                 _algorithmService.SolveAnnealingTravelSalesman(BodyRequest)
             };
-            
+
             var task = Task.WhenAny(taskArr).Result;
             var response = task.Result;
             return Ok(response);

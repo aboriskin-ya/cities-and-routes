@@ -44,7 +44,7 @@ namespace DesktopApp.ViewModels
                                    IShortestPathViewModel shortestPathViewModel,
                                    ITravelSalesmanViewModel travelViewModel,
                                    IEventAggregator eventAggregator)
-        
+
         {
             TravelSalesmanViewModel = travelViewModel;
             MapViewModel = viewModel;
@@ -54,7 +54,7 @@ namespace DesktopApp.ViewModels
             InitializeModels();
             Messenger.Default.Register<WholeMap>(this, map => ReceiveMessageSelectExistingMap(map));
             TravelSalesmanViewModel.WasChanged += TravelSalesmanViewModel_WasChanged;
-            
+
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<SettingsSentEvent>().Subscribe(ReceiveSettings, true);
             _eventAggregator.GetEvent<WholeMapSentEvent>().Subscribe(ReceiveMessageSelectExistingMap, true);
@@ -181,7 +181,7 @@ namespace DesktopApp.ViewModels
 
         private void ShowSettingsDialog(object p)
         {
-            var model = RegisterServices.Configure().Resolve<SettingsViewModel>(new NamedParameter ("settings", MapViewModel.WholeMap.Settings),
+            var model = RegisterServices.Configure().Resolve<SettingsViewModel>(new NamedParameter("settings", MapViewModel.WholeMap.Settings),
                 new NamedParameter("eventAggregator", _eventAggregator));
             var view = new SettingsDialog { DataContext = model };
             view.Owner = App.Current.MainWindow;

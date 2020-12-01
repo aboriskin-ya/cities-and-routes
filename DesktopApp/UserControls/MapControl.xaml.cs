@@ -19,7 +19,7 @@ namespace DesktopApp.UserControls
         #endregion
         public MapControl()
         {
-             InitializeComponent();
+            InitializeComponent();
             TransformPosition = new Point(0.5, 0.5);
             _RelativeTransformPosition = new Vector();
             _RelativeTransformPosition.X += TransformPosition.X;

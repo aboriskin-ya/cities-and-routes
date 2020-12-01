@@ -47,7 +47,7 @@ namespace Service.Services.Interfaces
                 _minWeightValue = int.MaxValue;
                 if (_sequence.Count == graph.Vertices.Count && _currentVertex.IsUnvisited == false)
                 {
-                    _result += graph.GetEdge(_sequence.Last().ToString(),_sequence.First().ToString()).EdgeWeight;
+                    _result += graph.GetEdge(_sequence.Last().ToString(), _sequence.First().ToString()).EdgeWeight;
                     _allVisited = true;
                 }
             }

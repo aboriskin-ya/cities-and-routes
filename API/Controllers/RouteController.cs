@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using DataAccess.Models;
-using Service.Services.Interfaces;
-using Service.DTO;
+﻿using DataAccess.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Service.DTO;
+using Service.Services.Interfaces;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace API.Controllers
 {

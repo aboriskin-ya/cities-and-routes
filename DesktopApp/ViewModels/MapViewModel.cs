@@ -99,7 +99,8 @@ namespace DesktopApp.ViewModels
                 for (int i = WholeMap.Routes.Count - 1; i >= 0; i--)
                 {
                     var Route = WholeMap.Routes[i];
-                    if (Route.FirstCity.Id == SelectedCity.Id || Route.SecondCity.Id == SelectedCity.Id) {
+                    if (Route.FirstCity.Id == SelectedCity.Id || Route.SecondCity.Id == SelectedCity.Id)
+                    {
                         WholeMap.Routes.Remove(Route);
                     }
                 }

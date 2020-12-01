@@ -1,7 +1,6 @@
 ﻿using DataAccess.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Serilog;
 using Service.Services.Interfaces;
 using System;
 using System.Collections.Generic;

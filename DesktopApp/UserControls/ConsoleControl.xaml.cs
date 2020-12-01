@@ -12,10 +12,6 @@ namespace DesktopApp.UserControls
             InitializeComponent();
             SetBinding(ClearConsoleCommandProperty, new Binding("ClearConsoleCommand"));
         }
-
-
-
-
         public string ConsoleContent
         {
             get { return (string)GetValue(ConsoleContentProperty); }
@@ -24,9 +20,6 @@ namespace DesktopApp.UserControls
 
         public static readonly DependencyProperty ConsoleContentProperty =
             DependencyProperty.Register(nameof(ConsoleContent), typeof(string), typeof(ConsoleControl));
-
-
-
 
         public ICommand ClearConsoleCommand
         {
