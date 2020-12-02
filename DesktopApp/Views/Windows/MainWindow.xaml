@@ -276,18 +276,10 @@
                     </TabItem.Header>
                     <TabItem.Content>
                         <StackPanel>
-                            <TextBlock>
-                            <Run Text="Distance:"/>
-                                <LineBreak/>
-                            <Run Text="{Binding ShortestPathViewModel.ShortestPath.FinalDistance}"/>
-                                <LineBreak/>
-                            <Run Text="Execution time:"/>
-                                <LineBreak/>
-                            <Run Text="{Binding ShortestPathViewModel.ShortestPath.ProcessDuration}"/>
-                                <LineBreak/>
-                            </TextBlock>
                             <Button Content="Calculate the shortest path"
                                     Command="{Binding CalculateShortestPathCommand}"/>
+                            <uc:ConsoleControl ConsoleContent="{Binding ShortestPathViewModel.ConsoleResult,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                               ClearConsoleCommand="{Binding ShortestPathViewModel.ClearConsoleCommand}"/>
                         </StackPanel>
                     </TabItem.Content>
                 </TabItem>

@@ -3,11 +3,14 @@ using DesktopApp.Models;
 using DesktopApp.Services.State;
 using Service.PathResolver;
 using System;
+using System.Collections.Specialized;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Documents;
+using Prism.Events;
 
 namespace DesktopApp.ViewModels
 {
@@ -26,6 +29,7 @@ namespace DesktopApp.ViewModels
             SelectedRoutes = new ObservableCollection<Route>();
             Initialize();
         }
+
         public ObservableCollection<City> SelectedCities { get; set; }
 
         public ObservableCollection<Route> SelectedRoutes { get; set; }
@@ -102,7 +106,7 @@ namespace DesktopApp.ViewModels
                 SelectedCity = (City)p;
             if (SelectedCities.Contains(SelectedCity)) return;
             SelectedCities.Add(SelectedCity);
-            ConsoleResult += $"{SelectedCity.Name}\n";
+            ConsoleResult += $"{SelectedCity.Name}->";
         }
         #endregion
 
@@ -128,6 +132,7 @@ namespace DesktopApp.ViewModels
 
         private async Task OnResolveExecuted(object p)
         {
+            ConsoleResult = ConsoleResult.Substring(0, ConsoleResult.Length - 2);
             var request = new TravelSalesmanRequest()
             {
                 MapId = SelectedCities.First().MapId,
@@ -143,10 +148,10 @@ namespace DesktopApp.ViewModels
             foreach (var cityId in model.Payload.PreferableSequenceOfCities)
             {
                 var city = await _cityService.GetCityAsync(cityId);
-                builder.Append($"{city.Payload.Name} ");
+                builder.Append($"{city.Payload.Name}->");
             }
             await GetSelectedRoutes(model.Payload.PreferableSequenceOfCities.ToArray(), request.MapId);
-            ConsoleResult += builder.ToString();
+            ConsoleResult += builder.ToString().Substring(0,builder.Length-2);
             CanDisplay = true;
             RemoveCities();
         }
@@ -182,7 +187,11 @@ namespace DesktopApp.ViewModels
         }
         private void RemoveRoutes()
         {
-            SelectedRoutes = new ObservableCollection<Route>();
+            while (SelectedRoutes.Count != 0)
+            {
+                var route = SelectedRoutes.First();
+                SelectedRoutes.Remove(route);
+            }
         }
         private async Task GetSelectedRoutes(Guid[] selectedCities, Guid mapId)
         {
