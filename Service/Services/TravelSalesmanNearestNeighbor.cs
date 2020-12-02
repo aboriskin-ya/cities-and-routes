@@ -23,6 +23,11 @@ namespace Service.Services.Interfaces
         public TravelSalesmanResponse Solve(Graph graph)
         {
             _timeCounter.Start();
+            foreach (var edge in graph.Edges)
+            {
+                graph.FindVertex(edge.FirstVertex.Name).AddNextVertex(edge.SecondVertex);
+                graph.FindVertex(edge.FirstVertex.Name).AddEdge(edge.FirstVertex, edge.SecondVertex, edge.EdgeWeight);
+            }
             var vertex = graph.Vertices[0];
             vertex.IsUnvisited = false;
             while (!_allVisited)
@@ -40,14 +45,31 @@ namespace Service.Services.Interfaces
                         }
                     }
                 }
+                if (vertex.NextVertices.Count == 0 || _minWeightValue == int.MaxValue)
+                {
+                    foreach (var nextVertice in graph.Vertices)
+                    {
+                        if (nextVertice.IsUnvisited)
+                        {
+                            var edgeWeight = new ShortestPathResolverService().
+                        FindShortestPath(graph, vertex.Name, nextVertice.Name).FinalDistance;
+                            if (edgeWeight < _minWeightValue && vertex.Name != nextVertice.Name)
+                            {
+                                _minWeightValue = edgeWeight;
+                                _currentVertex = nextVertice;
+                            }
+                        }
+                    }
+                }              
                 _currentVertex.IsUnvisited = false;
                 vertex = _currentVertex;
-                if (_sequence.Count != graph.Vertices.Count)
+                if (_sequence.Count != graph.Vertices.Count && _minWeightValue != int.MaxValue)
                     _result += _minWeightValue;
                 _minWeightValue = int.MaxValue;
                 if (_sequence.Count == graph.Vertices.Count && _currentVertex.IsUnvisited == false)
                 {
-                    _result += graph.GetEdge(_sequence.Last().ToString(),_sequence.First().ToString()).EdgeWeight;
+                    _result += new ShortestPathResolverService().
+                        FindShortestPath(graph, _sequence.Last().ToString(), _sequence.First().ToString()).FinalDistance;
                     _allVisited = true;
                 }
             }

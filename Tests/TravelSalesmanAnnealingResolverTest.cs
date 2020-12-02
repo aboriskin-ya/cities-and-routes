@@ -185,5 +185,35 @@ namespace Tests
                 Assert.Contains(city, result.PreferableSequenceOfCities);
             }
         }
+        [Fact]
+        public void CheckSalesmanAnnealing6Cities()
+        {
+            //Arrange
+            graph.AddVertex(voronezhId.ToString());
+            graph.AddVertex(rostovOnDonId.ToString());
+            graph.AddVertex(moscowId.ToString());
+            graph.AddVertex(kazanId.ToString());
+            graph.AddVertex(saratovId.ToString());
+            graph.AddVertex(saintPetersburgId.ToString());
+            graph.AddEdge(voronezhId.ToString(), rostovOnDonId.ToString(), 566);
+            graph.AddEdge(voronezhId.ToString(), moscowId.ToString(), 525);
+            graph.AddEdge(moscowId.ToString(), kazanId.ToString(), 822);
+            graph.AddEdge(rostovOnDonId.ToString(), kazanId.ToString(), 1521);
+            graph.AddEdge(rostovOnDonId.ToString(), saratovId.ToString(), 861);
+            graph.AddEdge(saratovId.ToString(), kazanId.ToString(), 674);
+            graph.AddEdge(moscowId.ToString(), saintPetersburgId.ToString(), 705);
+            graph.AddEdge(voronezhId.ToString(), saratovId.ToString(), 513);
+            var PreferableSequenceOfCities = new List<Guid> { rostovOnDonId, voronezhId, moscowId, kazanId };
+            var minCalculatedDistance = 4500;
+            var maxCalculatedDistance = 7000;
+            //Act
+            var result = travelSalesmanAnnealingResolver.Resolve(graph);
+            //Assert
+            Assert.InRange(result.CalculatedDistance, minCalculatedDistance, maxCalculatedDistance);
+            foreach (var city in PreferableSequenceOfCities)
+            {
+                Assert.Contains(city, result.PreferableSequenceOfCities);
+            }
+        }
     }
 }

@@ -50,10 +50,18 @@ namespace Service.Services
             return FindShortestPath(Graph.FindVertex(startName), Graph.FindVertex(finishName));
         }
 
-        public ShortestPathResponseDTO FindShortestPath(Graph Graph, string startName, string finishName)
+        public ShortestPathResponseDTO FindShortestPath(Graph graph, string startName, string finishName)
         {
             _logger.LogInformation("Find shortest path second function started");
-            this.Graph = Graph;
+            Graph = new Graph();
+            foreach (var vertex in graph.Vertices)
+            {
+                Graph.AddVertex(vertex.Name);
+            }
+            foreach (var edge in graph.Edges)
+            {
+                Graph.AddEdge(edge.FirstVertex.Name, edge.SecondVertex.Name, edge.EdgeWeight);
+            }
             foreach (var vertex in Graph.Vertices)
             {
                 vertex.EdgesWeightSum = int.MaxValue;
