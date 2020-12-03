@@ -68,7 +68,7 @@ namespace API.Controllers
         {
             Image img = _service.GetImage(id);
             if (img == null)
-                return NotFound();
+                return NotFound(null);
 
             return File(img.Data, img.ContentType);
         }
@@ -85,7 +85,7 @@ namespace API.Controllers
 
             if (ImageList.Count() == 0)
             {
-                return NotFound();
+                return NotFound(null);
             }
 
             return Ok(ImageList);

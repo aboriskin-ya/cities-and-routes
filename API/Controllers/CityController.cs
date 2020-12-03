@@ -31,7 +31,7 @@ namespace API.Controllers
             var city = _service.GetCity(id);
             if (city == null)
             {
-                return NotFound();
+                return NotFound(null);
             }
 
             return Ok(city);
@@ -49,7 +49,7 @@ namespace API.Controllers
 
             if (CityList.Count() == 0)
             {
-                return NotFound();
+                return NotFound(null);
             }
 
             return Ok(CityList);
@@ -90,7 +90,7 @@ namespace API.Controllers
             }
             else
             {
-                return NotFound();
+                return NotFound(null);
             }
         }
     }

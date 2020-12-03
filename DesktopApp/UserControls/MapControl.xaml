@@ -91,7 +91,7 @@
                     Height="{Binding ElementName=mControl, Path=ActualHeight}"
                     Visibility="{Binding ElementName=mControl, Path=SettingsMap.DisplayingGraph, 
                                 Converter={StaticResource BooleanToVisibilityConverter}}">
-                
+
                 <Canvas.Resources>
                     <PathGeometry x:Key="shortestPathGeometry">
                         <PathGeometry.Figures>
@@ -126,13 +126,13 @@
                 </Canvas.Resources>
                 
                 <Canvas Canvas.Left="{Binding ElementName=mControl, Path=PosX}"
-                        Canvas.Top="{Binding ElementName=mControl, Path=PosY}">
+                        Canvas.Top="{Binding ElementName=mControl, Path=PosY}" Cursor="Hand">
                     <Ellipse Visibility="{Binding ElementName=mControl, Path=AppState.IsAbleToSetCity, 
                                 Converter={StaticResource BooleanToVisibilityConverter}}"                           
                              Style="{StaticResource GreenPointStyle}"
                              x:Name="GreenCursor"/>
                 </Canvas>
-                <Canvas>
+                <Canvas Cursor="Hand">
                     <Canvas.Left>
                         <MultiBinding Converter="{StaticResource PositionCorrectorConverter}">
                             <Binding ElementName="mControl" Path="SelectedCity.X"/>
@@ -154,7 +154,7 @@
 
                 <Line Visibility="{Binding ElementName=mControl, Path=AppState.IsAbleToPickSecondCity, 
                           Converter={StaticResource BooleanToVisibilityConverter}}"
-                      Style="{StaticResource LineAnimation}"/>
+                      Style="{StaticResource LineAnimation}" />
                 <Line Visibility="{Binding ElementName=mControl, Path=AppState.IsAbleToCreateRoute, 
                           Converter={StaticResource BooleanToVisibilityConverter}}"
                       Style="{StaticResource LineAttemptToLoad}"/>
@@ -165,7 +165,7 @@
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Canvas MouseDown="Route_MouseDown">
+                            <Canvas MouseDown="Route_MouseDown" Cursor="Hand">
                                 <Line Style="{StaticResource LineRoute}"/>
                             </Canvas>
                         </DataTemplate>
@@ -182,9 +182,9 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <Path StrokeThickness="{Binding ElementName=mControl, Path=SettingsMap.EdgeSize}"
-                      Stroke="{Binding ElementName=mControl, Path=SettingsMap.EdgeColor, Converter={StaticResource StringToColorInvertConverter}}"
-                      Data="{StaticResource shortestPathGeometry}">
+                <Path Stroke="{Binding ElementName=mControl, Path=SettingsMap.EdgeColor, Converter={StaticResource StringToColorInvertConverter}}"
+                      Data="{StaticResource shortestPathGeometry}"
+                      Style="{StaticResource EdgeSizeStyle}">
                 </Path>
                 
                 <ItemsControl 
@@ -195,17 +195,26 @@
                         <DataTemplate>
                             <Canvas Height="2" Width="2" 
                                     Style="{StaticResource GrowAnimation}"
-                                    MouseDown="City_MouseDown"
-                                   >
+                                    MouseDown="City_MouseDown" Cursor="Hand" x:Name="canvasOfCity">
+
                                 <Ellipse x:Name="city"
                                          Style="{StaticResource CityStyle}"/>
 
-                                <Label Content="{Binding Name}" 
-                                       Padding="{Binding ElementName=city, Path=ActualHeight}"
-                                       Canvas.Bottom="0"
+                                <Label Content="{Binding Name}"
+                                       Canvas.Bottom="{Binding ElementName=canvasOfCity, Path=Height}"
                                        FontWeight="ExtraBlack"
+                                       FontSize="{Binding ElementName=city, Path=Width}"
                                        Canvas.Left="{Binding RelativeSource={RelativeSource Self}, Path=ActualWidth,
-                                            Converter={StaticResource CenterOffsetConverter}}"/>
+                                            Converter={StaticResource CenterOffsetConverter}}">
+                                    <Label.Padding>
+                                        <MultiBinding Converter ="{StaticResource MultiPaddingConverter}">
+                                            <Binding ElementName=""/>
+                                            <Binding ElementName=""/>
+                                            <Binding ElementName=""/>
+                                            <Binding ElementName="city" Path="Height"/>
+                                        </MultiBinding>
+                                    </Label.Padding>
+                                </Label>
                             </Canvas>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

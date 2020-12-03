@@ -1,10 +1,19 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <Style x:Key="RouteOfMapStyle">
+    <Style x:Key="EdgeSizeStyle">
+        <Setter Property="Line.StrokeThickness">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource SizeCorrectorConverter}">
+                    <Binding ElementName="mControl" Path="SettingsMap.EdgeSize"/>
+                    <Binding ElementName="mControl" Path="ScaleValue"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style BasedOn="{StaticResource EdgeSizeStyle}" x:Key="RouteOfMapStyle">
         <Setter Property="Line.Stroke" Value="{Binding ElementName=mControl, Path=SettingsMap.EdgeColor, 
                          Converter={StaticResource StringToColorConverter}}"/>
-        <Setter Property="Line.StrokeThickness" Value="{Binding ElementName=mControl, Path=SettingsMap.EdgeSize}"/>
     </Style>
     <Style BasedOn="{StaticResource RouteOfMapStyle}" x:Key="LineAnimation">
         <Setter Property="Line.X1">

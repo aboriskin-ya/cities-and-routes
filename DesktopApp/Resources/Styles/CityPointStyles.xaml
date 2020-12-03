@@ -2,8 +2,22 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Style x:Key="CityOfMapStyle">
-        <Setter Property="Ellipse.Width" Value="{Binding ElementName=mControl, Path=SettingsMap.VertexSize}"/>
-        <Setter Property="Ellipse.Height" Value="{Binding ElementName=mControl, Path=SettingsMap.VertexSize}"/>
+        <Setter Property="Ellipse.Width">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource SizeCorrectorConverter}">
+                    <Binding ElementName="mControl" Path="SettingsMap.VertexSize"/>
+                    <Binding ElementName="mControl" Path="ScaleValue"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Ellipse.Height">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource SizeCorrectorConverter}">
+                    <Binding ElementName="mControl" Path="SettingsMap.VertexSize"/>
+                    <Binding ElementName="mControl" Path="ScaleValue"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Canvas.Left" Value="{Binding RelativeSource={RelativeSource Self}, Path=ActualWidth, 
                                             Converter={StaticResource CenterOffsetConverter}}"/>
         <Setter Property="Canvas.Top" Value="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, 

@@ -32,7 +32,7 @@ namespace API.Controllers
 
             if (RouteList.Count() == 0)
             {
-                return NotFound();
+                return NotFound(null);
             }
             return Ok(RouteList);
         }
@@ -48,7 +48,7 @@ namespace API.Controllers
             var route = _service.GetRoute(id);
             if (route == null)
             {
-                return NotFound();
+                return NotFound(null);
             }
             return Ok(route);
         }
@@ -84,7 +84,7 @@ namespace API.Controllers
             }
             else
             {
-                return NotFound();
+                return NotFound(null);
             }
         }
     }
