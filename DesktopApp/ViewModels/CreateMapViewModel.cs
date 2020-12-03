@@ -1,15 +1,17 @@
 ﻿using DesktopApp.APIInteraction;
+using DesktopApp.Dialogs.Commands;
+using DesktopApp.Models;
+using DesktopApp.Services;
+using DesktopApp.Services.EventAggregator;
 using GongSolutions.Wpf.DragDrop;
+using Prism.Events;
 using System;
 using System.ComponentModel;
 using System.IO;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using DesktopApp.Dialogs.Commands;
-using DesktopApp.Services;
-using System.Threading.Tasks;
-using DesktopApp.Models;
 
 namespace DesktopApp.ViewModels
 {
@@ -20,13 +22,15 @@ namespace DesktopApp.ViewModels
         private readonly IOpenImageDialogService _openImageDialogService;
         private readonly IImageAPIService _imageAPIService;
         private readonly IMapAPIService _mapAPIService;
+        private IEventAggregator _eventAggregator;
 
-        public CreateMapViewModel(IMessageBoxService messageBoxService, IOpenImageDialogService openImageDialogService, IImageAPIService imageAPIService, IMapAPIService mapAPIService)
+        public CreateMapViewModel(IMessageBoxService messageBoxService, IOpenImageDialogService openImageDialogService, IImageAPIService imageAPIService, IMapAPIService mapAPIService, IEventAggregator eventAggregator)
         {
             _messageBoxService = messageBoxService;
             _openImageDialogService = openImageDialogService;
             _imageAPIService = imageAPIService;
             _mapAPIService = mapAPIService;
+            _eventAggregator = eventAggregator;
             InitializeProperties();
         }
 
@@ -67,17 +71,18 @@ namespace DesktopApp.ViewModels
             try
             {
                 NewMap.ImageId = await AddNewImage();
+                NewMap.Id = await AddNewMap();
+                _messageBoxService.ShowInfo($"We have a new map \"{NewMap.Name}\".", "Success");
 
-                if (!AddNewMap().IsFaulted)
+                var res = await _mapAPIService.GetMapAsync(NewMap.Id);
+                res.Payload.Image = new Image() { Data = await _imageAPIService.GetImageAsync(res.Payload.ImageId) };
+                _eventAggregator.GetEvent<WholeMapSentEvent>().Publish(res.Payload);
+
+                foreach (Window item in Application.Current.Windows)
                 {
-                    _messageBoxService.ShowInfo($"We have a new map \"{NewMap.Name}\".", "Success");
-                    InitializeProperties();
-                    foreach (Window item in Application.Current.Windows)
+                    if (item.DataContext == this)
                     {
-                        if (item.DataContext == this)
-                        {
-                            item.Close();
-                        }
+                        item.Close();
                     }
                 }
             }
@@ -87,11 +92,13 @@ namespace DesktopApp.ViewModels
             }
         }
 
-        private async Task AddNewMap()
+        private async Task<Guid> AddNewMap()
         {
             var res = await _mapAPIService.CreateMapAsync(NewMap);
             if (!res.IsSuccessful)
                 throw new Exception("A map was not added.");
+            else
+                return res.Payload.Id;
         }
 
         private async Task<Guid> AddNewImage()

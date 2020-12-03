@@ -16,13 +16,13 @@ namespace DesktopApp.ViewModels
         private IEventAggregator _eventAggregator;
         private Settings oldSettings;
 
-        public SettingsViewModel(ISettingsAPIService settingsAPIService, IMessageBoxService messageBoxService, IEventAggregator eventAggregator,Settings settings)
+        public SettingsViewModel(ISettingsAPIService settingsAPIService, IMessageBoxService messageBoxService, IEventAggregator eventAggregator, Settings settings)
         {
             _settingsAPIService = settingsAPIService;
             _messageBoxService = messageBoxService;
             _eventAggregator = eventAggregator;
             Settings = settings;
-            oldSettings = new Settings(settings);    
+            oldSettings = new Settings(settings);
         }
 
         #region CloseWindow
@@ -45,7 +45,7 @@ namespace DesktopApp.ViewModels
 
         private async Task OnSaveSettingsExecuted(object p)
         {
-            var res = (settings.Id != default)? await _settingsAPIService.UpdateSettingsAsync(settings)
+            var res = (settings.Id != default) ? await _settingsAPIService.UpdateSettingsAsync(settings)
                 : await _settingsAPIService.CreateSettingsAsync(settings);
             if (!res.IsSuccessful)
                 _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
@@ -53,7 +53,7 @@ namespace DesktopApp.ViewModels
             {
                 _messageBoxService.ShowInfo("All changes were saved", "Success");
                 oldSettings = res.Payload;
-            }                    
+            }
             CloseWindowCommand.Execute(p);
         }
 

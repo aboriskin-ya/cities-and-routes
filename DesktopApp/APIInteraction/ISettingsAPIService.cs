@@ -1,5 +1,4 @@
 ﻿using DesktopApp.Models;
-using System;
 using System.Threading.Tasks;
 
 namespace DesktopApp.APIInteraction

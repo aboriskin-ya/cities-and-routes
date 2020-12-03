@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DataAccess.Models;
+﻿using DataAccess.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.DTO;
 using Service.Services.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace API.Controllers
 {
@@ -31,7 +31,7 @@ namespace API.Controllers
             var city = _service.GetCity(id);
             if (city == null)
             {
-                return NotFound();
+                return NotFound(null);
             }
 
             return Ok(city);
@@ -49,7 +49,7 @@ namespace API.Controllers
 
             if (CityList.Count() == 0)
             {
-                return NotFound();
+                return NotFound(null);
             }
 
             return Ok(CityList);
@@ -90,7 +90,7 @@ namespace API.Controllers
             }
             else
             {
-                return NotFound();
+                return NotFound(null);
             }
         }
     }

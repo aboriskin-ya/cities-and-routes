@@ -25,6 +25,8 @@ namespace DesktopApp.APIInteraction.Mapper
             CreateMap<RouteGetDTO, Route>();
 
             CreateMap<Map, MapCreateDTO>();
+            CreateMap<Map, MapGetDTO>();
+            CreateMap<MapGetDTO, Map>();
             CreateMap<MapIdNameGetDTO, Map>();
             CreateMap<MapGetDTO, WholeMap>();
 

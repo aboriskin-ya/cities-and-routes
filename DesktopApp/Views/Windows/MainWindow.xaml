@@ -74,17 +74,22 @@
                                     Target="{Binding cityName}"/>
 
                                 <TextBox 
-                                    DataContext="{Binding MapViewModel}"
                                     Grid.Column="1"
-                                    Text="{Binding SelectedCity.Name, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                    Text="{Binding MapViewModel.SelectedCity.Name, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                     Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
                                     Style="{StaticResource StyleValidation}"
-                                    x:Name="cityName"/>
+                                    x:Name="cityName">
+                                    <TextBox.InputBindings>
+                                        <KeyBinding Command="{Binding CreateNewCityCommand}" Key="ENTER" CommandParameter="{Binding ElementName=cityName, Path=(Validation.HasError)}"/>
+                                    </TextBox.InputBindings>
+                                </TextBox>
 
                                 <Button
                                     Grid.Row="1"
                                     Content="Create"
-                                    Command="{Binding CreateNewCityCommand}" Margin="-1,0,2,0">
+                                    Command="{Binding CreateNewCityCommand}" 
+                                    CommandParameter="{Binding ElementName=cityName, Path=(Validation.HasError)}"
+                                    Margin="-1,0,2,0">
                                     <Button.Style>
                                         <Style TargetType="{x:Type Button}">
                                             <Setter Property="IsEnabled" Value="False"/>
@@ -123,16 +128,21 @@
                                     Target="{Binding cityNameUpdate}" Grid.ColumnSpan="2" Margin="0,-2,10,44" Grid.RowSpan="2"/>
 
                                 <TextBox 
-                                    DataContext="{Binding MapViewModel}"
-                                    Text="{Binding SelectedCity.Name, NotifyOnValidationError=true, ValidatesOnDataErrors=True}"
+                                    Text="{Binding MapViewModel.SelectedCity.Name, NotifyOnValidationError=true, ValidatesOnDataErrors=True}"
                                     Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
                                     Style="{StaticResource StyleValidation}"
-                                    x:Name="cityNameUpdate" Margin="1,20,1,37" Grid.ColumnSpan="2" Grid.Row="1" Height="25"/>
+                                    x:Name="cityNameUpdate" Margin="1,20,1,37" Grid.ColumnSpan="2" Grid.Row="1" Height="25">
+                                    <TextBox.InputBindings>
+                                        <KeyBinding Command="{Binding UpdateCityCommand}" Key="ENTER" CommandParameter="{Binding ElementName=cityNameUpdate, Path=(Validation.HasError)}"/>
+                                    </TextBox.InputBindings>
+                                </TextBox>
 
                                 <Button
                                     Grid.Row="1"
                                     Content="Update"
-                                    Command="{Binding UpdateCityCommand}" Margin="-1,51,2,10" Height="22">
+                                    Command="{Binding UpdateCityCommand}"
+                                    CommandParameter="{Binding ElementName=cityNameUpdate, Path=(Validation.HasError)}"
+                                    Margin="-1,51,2,10" Height="22">
                                     <Button.Style>
                                         <Style TargetType="{x:Type Button}">
                                             <Setter Property="IsEnabled" Value="True"/>
@@ -178,20 +188,24 @@
 
                                 <Label Grid.Row="1"
                                     Content="Distance: "/>
-                                <TextBox 
-                                    DataContext="{Binding MapViewModel}"
+                                <TextBox
                                     Grid.Column="1"
                                     Grid.Row="1"                        
-                                    Text="{Binding SelectedRoute.Distance, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                    Text="{Binding MapViewModel.SelectedRoute.Distance, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                     Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
                                     Style="{StaticResource StyleValidation}"
                                     x:Name="routeDistance">
+                                    <TextBox.InputBindings>
+                                        <KeyBinding Command="{Binding CreateNewRouteCommand}" Key="ENTER" CommandParameter="{Binding ElementName=routeDistance, Path=(Validation.HasError)}"/>
+                                    </TextBox.InputBindings>
                                 </TextBox>
 
                                 <Button
                                     Grid.Row="2"
                                     Content="Create"
-                                    Command="{Binding CreateNewRouteCommand}" Margin="-1,0,2,0">
+                                    Command="{Binding CreateNewRouteCommand}"
+                                    CommandParameter="{Binding ElementName=routeDistance, Path=(Validation.HasError)}"
+                                    Margin="-1,0,2,0">
                                     <Button.Style>
                                         <Style TargetType="{x:Type Button}">
                                             <Setter Property="IsEnabled" Value="False"/>
@@ -229,17 +243,22 @@
                         Content="Update distance: "
                         Target="{Binding routeUpdate}" Grid.ColumnSpan="2" Margin="0,-2,10,0" Grid.RowSpan="2" Height="41" VerticalAlignment="Top"/>
 
-                                <TextBox 
-                        DataContext="{Binding MapViewModel}"
-                        Text="{Binding SelectedRoute.Distance, NotifyOnValidationError=true, ValidatesOnDataErrors=True}"
+                                <TextBox
+                        Text="{Binding MapViewModel.SelectedRoute.Distance, NotifyOnValidationError=true, ValidatesOnDataErrors=True}"
                         Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
                         Style="{StaticResource StyleValidation}"
-                        x:Name="routeUpdate" Margin="1,20,1,37" Grid.ColumnSpan="2" Grid.Row="1" Height="25"/>
+                        x:Name="routeUpdate" Margin="1,20,1,37" Grid.ColumnSpan="2" Grid.Row="1" Height="25">
+                            <TextBox.InputBindings>
+                                  <KeyBinding Command="{Binding UpdateRouteCommand}" Key="ENTER" CommandParameter="{Binding ElementName=routeUpdate, Path=(Validation.HasError)}"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
 
                                 <Button
                         Grid.Row="1"
                         Content="Update"
-                        Command="{Binding UpdateRouteCommand}" Margin="-1,51,2,10" Height="22">
+                        Command="{Binding UpdateRouteCommand}"
+                        CommandParameter="{Binding ElementName=routeUpdate, Path=(Validation.HasError)}"
+                        Margin="-1,51,2,10" Height="22">
                                     <Button.Style>
                                         <Style TargetType="{x:Type Button}">
                                             <Setter Property="IsEnabled" Value="True"/>
