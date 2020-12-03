@@ -172,9 +172,9 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <Path StrokeThickness="{Binding ElementName=mControl, Path=SettingsMap.EdgeSize}"
-                      Stroke="{Binding ElementName=mControl, Path=SettingsMap.EdgeColor, Converter={StaticResource StringToColorInvertConverter}}"
-                      Data="{StaticResource shortestPathGeometry}">
+                <Path Stroke="{Binding ElementName=mControl, Path=SettingsMap.EdgeColor, Converter={StaticResource StringToColorInvertConverter}}"
+                      Data="{StaticResource shortestPathGeometry}"
+                      Style="{StaticResource EdgeSizeStyle}">
                 </Path>
                 
                 <ItemsControl 
@@ -185,16 +185,26 @@
                         <DataTemplate>
                             <Canvas Height="2" Width="2" 
                                     Style="{StaticResource GrowAnimation}"
-                                    MouseDown="City_MouseDown">
+                                    MouseDown="City_MouseDown"
+                                    x:Name="canvasOfCity">
                                 <Ellipse x:Name="city"
                                          Style="{StaticResource CityStyle}"/>
 
-                                <Label Content="{Binding Name}" 
-                                       Padding="{Binding ElementName=city, Path=ActualHeight}"
-                                       Canvas.Bottom="0"
+                                <Label Content="{Binding Name}"
+                                       Canvas.Bottom="{Binding ElementName=canvasOfCity, Path=Height}"
                                        FontWeight="ExtraBlack"
+                                       FontSize="{Binding ElementName=city, Path=Width}"
                                        Canvas.Left="{Binding RelativeSource={RelativeSource Self}, Path=ActualWidth,
-                                            Converter={StaticResource CenterOffsetConverter}}"/>
+                                            Converter={StaticResource CenterOffsetConverter}}">
+                                    <Label.Padding>
+                                        <MultiBinding Converter ="{StaticResource MultiPaddingConverter}">
+                                            <Binding ElementName=""/>
+                                            <Binding ElementName=""/>
+                                            <Binding ElementName=""/>
+                                            <Binding ElementName="city" Path="Height"/>
+                                        </MultiBinding>
+                                    </Label.Padding>
+                                </Label>
                             </Canvas>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
