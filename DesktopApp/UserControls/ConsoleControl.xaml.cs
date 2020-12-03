@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 
 namespace DesktopApp.UserControls
@@ -10,7 +9,6 @@ namespace DesktopApp.UserControls
         public ConsoleControl()
         {
             InitializeComponent();
-            SetBinding(ClearConsoleCommandProperty, new Binding("ClearConsoleCommand"));
         }
         public string ConsoleContent
         {

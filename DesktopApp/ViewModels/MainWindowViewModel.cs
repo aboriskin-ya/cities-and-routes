@@ -72,6 +72,7 @@ namespace DesktopApp.ViewModels
             InitializeModels();
             InitializeMapViewModel(map);
             InitializeMapImageSource(map.Image.Data);
+            TravelSalesmanViewModel.TravelsalesmanAcces = MapViewModel.IsHaveMap();
         }
 
         #region Initializers
@@ -366,10 +367,6 @@ namespace DesktopApp.ViewModels
 
         #region ResolveTravelSalesmanCommand
         public ICommand ResolveTravelSalesmanCommand { get => TravelSalesmanViewModel.ResolveTravelSalesmanCommand; }
-        #endregion
-
-        #region ClearConsoleCommand
-        public ICommand ClearConsoleCommand { get => TravelSalesmanViewModel.ClearConsoleCommand; }
         #endregion
 
         #region MapImage

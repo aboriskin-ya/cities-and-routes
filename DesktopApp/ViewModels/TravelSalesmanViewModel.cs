@@ -3,14 +3,11 @@ using DesktopApp.Models;
 using DesktopApp.Services.State;
 using Service.PathResolver;
 using System;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Documents;
-using Prism.Events;
 
 namespace DesktopApp.ViewModels
 {
@@ -68,6 +65,15 @@ namespace DesktopApp.ViewModels
         }
         #endregion
 
+        #region TravelsalesmanAcces
+        private bool _travelsalesmanAcces = false;
+        public bool TravelsalesmanAcces
+        {
+            get => _travelsalesmanAcces;
+            set => Set<bool>(ref _travelsalesmanAcces, value);
+        }
+        #endregion
+
         #region SelectedMethodIndex
         private int _selectedMethodIndex;
         public int SelectedMethodIndex
@@ -113,7 +119,7 @@ namespace DesktopApp.ViewModels
         #region CancelSelectCitities
         public ICommand CancelSelectCitiesCommand { get => new RelayCommand(p => OnCancelSelectExecuted(p), p => OnCanCancelSelectCityExecute(p)); }
 
-        private bool OnCanCancelSelectCityExecute(object p) => CitiesCount > 0;
+        private bool OnCanCancelSelectCityExecute(object p) => TravelsalesmanAcces && CanSelectCities;
 
         private void OnCancelSelectExecuted(object p)
         {
@@ -151,7 +157,7 @@ namespace DesktopApp.ViewModels
                 builder.Append($"{city.Payload.Name}->");
             }
             await GetSelectedRoutes(model.Payload.PreferableSequenceOfCities.ToArray(), request.MapId);
-            ConsoleResult += builder.ToString().Substring(0,builder.Length-2);
+            ConsoleResult += builder.ToString().Substring(0, builder.Length - 2);
             CanDisplay = true;
             RemoveCities();
         }

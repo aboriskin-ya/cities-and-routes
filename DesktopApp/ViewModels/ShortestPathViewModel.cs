@@ -1,7 +1,6 @@
 ﻿using DesktopApp.APIInteraction;
 using DesktopApp.Models;
 using DesktopApp.Services;
-using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,14 +38,14 @@ namespace DesktopApp.ViewModels
             set => Set<string>(ref _consoleResult, value);
         }
 
-        public ICommand ClearConsoleCommand { get => new RelayCommand(p => OnClearConsoleExecuted(p), p => OnCanClearConsoleExecute(p)); }
+        public ICommand ClearConsoleCommand { get => new RelayCommand(p => OnClearConsoleExecuted(p), p => OnCanClearExecute(p)); }
 
-        private bool OnCanClearConsoleExecute(object p) => !string.IsNullOrEmpty(ConsoleResult);
+        private bool OnCanClearExecute(object p) => !string.IsNullOrEmpty(ConsoleResult);
 
         private void OnClearConsoleExecuted(object p)
         {
             ConsoleResult = "";
-            ShortestPath.CitiesPosition.RemoveAll(t=>t!=null);
+            ShortestPath.CitiesPosition.RemoveAll(t => t != null);
         }
 
         public ICommand CalculateShortestPathCommand => new RelayCommand(p => OnCalculateShortestPath(p), p => OnCanCalculateShortestPathExecute(p));
@@ -70,7 +69,7 @@ namespace DesktopApp.ViewModels
         {
             var builder = new StringBuilder();
             var cities = new List<Point>();
-            ConsoleResult += "Selected cities: ";
+            ConsoleResult += "Route has forward cities: ";
             foreach (var guid in shortestPath.Path)
             {
                 var city = await _cityAPIService.GetCityAsync(guid);
@@ -94,6 +93,7 @@ namespace DesktopApp.ViewModels
         public void InitializeModels()
         {
             ShortestPath = new ShortestPath();
+            ConsoleResult = "";
         }
     }
 }

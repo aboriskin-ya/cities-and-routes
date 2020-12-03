@@ -12,6 +12,7 @@ namespace DesktopApp.ViewModels
         ObservableCollection<Route> SelectedRoutes { get; set; }
         City SelectedCity { get; set; }
         bool CanSelectCities { get; set; }
+        bool TravelsalesmanAcces { get; set; }
         int SelectedMethodIndex { get; set; }
         string ConsoleResult { get; set; }
         string State { get; set; }

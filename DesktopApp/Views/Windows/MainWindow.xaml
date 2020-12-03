@@ -297,17 +297,18 @@
                         <StackPanel>
                             <Button Content="Calculate the shortest path"
                                     Command="{Binding CalculateShortestPathCommand}"/>
-                            <uc:ConsoleControl ConsoleContent="{Binding ShortestPathViewModel.ConsoleResult,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                               ClearConsoleCommand="{Binding ShortestPathViewModel.ClearConsoleCommand}"/>
+                            <uc:ConsoleControl DataContext="{Binding ShortestPathViewModel}"
+                                               ConsoleContent="{Binding ConsoleResult,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                               ClearConsoleCommand="{Binding ClearConsoleCommand}"/>
                         </StackPanel>
                     </TabItem.Content>
                 </TabItem>
-                <TabItem Header="Travelsalesman">
+                <TabItem Header="Travelsalesman" DataContext="{Binding TravelSalesmanViewModel}">
                     <DockPanel>
                         <StatusBar DockPanel.Dock="Top">
-                            <StatusBarItem Content="{Binding TravelSalesmanViewModel.State}"/>
+                            <StatusBarItem Content="{Binding State}"/>
                         </StatusBar>
-                        <ComboBox DockPanel.Dock="Top" SelectedIndex="{Binding TravelSalesmanViewModel.SelectedMethodIndex}">
+                        <ComboBox DockPanel.Dock="Top" SelectedIndex="{Binding SelectedMethodIndex}" IsEnabled="{Binding TravelsalesmanAcces}">
                             <ComboBoxItem Content="Annealing"/>
                             <ComboBoxItem Content="Nearest"/>
                             <ComboBoxItem Content="Quickest"/>
@@ -324,15 +325,16 @@
                             <ToggleButton Content="Select cities" 
                                           Grid.Row="0"
                                           Grid.Column="0"
-                                          IsChecked="{Binding TravelSalesmanViewModel.CanSelectCities}"
+                                          IsChecked="{Binding CanSelectCities}"
+                                          IsEnabled="{Binding TravelsalesmanAcces}"
                                           />
-                            <Button Content="Cancel" Grid.Row="0" Grid.Column="1"/>
+                            <Button Content="Cancel" Grid.Row="0" Grid.Column="1" Command="{Binding CancelSelectCitiesCommand}"/>
                             <Button Content="Resolve travelsalesman goal"
                                     Grid.Row="1" Grid.ColumnSpan="2"
-                                    Command="{Binding TravelSalesmanViewModel.ResolveTravelSalesmanCommand}"/>
+                                    Command="{Binding ResolveTravelSalesmanCommand}"/>
                         </Grid>
                         <uc:ConsoleControl DockPanel.Dock="Top" 
-                            ConsoleContent="{Binding TravelSalesmanViewModel.ConsoleResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            ConsoleContent="{Binding ConsoleResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             ClearConsoleCommand="{Binding ClearConsoleCommand}"/>
                     </DockPanel>
                 </TabItem>
