@@ -34,7 +34,7 @@ namespace API.Controllers
             MapGetDTO map = _service.GetMap(id);
             if (map == null)
             {
-                return NotFound();
+                return NotFound(null);
             }
             return Ok(map);
         }
@@ -50,7 +50,7 @@ namespace API.Controllers
             var MapList = _service.GetMaps();
             if (MapList.Count() == 0)
             {
-                return NotFound();
+                return NotFound(null);
             }
             return Ok(MapList);
         }
@@ -62,7 +62,7 @@ namespace API.Controllers
             var MapList = _service.GetMapsNames();
             if (MapList.Count() == 0)
             {
-                return NotFound();
+                return NotFound(null);
             }
             return Ok(MapList);
         }
@@ -102,7 +102,7 @@ namespace API.Controllers
             }
             else
             {
-                return NotFound();
+                return NotFound(null);
             }
         }
     }

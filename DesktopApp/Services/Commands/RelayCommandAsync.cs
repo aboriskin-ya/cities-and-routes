@@ -24,9 +24,10 @@ namespace DesktopApp.Services.Commands
 
         public virtual async Task ExecuteAsync(object parameter) => await execute.Invoke(parameter);
 
-        public void Execute(object parameter)
+        public async void Execute(object parameter)
         {
-            ExecuteAsync(parameter).RunSynchronously();
+            await ExecuteAsync(parameter);
         }
+
     }
 }

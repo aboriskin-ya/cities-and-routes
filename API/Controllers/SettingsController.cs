@@ -31,7 +31,7 @@ namespace API.Controllers
 
             if (settings.Count() == 0)
             {
-                return NotFound();
+                return NotFound(null);
             }
 
             return Ok(settings);
@@ -49,7 +49,7 @@ namespace API.Controllers
 
             if (settings == null)
             {
-                return NotFound();
+                return NotFound(null);
             }
 
             return Ok(settings);
@@ -67,7 +67,7 @@ namespace API.Controllers
 
             if (settings == null)
             {
-                return NotFound();
+                return NotFound(null);
             }
 
             return Ok(settings);
@@ -110,7 +110,7 @@ namespace API.Controllers
             }
             else
             {
-                return NotFound();
+                return NotFound(null);
             }
         }
     }

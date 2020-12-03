@@ -40,7 +40,7 @@ namespace DesktopApp.ViewModels
             ShortestPathViewModel = shortestPathViewModel;
 
             InitializeModels();
-            
+
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<SettingsSentEvent>().Subscribe(ReceiveSettings, true);
             _eventAggregator.GetEvent<WholeMapSentEvent>().Subscribe(ReceiveMessageSelectExistingMap, true);
@@ -51,7 +51,7 @@ namespace DesktopApp.ViewModels
             MapViewModel.WholeMap.Settings = obj;
         }
 
-        private void ReceiveMessageSelectExistingMap(WholeMap map)
+        public void ReceiveMessageSelectExistingMap(WholeMap map)
         {
             ShortestPathViewModel.InitializeModels();
             MapViewModel.InitializeModels();
@@ -130,7 +130,7 @@ namespace DesktopApp.ViewModels
 
         private void ShowCreateMapDialog(object p)
         {
-            var model = RegisterServices.Configure().Resolve<CreateMapViewModel>();
+            var model = RegisterServices.Configure().Resolve<CreateMapViewModel>(new NamedParameter("eventAggregator", _eventAggregator));
             var view = new CreateMapDialog { DataContext = model };
             view.Owner = App.Current.MainWindow;
             view.Show();
@@ -158,7 +158,7 @@ namespace DesktopApp.ViewModels
 
         private void ShowSettingsDialog(object p)
         {
-            var model = RegisterServices.Configure().Resolve<SettingsViewModel>(new NamedParameter ("settings", MapViewModel.WholeMap.Settings),
+            var model = RegisterServices.Configure().Resolve<SettingsViewModel>(new NamedParameter("settings", MapViewModel.WholeMap.Settings),
                 new NamedParameter("eventAggregator", _eventAggregator));
             var view = new SettingsDialog { DataContext = model };
             view.Owner = App.Current.MainWindow;
@@ -184,12 +184,15 @@ namespace DesktopApp.ViewModels
 
         public ICommand CreateNewCityCommand => new RelayCommand(async p => await OnCreateNewCityExecutedAsync(p), p => OnCanCreateNewCityExecuted(p));
 
-        private async Task OnCreateNewCityExecutedAsync(object p)
+        private async Task OnCreateNewCityExecutedAsync(object HasError)
         {
-            await MapViewModel.CreateNewCityCommand.ExecuteAsync(p);
-            AppState.IsAbleToCreateCity = false;
-            if (MapViewModel.CityWasSaved())
-                AppState.IsSuccess = true;
+            if ((bool)HasError == false)
+            {
+                await MapViewModel.CreateNewCityCommand.ExecuteAsync(HasError);
+                AppState.IsAbleToCreateCity = false;
+                if (MapViewModel.CityWasSaved())
+                    AppState.IsSuccess = true;
+            }
         }
 
         private bool OnCanCreateNewCityExecuted(object p) => AppState.IsAbleToCreateCity;
@@ -200,14 +203,17 @@ namespace DesktopApp.ViewModels
 
         public ICommand UpdateCityCommand => new RelayCommand(p => OnUpdateCityExecuted(p), p => OnCanUpdateCityExecuted(p));
 
-        private void OnUpdateCityExecuted(object p)
+        private void OnUpdateCityExecuted(object HasError)
         {
-            MapViewModel.UpdateCityCommand.Execute(p);
-            AppState.IsAbleToCreateCity = false;
-            AppState.IsAbleToSetCity = false;
-            AppState.IsAbleToUpdateCity = false;
-            if (MapViewModel.CityWasSaved())
-                AppState.IsSuccess = true;
+            if ((bool)HasError == false)
+            {
+                MapViewModel.UpdateCityCommand.Execute(HasError);
+                AppState.IsAbleToCreateCity = false;
+                AppState.IsAbleToSetCity = false;
+                AppState.IsAbleToUpdateCity = false;
+                if (MapViewModel.CityWasSaved())
+                    AppState.IsSuccess = true;
+            }
         }
 
         private bool OnCanUpdateCityExecuted(object p) => AppState.IsAbleToUpdateCity;
@@ -235,12 +241,15 @@ namespace DesktopApp.ViewModels
 
         public ICommand CreateNewRouteCommand => new RelayCommand(async p => await OnCreateNewRouteExecutedAsync(p), p => OnCanCreateNewRouteExecuted(p));
 
-        private async Task OnCreateNewRouteExecutedAsync(object p)
+        private async Task OnCreateNewRouteExecutedAsync(object HasError)
         {
-            await MapViewModel.CreateNewRouteCommand.ExecuteAsync(p);
-            AppState.IsAbleToCreateRoute = false;
-            if (MapViewModel.RouteWasSaved())
-                AppState.IsSuccess = true;
+            if ((bool)HasError == false)
+            {
+                await MapViewModel.CreateNewRouteCommand.ExecuteAsync(HasError);
+                AppState.IsAbleToCreateRoute = false;
+                if (MapViewModel.RouteWasSaved())
+                    AppState.IsSuccess = true;
+            }
         }
 
         private bool OnCanCreateNewRouteExecuted(object p) => MapViewModel.IsRouteHasBothCities();
@@ -251,21 +260,24 @@ namespace DesktopApp.ViewModels
 
         public ICommand UpdateRouteCommand => new RelayCommand(p => OnUpdateRouteExecuted(p), p => OnCanUpdateRouteExecuted(p));
 
-        private void OnUpdateRouteExecuted(object p)
+        private void OnUpdateRouteExecuted(object HasError)
         {
-            MapViewModel.UpdateRouteCommand.Execute(p);
-            AppState.IsAbleToCreateCity = false;
-            AppState.IsAbleToSetCity = false;
-            AppState.IsAbleToUpdateRoute = false;
-            if (MapViewModel.RouteWasSaved())
-                AppState.IsSuccess = true;
+            if ((bool)HasError == false)
+            {
+                MapViewModel.UpdateRouteCommand.Execute(HasError);
+                AppState.IsAbleToCreateCity = false;
+                AppState.IsAbleToSetCity = false;
+                AppState.IsAbleToUpdateRoute = false;
+                if (MapViewModel.RouteWasSaved())
+                    AppState.IsSuccess = true;
+            }
         }
 
         private bool OnCanUpdateRouteExecuted(object p) => AppState.IsAbleToUpdateRoute;
 
         #endregion
 
-        #region UpdateRouteCommand
+        #region DeleteRouteCommand
 
         public ICommand DeleteRouteCommand => new DeleteRouteCommand(p => OnCanDeleteRouteExecuted(p), p => OnDeleteRouteExecuted(p));
 

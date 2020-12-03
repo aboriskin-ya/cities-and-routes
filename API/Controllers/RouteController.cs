@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using DataAccess.Models;
-using Service.Services.Interfaces;
-using Service.DTO;
+﻿using DataAccess.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Service.DTO;
+using Service.Services.Interfaces;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace API.Controllers
 {
@@ -32,7 +32,7 @@ namespace API.Controllers
 
             if (RouteList.Count() == 0)
             {
-                return NotFound();
+                return NotFound(null);
             }
             return Ok(RouteList);
         }
@@ -48,7 +48,7 @@ namespace API.Controllers
             var route = _service.GetRoute(id);
             if (route == null)
             {
-                return NotFound();
+                return NotFound(null);
             }
             return Ok(route);
         }
@@ -84,7 +84,7 @@ namespace API.Controllers
             }
             else
             {
-                return NotFound();
+                return NotFound(null);
             }
         }
     }

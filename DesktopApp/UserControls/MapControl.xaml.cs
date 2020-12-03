@@ -19,7 +19,7 @@ namespace DesktopApp.UserControls
         #endregion
         public MapControl()
         {
-             InitializeComponent();
+            InitializeComponent();
             TransformPosition = new Point(0.5, 0.5);
             _RelativeTransformPosition = new Vector();
             _RelativeTransformPosition.X += TransformPosition.X;
@@ -421,7 +421,7 @@ namespace DesktopApp.UserControls
             {
                 SelectedRoute.SecondCity = city;
                 AppState.IsAbleToCreateRoute = true;
-                AppState.IsAbleToPickSecondCity = false;                
+                AppState.IsAbleToPickSecondCity = false;
                 AppState.IsAbleToUpdateCity = false;
             }
         }
@@ -460,7 +460,7 @@ namespace DesktopApp.UserControls
                 return;
             }
 
-            if (!AppState.IsAbleToSetCity && !AppState.IsAbleToPickFirstCity) 
+            if (!AppState.IsAbleToSetCity && !AppState.IsAbleToPickFirstCity)
             {
                 AppState.IsAbleToUpdateCity = true;
                 AppState.IsAbleToUpdateRoute = false;
