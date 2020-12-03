@@ -288,6 +288,7 @@ namespace DesktopApp.ViewModels
             if (DialogResult == MessageBoxResult.Yes && AppState.IsAbleToUpdateRoute)
             {
                 MapViewModel.DeleteRouteCommand.Execute(p);
+                ShortestPathViewModel.InitializeModels();
                 AppState.IsAbleToUpdateRoute = false;
                 AppState.IsSuccess = true;
             }
@@ -319,6 +320,7 @@ namespace DesktopApp.ViewModels
             if (DialogResult == MessageBoxResult.Yes && AppState.IsAbleToUpdateCity)
             {
                 MapViewModel.DeleteCityCommand.Execute(p);
+                ShortestPathViewModel.InitializeModels();
                 AppState.IsAbleToUpdateCity = false;
                 AppState.IsSuccess = true;
             }
@@ -376,7 +378,7 @@ namespace DesktopApp.ViewModels
         #endregion
 
         #region ZoomCommand
-        public ZoomCommand ZoomCommand => new ZoomCommand(p => true, p => OnZoomExecuted(p));
+        public ZoomCommand ZoomCommand => new ZoomCommand(p => MapViewModel.IsHaveMap(), p => OnZoomExecuted(p));
 
         private void OnZoomExecuted(object p)
         {
