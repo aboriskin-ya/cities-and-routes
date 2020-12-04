@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.Extensions.Logging;
 using PathResolver;
-using Service.DTO;
 using Service.PathResolver;
 using Service.Services;
 using System;
@@ -14,7 +12,6 @@ namespace Service
     public class TravelSalesmanAnnealingResolver : ITravelSalesmanAnnealingResolver
     {
         #region fields
-        private double _result;
         private IEnumerable<string> _preferableSequnce;
         private double _temperature = 100;
         private double _deltaWeight;
@@ -65,7 +62,6 @@ namespace Service
                     return response;
                 }
             }
-            _result = _minWeightValue;
             while (_temperature >= 0.05)
             {
                 var changedIndexes = GetRandomIndexVertices(_minLimit, _maxLimit);
@@ -84,7 +80,7 @@ namespace Service
             response = new TravelSalesmanResponse()
             {
                 PreferableSequenceOfCities = _preferableSequnce.Select(Guid.Parse),
-                CalculatedDistance = _result,
+                CalculatedDistance = _minWeightValue,
                 NameAlghorithm = nameof(TravelSalesmanAnnealingResolver),
                 ProcessDuration = GetProcessDuration(_timeCounter.Elapsed)
             };
@@ -113,7 +109,7 @@ namespace Service
                 else
                 {
                     weightValue += CurrentEdge.EdgeWeight;
-                } 
+                }
             }
             var LastEdge = graph.GetEdge(currentSequence[currentSequence.Length - 1], currentSequence[0]);
             if (LastEdge == null)
@@ -124,7 +120,7 @@ namespace Service
             {
                 weightValue += graph.GetEdge(currentSequence[currentSequence.Length - 1], currentSequence[0]).EdgeWeight;
             }
-            
+
             return weightValue;
         }
         private void ChangeTemperature() => _temperature *= 0.75;
@@ -161,7 +157,6 @@ namespace Service
             if (_currentWeightValue <= _minWeightValue)
             {
                 _minWeightValue = _currentWeightValue;
-                _result = _minWeightValue;
                 _preferableSequnce = changedSequence;
             }
         }
@@ -176,7 +171,7 @@ namespace Service
             _timeCounter = new Stopwatch();
             _timeCounter.Start();
         }
-        
+
 
         private bool CheckExecuting(double criticalValue) => criticalValue.Equals(0);
         private string GetProcessDuration(TimeSpan timeSpan)

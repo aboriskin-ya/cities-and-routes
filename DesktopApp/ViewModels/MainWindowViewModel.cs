@@ -1,10 +1,11 @@
 ﻿using Autofac;
 using DesktopApp.Dialogs;
 using DesktopApp.Models;
+using DesktopApp.Resources;
 using DesktopApp.Services.Commands;
 using DesktopApp.Services.EventAggregator;
 using DesktopApp.Services.Helper;
-using DesktopApp.UserControls;
+using GalaSoft.MvvmLight.Messaging;
 using Prism.Events;
 using System.IO;
 using System.Threading.Tasks;
@@ -27,19 +28,32 @@ namespace DesktopApp.ViewModels
             get => mapViewModel;
             set => Set(ref mapViewModel, value, nameof(MapViewModel));
         }
-
+        private ITravelSalesmanViewModel _travelViewModel;
+        public ITravelSalesmanViewModel TravelSalesmanViewModel
+        {
+            get => _travelViewModel;
+            set => Set(ref _travelViewModel, value);
+        }
         public ICursorPositionViewModel PositionViewModel { get; }
 
         public IShortestPathViewModel ShortestPathViewModel { get; }
         private IEventAggregator _eventAggregator;
 
-        public MainWindowViewModel(IMapViewModel viewModel, ICursorPositionViewModel positionViewModel, IShortestPathViewModel shortestPathViewModel, IEventAggregator eventAggregator)
+        public MainWindowViewModel(IMapViewModel viewModel,
+                                   ICursorPositionViewModel positionViewModel,
+                                   IShortestPathViewModel shortestPathViewModel,
+                                   ITravelSalesmanViewModel travelViewModel,
+                                   IEventAggregator eventAggregator)
+
         {
+            TravelSalesmanViewModel = travelViewModel;
             MapViewModel = viewModel;
             PositionViewModel = positionViewModel;
             ShortestPathViewModel = shortestPathViewModel;
 
             InitializeModels();
+            Messenger.Default.Register<WholeMap>(this, map => ReceiveMessageSelectExistingMap(map));
+            TravelSalesmanViewModel.WasChanged += TravelSalesmanViewModel_WasChanged;
 
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<SettingsSentEvent>().Subscribe(ReceiveSettings, true);
@@ -58,6 +72,7 @@ namespace DesktopApp.ViewModels
             InitializeModels();
             InitializeMapViewModel(map);
             InitializeMapImageSource(map.Image.Data);
+            TravelSalesmanViewModel.TravelsalesmanAcces = MapViewModel.IsHaveMap();
         }
 
         #region Initializers
@@ -98,6 +113,15 @@ namespace DesktopApp.ViewModels
         private void OnPathResolverOpen(object p)
         {
             AppState.IsAbleToFindShortestPath = true;
+        }
+        #region SelectCity
+        public ICommand SelectCityCommand { get => TravelSalesmanViewModel.SelectCityCommand; }
+        #endregion
+        private bool _canSelected;
+        public bool CanSelected
+        {
+            get => _canSelected;
+            set => Set<bool>(ref _canSelected, value);
         }
 
         private bool OnCanPathResolverOpenExecute(object p) => MapViewModel.IsHaveMap() && MapViewModel.RoutesCount() > 0;
@@ -341,6 +365,10 @@ namespace DesktopApp.ViewModels
         private bool OnCanCancelCreatingRouteExecuted(object p) => AppState.IsAbleToCreateRoute;
         #endregion
 
+        #region ResolveTravelSalesmanCommand
+        public ICommand ResolveTravelSalesmanCommand { get => TravelSalesmanViewModel.ResolveTravelSalesmanCommand; }
+        #endregion
+
         #region MapImage
         private ImageSource _mapImage;
         public ImageSource MapImageSource
@@ -490,6 +518,11 @@ namespace DesktopApp.ViewModels
         {
             get => path;
             set => Set(ref path, value, nameof(Path));
+        }
+        private void TravelSalesmanViewModel_WasChanged(object sender, System.EventArgs e)
+        {
+            var travelsalesman = sender as TravelSalesmanViewModel;
+            CanSelected = travelsalesman.CanSelectCities;
         }
     }
 }

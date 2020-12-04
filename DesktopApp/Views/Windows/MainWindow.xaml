@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"       
         xmlns:uc="clr-namespace:DesktopApp.UserControls"
+        xmlns:vm="clr-namespace:DesktopApp.ViewModels"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"        
         Title="City and Routes" Height="720" Width="1280" WindowStartupLocation="CenterScreen">
     <DockPanel x:Name="praparent">
@@ -283,7 +284,6 @@
                         </StackPanel>
                     </TabItem.Content>
                 </TabItem>
-
                 <TabItem>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
@@ -295,20 +295,48 @@
                     </TabItem.Header>
                     <TabItem.Content>
                         <StackPanel>
-                            <TextBlock>
-                            <Run Text="Distance:"/>
-                                <LineBreak/>
-                            <Run Text="{Binding ShortestPathViewModel.ShortestPath.FinalDistance}"/>
-                                <LineBreak/>
-                            <Run Text="Execution time:"/>
-                                <LineBreak/>
-                            <Run Text="{Binding ShortestPathViewModel.ShortestPath.ProcessDuration}"/>
-                                <LineBreak/>
-                            </TextBlock>
                             <Button Content="Calculate the shortest path"
                                     Command="{Binding CalculateShortestPathCommand}"/>
+                            <uc:ConsoleControl DataContext="{Binding ShortestPathViewModel}"
+                                               ConsoleContent="{Binding ConsoleResult,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                               ClearConsoleCommand="{Binding ClearConsoleCommand}"/>
                         </StackPanel>
                     </TabItem.Content>
+                </TabItem>
+                <TabItem Header="Travelsalesman" DataContext="{Binding TravelSalesmanViewModel}">
+                    <DockPanel>
+                        <StatusBar DockPanel.Dock="Top">
+                            <StatusBarItem Content="{Binding State}"/>
+                        </StatusBar>
+                        <ComboBox DockPanel.Dock="Top" SelectedIndex="{Binding SelectedMethodIndex}" IsEnabled="{Binding TravelsalesmanAcces}">
+                            <ComboBoxItem Content="Annealing"/>
+                            <ComboBoxItem Content="Nearest"/>
+                            <ComboBoxItem Content="Quickest"/>
+                        </ComboBox>
+                        <Grid DockPanel.Dock="Top">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
+                            <ToggleButton Content="Select cities" 
+                                          Grid.Row="0"
+                                          Grid.Column="0"
+                                          IsChecked="{Binding CanSelectCities}"
+                                          IsEnabled="{Binding TravelsalesmanAcces}"
+                                          />
+                            <Button Content="Cancel" Grid.Row="0" Grid.Column="1" Command="{Binding CancelSelectCitiesCommand}"/>
+                            <Button Content="Resolve travelsalesman goal"
+                                    Grid.Row="1" Grid.ColumnSpan="2"
+                                    Command="{Binding ResolveTravelSalesmanCommand}"/>
+                        </Grid>
+                        <uc:ConsoleControl DockPanel.Dock="Top" 
+                            ConsoleContent="{Binding ConsoleResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            ClearConsoleCommand="{Binding ClearConsoleCommand}"/>
+                    </DockPanel>
                 </TabItem>
             </TabControl>
         </DockPanel>
@@ -321,7 +349,8 @@
                                Text="{Binding AppState.State}"/>
                 </StatusBarItem>
             </StatusBar>
-            <uc:MapControl OffsetValue="{Binding OffsetValue, Mode=TwoWay}"
+            <uc:MapControl CanSelect="{Binding CanSelected, Mode=TwoWay}"
+                           OffsetValue="{Binding OffsetValue, Mode=TwoWay}"
                            ScaleValue="{Binding ScaleValue, Mode=TwoWay}"
                            MapImageSource="{Binding MapImageSource}"
                            TransformPosition="{Binding TransformPosition, Mode=TwoWay}"
@@ -339,7 +368,9 @@
                            PosX="{Binding PositionViewModel.PanelX, Mode=TwoWay}"
                            PosY="{Binding PositionViewModel.PanelY, Mode=TwoWay}"
                            Path="{Binding Path, Mode=TwoWay}"
-                           CitiesPositionOfPath="{Binding ShortestPathViewModel.ShortestPath.CitiesPosition, Mode=TwoWay, IsAsync=True}"/>
+                           CanDisplay="{Binding TravelSalesmanViewModel.CanDisplay, Mode=TwoWay}"
+                           CitiesPositionOfPath="{Binding ShortestPathViewModel.ShortestPath.CitiesPosition, Mode=TwoWay, IsAsync=True}"
+                           SelectedRoutes="{Binding TravelSalesmanViewModel.SelectedRoutes, Mode=TwoWay, IsAsync=True}"/>
         </DockPanel>
     </DockPanel>
 

@@ -22,7 +22,7 @@ namespace DesktopApp
 
         public bool CanExecute(object parameter)
         {
-            return this.canExecute == null || this.canExecute(parameter);
+            return canExecute?.Invoke(parameter) ?? true;
         }
 
         public void Execute(object parameter)

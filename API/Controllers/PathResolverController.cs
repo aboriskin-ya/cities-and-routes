@@ -52,7 +52,6 @@ namespace API.Controllers
             var response = await _algorithmService.SolveAnnealingTravelSalesman(BodyRequest);
             if (response == default) return BadRequest();
             return Ok(response);
-
         }
 
         [ProducesResponseType(typeof(TravelSalesmanResponse), StatusCodes.Status200OK)]
@@ -73,7 +72,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        [Route("experiment")]
+        [Route("solve-travel-salesman-quickest")]
         public IActionResult Experiment([FromBody] TravelSalesmanRequest BodyRequest)
         {
             var taskArr = new Task<TravelSalesmanResponse>[]

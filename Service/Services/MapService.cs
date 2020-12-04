@@ -50,7 +50,7 @@ namespace Service.Services
         {
             _logger.LogInformation("Get map started");
             var map = _mapper.Map<Map, MapGetDTO>(_repository.GetWholeMap(id));
-            if (map.Settings == null) 
+            if (map.Settings == null)
                 map.Settings = new SettingsGetDTO() { MapId = map.Id };
             return map;
         }

@@ -1,6 +1,6 @@
 ﻿using DesktopApp.Models;
+using DesktopApp.Resources;
 using DesktopApp.Services.Helper;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -30,6 +30,7 @@ namespace DesktopApp.UserControls
 
             SetBinding(ZoomCommandProperty, new Binding("ZoomCommand"));
             SetBinding(NavigateCommandProperty, new Binding("NavigateCommand"));
+            SetBinding(SelectCityCommandProperty, new Binding("SelectCityCommand"));
         }
 
         private void MapControl_WindowResize(object sender, System.EventArgs e)
@@ -109,25 +110,25 @@ namespace DesktopApp.UserControls
         #endregion
 
         #region InitialHeight
-        public Double InitialHeight
+        public double InitialHeight
         {
-            get { return (Double)GetValue(InitialHeightProperty); }
+            get { return (double)GetValue(InitialHeightProperty); }
             set { SetValue(InitialHeightProperty, value); }
         }
 
         public static readonly DependencyProperty InitialHeightProperty =
-            DependencyProperty.Register("InitialHeight", typeof(Double), typeof(MapControl));
+            DependencyProperty.Register("InitialHeight", typeof(double), typeof(MapControl));
         #endregion
 
         #region InitialWidth
-        public Double InitialWidth
+        public double InitialWidth
         {
-            get { return (Double)GetValue(InitialWidthProperty); }
+            get { return (double)GetValue(InitialWidthProperty); }
             set { SetValue(InitialWidthProperty, value); }
         }
 
         public static readonly DependencyProperty InitialWidthProperty =
-            DependencyProperty.Register("InitialWidth", typeof(Double), typeof(MapControl));
+            DependencyProperty.Register("InitialWidth", typeof(double), typeof(MapControl));
         #endregion
 
         #region ImageSource
@@ -174,8 +175,6 @@ namespace DesktopApp.UserControls
 
         public static readonly DependencyProperty OffsetProperty =
             DependencyProperty.Register("Offset", typeof(Offset), typeof(MapControl));
-
-
 
 
         #endregion
@@ -245,6 +244,35 @@ namespace DesktopApp.UserControls
 
         #endregion
 
+        #region SelectCityCommand
+        public ICommand SelectCityCommand
+        {
+            get { return (ICommand)GetValue(SelectCityCommandProperty); }
+            set { SetValue(SelectCityCommandProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectCityCommandProperty =
+            DependencyProperty.Register("SelectCityCommand", typeof(ICommand), typeof(MapControl));
+
+
+        #endregion
+
+        #region CanSelect
+
+
+        public bool CanSelect
+        {
+            get { return (bool)GetValue(CanSelectProperty); }
+            set { SetValue(CanSelectProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CanSelect.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CanSelectProperty =
+            DependencyProperty.Register("CanSelect", typeof(bool), typeof(MapControl));
+
+
+        #endregion
+
         #region PixelPerWidth
 
 
@@ -307,6 +335,29 @@ namespace DesktopApp.UserControls
             set { SetValue(CityCollectionProperty, value); }
         }
 
+
+        public City HighlightedCity
+        {
+            get { return (City)GetValue(HighlightedCityProperty); }
+            set { SetValue(HighlightedCityProperty, value); }
+        }
+
+        public static readonly DependencyProperty HighlightedCityProperty =
+            DependencyProperty.Register("HighlightedCity", typeof(City), typeof(MapControl));
+
+
+
+        public ObservableCollection<City> SelectedCities
+        {
+            get { return (ObservableCollection<City>)GetValue(SelectedCitiesProperty); }
+            set { SetValue(SelectedCitiesProperty, value); }
+        }
+        public static readonly DependencyProperty SelectedCitiesProperty =
+            DependencyProperty.Register("SelectedCities", typeof(ObservableCollection<City>), typeof(MapControl));
+
+
+
+
         public static readonly DependencyProperty CityCollectionProperty =
         DependencyProperty.Register(nameof(CityCollection), typeof(ObservableCollection<City>), typeof(MapControl));
 
@@ -341,6 +392,30 @@ namespace DesktopApp.UserControls
 
         public static readonly DependencyProperty SelectedRouteProperty =
             DependencyProperty.Register(nameof(SelectedRoute), typeof(Route), typeof(MapControl));
+
+
+
+        public ObservableCollection<Route> SelectedRoutes
+        {
+            get { return (ObservableCollection<Route>)GetValue(SelectedRoutesProperty); }
+            set { SetValue(SelectedRoutesProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedRoutesProperty =
+            DependencyProperty.Register("SelectedRoutes", typeof(ObservableCollection<Route>), typeof(MapControl));
+        #endregion
+
+        #region CanDisplay
+
+
+        public bool CanDisplay
+        {
+            get { return (bool)GetValue(CanDisplayProperty); }
+            set { SetValue(CanDisplayProperty, value); }
+        }
+
+        public static readonly DependencyProperty CanDisplayProperty =
+            DependencyProperty.Register("CanDisplay", typeof(bool), typeof(MapControl));
 
 
         #endregion
@@ -445,9 +520,14 @@ namespace DesktopApp.UserControls
 
         private void City_MouseDown(object sender, MouseButtonEventArgs e)
         {
+
             Panel panel = sender as Panel;
             var City = panel.DataContext;
-
+            if (CanSelect)
+            {
+                SelectCityCommand.Execute(City);
+                return;
+            }
             if (AppState.IsAbleToFindShortestPath)
             {
                 if (Path.CityFromId == default)

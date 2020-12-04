@@ -78,7 +78,7 @@ namespace Service.Services
 
                 SetSumToNextVertex(current);
             }
-            
+
             return GetPath(startVertex, finishVertex);
         }
 
@@ -123,7 +123,7 @@ namespace Service.Services
                     return null;
                 }
                 ResultList.Add(Guid.Parse(endVertex.ToString()));
-                endVertex = endVertex.PreviousVertex;       
+                endVertex = endVertex.PreviousVertex;
             }
             ResultList.Add(Guid.Parse(startVertex.ToString()));
             ResultList.Reverse();

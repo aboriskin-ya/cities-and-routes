@@ -13,11 +13,16 @@ namespace DesktopApp.ViewModels
         private readonly IRouteAPIService _routeAPIService;
         private readonly IMessageBoxService _messageBoxService;
 
-        public MapViewModel(ICityAPIService cityAPIService, IMessageBoxService messageBoxService, IRouteAPIService routeAPIService)
+        public MapViewModel(ICityAPIService cityAPIService,
+               IMessageBoxService messageBoxService,
+               IRouteAPIService routeAPIService,
+               ITravelSalesmanService travelSalesmanService)
         {
             _cityAPIService = cityAPIService;
             _messageBoxService = messageBoxService;
             _routeAPIService = routeAPIService;
+
+            SelectedCity = new City();
 
             WholeMap = new WholeMap()
             {
@@ -27,6 +32,7 @@ namespace DesktopApp.ViewModels
             };
             InitializeModels();
         }
+        public ObservableCollection<City> SelectedCities { get; set; }
 
         private WholeMap wholeMap;
         public WholeMap WholeMap
@@ -35,6 +41,12 @@ namespace DesktopApp.ViewModels
             set => Set(ref wholeMap, value, nameof(WholeMap));
         }
 
+        private Route _selectedRoute;
+        public Route SelectedRoute
+        {
+            get => _selectedRoute;
+            set => Set<Route>(ref _selectedRoute, value);
+        }
         private City selectedCity;
         public City SelectedCity
         {
@@ -42,15 +54,8 @@ namespace DesktopApp.ViewModels
             set => Set(ref selectedCity, value, nameof(SelectedCity));
         }
 
-        private Route selectedRoute;
-        public Route SelectedRoute
-        {
-            get => selectedRoute;
-            set => Set(ref selectedRoute, value, nameof(SelectedRoute));
-        }
 
         #region CityCommands
-
         public RelayCommandAsync CreateNewCityCommand { get => new RelayCommandAsync(p => OnCanAddCityCollection(), async m => await OnAddCityCollectionAsync()); }
         private async Task OnAddCityCollectionAsync()
         {
@@ -164,7 +169,6 @@ namespace DesktopApp.ViewModels
             }
         }
         private bool OnCanDeleteRouteFromCollection() => true;
-
 
         #endregion
 
