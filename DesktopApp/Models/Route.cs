@@ -30,8 +30,8 @@ namespace DesktopApp.Models
             }
         }
 
-        private double distance;
-        public double Distance
+        private double? distance;
+        public double? Distance
         {
             get { return distance; }
             set
