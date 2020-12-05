@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+      xmlns:uc="clr-namespace:DesktopApp.UserControls"
       xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
       mc:Ignorable="d" 
       Height="450" Width="500" ResizeMode="NoResize"
@@ -20,6 +21,7 @@
             <RowDefinition Height="0.5*"/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
             <RowDefinition Height="0.3*"/>
         </Grid.RowDefinitions>
 
@@ -28,90 +30,79 @@
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <CheckBox VerticalAlignment="Center" Margin="0,0,352,0"
-                      IsChecked="{Binding Settings.DisplayingImage}">
-                <CheckBox.Content>
-                    <TextBlock Text="Display the image" Width="110"/>
-                </CheckBox.Content>
-            </CheckBox>
-            <CheckBox Grid.Row="1" VerticalAlignment="Center" Margin="0,0,352,0"
-                      IsChecked="{Binding Settings.DisplayingGraph}">
-                <CheckBox.Content>
-                    <TextBlock Text="Display the graph" Width="110"/>
-                </CheckBox.Content>
-            </CheckBox>
+            <uc:ToggleSwitch Grid.Row="0" IsChecked="{Binding Settings.DisplayingImage, Mode=TwoWay}" SwitchContent="Display the image" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <uc:ToggleSwitch Grid.Row="1" SwitchContent="Display the graph" IsChecked="{Binding Settings.DisplayingGraph, Mode=TwoWay}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <uc:ToggleSwitch Grid.Row="2" SwitchContent="Display the cities" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         </Grid>
 
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="20px"/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.5*"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Rectangle Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="2" Stroke="Gray" StrokeThickness="2"></Rectangle>
-            <TextBlock Grid.Column="0" Grid.Row="0" Text="City settings"/>
-            <TextBlock Grid.Column="0" Grid.Row="1" Text="Size" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Slider x:Name="sizeCity" 
-                    Grid.Column="1" Grid.Row="1" 
+
+        <GroupBox Grid.Row="1" Header="City settings">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="Size" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Slider x:Name="sizeCity" 
+                    Grid.Column="1" Grid.Row="0" 
                     VerticalAlignment="Center"
                     Minimum="5" Maximum="20" 
                     TickPlacement="BottomRight" 
                     TickFrequency="1"
                     Value="{Binding Settings.VertexSize}"/>
-            <xctk:ColorPicker x:Name="colorCity" 
-                              Grid.Column="1" Grid.Row="2" 
+                <xctk:ColorPicker x:Name="colorCity" 
+                              Grid.Column="1" Grid.Row="1" 
                               HorizontalAlignment="Left" VerticalAlignment="Top" 
                               Width="45"
                               SelectedColor="{Binding Settings.VertexColor}"/>
-            <TextBlock Grid.Column="0" Grid.Row="2" Text="Color" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-            <Ellipse x:Name="ellips" 
+                <TextBlock Grid.Column="0" Grid.Row="2" Text="Color" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                <Ellipse x:Name="ellips" 
                      Grid.Column="2" Grid.RowSpan="2" Grid.Row="1" 
                      Width="{Binding ElementName=sizeCity, Path=Value}" 
                      Height="{Binding ElementName=sizeCity, Path=Value}" 
                      VerticalAlignment="Center">
-                <Ellipse.Fill>
-                    <SolidColorBrush Color="{Binding ElementName=colorCity, Path=SelectedColor}"/>
-                </Ellipse.Fill>
-            </Ellipse>
-        </Grid>
-
-        <Grid Grid.Row="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="20px"/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.5*"/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Rectangle Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="2" Stroke="Gray" StrokeThickness="2"></Rectangle>
-            <TextBlock Grid.Column="0" Grid.Row="0" Text="Route settings"/>
-            <TextBlock Grid.Column="0" Grid.Row="1" Text="Size" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Slider x:Name="sizeRoute" 
+                    <Ellipse.Fill>
+                        <SolidColorBrush Color="{Binding ElementName=colorCity, Path=SelectedColor}"/>
+                    </Ellipse.Fill>
+                </Ellipse>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Row="2" Header="Road settings">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="Size" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Slider x:Name="sizeRoute" 
                     Grid.Column="1" 
-                    Grid.Row="1" 
+                    Grid.Row="0" 
                     VerticalAlignment="Center"
                     Minimum="1" Maximum="6" 
                     TickPlacement="BottomRight" 
                     TickFrequency="0.2"
                     Value="{Binding Settings.EdgeSize}"/>
-            <xctk:ColorPicker x:Name="colorRoute"
+                <xctk:ColorPicker x:Name="colorRoute"
                               Grid.Column="1" Grid.Row="2" 
                               HorizontalAlignment="Left" VerticalAlignment="Top" 
                               Width="45"
                               SelectedColor="{Binding Settings.EdgeColor}"/>
-            <TextBlock Grid.Column="0" Grid.Row="2" Text="Color" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                <TextBlock Grid.Column="0" Grid.Row="2" Text="Color" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
-            <Line x:Name="lineColor" 
+                <Line x:Name="lineColor" 
                   Grid.Column="2" 
                   Grid.Row="1" 
                   Grid.RowSpan="2" 
@@ -119,19 +110,22 @@
                   X1="40" Y1="0" X2="130" Y2="40" 
                   VerticalAlignment="Center"
                   StrokeThickness="{Binding ElementName=sizeRoute, Path=Value}">
-                <Line.Stroke>
-                    <SolidColorBrush Color="{Binding ElementName=colorRoute, Path=SelectedColor}"/>
-                </Line.Stroke>
-            </Line>
-        </Grid>
-
-        <Button Grid.Row="3" 
+                    <Line.Stroke>
+                        <SolidColorBrush Color="{Binding ElementName=colorRoute, Path=SelectedColor}"/>
+                    </Line.Stroke>
+                </Line>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Row="3" Header="Path settings">
+            
+        </GroupBox>
+        <Button Grid.Row="4" 
                 Content="Save and Apply" 
                 HorizontalAlignment="Left" VerticalAlignment="Center"
                 Command="{Binding SaveSettingsCommand}"
                 CommandParameter="{Binding ElementName=settingsDialog}"/>
 
-        <Button Grid.Row="3" 
+        <Button Grid.Row="4" 
                 Content="Cancel"
                 HorizontalAlignment="Right" VerticalAlignment="Center"
                 Command="{Binding CancelCommand}"
