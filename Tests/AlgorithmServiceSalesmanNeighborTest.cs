@@ -34,13 +34,13 @@ namespace Tests
         private readonly Guid irkutskId = Guid.NewGuid();
         private readonly Guid surgutId = Guid.NewGuid();
         private readonly Map map;
-        private readonly TravelSalesmanNearestNeighbor travelSalesmanNearestNeighbor;
+        private TravelSalesmanNearestNeighbor travelSalesmanNearestNeighbor;
         private readonly Graph graph;
-        private readonly AlgorithmService algorithmService;
+        private AlgorithmService algorithmService;
         private readonly Mock<IMapper> mockIMapper;
         private readonly ShortPathResolverDTO shortPathResolverDTO;
         private readonly PathToGraphService pathToGraphService;
-        private readonly TravelSalesmanRequest travelSalesmanRequest;
+        private TravelSalesmanRequest travelSalesmanRequest;
         private readonly Mock<IMapRepository> mockMapRepository;
         private readonly Mock<IPathToGraphService> mockPathToGraphService;
 
@@ -96,14 +96,10 @@ namespace Tests
             };
             travelSalesmanNearestNeighbor = new TravelSalesmanNearestNeighbor();
             shortPathResolverDTO = new ShortPathResolverDTO { Cities = new List<City>(), Routes = new List<Route>() };
-            travelSalesmanRequest = new TravelSalesmanRequest { MapId = map.Id, SelectedCities = new List<Guid>() };
-            var citiesGuid = new List<Guid>();
             foreach (var city in map.Cities)
             {
                 shortPathResolverDTO.Cities.Add(city);
-                citiesGuid.Add(city.Id);
             }
-            travelSalesmanRequest.SelectedCities = citiesGuid;
             foreach (var route in map.Routes)
             {
                 shortPathResolverDTO.Routes.Add(route);
@@ -111,21 +107,9 @@ namespace Tests
             mockIMapper = new Mock<IMapper>();
             mockIMapper.Setup(_mapper => _mapper.Map<ShortPathResolverDTO>(map)).Returns(shortPathResolverDTO);
             mockMapRepository = new Mock<IMapRepository>();
-            mockMapRepository.Setup(_mapRepository => _mapRepository.GetWholeMap(travelSalesmanRequest.MapId)).Returns(map);
             mockPathToGraphService = new Mock<IPathToGraphService>();
             pathToGraphService = new PathToGraphService(mockIMapper.Object, new Logger<PathToGraphService>(new LoggerFactory()));
-            var testGraph = pathToGraphService.MapToGraph(map, travelSalesmanRequest.SelectedCities);
-            mockPathToGraphService.Setup(_pathToGraphService => _pathToGraphService.MapToGraph(map, travelSalesmanRequest.SelectedCities))
-                .Returns(testGraph);
-            travelSalesmanNearestNeighbor = new TravelSalesmanNearestNeighbor();
-            algorithmService = new AlgorithmService(mockMapRepository.Object, null, mockPathToGraphService.Object,
-                null, null, travelSalesmanNearestNeighbor, new Logger<AlgorithmService>(new LoggerFactory()));
             graph = new Graph();
-        }
-        [Fact]
-        public void TestAllMap()
-        {
-            //Arrange
             foreach (var city in map.Cities)
             {
                 graph.AddVertex(city.Id.ToString());
@@ -134,6 +118,29 @@ namespace Tests
             {
                 graph.AddEdge(route.FirstCityId.ToString(), route.SecondCityId.ToString(), route.Distance);
             }
+        }
+        private void ArrangeTravelSalesmanRequest(TravelSalesmanRequest travelSalesmanRequest)
+        {
+            mockMapRepository.Setup(_mapRepository => _mapRepository.GetWholeMap(travelSalesmanRequest.MapId)).Returns(map);
+            var testGraph = pathToGraphService.MapToGraph(map, travelSalesmanRequest.SelectedCities);
+            mockPathToGraphService.Setup(_pathToGraphService => _pathToGraphService.MapToGraph(map, travelSalesmanRequest.SelectedCities))
+                .Returns(testGraph);
+            algorithmService = new AlgorithmService(mockMapRepository.Object, null, mockPathToGraphService.Object,
+                null, null, travelSalesmanNearestNeighbor, new Logger<AlgorithmService>(new LoggerFactory()));
+
+        }
+        [Fact]
+        public void TestAllMap()
+        {
+            //Arrange
+            travelSalesmanRequest = new TravelSalesmanRequest { MapId = map.Id, SelectedCities = new List<Guid>() };
+            var citiesGuid = new List<Guid>();
+            foreach (var city in map.Cities)
+            {
+                citiesGuid.Add(city.Id);
+            }
+            travelSalesmanRequest.SelectedCities = citiesGuid;
+            ArrangeTravelSalesmanRequest(travelSalesmanRequest);
             var PreferableSequenceOfCities = new List<Guid>();
             foreach (var city in map.Cities)
             {
@@ -141,6 +148,92 @@ namespace Tests
             }
             var minCalculatedDistance = 15000;
             var maxCalculatedDistance = 30000;
+            //Act
+            var result = algorithmService.SolveNearestNeghborTravelSalesman(travelSalesmanRequest);
+            //Assert
+            Assert.InRange(result.Result.CalculatedDistance, minCalculatedDistance, maxCalculatedDistance);
+            foreach (var city in PreferableSequenceOfCities)
+            {
+                Assert.Contains(city, result.Result.PreferableSequenceOfCities);
+            }
+        }
+        [Fact]
+        public void TestRostovVoronezMoscowKazan()
+        {
+            //Arrange
+            travelSalesmanRequest = new TravelSalesmanRequest
+            {
+                MapId = map.Id,
+                SelectedCities = new List<Guid> { voronezhId, rostovOnDonId, moscowId, kazanId }
+            };
+            ArrangeTravelSalesmanRequest(travelSalesmanRequest);
+            var PreferableSequenceOfCities = new List<Guid> { rostovOnDonId, voronezhId, moscowId, kazanId };
+            var minCalculatedDistance = 3000;
+            var maxCalculatedDistance = 4000;
+            //Act
+            var result = algorithmService.SolveNearestNeghborTravelSalesman(travelSalesmanRequest);
+            //Assert
+            Assert.InRange(result.Result.CalculatedDistance, minCalculatedDistance, maxCalculatedDistance);
+            foreach (var city in PreferableSequenceOfCities)
+            {
+                Assert.Contains(city, result.Result.PreferableSequenceOfCities);
+            }
+        }
+        [Fact]
+        public void TestWith2Cities()
+        {
+            //Arrange
+            travelSalesmanRequest = new TravelSalesmanRequest
+            {
+                MapId = map.Id,
+                SelectedCities = new List<Guid> { smolenskId, moscowId }
+            };
+            ArrangeTravelSalesmanRequest(travelSalesmanRequest);
+            var PreferableSequenceOfCities = new List<Guid> { smolenskId, moscowId };
+            var CalculatedDistance = 796;
+            //Act
+            var result = algorithmService.SolveNearestNeghborTravelSalesman(travelSalesmanRequest);
+            //Assert
+            Assert.Equal(result.Result.CalculatedDistance, CalculatedDistance);
+            foreach (var city in PreferableSequenceOfCities)
+            {
+                Assert.Contains(city, result.Result.PreferableSequenceOfCities);
+            }
+        }
+        [Fact]
+        public void TestWith3Cities()
+        {
+            //Arrange
+            travelSalesmanRequest = new TravelSalesmanRequest
+            {
+                MapId = map.Id,
+                SelectedCities = new List<Guid> { saintPetersburgId, archangelskId, moscowId }
+            };
+            ArrangeTravelSalesmanRequest(travelSalesmanRequest);
+            var PreferableSequenceOfCities = new List<Guid> { saintPetersburgId, archangelskId, moscowId };
+            var CalculatedDistance = 3726;
+            //Act
+            var result = algorithmService.SolveNearestNeghborTravelSalesman(travelSalesmanRequest);
+            //Assert
+            Assert.Equal(result.Result.CalculatedDistance, CalculatedDistance);
+            foreach (var city in PreferableSequenceOfCities)
+            {
+                Assert.Contains(city, result.Result.PreferableSequenceOfCities);
+            }
+        }
+        [Fact]
+        public void TestWith6Cities()
+        {
+            //Arrange
+            travelSalesmanRequest = new TravelSalesmanRequest
+            {
+                MapId = map.Id,
+                SelectedCities = new List<Guid> { voronezhId, rostovOnDonId, moscowId, kazanId, saratovId, saintPetersburgId }
+            };
+            ArrangeTravelSalesmanRequest(travelSalesmanRequest);
+            var PreferableSequenceOfCities = new List<Guid> { voronezhId, rostovOnDonId, moscowId, kazanId, saratovId, saintPetersburgId };
+            var minCalculatedDistance = 4500;
+            var maxCalculatedDistance = 7000;
             //Act
             var result = algorithmService.SolveNearestNeghborTravelSalesman(travelSalesmanRequest);
             //Assert
