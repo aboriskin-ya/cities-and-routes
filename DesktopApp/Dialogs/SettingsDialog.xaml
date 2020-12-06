@@ -66,6 +66,7 @@
                 <TextBlock Grid.Column="0" Grid.Row="2" Text="Color" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                 <Ellipse x:Name="ellips" 
                      Grid.Column="2" Grid.RowSpan="2" Grid.Row="1" 
+                         Margin="50,0,0,0"
                      Width="{Binding ElementName=sizeCity, Path=Value}" 
                      Height="{Binding ElementName=sizeCity, Path=Value}" 
                      VerticalAlignment="Center">

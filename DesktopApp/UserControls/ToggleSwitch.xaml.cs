@@ -27,6 +27,7 @@ namespace DesktopApp.UserControls
             InitializeComponent();
             _checkedColor = new SolidColorBrush(Color.FromArgb(100, 10, 224, 43));
             _unchekedColorBrush = new SolidColorBrush(Color.FromArgb(100, 186, 186, 196));
+            Initialize(IsChecked);
         }
         public bool IsChecked
         {
@@ -64,5 +65,21 @@ namespace DesktopApp.UserControls
                 button.Margin = new Thickness(340, 0, 0, 0);
             }
         }
+        private void Initialize(bool isChecked)
+        {
+            if (isChecked)
+            {
+                Background.Fill = _unchekedColorBrush;
+                IsChecked = false;
+                button.Margin = new Thickness(-340, 0, 0, 0);
+            }
+            else
+            {
+                Background.Fill = _checkedColor;
+                IsChecked = true;
+                button.Margin = new Thickness(340, 0, 0, 0);
+            }
+        }
+        
     }
 }
