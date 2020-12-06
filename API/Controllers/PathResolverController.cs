@@ -33,7 +33,8 @@ namespace API.Controllers
             if (result != null)
             {
                 return Ok(result);
-            } else 
+            }
+            else
             {
                 return Conflict(result);
             }
@@ -51,7 +52,6 @@ namespace API.Controllers
             var response = await _algorithmService.SolveAnnealingTravelSalesman(BodyRequest);
             if (response == default) return BadRequest();
             return Ok(response);
-
         }
 
         [ProducesResponseType(typeof(TravelSalesmanResponse), StatusCodes.Status200OK)]
@@ -72,7 +72,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        [Route("experiment")]
+        [Route("solve-travel-salesman-quickest")]
         public IActionResult Experiment([FromBody] TravelSalesmanRequest BodyRequest)
         {
             var taskArr = new Task<TravelSalesmanResponse>[]
@@ -80,7 +80,7 @@ namespace API.Controllers
                 _algorithmService.SolveNearestNeghborTravelSalesman(BodyRequest),
                 _algorithmService.SolveAnnealingTravelSalesman(BodyRequest)
             };
-            
+
             var task = Task.WhenAny(taskArr).Result;
             var response = task.Result;
             return Ok(response);

@@ -3,7 +3,6 @@ using DataAccess.Models;
 using Microsoft.Extensions.Logging;
 using Repository;
 using Repository.Storage;
-using Service.DefaultModels;
 using Service.DTO;
 using Service.Services.Interfaces;
 using System;

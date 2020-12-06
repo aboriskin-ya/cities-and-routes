@@ -10,8 +10,12 @@
         SelectSecondCity,
         CreateRoute,
         SaveChanges,
-        FindShortestPath
-    }  
+        FindShortestPath,
+        TravelSalesman_PushButton,
+        TravelSalesman_SelectCities,
+        TravelSalesman_ResolvingGoal,
+        TravelSalesman_Done
+    }
     public static class StateLine
     {
         public static string Show(StateLineStatus status)
@@ -34,6 +38,17 @@
                     return "All changes were saved";
                 case StateLineStatus.FindShortestPath:
                     return "Please select two cities to calculate the shortest path";
+            }
+            return "";
+        }
+        public static string GetStatus(StateLineStatus states)
+        {
+            switch (states)
+            {
+                case StateLineStatus.TravelSalesman_PushButton: return "Press button 'Select cities' to begin procedure choicing cities";
+                case StateLineStatus.TravelSalesman_SelectCities: return "Select cities for resolving goal";
+                case StateLineStatus.TravelSalesman_ResolvingGoal: return "Resolving travelsalesman for selected routes";
+                case StateLineStatus.TravelSalesman_Done: return "Goal was resolved. Check console above here";
             }
             return "";
         }

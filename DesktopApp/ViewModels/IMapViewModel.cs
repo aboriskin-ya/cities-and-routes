@@ -1,5 +1,6 @@
 ﻿using DesktopApp.Models;
 using DesktopApp.Services.Commands;
+using System.Collections.ObjectModel;
 
 namespace DesktopApp.ViewModels
 {
@@ -7,9 +8,9 @@ namespace DesktopApp.ViewModels
     {
         WholeMap WholeMap { get; set; }
 
-        City SelectedCity { get; set; }
+        ObservableCollection<City> SelectedCities { get; set; }
 
-        Route SelectedRoute { get; set; }
+        City SelectedCity { get; set; }
 
         RelayCommandAsync CreateNewCityCommand { get; }
 

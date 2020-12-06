@@ -1,4 +1,4 @@
-﻿using DesktopApp.UserControls;
+﻿using DesktopApp.Resources;
 using DesktopApp.ViewModels;
 using System;
 using System.Windows;

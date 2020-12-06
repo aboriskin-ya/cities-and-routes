@@ -2,12 +2,14 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converters="clr-namespace:DesktopApp.Services.Converters"
                     xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm">
-    
+
     <converters:StringToColorBrushConverter x:Key="StringToColorConverter"/>
     <converters:StringToColorInvertConverter x:Key="StringToColorInvertConverter"/>
     <converters:CenterOffsetConverter x:Key="CenterOffsetConverter"/>
     <converters:PointsToPathConverter x:Key="PointsToPathConverter"/>
     <converters:PositionCorrectorConverter x:Key="PositionCorrectorConverter"/>
+    <converters:SizeCorrectorConverter x:Key="SizeCorrectorConverter"/>
+    <converters:MultiPaddingConverter x:Key="MultiPaddingConverter"/>
     <dxmvvm:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
 </ResourceDictionary>

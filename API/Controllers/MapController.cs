@@ -34,7 +34,7 @@ namespace API.Controllers
             MapGetDTO map = _service.GetMap(id);
             if (map == null)
             {
-                return NotFound();
+                return NotFound(null);
             }
             return Ok(map);
         }
@@ -50,7 +50,7 @@ namespace API.Controllers
             var MapList = _service.GetMaps();
             if (MapList.Count() == 0)
             {
-                return NotFound();
+                return NotFound(null);
             }
             return Ok(MapList);
         }
@@ -62,7 +62,7 @@ namespace API.Controllers
             var MapList = _service.GetMapsNames();
             if (MapList.Count() == 0)
             {
-                return NotFound();
+                return NotFound(null);
             }
             return Ok(MapList);
         }
@@ -96,13 +96,18 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public IActionResult DeleteMap(Guid id)
         {
+            if (id == new Guid("643D4972-F06B-4F4B-5705-08D895F56871"))
+            {
+                return BadRequest("Cannot delete the map for the demo");
+            }
+
             if (_service.DeleteMap(id))
             {
                 return Ok();
             }
             else
             {
-                return NotFound();
+                return NotFound(null);
             }
         }
     }

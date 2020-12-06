@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="DesktopApp.UserControls.ConsoleControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Name="console"
+             >
+    <Grid>
+        <Border BorderBrush="Black" BorderThickness="2">
+            <DockPanel>
+                <Grid DockPanel.Dock="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.7*" />
+                        <ColumnDefinition Width="0.3*" />
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Information console"
+                       VerticalAlignment="Center" 
+                       Grid.Column="0"
+                       >
+                        <Label.BorderThickness>
+                            <Thickness Bottom="2"/>
+                        </Label.BorderThickness>
+                        <Label.BorderBrush>
+                            <SolidColorBrush Color="Black"/>
+                        </Label.BorderBrush>
+                    </Label>
+                    <Button Content="Clear" 
+                            Grid.Column="1"
+                            BorderBrush="Black" BorderThickness="2"
+                            Command="{Binding ClearConsoleCommand}" Click="Button_Click"
+                            >
+                    </Button>
+                </Grid>
+                <TextBlock FontSize="12"
+                           Foreground="Black"
+                           Text="{Binding ElementName=console, Path=ConsoleContent}" 
+                           TextWrapping="Wrap"
+                           DockPanel.Dock="Top"/>
+            </DockPanel>
+        </Border>
+    </Grid>
+</UserControl>

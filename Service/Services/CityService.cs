@@ -59,12 +59,12 @@ namespace Service.Services
 
             bool flag = _cityRepository.Delete(id);
             if (flag)
-            { 
+            {
                 _context.SaveChanges();
                 _logger.LogInformation("Delete city finished");
             }
             else
-                _logger.LogInformation("Delete city not finished"); 
+                _logger.LogInformation("Delete city not finished");
             return flag;
         }
 

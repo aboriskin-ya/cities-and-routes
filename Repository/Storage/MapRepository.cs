@@ -21,7 +21,6 @@ namespace Repository.Storage
             return _entity.Include(p => p.Cities)
                 .Include(p => p.Routes)
                 .Include(p => p.Settings)
-                .Include(p => p.Image)
                 .SingleOrDefault(p => p.Id == id);
         }
     }

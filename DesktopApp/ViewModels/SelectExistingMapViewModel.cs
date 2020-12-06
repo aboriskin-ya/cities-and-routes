@@ -5,8 +5,8 @@ using DesktopApp.Services;
 using DesktopApp.Services.EventAggregator;
 using Prism.Events;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 using System.Windows;
+using System.Windows.Input;
 
 namespace DesktopApp.ViewModels
 {
@@ -46,10 +46,10 @@ namespace DesktopApp.ViewModels
         private async void OnGetAllMapExecuted(object p)
         {
             var res = await _mapAPIService.GetAllNamesMapAsync();
-            if (!res.IsSuccessful)
-                _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
-            else
+            if (res.Payload.Count > 0)
+            {
                 MapCollection = new ObservableCollection<Map>(res.Payload);
+            }
         }
 
         private bool OnCanGetAllMapExecuted(object p) => true;

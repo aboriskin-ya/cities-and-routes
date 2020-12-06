@@ -27,7 +27,7 @@ namespace DesktopApp.APIInteraction
             var responsePayload = new HttpResponsePayload<ShortestPath>()
             {
                 IsSuccessful = response.IsSuccessStatusCode ? true : false
-            };           
+            };
             var shortestPathDTO = await response.Content.ReadAsAsync<ShortestPathResponseDTO>();
             responsePayload.Payload = AppMapper.GetAppMapper().Mapper.Map<ShortestPath>(shortestPathDTO);
 
