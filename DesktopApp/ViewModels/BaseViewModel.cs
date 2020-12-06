@@ -1,5 +1,7 @@
-﻿using System.ComponentModel;
+﻿using DesktopApp.Dialogs;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace DesktopApp.ViewModels
 {
@@ -19,5 +21,19 @@ namespace DesktopApp.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
+
+        #region CloseWindow
+
+        public ICommand CloseWindowCommand => new RelayCommand(p => CloseWindow((ICloseable)p), null);
+
+        private void CloseWindow(ICloseable window)
+        {
+            if (window != null)
+            {
+                window.Close();
+            }
+        }
+
+        #endregion
     }
 }

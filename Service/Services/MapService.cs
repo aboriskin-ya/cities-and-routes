@@ -6,6 +6,7 @@ using Repository.Storage;
 using Service.DTO;
 using Service.Services.Interfaces;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Service.Services
@@ -38,12 +39,12 @@ namespace Service.Services
         public IEnumerable<MapGetDTO> GetMaps()
         {
             _logger.LogInformation("Get maps started");
-            return _mapper.Map<IEnumerable<Map>, IEnumerable<MapGetDTO>>(_repository.GetAll());
+            return _mapper.Map<IEnumerable<Map>, List<MapGetDTO>>(_repository.GetAll());
         }
 
-        public IEnumerable<MapIdNameGetDTO> GetMapsNames()
+        public IEnumerable<MapInfoGetDTO> GetMapsInfo()
         {
-            return _mapper.Map<IEnumerable<Map>, IEnumerable<MapIdNameGetDTO>>(_repository.GetAll());
+            return _mapper.Map<IEnumerable<MapInfo>, List<MapInfoGetDTO>>(_repository.GetMapInfo());            
         }
 
         public MapGetDTO GetMap(Guid id)

@@ -26,6 +26,7 @@ namespace DesktopApp.ViewModels
 
             WholeMap = new WholeMap()
             {
+                Name = "a map is not chosen",
                 Cities = new ObservableCollection<City>(),
                 Routes = new ObservableCollection<Route>(),
                 Settings = new Settings()

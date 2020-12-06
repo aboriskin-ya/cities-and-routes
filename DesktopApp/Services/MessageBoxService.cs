@@ -5,18 +5,24 @@ namespace DesktopApp.Services
 {
     public class MessageBoxService : IMessageBoxService
     {
-        public void ShowError(string message, string caption)
+        public MessageBoxResult ShowError(string message, string caption, MessageBoxButton buttons)
         {
-            MessageBox.Show(message, caption, MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-        public void ShowError(Exception ex, string message)
-        {
-            MessageBox.Show($"{message}\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return MessageBox.Show(message, caption, buttons, MessageBoxImage.Error);
         }
 
-        public void ShowInfo(string message, string caption)
+        public MessageBoxResult ShowError(Exception ex, string message, MessageBoxButton buttons)
         {
-            MessageBox.Show(message, caption, MessageBoxButton.OK, MessageBoxImage.Information);
+            return MessageBox.Show($"{message}\n{ex.Message}", "Error", buttons, MessageBoxImage.Error);
+        }
+
+        public MessageBoxResult ShowInfo(string message, string caption, MessageBoxButton buttons)
+        {
+            return MessageBox.Show(message, caption, buttons, MessageBoxImage.Information);
+        }
+
+        public MessageBoxResult ShowConfirmation(string message, string caption, MessageBoxButton buttons)
+        {
+            return MessageBox.Show(message, caption, buttons, MessageBoxImage.Question);
         }
     }
 }

@@ -35,7 +35,7 @@ namespace DesktopApp.APIInteraction
             return responsePayload;
         }
 
-        public async Task<HttpResponsePayload<List<Map>>> GetAllNamesMapAsync()
+        public async Task<HttpResponsePayload<List<MapInfo>>> GetMapInfoAsync()
         {
             HttpResponseMessage response;
 
@@ -45,15 +45,15 @@ namespace DesktopApp.APIInteraction
             }
             catch
             {
-                return new HttpResponsePayload<List<Map>>() { IsSuccessful = false };
+                return new HttpResponsePayload<List<MapInfo>>() { IsSuccessful = false };
             }
 
-            var responsePayload = new HttpResponsePayload<List<Map>>()
+            var responsePayload = new HttpResponsePayload<List<MapInfo>>()
             {
                 IsSuccessful = response.IsSuccessStatusCode ? true : false
             };
-            var listMapGetDTO = await response.Content.ReadAsAsync<List<MapIdNameGetDTO>>();
-            responsePayload.Payload = AppMapper.GetAppMapper().Mapper.Map<List<Map>>(listMapGetDTO);
+            var listMapGetDTO = await response.Content.ReadAsAsync<List<MapInfoGetDTO>>();
+            responsePayload.Payload = AppMapper.GetAppMapper().Mapper.Map<List<MapInfo>>(listMapGetDTO);
 
             return responsePayload;
         }

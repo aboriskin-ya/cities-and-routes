@@ -7,7 +7,8 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
         mc:Ignorable="d"
-        Title="Create map" Height="450" Width="450">
+        Title="Create map" Height="450" Width="450"
+        x:Name="createMap">
     <Window.Resources>
         <ResourceDictionary Source="..\Resources\Styles\CreateMapDialogStyles.xaml" />
     </Window.Resources>
@@ -77,6 +78,7 @@
             Content="Create"
             Grid.Row="2"            
             Command="{Binding CreateMapCommand}"
+            CommandParameter="{Binding ElementName=createMap}"
             ToolTip="Add new map">
         </Button>
     </Grid>
