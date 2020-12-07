@@ -7,6 +7,7 @@ using Service.DTO;
 using Service.PathResolver;
 using Service.Services.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -54,8 +55,34 @@ namespace Service.Services
             Map map = _mapRepository.GetWholeMap(request.MapId);
             if (request.SelectedCities.Count() > 0 && map != null)
             {
-                Graph graph = _pathToGraphService.MapToGraph(map, request.SelectedCities);
-                return await Task.Run(() => _annealingResolver.Resolve(graph));
+                Graph graph = _pathToGraphService.MapToGraph(map, request.SelectedCities);               
+                return await Task.Run(() => {
+                    var result = _annealingResolver.Resolve(graph);
+                    var sequenceList = result.PreferableSequenceOfCities.ToList();
+                    var citiesIdList = new List<Guid>();
+                    foreach (var city in map.Cities)
+                    {
+                        citiesIdList.Add(city.Id);
+                    }
+                    var newSequence = new List<Guid>();
+                    Graph graphFullMap = _pathToGraphService.MapToGraph(map, citiesIdList);
+                    for (int i = 0; i < sequenceList.Count - 1; i++)
+                    {
+                        if (graphFullMap.GetEdge(sequenceList[i].ToString(), sequenceList[i + 1].ToString()) == null)
+                        {
+                            var middlePart = new ShortestPathResolverService().FindShortestPath(graphFullMap, sequenceList[i].ToString(), sequenceList[i + 1].ToString()).Path;
+                            middlePart.RemoveAt(middlePart.Count - 1);
+                            newSequence.AddRange(middlePart);
+                        }
+                        else
+                        {
+                            newSequence.Add(sequenceList[i]);
+                        }              
+                    }
+                    newSequence.Add(sequenceList[sequenceList.Count - 1]);
+                    result.PreferableSequenceOfCities = newSequence;
+                    return result;
+                } );
             }
             return default;
         }
