@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace API.Controllers
 {
-    [Route("settings")]
+    [Route("api/settings")]
     [ApiController]
     public class SettingsController : ControllerBase
     {
@@ -60,7 +60,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
-        [Route("~/map/{id:guid}/settings")]
+        [Route("~/api/map/{id:guid}/settings")]
         public IActionResult GetMap(Guid id)
         {
             var settings = _service.GetSettingsOfMap(id);

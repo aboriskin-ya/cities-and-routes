@@ -1,5 +1,4 @@
 ﻿using DesktopApp.APIInteraction;
-using DesktopApp.Dialogs.Commands;
 using DesktopApp.Models;
 using DesktopApp.Services;
 using DesktopApp.Services.EventAggregator;
@@ -25,15 +24,15 @@ namespace DesktopApp.ViewModels
             _eventAggregator = eventAggregator;
         }
 
-        private ObservableCollection<Map> mapCollection;
-        public ObservableCollection<Map> MapCollection
+        private ObservableCollection<MapInfo> mapCollection;
+        public ObservableCollection<MapInfo> MapCollection
         {
             get => mapCollection;
             set => Set(ref mapCollection, value, nameof(MapCollection));
         }
 
-        private Map selectedMap;
-        public Map SelectedMap
+        private MapInfo selectedMap;
+        public MapInfo SelectedMap
         {
             get => selectedMap;
             set => Set(ref selectedMap, value, nameof(SelectedMap));
@@ -41,15 +40,18 @@ namespace DesktopApp.ViewModels
 
         #region GetAllMapCommand
 
-        public ICommand GetAllMapCommand => new GetAllMapCommand(p => OnCanGetAllMapExecuted(p), p => OnGetAllMapExecuted(p));
+        public ICommand GetAllMapCommand => new RelayCommand(p => OnGetAllMapExecuted(p), p => OnCanGetAllMapExecuted(p));
 
         private async void OnGetAllMapExecuted(object p)
         {
-            var res = await _mapAPIService.GetAllNamesMapAsync();
-            if (res.Payload.Count > 0)
+            var res = await _mapAPIService.GetMapInfoAsync();
+            if (res.IsSuccessful == false && res.Payload == default)
             {
-                MapCollection = new ObservableCollection<Map>(res.Payload);
+                _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
+                CloseWindowCommand.Execute(p);
+                return;
             }
+            MapCollection = new ObservableCollection<MapInfo>(res.Payload);
         }
 
         private bool OnCanGetAllMapExecuted(object p) => true;
@@ -58,24 +60,30 @@ namespace DesktopApp.ViewModels
 
         #region DeleteMapCommand
 
-        public ICommand DeleteMapCommand => new DeleteMapCommand(p => OnCanDeleteMapExecuted(p), p => OnDeleteMapExecuted(p));
+        public ICommand DeleteMapCommand => new RelayCommand(p => OnDeleteMapExecuted(p), p => OnCanDeleteMapExecuted(p));
 
         private async void OnDeleteMapExecuted(object p)
         {
-            var res = await _mapAPIService.DeleteMapAsync(SelectedMap.Id);
-            if (!res)
-                _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
-            else
-                MapCollection.Remove(SelectedMap);
+            var DialogResult = _messageBoxService.ShowConfirmation($"Are you sure, you want to delete \"{SelectedMap.Name}\"?", "Confirm action", MessageBoxButton.YesNo);
+            if (DialogResult == MessageBoxResult.Yes)
+            {
+                var res = await _mapAPIService.DeleteMapAsync(SelectedMap.Id);
+                if (!res)
+                    _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
+                else
+                {
+                    MapCollection.Remove(SelectedMap);
+                }                
+            }            
         }
 
-        private bool OnCanDeleteMapExecuted(object p) => true;
+        private bool OnCanDeleteMapExecuted(object p) => SelectedMap != default;
 
         #endregion
 
         #region LoadMapCommand
 
-        public ICommand LoadMapCommand => new LoadMapCommand(p => OnCanLoadMapExecuted(p), p => OnLoadMapExecuted(p));
+        public ICommand LoadMapCommand => new RelayCommand(p => OnLoadMapExecuted(p), p => OnCanLoadMapExecuted(p));
 
         private async void OnLoadMapExecuted(object p)
         {
@@ -86,18 +94,14 @@ namespace DesktopApp.ViewModels
             else
             {
                 _eventAggregator.GetEvent<WholeMapSentEvent>().Publish(res.Payload);
-                foreach (Window item in Application.Current.Windows)
-                {
-                    if (item.DataContext == this)
-                    {
-                        item.Close();
-                    }
-                }
+                CloseWindowCommand.Execute(p);
             }
         }
 
-        private bool OnCanLoadMapExecuted(object p) => true;
+        private bool OnCanLoadMapExecuted(object p) => SelectedMap != default;
 
         #endregion
+
+        
     }
 }

@@ -18,7 +18,7 @@ namespace DesktopApp.APIInteraction
 
             try
             {
-                response = await APIClient.Client.PostAsJsonAsync("map", mapDTO);
+                response = await APIClient.Client.PostAsJsonAsync("api/map", mapDTO);
             }
             catch
             {
@@ -35,25 +35,25 @@ namespace DesktopApp.APIInteraction
             return responsePayload;
         }
 
-        public async Task<HttpResponsePayload<List<Map>>> GetAllNamesMapAsync()
+        public async Task<HttpResponsePayload<List<MapInfo>>> GetMapInfoAsync()
         {
             HttpResponseMessage response;
 
             try
             {
-                response = await APIClient.Client.GetAsync("map/getallnames");
+                response = await APIClient.Client.GetAsync("api/map/getallnames");
             }
             catch
             {
-                return new HttpResponsePayload<List<Map>>() { IsSuccessful = false };
+                return new HttpResponsePayload<List<MapInfo>>() { IsSuccessful = false };
             }
 
-            var responsePayload = new HttpResponsePayload<List<Map>>()
+            var responsePayload = new HttpResponsePayload<List<MapInfo>>()
             {
                 IsSuccessful = response.IsSuccessStatusCode ? true : false
             };
-            var listMapGetDTO = await response.Content.ReadAsAsync<List<MapIdNameGetDTO>>();
-            responsePayload.Payload = AppMapper.GetAppMapper().Mapper.Map<List<Map>>(listMapGetDTO);
+            var listMapGetDTO = await response.Content.ReadAsAsync<List<MapInfoGetDTO>>();
+            responsePayload.Payload = AppMapper.GetAppMapper().Mapper.Map<List<MapInfo>>(listMapGetDTO);
 
             return responsePayload;
         }
@@ -64,7 +64,7 @@ namespace DesktopApp.APIInteraction
 
             try
             {
-                response = await APIClient.Client.DeleteAsync($"map/{guid}");
+                response = await APIClient.Client.DeleteAsync($"api/map/{guid}");
             }
             catch
             {
@@ -80,7 +80,7 @@ namespace DesktopApp.APIInteraction
 
             try
             {
-                response = await APIClient.Client.GetAsync($"map/{guid}");
+                response = await APIClient.Client.GetAsync($"api/map/{guid}");
             }
             catch
             {

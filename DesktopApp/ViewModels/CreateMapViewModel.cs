@@ -8,7 +8,6 @@ using Prism.Events;
 using System;
 using System.ComponentModel;
 using System.IO;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -16,7 +15,7 @@ using System.Windows.Input;
 namespace DesktopApp.ViewModels
 {
     public enum AllowExtensions { jpg, png };
-    public class CreateMapViewModel : INotifyPropertyChanged, IDropTarget
+    internal class CreateMapViewModel : BaseViewModel, INotifyPropertyChanged, IDropTarget
     {
         private readonly IMessageBoxService _messageBoxService;
         private readonly IOpenImageDialogService _openImageDialogService;
@@ -43,23 +42,15 @@ namespace DesktopApp.ViewModels
         private Map newMap;
         public Map NewMap
         {
-            get { return newMap; }
-            set
-            {
-                newMap = value;
-                FirePropertyChanged(p => p.NewMap);
-            }
+            get => newMap;
+            set => Set(ref newMap, value, nameof(NewMap));
         }
 
         private string mapPath;
         public string MapPath
         {
-            get { return mapPath; }
-            set
-            {
-                mapPath = value;
-                FirePropertyChanged(p => p.MapPath);
-            }
+            get => mapPath;
+            set => Set(ref mapPath, value, nameof(MapPath));
         }
 
         #region CreateMapCommand
@@ -78,13 +69,7 @@ namespace DesktopApp.ViewModels
                 res.Payload.Image = new Image() { Data = await _imageAPIService.GetImageAsync(res.Payload.ImageId) };
                 _eventAggregator.GetEvent<WholeMapSentEvent>().Publish(res.Payload);
 
-                foreach (Window item in Application.Current.Windows)
-                {
-                    if (item.DataContext == this)
-                    {
-                        item.Close();
-                    }
-                }
+                CloseWindowCommand.Execute(p);
             }
             catch (Exception ex)
             {
@@ -176,18 +161,5 @@ namespace DesktopApp.ViewModels
 
         #endregion
 
-        private void FirePropertyChanged<TValue>(Expression<Func<CreateMapViewModel, TValue>> propertySelector)
-        {
-            if (PropertyChanged == null)
-                return;
-
-            var memberExpression = propertySelector.Body as MemberExpression;
-            if (memberExpression == null)
-                return;
-
-            PropertyChanged(this, new PropertyChangedEventArgs(memberExpression.Member.Name));
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

@@ -9,7 +9,7 @@ namespace DesktopApp.APIInteraction
     {
         Task<HttpResponsePayload<Map>> CreateMapAsync(Map map);
 
-        Task<HttpResponsePayload<List<Map>>> GetAllNamesMapAsync();
+        Task<HttpResponsePayload<List<MapInfo>>> GetMapInfoAsync();
 
         Task<bool> DeleteMapAsync(Guid guid);
 

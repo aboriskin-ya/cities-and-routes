@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [Route("image")]
+    [Route("api/image")]
     [ApiController]
     public class ImageController : ControllerBase
     {

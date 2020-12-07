@@ -32,15 +32,21 @@ namespace API.Middlewares
                 }
                 else
                 {
-                    httpContext.Response.StatusCode = 401;
+                    SetUnauthorizedResponse(httpContext);
                     return;
                 }
             }
             else
             {
-                httpContext.Response.StatusCode = 401;
+                SetUnauthorizedResponse(httpContext);
                 return;
             }
+        }
+
+        private static void SetUnauthorizedResponse(HttpContext httpContext)
+        {
+            httpContext.Response.StatusCode = 401;
+            httpContext.Response.Headers.Add("WWW-Authenticate", @"Basic realm=""Access to the secured resource"", charset=""UTF-8""");
         }
     }
 }
