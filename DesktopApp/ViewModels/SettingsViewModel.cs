@@ -1,5 +1,4 @@
 ﻿using DesktopApp.APIInteraction;
-using DesktopApp.Dialogs;
 using DesktopApp.Models;
 using DesktopApp.Services;
 using DesktopApp.Services.EventAggregator;
@@ -24,20 +23,6 @@ namespace DesktopApp.ViewModels
             Settings = settings;
             oldSettings = new Settings(settings);
         }
-
-        #region CloseWindow
-
-        public ICommand CloseWindowCommand => new RelayCommand(p => CloseWindow((ICloseable)p), null);
-
-        private void CloseWindow(ICloseable window)
-        {
-            if (window != null)
-            {
-                window.Close();
-            }
-        }
-
-        #endregion
 
         #region CreateMapCommand
 

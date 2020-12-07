@@ -2,6 +2,7 @@
 using DesktopApp.Dialogs;
 using DesktopApp.Models;
 using DesktopApp.Resources;
+using DesktopApp.Services;
 using DesktopApp.Services.Commands;
 using DesktopApp.Services.EventAggregator;
 using DesktopApp.Services.Helper;
@@ -37,13 +38,16 @@ namespace DesktopApp.ViewModels
         public ICursorPositionViewModel PositionViewModel { get; }
 
         public IShortestPathViewModel ShortestPathViewModel { get; }
+
+        private readonly IMessageBoxService _messageBoxService;
         private IEventAggregator _eventAggregator;
 
         public MainWindowViewModel(IMapViewModel viewModel,
                                    ICursorPositionViewModel positionViewModel,
                                    IShortestPathViewModel shortestPathViewModel,
                                    ITravelSalesmanViewModel travelViewModel,
-                                   IEventAggregator eventAggregator)
+                                   IEventAggregator eventAggregator,
+                                   IMessageBoxService messageBoxService)
 
         {
             TravelSalesmanViewModel = travelViewModel;
@@ -55,6 +59,7 @@ namespace DesktopApp.ViewModels
             Messenger.Default.Register<WholeMap>(this, map => ReceiveMessageSelectExistingMap(map));
             TravelSalesmanViewModel.WasChanged += TravelSalesmanViewModel_WasChanged;
 
+            _messageBoxService = messageBoxService;
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<SettingsSentEvent>().Subscribe(ReceiveSettings, true);
             _eventAggregator.GetEvent<WholeMapSentEvent>().Subscribe(ReceiveMessageSelectExistingMap, true);
@@ -156,7 +161,7 @@ namespace DesktopApp.ViewModels
         {
             var model = RegisterServices.Configure().Resolve<CreateMapViewModel>(new NamedParameter("eventAggregator", _eventAggregator));
             var view = new CreateMapDialog { DataContext = model };
-            view.Owner = App.Current.MainWindow;
+            view.Owner = (Window)p;
             view.Show();
         }
 
@@ -170,7 +175,7 @@ namespace DesktopApp.ViewModels
         {
             var model = RegisterServices.Configure().Resolve<SelectExistingMapViewModel>(new NamedParameter("eventAggregator", _eventAggregator));
             var view = new SelectExistingMapDialog { DataContext = model };
-            view.Owner = App.Current.MainWindow;
+            view.Owner = (Window)p;
             view.Show();
         }
 
@@ -185,7 +190,7 @@ namespace DesktopApp.ViewModels
             var model = RegisterServices.Configure().Resolve<SettingsViewModel>(new NamedParameter("settings", MapViewModel.WholeMap.Settings),
                 new NamedParameter("eventAggregator", _eventAggregator));
             var view = new SettingsDialog { DataContext = model };
-            view.Owner = App.Current.MainWindow;
+            view.Owner = (Window)p;
             view.Show();
         }
 
@@ -308,7 +313,7 @@ namespace DesktopApp.ViewModels
         private void OnDeleteRouteExecuted(object p)
         {
             var Message = "Are you sure, you want to delete the route?";
-            MessageBoxResult DialogResult = MessageBox.Show(Message, "Confirm action", MessageBoxButton.YesNo);
+            var DialogResult = _messageBoxService.ShowConfirmation(Message, "Confirm action", MessageBoxButton.YesNo);
             if (DialogResult == MessageBoxResult.Yes && AppState.IsAbleToUpdateRoute)
             {
                 MapViewModel.DeleteRouteCommand.Execute(p);
@@ -339,8 +344,7 @@ namespace DesktopApp.ViewModels
 
         private void DeleteCityCommandExecuted(object p)
         {
-            var Message = "Are you sure, you want to delete {0} city?";
-            MessageBoxResult DialogResult = MessageBox.Show(string.Format(Message, MapViewModel.SelectedCity.Name), "Confirm action", MessageBoxButton.YesNo);
+            var DialogResult = _messageBoxService.ShowConfirmation($"Are you sure, you want to delete {MapViewModel.SelectedCity.Name} city?", "Confirm action", MessageBoxButton.YesNo);
             if (DialogResult == MessageBoxResult.Yes && AppState.IsAbleToUpdateCity)
             {
                 MapViewModel.DeleteCityCommand.Execute(p);

@@ -59,7 +59,7 @@ namespace API.Controllers
         [Route("getallnames")]
         public IActionResult GetMapName()
         {
-            var MapList = _service.GetMapsNames();
+            var MapList = _service.GetMapsInfo();
             if (MapList.Count() == 0)
             {
                 return NotFound(null);
