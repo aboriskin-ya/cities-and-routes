@@ -1,23 +1,22 @@
-﻿using DataAccess.Models;
-using Microsoft.EntityFrameworkCore.Internal;
+﻿using AutoMapper;
+using DataAccess.Models;
 using Microsoft.Extensions.Logging;
 using Moq;
+using PathResolver;
 using Repository.Storage;
 using Service;
 using Service.DTO;
-using PathResolver;
+using Service.PathResolver;
 using Service.Services;
 using Service.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
-using Service.PathResolver;
-using AutoMapper;
 
 namespace Tests
 {
-    public class TravelSalesmanAnnealingResolverTest
+    public class AlgorithmServiceSalesmanAnnealingTest
     {
         private readonly Guid saintPetersburgId = Guid.NewGuid();
         private readonly Guid moscowId = Guid.NewGuid();
@@ -35,11 +34,17 @@ namespace Tests
         private readonly Guid irkutskId = Guid.NewGuid();
         private readonly Guid surgutId = Guid.NewGuid();
         private readonly Map map;
-        private readonly TravelSalesmanAnnealingResolver travelSalesmanAnnealingResolver;
+        private TravelSalesmanAnnealingResolver travelSalesmanAnnealingResolver;
         private readonly Graph graph;
+        private AlgorithmService algorithmService;
+        private readonly Mock<IMapper> mockIMapper;
+        private readonly ShortPathResolverDTO shortPathResolverDTO;
+        private readonly PathToGraphService pathToGraphService;
+        private TravelSalesmanRequest travelSalesmanRequest;
+        private readonly Mock<IMapRepository> mockMapRepository;
+        private readonly Mock<IPathToGraphService> mockPathToGraphService;
 
-
-        public TravelSalesmanAnnealingResolverTest()
+        public AlgorithmServiceSalesmanAnnealingTest()
         {
             map = new Map
             {
@@ -90,14 +95,21 @@ namespace Tests
                 }
             };
             travelSalesmanAnnealingResolver = new TravelSalesmanAnnealingResolver();
-
+            shortPathResolverDTO = new ShortPathResolverDTO { Cities = new List<City>(), Routes = new List<Route>() };
+            foreach (var city in map.Cities)
+            {
+                shortPathResolverDTO.Cities.Add(city);
+            }
+            foreach (var route in map.Routes)
+            {
+                shortPathResolverDTO.Routes.Add(route);
+            }
+            mockIMapper = new Mock<IMapper>();
+            mockIMapper.Setup(_mapper => _mapper.Map<ShortPathResolverDTO>(map)).Returns(shortPathResolverDTO);
+            mockMapRepository = new Mock<IMapRepository>();            
+            mockPathToGraphService = new Mock<IPathToGraphService>();
+            pathToGraphService = new PathToGraphService(mockIMapper.Object, new Logger<PathToGraphService>(new LoggerFactory()));          
             graph = new Graph();
-            
-        }
-        [Fact]
-        public void CheckSalesmanAnnealingAllMap()
-        {
-            //Arrange
             foreach (var city in map.Cities)
             {
                 graph.AddVertex(city.Id.ToString());
@@ -106,6 +118,29 @@ namespace Tests
             {
                 graph.AddEdge(route.FirstCityId.ToString(), route.SecondCityId.ToString(), route.Distance);
             }
+        }
+        private void ArrangeTravelSalesmanRequest(TravelSalesmanRequest travelSalesmanRequest)
+        {
+            mockMapRepository.Setup(_mapRepository => _mapRepository.GetWholeMap(travelSalesmanRequest.MapId)).Returns(map);
+            var testGraph = pathToGraphService.MapToGraph(map, travelSalesmanRequest.SelectedCities);
+            mockPathToGraphService.Setup(_pathToGraphService => _pathToGraphService.MapToGraph(map, travelSalesmanRequest.SelectedCities))
+                .Returns(testGraph);
+            algorithmService = new AlgorithmService(mockMapRepository.Object, null, mockPathToGraphService.Object,
+                null, travelSalesmanAnnealingResolver, null, new Logger<AlgorithmService>(new LoggerFactory()));
+
+        }
+        [Fact]
+        public void TestAllMap()
+        {
+            //Arrange
+            travelSalesmanRequest = new TravelSalesmanRequest { MapId = map.Id, SelectedCities = new List<Guid>() };
+            var citiesGuid = new List<Guid>();
+            foreach (var city in map.Cities)
+            {
+                citiesGuid.Add(city.Id);
+            }
+            travelSalesmanRequest.SelectedCities = citiesGuid;
+            ArrangeTravelSalesmanRequest(travelSalesmanRequest);
             var PreferableSequenceOfCities = new List<Guid>();
             foreach (var city in map.Cities)
             {
@@ -114,105 +149,98 @@ namespace Tests
             var minCalculatedDistance = 25000;
             var maxCalculatedDistance = 40000;
             //Act
-            var result = travelSalesmanAnnealingResolver.Resolve(graph);
+            var result = algorithmService.SolveAnnealingTravelSalesman(travelSalesmanRequest);
             //Assert
-            Assert.InRange(result.CalculatedDistance, minCalculatedDistance, maxCalculatedDistance);
+            Assert.InRange(result.Result.CalculatedDistance, minCalculatedDistance, maxCalculatedDistance);
             foreach (var city in PreferableSequenceOfCities)
             {
-                Assert.Contains(city, result.PreferableSequenceOfCities);
+                Assert.Contains(city, result.Result.PreferableSequenceOfCities);
             }
         }
         [Fact]
-        public void CheckSalesmanAnnealingRostovVoronezMoscowKazan()
+        public void TestRostovVoronezMoscowKazan()
         {
             //Arrange
-            graph.AddVertex(voronezhId.ToString());
-            graph.AddVertex(rostovOnDonId.ToString());
-            graph.AddVertex(moscowId.ToString());
-            graph.AddVertex(kazanId.ToString());
-            graph.AddEdge(voronezhId.ToString(), rostovOnDonId.ToString(), 566);
-            graph.AddEdge(voronezhId.ToString(), moscowId.ToString(), 525);
-            graph.AddEdge(moscowId.ToString(), kazanId.ToString(), 822);
-            graph.AddEdge(rostovOnDonId.ToString(), kazanId.ToString(), 1521);
+            travelSalesmanRequest = new TravelSalesmanRequest
+            {
+                MapId = map.Id,
+                SelectedCities = new List<Guid> { voronezhId, rostovOnDonId, moscowId, kazanId }
+            };
+            ArrangeTravelSalesmanRequest(travelSalesmanRequest);
             var PreferableSequenceOfCities = new List<Guid> { rostovOnDonId, voronezhId, moscowId, kazanId };
             var minCalculatedDistance = 3000;
             var maxCalculatedDistance = 4000;
             //Act
-            var result = travelSalesmanAnnealingResolver.Resolve(graph);
+            var result = algorithmService.SolveAnnealingTravelSalesman(travelSalesmanRequest);
             //Assert
-            Assert.InRange(result.CalculatedDistance, minCalculatedDistance, maxCalculatedDistance);
+            Assert.InRange(result.Result.CalculatedDistance, minCalculatedDistance, maxCalculatedDistance);
             foreach (var city in PreferableSequenceOfCities)
             {
-                Assert.Contains(city, result.PreferableSequenceOfCities);
+                Assert.Contains(city, result.Result.PreferableSequenceOfCities);
             }
         }
         [Fact]
-        public void CheckSalesmanAnnealinWith2Cities()
+        public void TestWith2Cities()
         {
             //Arrange
-            graph.AddVertex(smolenskId.ToString());
-            graph.AddVertex(moscowId.ToString());
-            graph.AddEdge(smolenskId.ToString(), moscowId.ToString(), 398);
+            travelSalesmanRequest = new TravelSalesmanRequest
+            {
+                MapId = map.Id,
+                SelectedCities = new List<Guid> { smolenskId, moscowId }
+            };
+            ArrangeTravelSalesmanRequest(travelSalesmanRequest);
             var PreferableSequenceOfCities = new List<Guid> { smolenskId, moscowId };
             var CalculatedDistance = 796;
             //Act
-            var result = travelSalesmanAnnealingResolver.Resolve(graph);
+            var result = algorithmService.SolveAnnealingTravelSalesman(travelSalesmanRequest);
             //Assert
-            Assert.Equal(result.CalculatedDistance, CalculatedDistance);
+            Assert.Equal(result.Result.CalculatedDistance, CalculatedDistance);
             foreach (var city in PreferableSequenceOfCities)
             {
-                Assert.Contains(city, result.PreferableSequenceOfCities);
+                Assert.Contains(city, result.Result.PreferableSequenceOfCities);
             }
         }
         [Fact]
-        public void CheckSalesmanAnnealingWith3Cities()
+        public void TestWith3Cities()
         {
             //Arrange
-            graph.AddVertex(saintPetersburgId.ToString());
-            graph.AddVertex(moscowId.ToString());
-            graph.AddVertex(archangelskId.ToString());
-            graph.AddEdge(saintPetersburgId.ToString(), moscowId.ToString(), 706);
-            graph.AddEdge(saintPetersburgId.ToString(), archangelskId.ToString(), 1158);
-            graph.AddEdge(archangelskId.ToString(), moscowId.ToString(), 1250);
-            var PreferableSequenceOfCities = new List<Guid> { saintPetersburgId, moscowId, archangelskId };
-            var CalculatedDistance = 3114;
+            travelSalesmanRequest = new TravelSalesmanRequest
+            {
+                MapId = map.Id,
+                SelectedCities = new List<Guid> { saintPetersburgId, archangelskId, moscowId }
+            };
+            ArrangeTravelSalesmanRequest(travelSalesmanRequest);
+            var PreferableSequenceOfCities = new List<Guid> { saintPetersburgId, archangelskId, moscowId };
+            var CalculatedDistance = 3726;
             //Act
-            var result = travelSalesmanAnnealingResolver.Resolve(graph);
+            var result = algorithmService.SolveAnnealingTravelSalesman(travelSalesmanRequest);
             //Assert
-            Assert.Equal(result.CalculatedDistance, CalculatedDistance);
+            Assert.Equal(result.Result.CalculatedDistance, CalculatedDistance);
             foreach (var city in PreferableSequenceOfCities)
             {
-                Assert.Contains(city, result.PreferableSequenceOfCities);
+                Assert.Contains(city, result.Result.PreferableSequenceOfCities);
             }
         }
         [Fact]
-        public void CheckSalesmanAnnealing6Cities()
+        public void TestWith6Cities()
         {
             //Arrange
-            graph.AddVertex(voronezhId.ToString());
-            graph.AddVertex(rostovOnDonId.ToString());
-            graph.AddVertex(moscowId.ToString());
-            graph.AddVertex(kazanId.ToString());
-            graph.AddVertex(saratovId.ToString());
-            graph.AddVertex(saintPetersburgId.ToString());
-            graph.AddEdge(voronezhId.ToString(), rostovOnDonId.ToString(), 566);
-            graph.AddEdge(voronezhId.ToString(), moscowId.ToString(), 525);
-            graph.AddEdge(moscowId.ToString(), kazanId.ToString(), 822);
-            graph.AddEdge(rostovOnDonId.ToString(), kazanId.ToString(), 1521);
-            graph.AddEdge(rostovOnDonId.ToString(), saratovId.ToString(), 861);
-            graph.AddEdge(saratovId.ToString(), kazanId.ToString(), 674);
-            graph.AddEdge(moscowId.ToString(), saintPetersburgId.ToString(), 705);
-            graph.AddEdge(voronezhId.ToString(), saratovId.ToString(), 513);
-            var PreferableSequenceOfCities = new List<Guid> { rostovOnDonId, voronezhId, moscowId, kazanId };
+            travelSalesmanRequest = new TravelSalesmanRequest
+            {
+                MapId = map.Id,
+                SelectedCities = new List<Guid> { voronezhId, rostovOnDonId, moscowId, kazanId, saratovId, saintPetersburgId }
+            };
+            ArrangeTravelSalesmanRequest(travelSalesmanRequest);
+            var PreferableSequenceOfCities = new List<Guid> { voronezhId, rostovOnDonId, moscowId, kazanId, saratovId, saintPetersburgId };
             var minCalculatedDistance = 4500;
             var maxCalculatedDistance = 7000;
             //Act
-            var result = travelSalesmanAnnealingResolver.Resolve(graph);
+            var result = algorithmService.SolveAnnealingTravelSalesman(travelSalesmanRequest);
             //Assert
-            Assert.InRange(result.CalculatedDistance, minCalculatedDistance, maxCalculatedDistance);
+            Assert.InRange(result.Result.CalculatedDistance, minCalculatedDistance, maxCalculatedDistance);
             foreach (var city in PreferableSequenceOfCities)
             {
-                Assert.Contains(city, result.PreferableSequenceOfCities);
+                Assert.Contains(city, result.Result.PreferableSequenceOfCities);
             }
         }
     }

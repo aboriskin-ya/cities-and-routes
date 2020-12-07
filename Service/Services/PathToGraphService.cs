@@ -41,7 +41,8 @@ namespace Service.Services
                 {
                     if (i == j) continue;
                     var route = map.Routes.FirstOrDefault(t => t.FirstCityId == citiesArr[i] && t.SecondCityId == citiesArr[j]);
-                    if (route == null) continue;
+                    if (route == null)
+                        route = SearchingRoute(map, citiesArr[i], citiesArr[j]);                   
                     graph.AddEdge(route.FirstCityId.ToString(), route.SecondCityId.ToString(), route.Distance);
                     if (vertex.Name.Equals(route.FirstCityId.ToString()))
                     {
@@ -57,5 +58,19 @@ namespace Service.Services
             return graph;
         }
 
+        private Route SearchingRoute(Map map, Guid firstCity, Guid secondCity)
+        {
+            var result = new ShortestPathResolverService()
+                .FindShortestPath(MapToResolver(map), firstCity.ToString(), secondCity.ToString());
+            var route = new Route
+            {
+                Id = new Guid(),
+                MapId = map.Id,
+                FirstCityId = firstCity,
+                SecondCityId = secondCity,
+                Distance = result.FinalDistance
+            };
+            return route;
+        }
     }
 }
