@@ -2,6 +2,7 @@
 using DataAccess.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Service.DTO;
 using Service.PathResolver;
 using Service.Services.Interfaces;
 using System;
@@ -21,7 +22,7 @@ namespace API.Controllers
             _algorithmService = AlgorithmService;
         }
 
-        [ProducesResponseType(typeof(List<Guid>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ShortestPathResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -30,15 +31,11 @@ namespace API.Controllers
         public IActionResult FindShortestPath([FromBody] PathResolverDTO Dto)
         {
             var result = _algorithmService.FindShortestPath(Dto.MapId, Dto.CityFromId, Dto.CityToId);
-            if (result != null)
-            {
-                return Ok(result);
-            }
+            if (result == null)
+                result = new ShortestPathResponseDTO() { IsPathFound = false };
             else
-            {
-                return Conflict(result);
-            }
-
+                result.IsPathFound = true;
+            return Ok(result);
         }
 
         [ProducesResponseType(typeof(TravelSalesmanResponse), StatusCodes.Status200OK)]
