@@ -1,6 +1,7 @@
 ﻿using DesktopApp.APIInteraction;
 using DesktopApp.Models;
 using DesktopApp.Services;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -61,8 +62,19 @@ namespace DesktopApp.ViewModels
                 _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
             else
             {
-                await GetCitiesAsync(res.Payload);
+                if (!res.Payload.IsPathFound)
+                    ConsoleResult += $"There is no path from \"{path.CityFromName}\" to \"{path.CityToName}\"";
+                else
+                    await GetCitiesAsync(res.Payload);
             }
+        }
+
+        private async Task<City> GetCityAsync(Guid guid)
+        {
+            var city = await _cityAPIService.GetCityAsync(guid);
+            if (!city.IsSuccessful)
+                _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
+            return city.Payload;
         }
 
         private async Task GetCitiesAsync(ShortestPath shortestPath)
@@ -72,13 +84,11 @@ namespace DesktopApp.ViewModels
             ConsoleResult += "Route has forward cities: ";
             foreach (var guid in shortestPath.Path)
             {
-                var city = await _cityAPIService.GetCityAsync(guid);
-                if (!city.IsSuccessful)
-                    _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
-                else
+                var city = await GetCityAsync(guid);
+                if(city != null)
                 {
-                    cities.Add(new Point { X = city.Payload.X, Y = city.Payload.Y });
-                    ConsoleResult += $"{city.Payload.Name}->";
+                    cities.Add(new Point { X = city.X, Y = city.Y });
+                    ConsoleResult += $"{city.Name}->";
                 }
             }
             ConsoleResult = ConsoleResult.Substring(0, ConsoleResult.Length - 2);
