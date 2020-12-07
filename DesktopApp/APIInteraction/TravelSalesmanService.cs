@@ -13,9 +13,9 @@ namespace DesktopApp.APIInteraction
             HttpResponseMessage response = default;
             switch (selectedMethodIndex)
             {
-                case 0: response = await APIClient.Client.PostAsJsonAsync("pathresolver/solve-travel-salesman-annealing", request); break;
-                case 1: response = await APIClient.Client.PostAsJsonAsync("pathresolver/solve-travel-salesman-nearest", request); break;
-                case 2: response = await APIClient.Client.PostAsJsonAsync("pathresolver/solve-travel-salesman-quickest", request); break;
+                case 0: response = await APIClient.Client.PostAsJsonAsync("api/pathresolver/solve-travel-salesman-annealing", request); break;
+                case 1: response = await APIClient.Client.PostAsJsonAsync("api/pathresolver/solve-travel-salesman-nearest", request); break;
+                case 2: response = await APIClient.Client.PostAsJsonAsync("api/pathresolver/solve-travel-salesman-quickest", request); break;
             }
             HttpResponsePayload<TravelSalesman> payload = new HttpResponsePayload<TravelSalesman>();
             payload.IsSuccessful = response.IsSuccessStatusCode;

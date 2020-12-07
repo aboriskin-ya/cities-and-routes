@@ -16,7 +16,7 @@ namespace DesktopApp.APIInteraction
 
             try
             {
-                response = await APIClient.Client.PutAsJsonAsync($"settings/{settings.Id}", settingsDTO);
+                response = await APIClient.Client.PutAsJsonAsync($"api/settings/{settings.Id}", settingsDTO);
             }
             catch
             {
@@ -41,7 +41,7 @@ namespace DesktopApp.APIInteraction
 
             try
             {
-                response = await APIClient.Client.PostAsJsonAsync($"settings", settingsDTO);
+                response = await APIClient.Client.PostAsJsonAsync($"api/settings", settingsDTO);
             }
             catch
             {

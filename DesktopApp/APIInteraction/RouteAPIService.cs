@@ -16,7 +16,7 @@ namespace DesktopApp.APIInteraction
 
             try
             {
-                response = await APIClient.Client.PostAsJsonAsync("route", routeDTO);
+                response = await APIClient.Client.PostAsJsonAsync("api/route", routeDTO);
             }
             catch
             {
@@ -41,7 +41,7 @@ namespace DesktopApp.APIInteraction
 
             try
             {
-                response = await APIClient.Client.PutAsJsonAsync("route/" + Route.Id, RouteDTO);
+                response = await APIClient.Client.PutAsJsonAsync("api/route/" + Route.Id, RouteDTO);
             }
             catch
             {
@@ -66,7 +66,7 @@ namespace DesktopApp.APIInteraction
 
             try
             {
-                response = await APIClient.Client.DeleteAsync("route/" + Route.Id);
+                response = await APIClient.Client.DeleteAsync("api/route/" + Route.Id);
             }
             catch
             {

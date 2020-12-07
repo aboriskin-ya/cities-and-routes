@@ -17,7 +17,7 @@ namespace DesktopApp.APIInteraction
 
             try
             {
-                response = await APIClient.Client.PostAsJsonAsync("city", cityDTO);
+                response = await APIClient.Client.PostAsJsonAsync("api/city", cityDTO);
             }
             catch
             {
@@ -42,7 +42,7 @@ namespace DesktopApp.APIInteraction
 
             try
             {
-                response = await APIClient.Client.PutAsJsonAsync("city/" + city.Id, cityDTO);
+                response = await APIClient.Client.PutAsJsonAsync("api/city/" + city.Id, cityDTO);
             }
             catch
             {
@@ -65,7 +65,7 @@ namespace DesktopApp.APIInteraction
 
             try
             {
-                response = await APIClient.Client.DeleteAsync("city/" + city.Id);
+                response = await APIClient.Client.DeleteAsync("api/city/" + city.Id);
             }
             catch
             {
@@ -86,7 +86,7 @@ namespace DesktopApp.APIInteraction
 
             try
             {
-                response = await APIClient.Client.GetAsync($"city/{guid}");
+                response = await APIClient.Client.GetAsync($"api/city/{guid}");
             }
             catch
             {

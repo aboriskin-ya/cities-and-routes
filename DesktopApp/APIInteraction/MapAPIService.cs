@@ -18,7 +18,7 @@ namespace DesktopApp.APIInteraction
 
             try
             {
-                response = await APIClient.Client.PostAsJsonAsync("map", mapDTO);
+                response = await APIClient.Client.PostAsJsonAsync("api/map", mapDTO);
             }
             catch
             {
@@ -41,7 +41,7 @@ namespace DesktopApp.APIInteraction
 
             try
             {
-                response = await APIClient.Client.GetAsync("map/getallnames");
+                response = await APIClient.Client.GetAsync("api/map/getallnames");
             }
             catch
             {
@@ -64,7 +64,7 @@ namespace DesktopApp.APIInteraction
 
             try
             {
-                response = await APIClient.Client.DeleteAsync($"map/{guid}");
+                response = await APIClient.Client.DeleteAsync($"api/map/{guid}");
             }
             catch
             {
@@ -80,7 +80,7 @@ namespace DesktopApp.APIInteraction
 
             try
             {
-                response = await APIClient.Client.GetAsync($"map/{guid}");
+                response = await APIClient.Client.GetAsync($"api/map/{guid}");
             }
             catch
             {
