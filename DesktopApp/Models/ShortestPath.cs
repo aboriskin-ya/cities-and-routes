@@ -1,6 +1,7 @@
 ﻿using DesktopApp.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace DesktopApp.Models
@@ -23,11 +24,6 @@ namespace DesktopApp.Models
             set => Set(ref processDuration, value, nameof(ProcessDuration));
         }
 
-        private List<Point> citiesPosition = new List<Point>();
-        public List<Point> CitiesPosition
-        {
-            get => citiesPosition;
-            set => Set(ref citiesPosition, value, nameof(CitiesPosition));
-        }
+        public ObservableCollection<Point> CitiesPosition { get; set; } = new ObservableCollection<Point>();
     }
 }

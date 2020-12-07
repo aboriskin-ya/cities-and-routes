@@ -9,6 +9,8 @@ namespace DataAccess.EntityBuilders
         public SettingsBuild(EntityTypeBuilder<Settings> entityBuilder)
         {
             entityBuilder.HasKey(s => s.Id);
+            entityBuilder.Property(s => s.FoundPathSize).IsRequired();
+            entityBuilder.Property(s => s.FoundPathColor).IsRequired();
             entityBuilder.Property(s => s.DisplayingImage).IsRequired();
             entityBuilder.Property(s => s.DisplayingGraph).IsRequired();
             entityBuilder.Property(s => s.VertexSize).IsRequired();

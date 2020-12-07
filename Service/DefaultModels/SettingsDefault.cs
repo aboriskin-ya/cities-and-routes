@@ -2,6 +2,10 @@
 {
     public static class SettingsDefault
     {
+        public static readonly string FoundPathColor = "#00ff00";
+
+        public static readonly double FoundPathSize = 3;
+
         public static readonly double VertexSize = 10;
 
         public static readonly string VertexColor = "#ff0000";

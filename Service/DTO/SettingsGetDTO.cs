@@ -5,6 +5,8 @@ namespace Service.DTO
     public class SettingsGetDTO
     {
         public Guid Id { get; set; }
+        public string FoundPathColor { get; set; } = SettingsDefault.FoundPathColor;
+        public double FoundPathSize { get; set; } = SettingsDefault.FoundPathSize;
         public bool DisplayingImage { get; set; } = SettingsDefault.DisplayingImage;
         public bool DisplayingGraph { get; set; } = SettingsDefault.DisplayingGraph;
         public double VertexSize { get; set; } = SettingsDefault.VertexSize;

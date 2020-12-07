@@ -8,6 +8,34 @@ namespace DesktopApp.Models
         public Guid Id { get; set; }
         public Guid MapId { get; set; }
 
+        #region FoundPathSize
+        private double _foundPathSize;
+        public double FoundPathSize
+        {
+            get => _foundPathSize;
+            set
+            {
+                if (_foundPathSize == value) return;
+                _foundPathSize = value;
+                RaisePropertyChanged(nameof(FoundPathSize));
+            }
+        }
+        #endregion
+
+        #region FoundPathColor
+        private string _foundPathColor;
+        public string FoundPathColor
+        {
+            get => _foundPathColor;
+            set
+            {
+                if (value == _foundPathColor) return;
+                _foundPathColor = value;
+                RaisePropertyChanged(nameof(FoundPathColor));
+            }
+        }
+        #endregion
+
         private bool displayingImage;
         public bool DisplayingImage
         {
