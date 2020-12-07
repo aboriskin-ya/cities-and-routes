@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace API.Controllers
 {
-    [Route("map")]
+    [Route("api/map")]
     [ApiController]
     public class MapController : ControllerBase
     {

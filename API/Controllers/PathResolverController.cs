@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [Route("pathresolver")]
+    [Route("api/pathresolver")]
     [ApiController]
     public class PathResolverController : ControllerBase
     {
