@@ -11,6 +11,7 @@ using Service.Services;
 using Service.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Xunit;
 
@@ -43,6 +44,7 @@ namespace Tests
         private TravelSalesmanRequest travelSalesmanRequest;
         private readonly Mock<IMapRepository> mockMapRepository;
         private readonly Mock<IPathToGraphService> mockPathToGraphService;
+        private readonly List<Guid> citiesGuid;
 
         public AlgorithmServiceSalesmanAnnealingTest()
         {
@@ -110,6 +112,7 @@ namespace Tests
             mockPathToGraphService = new Mock<IPathToGraphService>();
             pathToGraphService = new PathToGraphService(mockIMapper.Object, new Logger<PathToGraphService>(new LoggerFactory()));          
             graph = new Graph();
+            citiesGuid = map.Cities.Select(c => c.Id).ToList();
             foreach (var city in map.Cities)
             {
                 graph.AddVertex(city.Id.ToString());
@@ -125,6 +128,8 @@ namespace Tests
             var testGraph = pathToGraphService.MapToGraph(map, travelSalesmanRequest.SelectedCities);
             mockPathToGraphService.Setup(_pathToGraphService => _pathToGraphService.MapToGraph(map, travelSalesmanRequest.SelectedCities))
                 .Returns(testGraph);
+            mockPathToGraphService.Setup(_pathToGraphService => _pathToGraphService.MapToGraph(map, citiesGuid))
+                .Returns(graph);
             algorithmService = new AlgorithmService(mockMapRepository.Object, null, mockPathToGraphService.Object,
                 null, travelSalesmanAnnealingResolver, null, new Logger<AlgorithmService>(new LoggerFactory()));
 
@@ -146,7 +151,7 @@ namespace Tests
             {
                 PreferableSequenceOfCities.Add(city.Id);
             }
-            var minCalculatedDistance = 25000;
+            var minCalculatedDistance = 20000;
             var maxCalculatedDistance = 40000;
             //Act
             var result = algorithmService.SolveAnnealingTravelSalesman(travelSalesmanRequest);

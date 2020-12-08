@@ -7,6 +7,7 @@ using Service.DTO;
 using Service.PathResolver;
 using Service.Services.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -54,8 +55,11 @@ namespace Service.Services
             Map map = _mapRepository.GetWholeMap(request.MapId);
             if (request.SelectedCities.Count() > 0 && map != null)
             {
-                Graph graph = _pathToGraphService.MapToGraph(map, request.SelectedCities);
-                return await Task.Run(() => _annealingResolver.Resolve(graph));
+                Graph graph = _pathToGraphService.MapToGraph(map, request.SelectedCities);               
+                return await Task.Run(() => {
+                    var result = _annealingResolver.Resolve(graph);
+                    return ExpandPathToFullMap(result, map);
+                } );
             }
             return default;
         }
@@ -66,10 +70,38 @@ namespace Service.Services
             if (requestBody.SelectedCities.Count() > 0 && map != null)
             {
                 Graph graph = _pathToGraphService.MapToGraph(map, requestBody.SelectedCities);
-                return await Task.Run(() => _nearestResolver.Solve(graph));
+                return await Task.Run(() => {
+                    var result = _nearestResolver.Solve(graph);
+                    return ExpandPathToFullMap(result, map);
+                } );
             }
             _logger.LogInformation("Solve travel salesman task started");
             return default;
+        }
+
+        private TravelSalesmanResponse ExpandPathToFullMap(TravelSalesmanResponse result, Map map)
+        {
+            var shortestPathService = new ShortestPathResolverService();
+            var sequenceList = result.PreferableSequenceOfCities.ToList();
+            var citiesIdList = map.Cities.Select(c => c.Id).ToList();
+            var newSequence = new List<Guid>();
+            Graph graphFullMap = _pathToGraphService.MapToGraph(map, citiesIdList);
+            for (int i = 0; i < sequenceList.Count - 1; i++)
+            {
+                if (graphFullMap.GetEdge(sequenceList[i].ToString(), sequenceList[i + 1].ToString()) == null)
+                {
+                    var middlePart = shortestPathService.FindShortestPath(graphFullMap, sequenceList[i].ToString(), sequenceList[i + 1].ToString()).Path;
+                    middlePart.RemoveAt(middlePart.Count - 1);
+                    newSequence.AddRange(middlePart);
+                }
+                else
+                {
+                    newSequence.Add(sequenceList[i]);
+                }
+            }
+            newSequence.Add(sequenceList.Last());
+            result.PreferableSequenceOfCities = newSequence;
+            return result;
         }
     }
 }
