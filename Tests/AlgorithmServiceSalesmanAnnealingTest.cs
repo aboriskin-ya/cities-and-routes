@@ -112,7 +112,7 @@ namespace Tests
             mockPathToGraphService = new Mock<IPathToGraphService>();
             pathToGraphService = new PathToGraphService(mockIMapper.Object, new Logger<PathToGraphService>(new LoggerFactory()));          
             graph = new Graph();
-            citiesGuid = new List<Guid>(map.Cities.Select(c => c.Id));
+            citiesGuid = map.Cities.Select(c => c.Id).ToList();
             foreach (var city in map.Cities)
             {
                 graph.AddVertex(city.Id.ToString());

@@ -83,7 +83,7 @@ namespace Service.Services
         {
             var shortestPathService = new ShortestPathResolverService();
             var sequenceList = result.PreferableSequenceOfCities.ToList();
-            var citiesIdList = new List<Guid>(map.Cities.Select(c => c.Id));
+            var citiesIdList = map.Cities.Select(c => c.Id).ToList();
             var newSequence = new List<Guid>();
             Graph graphFullMap = _pathToGraphService.MapToGraph(map, citiesIdList);
             for (int i = 0; i < sequenceList.Count - 1; i++)
