@@ -36,6 +36,15 @@ namespace DesktopApp.Models
         }
         #endregion
 
+        #region DisplayCitiesNames
+        private bool _displayCitiesNames;
+        public bool DisplayCitiesNames
+        {
+            get => _displayCitiesNames;
+            set => Set(ref _displayCitiesNames, value);
+        }
+        #endregion
+
         private bool displayingImage;
         public bool DisplayingImage
         {

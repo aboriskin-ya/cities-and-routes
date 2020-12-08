@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DesktopApp.UserControls
 {
@@ -56,13 +46,13 @@ namespace DesktopApp.UserControls
             {
                 Background.Fill = _unchekedColorBrush;
                 IsChecked = false;
-                button.Margin = new Thickness(-340, 0, 0, 0);
+                button.Margin = new Thickness(-620, 0, 0, 0);
             }
             else
             {
                 Background.Fill = _checkedColor;
                 IsChecked = true;
-                button.Margin = new Thickness(340, 0, 0, 0);
+                button.Margin = new Thickness(620, 0, 0, 0);
             }
         }
         private void Initialize(bool isChecked)
@@ -71,13 +61,13 @@ namespace DesktopApp.UserControls
             {
                 Background.Fill = _unchekedColorBrush;
                 IsChecked = false;
-                button.Margin = new Thickness(-340, 0, 0, 0);
+                button.Margin = new Thickness(-620, 0, 0, 0);
             }
             else
             {
                 Background.Fill = _checkedColor;
                 IsChecked = true;
-                button.Margin = new Thickness(340, 0, 0, 0);
+                button.Margin = new Thickness(620, 0, 0, 0);
             }
         }
         

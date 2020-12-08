@@ -35,7 +35,7 @@
 
             <uc:ToggleSwitch Grid.Row="0" IsChecked="{Binding Settings.DisplayingImage, Mode=TwoWay}" SwitchContent="Display the image" VerticalAlignment="Center" HorizontalAlignment="Left"/>
             <uc:ToggleSwitch Grid.Row="1" SwitchContent="Display the graph" IsChecked="{Binding Settings.DisplayingGraph, Mode=TwoWay}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-            <uc:ToggleSwitch Grid.Row="2" SwitchContent="Display the cities" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <uc:ToggleSwitch Grid.Row="2" SwitchContent="Display the cities` names" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding Settings.DisplayCitiesNames, Mode=TwoWay}"/>
         </Grid>
 
 

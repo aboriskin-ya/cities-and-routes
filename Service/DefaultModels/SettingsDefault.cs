@@ -6,6 +6,8 @@
 
         public static readonly double FoundPathSize = 3;
 
+        public static readonly bool DisplayCitiesNames = true;
+
         public static readonly double VertexSize = 10;
 
         public static readonly string VertexColor = "#ff0000";

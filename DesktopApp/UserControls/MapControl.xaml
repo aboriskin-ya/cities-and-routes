@@ -182,7 +182,7 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <Path Stroke="{Binding ElementName=mControl, Path=SettingsMap.FoundPathColor}"
+                <Path Stroke="{Binding ElementName=mControl, Path=SettingsMap.FoundPathColor, Converter={StaticResource StringToColorConverter}}"
                       Data="{StaticResource shortestPathGeometry}"
                       Style="{StaticResource FoundPathSize}">
                 </Path>
@@ -201,6 +201,9 @@
                                          Style="{StaticResource CityStyle}"/>
 
                                 <Label Content="{Binding Name}"
+                                        Visibility="{Binding ElementName=mControl,
+                                                    Path=SettingsMap.DisplayingImage, 
+                                                    Converter={StaticResource BooleanToVisibilityConverter}}"
                                        Canvas.Bottom="{Binding ElementName=canvasOfCity, Path=Height}"
                                        FontWeight="ExtraBlack"
                                        FontSize="{Binding ElementName=city, Path=Width}"

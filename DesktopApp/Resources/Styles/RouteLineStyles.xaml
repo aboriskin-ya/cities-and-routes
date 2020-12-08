@@ -125,7 +125,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style x:Key="foundPath" TargetType="Line" BasedOn="{StaticResource FoundPathSize}">
         <Setter Property="Line.Stroke" Value="{Binding ElementName=mControl, Path=SettingsMap.FoundPathColor, 
                          Converter={StaticResource StringToColorConverter}}"/>
@@ -165,17 +165,6 @@
                 </MultiBinding>
             </Setter.Value>
         </Setter>
-    </Style>
-    <Style BasedOn="{StaticResource foundPath}" TargetType="Line" x:Key="SelectedRoute">
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding ElementName=mControl, Path=CanDisplay}" Value="true">
-                <Setter Property="Stroke" Value="#FFDF38E7"/>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding ElementName=mControl, Path=CanDisplay}" Value="false">
-                <Setter Property="Stroke"  Value="{Binding ElementName=mControl, Path=SettingsMap.FoundPathColor, 
-                         Converter={StaticResource StringToColorConverter}}"/>
-            </DataTrigger>
-        </Style.Triggers>
     </Style>
 </ResourceDictionary>
     

@@ -46,11 +46,7 @@ namespace DesktopApp.ViewModels
         private void OnClearConsoleExecuted(object p)
         {
             ConsoleResult = "";
-            for (int i = 0; i < ShortestPath.CitiesPosition.Count; i++)
-            {
-                var point = ShortestPath.CitiesPosition[i];
-                ShortestPath.CitiesPosition.Remove(point);
-            }
+            ShortestPath.CitiesPosition = new List<Point>();
 
         }
 
@@ -96,14 +92,13 @@ namespace DesktopApp.ViewModels
                     ConsoleResult += $"{city.Name}->";
                 }
             }
+            ShortestPath = shortestPath;
+            ShortestPath.CitiesPosition = cities;
             ConsoleResult = ConsoleResult.Substring(0, ConsoleResult.Length - 2);
             builder.Append($"\nProcess` duration: {shortestPath.ProcessDuration}\n" +
                             $"Calculated distance: {shortestPath.FinalDistance}\n");
             ConsoleResult += builder.ToString();
-            foreach (var point in cities)
-            {
-                ShortestPath.CitiesPosition.Add(point);
-            }
+            
         }
 
         private bool OnCanCalculateShortestPathExecute(object p) => true;
@@ -111,6 +106,7 @@ namespace DesktopApp.ViewModels
         public void InitializeModels()
         {
             ShortestPath = new ShortestPath();
+            ShortestPath.CitiesPosition = new List<Point>();
             ConsoleResult = "";
         }
     }
