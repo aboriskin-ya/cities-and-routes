@@ -11,6 +11,7 @@ using Service.Services;
 using Service.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Xunit;
 
@@ -112,10 +113,10 @@ namespace Tests
             pathToGraphService = new PathToGraphService(mockIMapper.Object, new Logger<PathToGraphService>(new LoggerFactory()));
             graph = new Graph();
             citiesGuid = new List<Guid>();
+            citiesGuid.AddRange(map.Cities.Select(c => c.Id));
             foreach (var city in map.Cities)
             {
                 graph.AddVertex(city.Id.ToString());
-                citiesGuid.Add(city.Id);
             }
             foreach (var route in map.Routes)
             {
