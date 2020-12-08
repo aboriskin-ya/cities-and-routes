@@ -47,16 +47,16 @@
                                     <ColumnDefinition />
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
-                                <Button
+                                <ToggleButton
                                     Grid.Column="0"
                                     Command ="{Binding AddNewCityCommand}"
                                     VerticalAlignment="Top"
                                     Content="Add a city"/>
-                                <Button                    
+                                <ToggleButton                     
                                     Grid.Column="1"
                                     Command ="{Binding AddNewRouteCommand}"
                                     VerticalAlignment="Top"
-                                    Content="Add a route"/>
+                                    Content="Add a road"/>
                             </Grid>
 
                             <Grid x:Name ="CreatingCityPanel"
