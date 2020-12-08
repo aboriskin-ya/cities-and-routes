@@ -346,7 +346,7 @@
                                         <RowDefinition Height="1*" />
                                         <RowDefinition Height="1*" />
                                     </Grid.RowDefinitions>
-                                    <ToggleButton Content="Select cities" 
+                                    <ToggleButton Content="Start selection" 
                                           Grid.Row="0"
                                           Grid.ColumnSpan="2"
                                           Command="{Binding PathResolverOpenCommand}" Margin="0,0,0,20" Grid.RowSpan="2"
