@@ -43,6 +43,7 @@ namespace Tests
         private TravelSalesmanRequest travelSalesmanRequest;
         private readonly Mock<IMapRepository> mockMapRepository;
         private readonly Mock<IPathToGraphService> mockPathToGraphService;
+        private readonly List<Guid> citiesGuid;
 
         public AlgorithmServiceSalesmanNeighborTest()
         {
@@ -110,9 +111,11 @@ namespace Tests
             mockPathToGraphService = new Mock<IPathToGraphService>();
             pathToGraphService = new PathToGraphService(mockIMapper.Object, new Logger<PathToGraphService>(new LoggerFactory()));
             graph = new Graph();
+            citiesGuid = new List<Guid>();
             foreach (var city in map.Cities)
             {
                 graph.AddVertex(city.Id.ToString());
+                citiesGuid.Add(city.Id);
             }
             foreach (var route in map.Routes)
             {
@@ -125,6 +128,8 @@ namespace Tests
             var testGraph = pathToGraphService.MapToGraph(map, travelSalesmanRequest.SelectedCities);
             mockPathToGraphService.Setup(_pathToGraphService => _pathToGraphService.MapToGraph(map, travelSalesmanRequest.SelectedCities))
                 .Returns(testGraph);
+            mockPathToGraphService.Setup(_pathToGraphService => _pathToGraphService.MapToGraph(map, citiesGuid))
+                .Returns(graph);
             algorithmService = new AlgorithmService(mockMapRepository.Object, null, mockPathToGraphService.Object,
                 null, null, travelSalesmanNearestNeighbor, new Logger<AlgorithmService>(new LoggerFactory()));
 

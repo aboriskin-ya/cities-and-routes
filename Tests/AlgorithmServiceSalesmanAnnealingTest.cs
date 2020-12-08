@@ -151,7 +151,7 @@ namespace Tests
             {
                 PreferableSequenceOfCities.Add(city.Id);
             }
-            var minCalculatedDistance = 25000;
+            var minCalculatedDistance = 20000;
             var maxCalculatedDistance = 40000;
             //Act
             var result = algorithmService.SolveAnnealingTravelSalesman(travelSalesmanRequest);
