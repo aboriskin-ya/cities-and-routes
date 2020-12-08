@@ -31,331 +31,21 @@
                 CommandParameter="{Binding ElementName=mainWindow}">
             </MenuItem>
         </Menu>
-        <DockPanel DockPanel.Dock="Right" Width="200">
-            <TabControl>
-                <TabItem>
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                            <i:InvokeCommandAction Command="{Binding AddingCitiesRoutesOpenCommand}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                    <TabItem.Header>
-                        <TextBlock Text="Adding cities and routes"></TextBlock>
-                    </TabItem.Header>
-                    <TabItem.Content>
-                        <StackPanel Background="#FFF0F0F0">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition  />
-                                    <RowDefinition  />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-                                <ToggleButton
-                                    Grid.Column="0"
-                                    Command ="{Binding AddNewCityCommand}"
-                                    VerticalAlignment="Top"
-                                    Content="Add a city"/>
-                                <ToggleButton                     
-                                    Grid.Column="1"
-                                    Command ="{Binding AddNewRouteCommand}"
-                                    VerticalAlignment="Top"
-                                    Content="Add a road"/>
-                            </Grid>
-
-                            <Grid x:Name ="CreatingCityPanel"
-                                Visibility="{Binding AppState.IsAbleToCreateCity, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition  />
-                                    <RowDefinition  />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-
-                                <Label
-                                    Content="City Name: "
-                                    Target="{Binding cityName}"/>
-
-                                <TextBox 
-                                    Grid.Column="1"
-                                    Text="{Binding MapViewModel.SelectedCity.Name, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                                    Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
-                                    Style="{StaticResource StyleValidation}"
-                                    x:Name="cityName">
-                                    <TextBox.InputBindings>
-                                        <KeyBinding Command="{Binding CreateNewCityCommand}" Key="ENTER" CommandParameter="{Binding ElementName=cityName, Path=(Validation.HasError)}"/>
-                                    </TextBox.InputBindings>
-                                </TextBox>
-
-                                <Button
-                                    Grid.Row="1"
-                                    Content="Create"
-                                    Command="{Binding CreateNewCityCommand}" 
-                                    CommandParameter="{Binding ElementName=cityName, Path=(Validation.HasError)}"
-                                    Margin="-1,0,2,0">
-                                    <Button.Style>
-                                        <Style TargetType="{x:Type Button}">
-                                            <Setter Property="IsEnabled" Value="False"/>
-                                            <Style.Triggers>
-                                                <MultiDataTrigger>
-                                                    <MultiDataTrigger.Conditions>
-                                                        <Condition Binding="{Binding (Validation.HasError), ElementName=cityName}" Value="False"/>
-                                                    </MultiDataTrigger.Conditions>
-                                                    <Setter Property="IsEnabled" Value="True"/>
-                                                </MultiDataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Button.Style>
-                                </Button>
-
-                                <Button 
-                                    Grid.Column="1"
-                                    Grid.Row="1"
-                                    Content="Cancel"
-                                    Command="{Binding CancelCreatingCityCommand}"/>
-                            </Grid>
-
-                            <Grid x:Name ="UpdatingCityPanel"
-                                Visibility="{Binding AppState.IsAbleToUpdateCity, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition  />
-                                    <RowDefinition  />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-
-                                <Label
-                                    Content="Update the name: "
-                                    Target="{Binding cityNameUpdate}" Grid.ColumnSpan="2" Margin="0,-2,10,44" Grid.RowSpan="2"/>
-
-                                <TextBox 
-                                    Text="{Binding MapViewModel.SelectedCity.Name, NotifyOnValidationError=true, ValidatesOnDataErrors=True}"
-                                    Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
-                                    Style="{StaticResource StyleValidation}"
-                                    x:Name="cityNameUpdate" Margin="1,20,1,37" Grid.ColumnSpan="2" Grid.Row="1" Height="25">
-                                    <TextBox.InputBindings>
-                                        <KeyBinding Command="{Binding UpdateCityCommand}" Key="ENTER" CommandParameter="{Binding ElementName=cityNameUpdate, Path=(Validation.HasError)}"/>
-                                    </TextBox.InputBindings>
-                                </TextBox>
-
-                                <Button
-                                    Grid.Row="1"
-                                    Content="Update"
-                                    Command="{Binding UpdateCityCommand}"
-                                    CommandParameter="{Binding ElementName=cityNameUpdate, Path=(Validation.HasError)}"
-                                    Margin="-1,51,2,10" Height="22">
-                                    <Button.Style>
-                                        <Style TargetType="{x:Type Button}">
-                                            <Setter Property="IsEnabled" Value="True"/>
-                                            <Style.Triggers>
-                                                <MultiDataTrigger>
-                                                    <MultiDataTrigger.Conditions>
-                                                        <Condition Binding="{Binding Text.Length, ElementName=cityNameUpdate, UpdateSourceTrigger=PropertyChanged}" Value="0"/>
-                                                    </MultiDataTrigger.Conditions>
-                                                    <Setter Property="IsEnabled" Value="False"/>
-                                                </MultiDataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Button.Style>
-                                </Button>
-
-                                <Button 
-                                    Grid.Column="1"
-                                    Grid.Row="1"
-                                    Content="Delete"
-                                    Command="{Binding DeleteCityCommand}" Margin="0,51,0,0" VerticalAlignment="Top" Height="22"/>
-                            </Grid>
-
-                            <Grid x:Name="CreatingRoutePanel"
-                                Visibility="{Binding AppState.IsAbleToCreateRoute, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition  />
-                                    <RowDefinition  />
-                                    <RowDefinition  />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock 
-                                    DataContext="{Binding MapViewModel}" 
-                                    Grid.Column="0"
-                                    Text="{Binding SelectedRoute.FirstCity.Name}"/>
-                                <TextBlock 
-                                    DataContext="{Binding MapViewModel}" 
-                                    Grid.Column="1" 
-                                    Text="{Binding SelectedRoute.SecondCity.Name}"/>
-
-                                <Label Grid.Row="1"
-                                    Content="Distance: "/>
-                                <TextBox
-                                    Grid.Column="1"
-                                    Grid.Row="1"                        
-                                    Text="{Binding MapViewModel.SelectedRoute.Distance, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                                    Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
-                                    Style="{StaticResource StyleValidation}"
-                                    x:Name="routeDistance">
-                                    <TextBox.InputBindings>
-                                        <KeyBinding Command="{Binding CreateNewRouteCommand}" Key="ENTER" CommandParameter="{Binding ElementName=routeDistance, Path=(Validation.HasError)}"/>
-                                    </TextBox.InputBindings>
-                                </TextBox>
-
-                                <Button
-                                    Grid.Row="2"
-                                    Content="Create"
-                                    Command="{Binding CreateNewRouteCommand}"
-                                    CommandParameter="{Binding ElementName=routeDistance, Path=(Validation.HasError)}"
-                                    Margin="-1,0,2,0">
-                                    <Button.Style>
-                                        <Style TargetType="{x:Type Button}">
-                                            <Setter Property="IsEnabled" Value="False"/>
-                                            <Style.Triggers>
-                                                <MultiDataTrigger>
-                                                    <MultiDataTrigger.Conditions>
-                                                        <Condition Binding="{Binding (Validation.HasError), ElementName=routeDistance}" Value="False"/>
-                                                    </MultiDataTrigger.Conditions>
-                                                    <Setter Property="IsEnabled" Value="True"/>
-                                                </MultiDataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Button.Style>
-                                </Button>
-
-                                <Button 
-                                    Grid.Column="1"
-                                    Grid.Row="2"
-                                    Content="Cancel"
-                                    Command="{Binding CancelCreatingRouteCommand}"/>
-                            </Grid>
-                            <TextBlock Text="{Binding WholeMap.Name}"/>
-                            <Grid x:Name ="UpdatingRoutePanel"
-                    Visibility="{Binding AppState.IsAbleToUpdateRoute, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition  />
-                                    <RowDefinition  />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-
-                                <Label
-                        Content="Update distance: "
-                        Target="{Binding routeUpdate}" Grid.ColumnSpan="2" Margin="0,-2,10,0" Grid.RowSpan="2" Height="41" VerticalAlignment="Top"/>
-
-                                <TextBox
-                        Text="{Binding MapViewModel.SelectedRoute.Distance, NotifyOnValidationError=true, ValidatesOnDataErrors=True}"
-                        Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
-                        Style="{StaticResource StyleValidation}"
-                        x:Name="routeUpdate" Margin="1,20,1,37" Grid.ColumnSpan="2" Grid.Row="1" Height="25">
-                            <TextBox.InputBindings>
-                                  <KeyBinding Command="{Binding UpdateRouteCommand}" Key="ENTER" CommandParameter="{Binding ElementName=routeUpdate, Path=(Validation.HasError)}"/>
-                            </TextBox.InputBindings>
-                        </TextBox>
-
-                                <Button
-                        Grid.Row="1"
-                        Content="Update"
-                        Command="{Binding UpdateRouteCommand}"
-                        CommandParameter="{Binding ElementName=routeUpdate, Path=(Validation.HasError)}"
-                        Margin="-1,51,2,10" Height="22">
-                                    <Button.Style>
-                                        <Style TargetType="{x:Type Button}">
-                                            <Setter Property="IsEnabled" Value="True"/>
-                                            <Style.Triggers>
-                                                <MultiDataTrigger>
-                                                    <MultiDataTrigger.Conditions>
-                                                        <Condition Binding="{Binding Text.Length, ElementName=routeUpdate, UpdateSourceTrigger=PropertyChanged}" Value="0"/>
-                                                    </MultiDataTrigger.Conditions>
-                                                    <Setter Property="IsEnabled" Value="False"/>
-                                                </MultiDataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Button.Style>
-                                </Button>
-
-                                <Button 
-                        Grid.Column="1"
-                        Grid.Row="1"
-                        Content="Delete"
-                        Command="{Binding DeleteRouteCommand}" Margin="0,51,0,0" VerticalAlignment="Top" Height="22"/>
-                            </Grid>
-                        </StackPanel>
-                    </TabItem.Content>
-                </TabItem>
-                <TabItem>
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                            <i:InvokeCommandAction Command="{Binding PathResolverOpenCommand}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                    <TabItem.Header>
-                        <TextBlock Text="Shortest path"></TextBlock>
-                    </TabItem.Header>
-                    <TabItem.Content>
-                        <StackPanel>
-                            <Button Content="Calculate the shortest path"
-                                    Command="{Binding CalculateShortestPathCommand}"/>
-                            <uc:ConsoleControl DataContext="{Binding ShortestPathViewModel}"
-                                               ConsoleContent="{Binding ConsoleResult,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                               ClearConsoleCommand="{Binding ClearConsoleCommand}"/>
-                        </StackPanel>
-                    </TabItem.Content>
-                </TabItem>
-                <TabItem Header="Travelsalesman" DataContext="{Binding TravelSalesmanViewModel}">
-                    <DockPanel>
-                        <StatusBar DockPanel.Dock="Top">
-                            <StatusBarItem Content="{Binding State}"/>
-                        </StatusBar>
-                        <ComboBox DockPanel.Dock="Top" SelectedIndex="{Binding SelectedMethodIndex}" IsEnabled="{Binding TravelsalesmanAcces}">
-                            <ComboBoxItem Content="Annealing"/>
-                            <ComboBoxItem Content="Nearest"/>
-                            <ComboBoxItem Content="Quickest"/>
-                        </ComboBox>
-                        <Grid DockPanel.Dock="Top">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*" />
-                                <ColumnDefinition Width="1*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="1*" />
-                                <RowDefinition Height="1*" />
-                            </Grid.RowDefinitions>
-                            <ToggleButton Content="Select cities" 
-                                          Grid.Row="0"
-                                          Grid.Column="0"
-                                          IsChecked="{Binding CanSelectCities}"
-                                          IsEnabled="{Binding TravelsalesmanAcces}"
-                                          />
-                            <Button Content="Cancel" Grid.Row="0" Grid.Column="1" Command="{Binding CancelSelectCitiesCommand}"/>
-                            <Button Content="Resolve travelsalesman goal"
-                                    Grid.Row="1" Grid.ColumnSpan="2"
-                                    Command="{Binding ResolveTravelSalesmanCommand}"/>
-                        </Grid>
-                        <uc:ConsoleControl DockPanel.Dock="Top" 
-                            ConsoleContent="{Binding ConsoleResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            ClearConsoleCommand="{Binding ClearConsoleCommand}"/>
-                    </DockPanel>
-                </TabItem>
-            </TabControl>
-        </DockPanel>
-        <DockPanel 
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="200"/>
+            </Grid.ColumnDefinitions>
+            <DockPanel Name="dockPanel_1"
             DockPanel.Dock="Top">
-            <StatusBar DockPanel.Dock="Top"
+                <StatusBar DockPanel.Dock="Top"
                        Panel.ZIndex="2">
-                <StatusBarItem BorderBrush="#FFCCCCCC" BorderThickness="1,1,1,1">
-                    <TextBlock x:Name="stateLine"
+                    <StatusBarItem BorderBrush="#FFCCCCCC" BorderThickness="1,1,1,1">
+                        <TextBlock x:Name="stateLine"
                                Text="{Binding AppState.State}"/>
-                </StatusBarItem>
-            </StatusBar>
-            <uc:MapControl CanSelect="{Binding CanSelected, Mode=TwoWay}"
+                    </StatusBarItem>
+                </StatusBar>
+                <uc:MapControl CanSelect="{Binding CanSelected, Mode=TwoWay}"
                            OffsetValue="{Binding OffsetValue, Mode=TwoWay}"
                            ScaleValue="{Binding ScaleValue, Mode=TwoWay}"
                            MapImageSource="{Binding MapImageSource}"
@@ -377,7 +67,365 @@
                            CanDisplay="{Binding TravelSalesmanViewModel.CanDisplay, Mode=TwoWay}"
                            CitiesPositionOfPath="{Binding ShortestPathViewModel.ShortestPath.CitiesPosition, Mode=TwoWay, IsAsync=True}"
                            SelectedRoutes="{Binding TravelSalesmanViewModel.SelectedRoutes, Mode=TwoWay, IsAsync=True}"/>
-        </DockPanel>
-    </DockPanel>
 
+            </DockPanel>
+
+            <GridSplitter Width="5" HorizontalAlignment="Right" VerticalAlignment="Stretch" ResizeBehavior="CurrentAndNext"/>
+            <DockPanel Grid.Column="1" Name="dockPanel_2" >
+                <DockPanel DockPanel.Dock="Right">
+                    <TabControl>
+                        <TabItem>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding AddingCitiesRoutesOpenCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <TabItem.Header>
+                                <TextBlock Text="Adding cities and routes"></TextBlock>
+                            </TabItem.Header>
+                            <TabItem.Content>
+                                <StackPanel Background="#FFF0F0F0">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition  />
+                                            <RowDefinition  />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <ToggleButton
+                                    Grid.Column="0"
+                                    Command ="{Binding AddNewCityCommand}"
+                                    VerticalAlignment="Top"
+                                    Content="Add a city"
+                                    x:Name="AddNewCityButton"/>
+                                        <ToggleButton                     
+                                    Grid.Column="1"
+                                    Command ="{Binding AddNewRouteCommand}"
+                                    VerticalAlignment="Top"
+                                    Content="Add a road"
+                                    x:Name="AddNewRouteButton"/>
+                                    </Grid>
+
+                                    <Grid x:Name ="CreatingCityPanel"
+                                Visibility="{Binding AppState.IsAbleToCreateCity, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition  />
+                                            <RowDefinition  />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label
+                                    Content="City Name: "
+                                    Target="{Binding cityName}"/>
+
+                                        <TextBox 
+                                    Grid.Column="1"
+                                    Text="{Binding MapViewModel.SelectedCity.Name, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                    Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
+                                    Style="{StaticResource StyleValidation}"
+                                    x:Name="cityName">
+                                            <TextBox.InputBindings>
+                                                <KeyBinding Command="{Binding CreateNewCityCommand}" Key="ENTER" CommandParameter="{Binding ElementName=cityName, Path=(Validation.HasError)}"/>
+                                            </TextBox.InputBindings>
+                                        </TextBox>
+
+                                        <Button
+                                    Grid.Row="1"
+                                    Content="Create"
+                                    Command="{Binding CreateNewCityCommand}" 
+                                    CommandParameter="{Binding ElementName=cityName, Path=(Validation.HasError)}"
+                                    Margin="-1,0,2,0">
+                                            <Button.Style>
+                                                <Style TargetType="{x:Type Button}">
+                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                    <Style.Triggers>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding (Validation.HasError), ElementName=cityName}" Value="False"/>
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="IsEnabled" Value="True"/>
+                                                        </MultiDataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+
+                                        <Button 
+                                    Grid.Column="1"
+                                    Grid.Row="1"
+                                    Content="Cancel"
+                                    Command="{Binding CancelCreatingCityCommand}"
+                                    CommandParameter="{Binding ElementName=AddNewCityButton}"/>
+                                    </Grid>
+
+                                    <Grid x:Name ="UpdatingCityPanel"
+                                Visibility="{Binding AppState.IsAbleToUpdateCity, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition  />
+                                            <RowDefinition  />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label
+                                    Content="Update the name: "
+                                    Target="{Binding cityNameUpdate}" Grid.ColumnSpan="2" Margin="0,-2,10,44" Grid.RowSpan="2"/>
+
+                                        <TextBox 
+                                    Text="{Binding MapViewModel.SelectedCity.Name, NotifyOnValidationError=true, ValidatesOnDataErrors=True}"
+                                    Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
+                                    Style="{StaticResource StyleValidation}"
+                                    x:Name="cityNameUpdate" Margin="1,20,1,37" Grid.ColumnSpan="2" Grid.Row="1" Height="25">
+                                            <TextBox.InputBindings>
+                                                <KeyBinding Command="{Binding UpdateCityCommand}" Key="ENTER" CommandParameter="{Binding ElementName=cityNameUpdate, Path=(Validation.HasError)}"/>
+                                            </TextBox.InputBindings>
+                                        </TextBox>
+
+                                        <Button
+                                    Grid.Row="1"
+                                    Content="Update"
+                                    Command="{Binding UpdateCityCommand}"
+                                    CommandParameter="{Binding ElementName=cityNameUpdate, Path=(Validation.HasError)}"
+                                    Margin="-1,51,2,10" Height="22">
+                                            <Button.Style>
+                                                <Style TargetType="{x:Type Button}">
+                                                    <Setter Property="IsEnabled" Value="True"/>
+                                                    <Style.Triggers>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding Text.Length, ElementName=cityNameUpdate, UpdateSourceTrigger=PropertyChanged}" Value="0"/>
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="IsEnabled" Value="False"/>
+                                                        </MultiDataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+
+                                        <Button 
+                                    Grid.Column="1"
+                                    Grid.Row="1"
+                                    Content="Delete"
+                                    Command="{Binding DeleteCityCommand}" Margin="0,51,0,0" VerticalAlignment="Top" Height="22"/>
+                                    </Grid>
+
+                                    <Grid x:Name="CreatingRoutePanel"
+                                Visibility="{Binding AppState.IsAbleToCreateRoute, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition  />
+                                            <RowDefinition  />
+                                            <RowDefinition  />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock 
+                                    DataContext="{Binding MapViewModel}" 
+                                    Grid.Column="0"
+                                    Text="{Binding SelectedRoute.FirstCity.Name}"/>
+                                        <TextBlock 
+                                    DataContext="{Binding MapViewModel}" 
+                                    Grid.Column="1" 
+                                    Text="{Binding SelectedRoute.SecondCity.Name}"/>
+
+                                        <Label Grid.Row="1"
+                                    Content="Distance: "/>
+                                        <TextBox
+                                    Grid.Column="1"
+                                    Grid.Row="1"                        
+                                    Text="{Binding MapViewModel.SelectedRoute.Distance, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                    Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
+                                    Style="{StaticResource StyleValidation}"
+                                    x:Name="routeDistance">
+                                            <TextBox.InputBindings>
+                                                <KeyBinding Command="{Binding CreateNewRouteCommand}" Key="ENTER" CommandParameter="{Binding ElementName=routeDistance, Path=(Validation.HasError)}"/>
+                                            </TextBox.InputBindings>
+                                        </TextBox>
+
+                                        <Button
+                                    Grid.Row="2"
+                                    Content="Create"
+                                    Command="{Binding CreateNewRouteCommand}"
+                                    CommandParameter="{Binding ElementName=routeDistance, Path=(Validation.HasError)}"
+                                    Margin="-1,0,2,0">
+                                            <Button.Style>
+                                                <Style TargetType="{x:Type Button}">
+                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                    <Style.Triggers>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding (Validation.HasError), ElementName=routeDistance}" Value="False"/>
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="IsEnabled" Value="True"/>
+                                                        </MultiDataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+
+                                        <Button 
+                                    Grid.Column="1"
+                                    Grid.Row="2"
+                                    Content="Cancel"
+                                    Command="{Binding CancelCreatingRouteCommand}"                                            
+                                    CommandParameter="{Binding ElementName=AddNewRouteButton}"/>
+                                    </Grid>
+                                    <TextBlock Text="{Binding WholeMap.Name}"/>
+                                    <Grid x:Name ="UpdatingRoutePanel"
+                    Visibility="{Binding AppState.IsAbleToUpdateRoute, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition  />
+                                            <RowDefinition  />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label
+                        Content="Update distance: "
+                        Target="{Binding routeUpdate}" Grid.ColumnSpan="2" Margin="0,-2,10,0" Grid.RowSpan="2" Height="41" VerticalAlignment="Top"/>
+
+                                        <TextBox
+                        Text="{Binding MapViewModel.SelectedRoute.Distance, NotifyOnValidationError=true, ValidatesOnDataErrors=True}"
+                        Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
+                        Style="{StaticResource StyleValidation}"
+                        x:Name="routeUpdate" Margin="1,20,1,37" Grid.ColumnSpan="2" Grid.Row="1" Height="25">
+                                            <TextBox.InputBindings>
+                                                <KeyBinding Command="{Binding UpdateRouteCommand}" Key="ENTER" CommandParameter="{Binding ElementName=routeUpdate, Path=(Validation.HasError)}"/>
+                                            </TextBox.InputBindings>
+                                        </TextBox>
+
+                                        <Button
+                        Grid.Row="1"
+                        Content="Update"
+                        Command="{Binding UpdateRouteCommand}"
+                        CommandParameter="{Binding ElementName=routeUpdate, Path=(Validation.HasError)}"
+                        Margin="-1,51,2,10" Height="22">
+                                            <Button.Style>
+                                                <Style TargetType="{x:Type Button}">
+                                                    <Setter Property="IsEnabled" Value="True"/>
+                                                    <Style.Triggers>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding Text.Length, ElementName=routeUpdate, UpdateSourceTrigger=PropertyChanged}" Value="0"/>
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="IsEnabled" Value="False"/>
+                                                        </MultiDataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+
+                                        <Button 
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        Content="Delete"
+                        Command="{Binding DeleteRouteCommand}" Margin="0,51,0,0" VerticalAlignment="Top" Height="22"/>
+                                    </Grid>
+                                </StackPanel>
+                            </TabItem.Content>
+                        </TabItem>
+                        <TabItem Header="Shortest path">
+                            <DockPanel>
+                                <Grid DockPanel.Dock="Top">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="64*" />
+                                        <ColumnDefinition Width="131*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="1*" />
+                                        <RowDefinition Height="1*" />
+                                    </Grid.RowDefinitions>
+                                    <ToggleButton Content="Select cities" 
+                                          Grid.Row="0"
+                                          Grid.ColumnSpan="2"
+                                          Command="{Binding PathResolverOpenCommand}" Margin="0,0,0,20" Grid.RowSpan="2"
+                                          x:Name="PathResolverButton"
+                                          />
+                                    <StackPanel x:Name="ShortestPathPanel" Grid.Row="1" Grid.ColumnSpan="2">
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsChecked,ElementName=PathResolverButton}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                        <Grid DockPanel.Dock="Top">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="1*" />
+                                                <ColumnDefinition Width="1*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="1*" />
+                                                <RowDefinition Height="1*" />
+                                            </Grid.RowDefinitions>
+                                            <Button Content="Solve"
+                                        Grid.Row="0" Grid.Column="0"
+                                        Command="{Binding CalculateShortestPathCommand}"                                            
+                                         IsEnabled="{Binding AppState.IsAbleToFindShortestPath}"
+                                            />
+                                            <Button Content="Cancel" Grid.Row="0" Grid.Column="1" Command="{Binding PathResolverCancelCommand}"
+                                             CommandParameter="{Binding ElementName=PathResolverButton}"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </Grid>
+
+                                <uc:ConsoleControl DataContext="{Binding ShortestPathViewModel}"
+                                               ConsoleContent="{Binding ConsoleResult,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                               ClearConsoleCommand="{Binding ClearConsoleCommand}"/>
+                            </DockPanel>
+                        </TabItem>
+                        <TabItem Header="Travelsalesman" DataContext="{Binding TravelSalesmanViewModel}">
+                            <DockPanel>
+                                <StatusBar DockPanel.Dock="Top">
+                                    <StatusBarItem Content="{Binding State}"/>
+                                </StatusBar>
+                                <ComboBox DockPanel.Dock="Top" SelectedIndex="{Binding SelectedMethodIndex}" IsEnabled="{Binding TravelsalesmanAcces}">
+                                    <ComboBoxItem Content="Annealing"/>
+                                    <ComboBoxItem Content="Nearest"/>
+                                    <ComboBoxItem Content="Quickest"/>
+                                </ComboBox>
+                                <Grid DockPanel.Dock="Top">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*" />
+                                        <ColumnDefinition Width="1*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="1*" />
+                                        <RowDefinition Height="1*" />
+                                    </Grid.RowDefinitions>
+                                    <ToggleButton Content="Select cities" 
+                                          Grid.Row="0"
+                                          Grid.Column="0"
+                                          IsChecked="{Binding CanSelectCities}"
+                                          IsEnabled="{Binding TravelsalesmanAcces}"
+                                          />
+                                    <Button Content="Cancel" Grid.Row="0" Grid.Column="1" Command="{Binding CancelSelectCitiesCommand}"/>
+                                    <Button Content="Resolve travelsalesman goal"
+                                    Grid.Row="1" Grid.ColumnSpan="2"
+                                    Command="{Binding ResolveTravelSalesmanCommand}"/>
+                                </Grid>
+                                <uc:ConsoleControl DockPanel.Dock="Top" 
+                            ConsoleContent="{Binding ConsoleResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            ClearConsoleCommand="{Binding ClearConsoleCommand}"/>
+                            </DockPanel>
+                        </TabItem>
+                    </TabControl>
+                </DockPanel>
+            </DockPanel>
+        </Grid>
+    </DockPanel>
 </Window>

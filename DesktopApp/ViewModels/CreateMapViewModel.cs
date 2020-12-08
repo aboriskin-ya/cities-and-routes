@@ -97,6 +97,28 @@ namespace DesktopApp.ViewModels
 
         private bool OnCanCreateMapExecuted(object p) => !string.IsNullOrEmpty(NewMap.Name) && !string.IsNullOrEmpty(MapPath);
 
+        private bool CheckImage(string fullPath)
+        {
+            if (Enum.IsDefined(typeof(AllowExtensions), Path.GetExtension(fullPath).Trim('.').ToLower()))
+            {
+                System.Drawing.Image img = System.Drawing.Image.FromFile(fullPath);
+                if (img.Width >= 1000 && img.Height >= 1000)
+                {
+                    return true;
+                }
+                else
+                {
+                    _messageBoxService.ShowError("Incorrect image size. Minimum size is 1000x1000.", "Error");
+                }
+            }
+            else
+            {
+                _messageBoxService.ShowError("Incorrect image file.", "Error");
+            }
+
+            return false;
+        }
+
         #endregion
 
         #region DragDropFile
@@ -122,10 +144,7 @@ namespace DesktopApp.ViewModels
 
                 string fullPath = Path.GetFullPath(dropPath[0]);
 
-                System.Drawing.Image img = System.Drawing.Image.FromFile(fullPath);
-
-                if (Enum.IsDefined(typeof(AllowExtensions), Path.GetExtension(dropPath[0]).Trim('.')) &&
-                    img.Width >= 1000 && img.Height >= 900)
+                if (CheckImage(fullPath))
                 {
                     InitializeProperties(Path.GetFileNameWithoutExtension(dropPath[0]), fullPath);
                 }
@@ -152,8 +171,11 @@ namespace DesktopApp.ViewModels
             var res = _openImageDialogService.ShowDialog();
             if (!String.IsNullOrEmpty(res))
             {
-                System.Drawing.Image img = System.Drawing.Image.FromFile(res);
-                InitializeProperties(Path.GetFileNameWithoutExtension(res), res);
+                if (CheckImage(res))
+                {
+                    System.Drawing.Image img = System.Drawing.Image.FromFile(res);
+                    InitializeProperties(Path.GetFileNameWithoutExtension(res), res);
+                }
             }
         }
 

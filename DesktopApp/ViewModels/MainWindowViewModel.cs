@@ -11,6 +11,7 @@ using Prism.Events;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -112,16 +113,31 @@ namespace DesktopApp.ViewModels
 
         #endregion
 
+        #region SelectCity
+        public ICommand SelectCityCommand { get => TravelSalesmanViewModel.SelectCityCommand; }
+        #endregion
+
         #region PathResolver
         public ICommand PathResolverOpenCommand => new PathResolverOpenCommand(p => OnCanPathResolverOpenExecute(p), p => OnPathResolverOpen(p));
 
         private void OnPathResolverOpen(object p)
         {
-            AppState.IsAbleToFindShortestPath = true;
+            AppState.IsAbleToPickShortestPath = !AppState.IsAbleToPickShortestPath;
         }
-        #region SelectCity
-        public ICommand SelectCityCommand { get => TravelSalesmanViewModel.SelectCityCommand; }
-        #endregion
+
+        public ICommand PathResolverCancelCommand => new PathResolverCancelCommand(p => OnCanPathResolverCancelExecute(p), p => OnPathResolverCancel(p));
+
+        private bool OnCanPathResolverCancelExecute(object p) => MapViewModel.IsHaveMap() && MapViewModel.RoutesCount() > 0;
+
+        private void OnPathResolverCancel(object PathResolverOpen)
+        {
+            (PathResolverOpen as ToggleButton).IsChecked = false;
+            Path = new PathModel();
+            AppState.IsAbleToPickShortestPath = false;
+            AppState.IsAbleToFindShortestPath = false;
+            ShortestPathViewModel.ShortestPath = new ShortestPath();
+        }
+
         private bool _canSelected;
         public bool CanSelected
         {
@@ -129,13 +145,13 @@ namespace DesktopApp.ViewModels
             set => Set<bool>(ref _canSelected, value);
         }
 
-        private bool OnCanPathResolverOpenExecute(object p) => MapViewModel.IsHaveMap() && MapViewModel.RoutesCount() > 0;
+        private bool OnCanPathResolverOpenExecute(object p) => MapViewModel.IsHaveMap() && MapViewModel.RoutesCount() > 0 && !AppState.IsAbleToFindShortestPath;
 
         public ICommand AddingCitiesRoutesOpenCommand => new AddingCitiesRoutesOpenCommand(p => OnCanOnAddingCitiesRoutesOpenExecute(p), p => OnAddingCitiesRoutesOpen(p));
 
         private void OnAddingCitiesRoutesOpen(object p)
         {
-            AppState.IsAbleToFindShortestPath = false;
+            AppState.IsAbleToPickShortestPath = false;
         }
 
         private bool OnCanOnAddingCitiesRoutesOpenExecute(object p) => true;
@@ -202,11 +218,11 @@ namespace DesktopApp.ViewModels
 
         private void OnAddNewCity(object p)
         {
-            AppState.IsAbleToSetCity = true;
+            AppState.IsAbleToSetCity = !AppState.IsAbleToSetCity;
             AppState.IsAbleToUpdateRoute = false;
         }
 
-        private bool OnCanAddNewCityExecute(object p) => !AppState.IsAbleToSetCity && !AppState.IsAbleToCreateCity && !AppState.IsAbleToUpdateCity && MapViewModel.IsHaveMap();
+        private bool OnCanAddNewCityExecute(object p) =>  !AppState.IsAbleToCreateCity && !AppState.IsAbleToUpdateCity && MapViewModel.IsHaveMap();
         #endregion
 
         #region CreateNewCityCommand
@@ -255,13 +271,12 @@ namespace DesktopApp.ViewModels
 
         private void OnAddNewRoute(object p)
         {
-            AppState.IsAbleToPickFirstCity = true;
+            AppState.IsAbleToPickFirstCity = !AppState.IsAbleToPickFirstCity;
             AppState.IsAbleToUpdateCity = false;
             AppState.IsAbleToUpdateRoute = false;
         }
 
         private bool OnCanAddNewRouteExecute(object p) => !AppState.IsAbleToCreateRoute
-            && !AppState.IsAbleToPickFirstCity
             && MapViewModel.CitiesCount() >= 2;
 
         #endregion
@@ -330,9 +345,10 @@ namespace DesktopApp.ViewModels
         #region CancelCreatingNewCityCommand
         public ICommand CancelCreatingCityCommand => new CancelCreatingCityCommand(p => OnCanCancelCreatingCityExecuted(p), p => OnCancelCreatingCityExecuted(p));
 
-        private void OnCancelCreatingCityExecuted(object p)
+        private void OnCancelCreatingCityExecuted(object Button)
         {
-            MapViewModel.CancelCreatingCityCommand.Execute(p);
+            (Button as ToggleButton).IsChecked = false;
+            MapViewModel.CancelCreatingCityCommand.Execute(Button);
             AppState.IsAbleToCreateCity = false;
         }
 

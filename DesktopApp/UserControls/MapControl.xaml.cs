@@ -538,7 +538,7 @@ namespace DesktopApp.UserControls
             }
 
             var city = City as City;
-            if (AppState.IsAbleToFindShortestPath)
+            if (AppState.IsAbleToPickShortestPath)
             {
                 if (Path.CityFromId == default)
                 {
@@ -549,7 +549,8 @@ namespace DesktopApp.UserControls
                 {
                     Path.CityToId = city.Id;
                     Path.CityToName = city.Name;
-                    AppState.IsAbleToFindShortestPath = false;
+                    AppState.IsAbleToPickShortestPath = false;
+                    AppState.IsAbleToFindShortestPath = true;
                 }
                 return;
             }
