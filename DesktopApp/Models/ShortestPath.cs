@@ -7,6 +7,7 @@ namespace DesktopApp.Models
 {
     class ShortestPath : BaseViewModel
     {
+        public bool IsPathFound { get; set; }
         public List<Guid> Path { get; set; }
 
         private string finalDistance;

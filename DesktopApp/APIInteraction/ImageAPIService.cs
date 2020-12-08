@@ -24,7 +24,7 @@ namespace DesktopApp.APIInteraction
 
             content.Add(streamContent, "file", System.IO.Path.GetFullPath(path));
 
-            HttpResponseMessage response = await APIClient.Client.PostAsync("image/upload", content);
+            HttpResponseMessage response = await APIClient.Client.PostAsync("api/image/upload", content);
 
             var responsePayload = new HttpResponsePayload<Guid>()
             {
@@ -40,7 +40,7 @@ namespace DesktopApp.APIInteraction
 
             try
             {
-                response = await APIClient.Client.GetAsync($"image/{guid}");
+                response = await APIClient.Client.GetAsync($"api/image/{guid}");
             }
             catch (HttpRequestException ex)
             {

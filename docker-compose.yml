@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  api:
+    container_name: cities-and-routes.api
+    build:
+        context: API
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Production
+    restart: unless-stopped
+    ports:
+        - 4444:5000

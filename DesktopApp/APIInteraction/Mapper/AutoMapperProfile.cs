@@ -27,9 +27,8 @@ namespace DesktopApp.APIInteraction.Mapper
             CreateMap<TravelSalesmanResponse, TravelSalesman>();
 
             CreateMap<Map, MapCreateDTO>();
-            CreateMap<Map, MapGetDTO>();
-            CreateMap<MapGetDTO, Map>();
-            CreateMap<MapIdNameGetDTO, Map>();
+            CreateMap<Map, MapGetDTO>().ReverseMap();
+            CreateMap<MapInfoGetDTO, MapInfo>();
             CreateMap<MapGetDTO, WholeMap>();
 
             CreateMap<Settings, SettingsUpdateDTO>();

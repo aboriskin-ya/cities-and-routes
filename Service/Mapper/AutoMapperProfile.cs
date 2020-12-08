@@ -10,7 +10,7 @@ namespace Service.Mapper
         {
             CreateMap<MapCreateDTO, Map>();
             CreateMap<Map, MapGetDTO>();
-            CreateMap<Map, MapIdNameGetDTO>();
+            CreateMap<MapInfo, MapInfoGetDTO>();
 
             CreateMap<CityCreateDTO, City>()
                 .ForMember("X", opt => opt.MapFrom(src => src.Position.X))

@@ -58,7 +58,7 @@ namespace Service.Services
         public IEnumerable<SettingsGetDTO> GetSettings()
         {
             _logger.LogInformation("Get all settings started");
-            return _mapper.Map<IEnumerable<Settings>, IEnumerable<SettingsGetDTO>>(_repository.GetAll());
+            return _mapper.Map<IEnumerable<Settings>, List<SettingsGetDTO>>(_repository.GetAll());
         }
 
         public SettingsGetDTO GetSettings(Guid id)
