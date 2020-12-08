@@ -515,6 +515,7 @@ namespace DesktopApp.UserControls
                 SelectedRoute = new Route();
                 Path = new PathModel();
                 CitiesPositionOfPath = new List<Point>();
+                SelectedRoutes = new ObservableCollection<Route>();
             }
         }
 

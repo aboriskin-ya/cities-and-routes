@@ -349,7 +349,7 @@
                                Text="{Binding AppState.State}"/>
                 </StatusBarItem>
             </StatusBar>
-            <uc:MapControl CanSelect="{Binding CanSelected, Mode=TwoWay}"
+            <uc:MapControl CanSelect="{Binding CanSelectedCitiesForPath, Mode=TwoWay}"
                            OffsetValue="{Binding OffsetValue, Mode=TwoWay}"
                            ScaleValue="{Binding ScaleValue, Mode=TwoWay}"
                            MapImageSource="{Binding MapImageSource}"
