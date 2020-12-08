@@ -122,11 +122,11 @@ namespace DesktopApp.ViewModels
         #region SelectCity
         public ICommand SelectCityCommand { get => TravelSalesmanViewModel.SelectCityCommand; }
         #endregion
-        private bool _canSelected;
-        public bool CanSelected
+        private bool canSelectedCitiesForPath;
+        public bool CanSelectedCitiesForPath
         {
-            get => _canSelected;
-            set => Set<bool>(ref _canSelected, value);
+            get => canSelectedCitiesForPath;
+            set => Set<bool>(ref canSelectedCitiesForPath, value);
         }
 
         private bool OnCanPathResolverOpenExecute(object p) => MapViewModel.IsHaveMap() && MapViewModel.RoutesCount() > 0;
@@ -136,6 +136,7 @@ namespace DesktopApp.ViewModels
         private void OnAddingCitiesRoutesOpen(object p)
         {
             AppState.IsAbleToFindShortestPath = false;
+            CanSelectedCitiesForPath = false;
         }
 
         private bool OnCanOnAddingCitiesRoutesOpenExecute(object p) => true;
@@ -349,6 +350,7 @@ namespace DesktopApp.ViewModels
             {
                 MapViewModel.DeleteCityCommand.Execute(p);
                 ShortestPathViewModel.InitializeModels();
+                TravelSalesmanViewModel.Initialize();                
                 AppState.IsAbleToUpdateCity = false;
                 AppState.IsSuccess = true;
             }
@@ -526,7 +528,7 @@ namespace DesktopApp.ViewModels
         private void TravelSalesmanViewModel_WasChanged(object sender, System.EventArgs e)
         {
             var travelsalesman = sender as TravelSalesmanViewModel;
-            CanSelected = travelsalesman.CanSelectCities;
+            CanSelectedCitiesForPath = travelsalesman.CanSelectCities;
         }
     }
 }

@@ -29,7 +29,12 @@ namespace DesktopApp.ViewModels
 
         public ObservableCollection<City> SelectedCities { get; set; }
 
-        public ObservableCollection<Route> SelectedRoutes { get; set; }
+        private ObservableCollection<Route> selecteRoutes;
+        public ObservableCollection<Route> SelectedRoutes
+        {
+            get => selecteRoutes;
+            set => Set(ref selecteRoutes, value, nameof(SelectedRoutes));
+        }
 
         #region ConsoleResult
         private string _consoleResult;
@@ -157,7 +162,7 @@ namespace DesktopApp.ViewModels
                 builder.Append($"{city.Payload.Name}->");
             }
             await GetSelectedRoutes(model.Payload.PreferableSequenceOfCities.ToArray(), request.MapId);
-            ConsoleResult += builder.ToString().Substring(0, builder.Length - 2);
+            ConsoleResult += builder.ToString().Substring(0, builder.Length - 2) + '\n';
             CanDisplay = true;
             RemoveCities();
         }
@@ -179,11 +184,12 @@ namespace DesktopApp.ViewModels
         }
         #endregion
         public int CitiesCount { get => SelectedCities.Count; }
-        private void Initialize()
+        public void Initialize()
         {
             State = StateLine.GetStatus(StateLineStatus.TravelSalesman_PushButton);
             SelectedMethodIndex = -1;
             SelectedCity = new City();
+            SelectedRoutes = new ObservableCollection<Route>();
             ConsoleResult = null;
         }
         private void RemoveCities()
