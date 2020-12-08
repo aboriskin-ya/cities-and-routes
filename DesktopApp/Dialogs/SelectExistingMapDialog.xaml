@@ -4,40 +4,100 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:fa="http://schemas.fontawesome.com/icons/"
         mc:Ignorable="d"
-        Title="Select existing map" Height="450" Width="300">
+        Title="Select existing map" Height="350" Width="550"
+        x:Name="selectExistingMapDialog">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding GetAllMapCommand}" />
+            <i:InvokeCommandAction Command="{Binding GetAllMapCommand}" 
+                                   CommandParameter="{Binding ElementName=selectExistingMapDialog}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <DockPanel LastChildFill="True">
-        <Grid DockPanel.Dock="Bottom">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Button 
-                Grid.Column="0" 
-                Content="Load"
-                Command="{Binding LoadMapCommand}"/>
-            <Button 
-                Grid.Column="1" 
-                Content="Delete"
-                Command="{Binding DeleteMapCommand}"/>
-        </Grid>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="0.15*"/>
+        </Grid.RowDefinitions>
 
-        <ListBox 
-            Grid.Column="1" 
-            ItemsSource="{Binding MapCollection}"
-            SelectedItem="{Binding SelectedMap}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Margin="5">
-                        <TextBlock FontSize="18" Text="{Binding Path=Name}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-    </DockPanel>
+        <fa:ImageAwesome Grid.Row="0"
+                         Icon="Solid_Spinner" 
+                         Spin="True"
+                         SpinDuration="1.5"
+                         Foreground="Black"  
+                         Height="30"
+                         HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+        <DataGrid Grid.Row="0" 
+                  ItemsSource="{Binding MapCollection}" 
+                  IsReadOnly="True" 
+                  AutoGenerateColumns="False" 
+                  SelectedItem="{Binding SelectedMap}"
+                  VerticalScrollBarVisibility="Auto"
+                  FontSize="15"
+                  x:Name="dataGrid">
+            <DataGrid.Style>
+                <Style TargetType="{x:Type DataGrid}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding MapCollection}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Style>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                <DataGridTextColumn Header=" Number of cities " Binding="{Binding CountCities}" Width="*"/>
+                <DataGridTextColumn Header=" Number of routes " Binding="{Binding CountRoutes}" Width="*"/>
+                <DataGridTextColumn Header=" Creating time " Binding="{Binding CreateOnUTC, StringFormat='{}{0:HH:mm dd.MM.yyyy}'}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <TextBlock Grid.Row="0"
+                   Text="A list of maps is empty"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Foreground="Gray">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Style.Setters>
+                        <Setter Property="Visibility" Value="Hidden"/>
+                    </Style.Setters>
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding ElementName=dataGrid, Path=Visibility}" Value="Visible" />
+                                <Condition Binding="{Binding MapCollection.Count}" Value="0"/>
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="TextBlock.Visibility" Value="Visible"/>
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+
+        </TextBlock>
+
+        <Grid Grid.Row="1" 
+              Margin="0 5 0 0">
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding MapCollection}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <Button HorizontalAlignment="Left" VerticalAlignment="Center"
+                    Content="Load"
+                    Command="{Binding LoadMapCommand}"
+                    CommandParameter="{Binding ElementName=selectExistingMapDialog}"
+                    Width="50"/>
+            <Button HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Content="Delete"
+                    Command="{Binding DeleteMapCommand}"
+                    Width="50"/>
+        </Grid>
+    </Grid>
 </Window>

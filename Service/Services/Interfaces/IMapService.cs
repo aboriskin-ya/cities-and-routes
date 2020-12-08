@@ -7,7 +7,7 @@ namespace Service.Services.Interfaces
     public interface IMapService
     {
         IEnumerable<MapGetDTO> GetMaps();
-        IEnumerable<MapIdNameGetDTO> GetMapsNames();
+        IEnumerable<MapInfoGetDTO> GetMapsInfo();
         MapGetDTO GetMap(Guid id);
         MapGetDTO CreateMap(MapCreateDTO dto);
         MapGetDTO UpdateMap(MapCreateDTO dto, Guid id);

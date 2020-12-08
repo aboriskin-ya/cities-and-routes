@@ -536,13 +536,19 @@ namespace DesktopApp.UserControls
                 SelectCityCommand.Execute(City);
                 return;
             }
+
+            var city = City as City;
             if (AppState.IsAbleToFindShortestPath)
             {
                 if (Path.CityFromId == default)
-                    Path.CityFromId = ((City)City).Id;
+                {
+                    Path.CityFromId = city.Id;
+                    Path.CityFromName = city.Name;
+                }
                 else
                 {
-                    Path.CityToId = ((City)City).Id;
+                    Path.CityToId = city.Id;
+                    Path.CityToName = city.Name;
                     AppState.IsAbleToFindShortestPath = false;
                 }
                 return;

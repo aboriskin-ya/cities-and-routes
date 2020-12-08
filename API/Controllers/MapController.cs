@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace API.Controllers
 {
-    [Route("map")]
+    [Route("api/map")]
     [ApiController]
     public class MapController : ControllerBase
     {
@@ -59,7 +59,7 @@ namespace API.Controllers
         [Route("getallnames")]
         public IActionResult GetMapName()
         {
-            var MapList = _service.GetMapsNames();
+            var MapList = _service.GetMapsInfo();
             if (MapList.Count() == 0)
             {
                 return NotFound(null);
@@ -96,6 +96,11 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public IActionResult DeleteMap(Guid id)
         {
+            if (id == new Guid("643D4972-F06B-4F4B-5705-08D895F56871"))
+            {
+                return BadRequest("Cannot delete the map for the demo");
+            }
+
             if (_service.DeleteMap(id))
             {
                 return Ok();

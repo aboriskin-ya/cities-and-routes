@@ -4,7 +4,10 @@
         xmlns:uc="clr-namespace:DesktopApp.UserControls"
         xmlns:vm="clr-namespace:DesktopApp.ViewModels"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"        
-        Title="City and Routes" Height="720" Width="1280" WindowStartupLocation="CenterScreen">
+        Height="720" Width="1280" WindowStartupLocation="CenterScreen"
+        Title="{Binding MapViewModel.WholeMap.Name, StringFormat=City and Routes ({0})}"
+        x:Name="mainWindow">
+
     <DockPanel x:Name="praparent">
         <Menu DockPanel.Dock="Top" 
             Height="25" 
@@ -14,15 +17,18 @@
                 Header="Map">
                 <MenuItem 
                     Header="Create new" 
-                    Command="{Binding ShowCreateMapDialogCommand}"/>
+                    Command="{Binding ShowCreateMapDialogCommand}"
+                    CommandParameter="{Binding ElementName=mainWindow}"/>
                 <MenuItem 
                     Header="Select existing"
-                    Command="{Binding ShowSelectExistingMapDialogCommand}">
+                    Command="{Binding ShowSelectExistingMapDialogCommand}"
+                    CommandParameter="{Binding ElementName=mainWindow}">
                 </MenuItem>
             </MenuItem>
             <MenuItem
                 Header="Settings"
-                Command="{Binding ShowSettingsDialogCommand}">
+                Command="{Binding ShowSettingsDialogCommand}"
+                CommandParameter="{Binding ElementName=mainWindow}">
             </MenuItem>
         </Menu>
         <DockPanel DockPanel.Dock="Right" Width="200">

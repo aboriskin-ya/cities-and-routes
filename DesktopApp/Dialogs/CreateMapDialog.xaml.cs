@@ -2,7 +2,7 @@
 
 namespace DesktopApp.Dialogs
 {
-    public partial class CreateMapDialog : Window
+    public partial class CreateMapDialog : Window, ICloseable
     {
         public CreateMapDialog()
         {

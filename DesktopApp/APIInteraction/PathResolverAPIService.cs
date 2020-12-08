@@ -17,7 +17,7 @@ namespace DesktopApp.APIInteraction
 
             try
             {
-                response = await APIClient.Client.PostAsJsonAsync("pathresolver/FindShortestPath", pathDTO);
+                response = await APIClient.Client.PostAsJsonAsync("api/pathresolver/FindShortestPath", pathDTO);
             }
             catch
             {
