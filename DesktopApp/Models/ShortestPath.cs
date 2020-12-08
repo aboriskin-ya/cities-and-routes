@@ -25,6 +25,12 @@ namespace DesktopApp.Models
             set => Set(ref processDuration, value, nameof(ProcessDuration));
         }
 
-        public ObservableCollection<Point> CitiesPosition { get; set; } = new ObservableCollection<Point>();
+        private List<Point> _citiesPosition;
+        public List<Point> CitiesPosition
+        {
+            get => _citiesPosition;
+            set => Set(ref _citiesPosition, value);
+            
+        }
     }
 }

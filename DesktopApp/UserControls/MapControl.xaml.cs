@@ -431,14 +431,14 @@ namespace DesktopApp.UserControls
         public static readonly DependencyProperty PathProperty =
         DependencyProperty.Register(nameof(Path), typeof(PathModel), typeof(MapControl));
 
-        public ObservableCollection<Point> CitiesPositionOfPath
+        public List<Point> CitiesPositionOfPath
         {
-            get { return (ObservableCollection<Point>)GetValue(CitiesPositionOfPathProperty); }
+            get { return (List<Point>)GetValue(CitiesPositionOfPathProperty); }
             set { SetValue(CitiesPositionOfPathProperty, value); }
         }
 
         public static readonly DependencyProperty CitiesPositionOfPathProperty =
-        DependencyProperty.Register(nameof(CitiesPositionOfPath), typeof(ObservableCollection<Point>), typeof(MapControl));
+        DependencyProperty.Register(nameof(CitiesPositionOfPath), typeof(List<Point>), typeof(MapControl));
 
         #endregion
 
