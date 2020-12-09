@@ -4,6 +4,7 @@ using DesktopApp.Services;
 using DesktopApp.Services.Commands;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows.Controls.Primitives;
 
 namespace DesktopApp.ViewModels
 {
@@ -135,9 +136,10 @@ namespace DesktopApp.ViewModels
 
         private bool OnCanAddRouteCollection() => true;
 
-        public CancelCreatingRouteCommand CancelCreatingRouteCommand { get => new CancelCreatingRouteCommand(p => OnCanRemoveRouteFromCollection(), m => OnRemoveRouteFromCollection()); }
-        private void OnRemoveRouteFromCollection()
+        public CancelCreatingRouteCommand CancelCreatingRouteCommand { get => new CancelCreatingRouteCommand(p => OnCanRemoveRouteFromCollection(), m => OnRemoveRouteFromCollection(m)); }
+        private void OnRemoveRouteFromCollection(object Button)
         {
+            (Button as ToggleButton).IsChecked = false;
             SelectedRoute = new Route();
         }
         private bool OnCanRemoveRouteFromCollection() => true;
@@ -166,7 +168,7 @@ namespace DesktopApp.ViewModels
             else
             {
                 _messageBoxService.ShowError("An error occured. Please try it again.", "Error occured");
-                OnRemoveRouteFromCollection();
+                SelectedRoute = new Route();
             }
         }
         private bool OnCanDeleteRouteFromCollection() => true;

@@ -15,7 +15,6 @@
                 <ResourceDictionary Source="Resources\Triggers\GrowTrigger.xaml"/>
                 <ResourceDictionary Source="Resources\Styles\CityPointStyles.xaml"/>
                 <ResourceDictionary Source="Resources\Styles\RouteLineStyles.xaml"/>
-
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

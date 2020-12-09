@@ -126,6 +126,18 @@ namespace DesktopApp.Models
 
         #region FindShortestPathPossibility
 
+        private bool _isAbleToPickShortestPath = false;
+        public bool IsAbleToPickShortestPath
+        {
+            get => _isAbleToPickShortestPath;
+            set
+            {
+                _isAbleToPickShortestPath = value;
+                RaisePropertyChanged(nameof(IsAbleToPickShortestPath));
+                State = PathStatusUpdate();
+            }
+        }
+
         private bool _isAbleToFindShortestPath = false;
         public bool IsAbleToFindShortestPath
         {
@@ -193,7 +205,7 @@ namespace DesktopApp.Models
 
         private string PathStatusUpdate()
         {
-            if (IsAbleToFindShortestPath)
+            if (IsAbleToPickShortestPath)
                 return StateLine.Show(StateLineStatus.FindShortestPath);
 
             return StateLine.Show(StateLineStatus.Empty);
