@@ -22,18 +22,14 @@ namespace DesktopApp.UserControls
             get { return (bool)GetValue(IsCheckedProperty); }
             set { SetValue(IsCheckedProperty, value); }
         }
-
-
         public static readonly DependencyProperty IsCheckedProperty =
             DependencyProperty.Register("IsChecked", typeof(bool), typeof(ToggleSwitch));
-
 
         public string SwitchContent
         {
             get { return (string)GetValue(SwitchContentProperty); }
             set { SetValue(SwitchContentProperty, value); }
         }
-
         public static readonly DependencyProperty SwitchContentProperty =
             DependencyProperty.Register("SwitchContent", typeof(string), typeof(ToggleSwitch));
 
