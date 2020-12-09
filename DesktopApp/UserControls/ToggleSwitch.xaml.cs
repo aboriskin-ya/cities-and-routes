@@ -1,7 +1,10 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace DesktopApp.UserControls
 {
@@ -10,14 +13,9 @@ namespace DesktopApp.UserControls
     /// </summary>
     public partial class ToggleSwitch : UserControl
     {
-        private SolidColorBrush _checkedColor;
-        private SolidColorBrush _unchekedColorBrush;
         public ToggleSwitch()
         {
             InitializeComponent();
-            _checkedColor = new SolidColorBrush(Color.FromArgb(100, 10, 224, 43));
-            _unchekedColorBrush = new SolidColorBrush(Color.FromArgb(100, 186, 186, 196));
-            Initialize(IsChecked);
         }
         public bool IsChecked
         {
@@ -28,7 +26,6 @@ namespace DesktopApp.UserControls
 
         public static readonly DependencyProperty IsCheckedProperty =
             DependencyProperty.Register("IsChecked", typeof(bool), typeof(ToggleSwitch));
-
 
 
         public string SwitchContent
@@ -44,32 +41,12 @@ namespace DesktopApp.UserControls
         {
             if (IsChecked)
             {
-                Background.Fill = _unchekedColorBrush;
                 IsChecked = false;
-                button.Margin = new Thickness(-620, 0, 0, 0);
             }
             else
             {
-                Background.Fill = _checkedColor;
                 IsChecked = true;
-                button.Margin = new Thickness(620, 0, 0, 0);
             }
         }
-        private void Initialize(bool isChecked)
-        {
-            if (isChecked)
-            {
-                Background.Fill = _unchekedColorBrush;
-                IsChecked = false;
-                button.Margin = new Thickness(-620, 0, 0, 0);
-            }
-            else
-            {
-                Background.Fill = _checkedColor;
-                IsChecked = true;
-                button.Margin = new Thickness(620, 0, 0, 0);
-            }
-        }
-        
     }
 }

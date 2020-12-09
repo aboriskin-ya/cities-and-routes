@@ -13,15 +13,15 @@
                 <ColumnDefinition Width="0.2*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
-            <Rectangle x:Name="Background" Stroke="Black" RadiusX="160" RadiusY="160" Grid.Column="0"/>
+            <Rectangle x:Name="Background" Stroke="Black" RadiusX="160" RadiusY="160" Grid.Column="0" Style="{StaticResource DefaultBack}"/>
             <Ellipse Name="button"
                      Grid.Column="0"
                      StrokeThickness="1" 
                      Stroke="Black"
-                     Fill="#FFBABABA" 
+                     Fill="#FF888888" 
                      Width="330"
                      Height="330"
-                     Margin="-620,0,0,0"
+                     Style="{StaticResource DefaultBtn}"
                     />
             <TextBlock Grid.Column="2" Margin="30,0,0,0" FontSize="260" Text="{Binding ElementName=switch, Path=SwitchContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                        VerticalAlignment="Center"/>

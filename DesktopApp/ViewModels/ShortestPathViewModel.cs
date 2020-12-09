@@ -47,7 +47,6 @@ namespace DesktopApp.ViewModels
         {
             ConsoleResult = "";
             ShortestPath.CitiesPosition = new List<Point>();
-
         }
 
         public ICommand CalculateShortestPathCommand => new RelayCommand(p => OnCalculateShortestPath(p), p => OnCanCalculateShortestPathExecute(p));

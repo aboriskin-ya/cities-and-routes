@@ -201,8 +201,8 @@
                                          Style="{StaticResource CityStyle}"/>
 
                                 <Label Content="{Binding Name}"
-                                        Visibility="{Binding ElementName=mControl,
-                                                    Path=SettingsMap.DisplayingImage, 
+                                       Visibility="{Binding ElementName=mControl,
+                                                    Path=SettingsMap.DisplayCitiesNames, 
                                                     Converter={StaticResource BooleanToVisibilityConverter}}"
                                        Canvas.Bottom="{Binding ElementName=canvasOfCity, Path=Height}"
                                        FontWeight="ExtraBlack"
