@@ -1,6 +1,8 @@
 ﻿using DesktopApp.Models;
 using DesktopApp.Resources;
 using DesktopApp.Services.Helper;
+using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -494,6 +496,12 @@ namespace DesktopApp.UserControls
             }
             else
             {
+                Guid[] SelectedCities = { SelectedRoute.FirstCity.Id, city.Id };
+                foreach (var Route in RouteCollection) {
+                    if (SelectedCities.Contains(Route.FirstCity.Id) && SelectedCities.Contains(Route.SecondCity.Id)) {
+                        return;
+                    }
+                }
                 SelectedRoute.SecondCity = city;
                 AppState.IsAbleToCreateRoute = true;
                 AppState.IsAbleToPickSecondCity = false;
@@ -515,6 +523,7 @@ namespace DesktopApp.UserControls
                 SelectedRoute = new Route();
                 Path = new PathModel();
                 CitiesPositionOfPath = new List<Point>();
+                SelectedRoutes = new ObservableCollection<Route>();
             }
         }
 
@@ -530,7 +539,7 @@ namespace DesktopApp.UserControls
             }
 
             var city = City as City;
-            if (AppState.IsAbleToFindShortestPath)
+            if (AppState.IsAbleToPickShortestPath)
             {
                 if (Path.CityFromId == default)
                 {
@@ -541,7 +550,8 @@ namespace DesktopApp.UserControls
                 {
                     Path.CityToId = city.Id;
                     Path.CityToName = city.Name;
-                    AppState.IsAbleToFindShortestPath = false;
+                    AppState.IsAbleToPickShortestPath = false;
+                    AppState.IsAbleToFindShortestPath = true;
                 }
                 return;
             }

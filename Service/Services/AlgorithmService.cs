@@ -55,7 +55,9 @@ namespace Service.Services
             Map map = _mapRepository.GetWholeMap(request.MapId);
             if (request.SelectedCities.Count() > 0 && map != null)
             {
-                Graph graph = _pathToGraphService.MapToGraph(map, request.SelectedCities);               
+                Graph graph = _pathToGraphService.MapToGraph(map, request.SelectedCities);
+                if (graph == null)
+                    return default;
                 return await Task.Run(() => {
                     var result = _annealingResolver.Resolve(graph);
                     return ExpandPathToFullMap(result, map);
@@ -70,6 +72,8 @@ namespace Service.Services
             if (requestBody.SelectedCities.Count() > 0 && map != null)
             {
                 Graph graph = _pathToGraphService.MapToGraph(map, requestBody.SelectedCities);
+                if (graph == null)
+                    return default;
                 return await Task.Run(() => {
                     var result = _nearestResolver.Solve(graph);
                     return ExpandPathToFullMap(result, map);
@@ -85,7 +89,16 @@ namespace Service.Services
             var sequenceList = result.PreferableSequenceOfCities.ToList();
             var citiesIdList = map.Cities.Select(c => c.Id).ToList();
             var newSequence = new List<Guid>();
-            Graph graphFullMap = _pathToGraphService.MapToGraph(map, citiesIdList);
+            Graph graphFullMap = new Graph();
+            foreach (City City in map.Cities)
+            {
+               graphFullMap.AddVertex(City.Id.ToString());
+            }
+
+            foreach (Route Route in map.Routes)
+            {
+                graphFullMap.AddEdge(Route.FirstCityId.ToString(), Route.SecondCityId.ToString(), Route.Distance);
+            }
             for (int i = 0; i < sequenceList.Count - 1; i++)
             {
                 if (graphFullMap.GetEdge(sequenceList[i].ToString(), sequenceList[i + 1].ToString()) == null)
@@ -100,6 +113,15 @@ namespace Service.Services
                 }
             }
             newSequence.Add(sequenceList.Last());
+            if (graphFullMap.GetEdge(sequenceList.Last().ToString(), sequenceList[0].ToString()) == null)
+            {
+                var middlePart = new ShortestPathResolverService().FindShortestPath(graphFullMap, sequenceList.Last().ToString(), sequenceList[0].ToString()).Path;
+                newSequence.AddRange(middlePart);
+            }
+            else
+            {
+                newSequence.Add(sequenceList[0]);
+            }
             result.PreferableSequenceOfCities = newSequence;
             return result;
         }
