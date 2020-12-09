@@ -124,11 +124,23 @@ namespace DesktopApp.ViewModels
         {
             AppState.IsAbleToPickShortestPath = !AppState.IsAbleToPickShortestPath;
         }
-        #region SelectCity
-        public ICommand SelectCityCommand { get => TravelSalesmanViewModel.SelectCityCommand; }
-        #endregion
+
         private bool canSelectedCitiesForPath;
         public bool CanSelectedCitiesForPath
+        {
+            get => canSelectedCitiesForPath;
+            set => Set<bool>(ref canSelectedCitiesForPath, value);
+        }
+
+        public ICommand AddingCitiesRoutesOpenCommand => new AddingCitiesRoutesOpenCommand(p => OnCanOnAddingCitiesRoutesOpenExecute(p), p => OnAddingCitiesRoutesOpen(p));
+
+        private void OnAddingCitiesRoutesOpen(object p)
+        {
+            AppState.IsAbleToFindShortestPath = false;
+            CanSelectedCitiesForPath = false;
+        }
+
+        private bool OnCanOnAddingCitiesRoutesOpenExecute(object p) => true;
 
         public ICommand PathResolverCancelCommand => new PathResolverCancelCommand(p => OnCanPathResolverCancelExecute(p), p => OnPathResolverCancel(p));
 
@@ -151,18 +163,6 @@ namespace DesktopApp.ViewModels
         }
 
         private bool OnCanPathResolverOpenExecute(object p) => MapViewModel.IsHaveMap() && MapViewModel.RoutesCount() > 0 && !AppState.IsAbleToFindShortestPath;
-
-        public ICommand AddingCitiesRoutesOpenCommand => new AddingCitiesRoutesOpenCommand(p => OnCanOnAddingCitiesRoutesOpenExecute(p), p => OnAddingCitiesRoutesOpen(p));
-
-        private void OnAddingCitiesRoutesOpen(object p)
-        {
-            AppState.IsAbleToFindShortestPath = false;
-            CanSelectedCitiesForPath = false;
-        }
-
-        private bool OnCanOnAddingCitiesRoutesOpenExecute(object p) => true;
-
-        public ICommand CalculateShortestPathCommand => new RelayCommand(p => OnCalculateShortestPath(p), p => OnCanCalculateShortestPathExecute(p));
 
         private void OnCalculateShortestPath(object p)
         {
