@@ -97,8 +97,7 @@ namespace DesktopApp.ViewModels
             builder.Append($"\nProcess` duration: {shortestPath.ProcessDuration}\n" +
                             $"Calculated distance: {shortestPath.FinalDistance}\n");
             ConsoleResult += builder.ToString();
-            
-        }
+            }
 
         private bool OnCanCalculateShortestPathExecute(object p) => true;
 
