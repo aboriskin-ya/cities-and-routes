@@ -73,8 +73,8 @@ namespace DesktopApp.ViewModels
                 else
                 {
                     MapCollection.Remove(SelectedMap);
-                }                
-            }            
+                }
+            }
         }
 
         private bool OnCanDeleteMapExecuted(object p) => SelectedMap != default;
@@ -102,6 +102,6 @@ namespace DesktopApp.ViewModels
 
         #endregion
 
-        
+
     }
 }

@@ -1,7 +1,6 @@
 ﻿using DesktopApp.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace DesktopApp.Models
@@ -30,7 +29,7 @@ namespace DesktopApp.Models
         {
             get => _citiesPosition;
             set => Set(ref _citiesPosition, value);
-            
+
         }
     }
 }
