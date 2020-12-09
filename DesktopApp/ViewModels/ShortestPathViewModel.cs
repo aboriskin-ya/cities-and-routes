@@ -3,6 +3,7 @@ using DesktopApp.Models;
 using DesktopApp.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -84,7 +85,7 @@ namespace DesktopApp.ViewModels
             foreach (var guid in shortestPath.Path)
             {
                 var city = await GetCityAsync(guid);
-                if (city != null)
+                if(city != null)
                 {
                     cities.Add(new Point { X = city.X, Y = city.Y });
                     ConsoleResult += $"{city.Name}->";
@@ -96,8 +97,7 @@ namespace DesktopApp.ViewModels
             builder.Append($"\nProcess` duration: {shortestPath.ProcessDuration}\n" +
                             $"Calculated distance: {shortestPath.FinalDistance}\n");
             ConsoleResult += builder.ToString();
-
-        }
+            }
 
         private bool OnCanCalculateShortestPathExecute(object p) => true;
 
