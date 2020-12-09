@@ -124,6 +124,11 @@ namespace DesktopApp.ViewModels
         {
             AppState.IsAbleToPickShortestPath = !AppState.IsAbleToPickShortestPath;
         }
+        #region SelectCity
+        public ICommand SelectCityCommand { get => TravelSalesmanViewModel.SelectCityCommand; }
+        #endregion
+        private bool canSelectedCitiesForPath;
+        public bool CanSelectedCitiesForPath
 
         public ICommand PathResolverCancelCommand => new PathResolverCancelCommand(p => OnCanPathResolverCancelExecute(p), p => OnPathResolverCancel(p));
 
@@ -141,8 +146,8 @@ namespace DesktopApp.ViewModels
         private bool _canSelected;
         public bool CanSelected
         {
-            get => _canSelected;
-            set => Set<bool>(ref _canSelected, value);
+            get => canSelectedCitiesForPath;
+            set => Set<bool>(ref canSelectedCitiesForPath, value);
         }
 
         private bool OnCanPathResolverOpenExecute(object p) => MapViewModel.IsHaveMap() && MapViewModel.RoutesCount() > 0 && !AppState.IsAbleToFindShortestPath;
@@ -151,7 +156,8 @@ namespace DesktopApp.ViewModels
 
         private void OnAddingCitiesRoutesOpen(object p)
         {
-            AppState.IsAbleToPickShortestPath = false;
+            AppState.IsAbleToFindShortestPath = false;
+            CanSelectedCitiesForPath = false;
         }
 
         private bool OnCanOnAddingCitiesRoutesOpenExecute(object p) => true;
@@ -365,6 +371,7 @@ namespace DesktopApp.ViewModels
             {
                 MapViewModel.DeleteCityCommand.Execute(p);
                 ShortestPathViewModel.InitializeModels();
+                TravelSalesmanViewModel.Initialize();                
                 AppState.IsAbleToUpdateCity = false;
                 AppState.IsSuccess = true;
             }
@@ -542,7 +549,7 @@ namespace DesktopApp.ViewModels
         private void TravelSalesmanViewModel_WasChanged(object sender, System.EventArgs e)
         {
             var travelsalesman = sender as TravelSalesmanViewModel;
-            CanSelected = travelsalesman.CanSelectCities;
+            CanSelectedCitiesForPath = travelsalesman.CanSelectCities;
         }
     }
 }

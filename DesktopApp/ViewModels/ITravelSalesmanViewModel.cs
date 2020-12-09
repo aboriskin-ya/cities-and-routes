@@ -21,5 +21,6 @@ namespace DesktopApp.ViewModels
         ICommand ResolveTravelSalesmanCommand { get; }
         ICommand ClearConsoleCommand { get; }
         int CitiesCount { get; }
+        void Initialize();
     }
 }
