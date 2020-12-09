@@ -55,7 +55,9 @@ namespace Service.Services
             Map map = _mapRepository.GetWholeMap(request.MapId);
             if (request.SelectedCities.Count() > 0 && map != null)
             {
-                Graph graph = _pathToGraphService.MapToGraph(map, request.SelectedCities);               
+                Graph graph = _pathToGraphService.MapToGraph(map, request.SelectedCities);
+                if (graph == null)
+                    return default;
                 return await Task.Run(() => {
                     var result = _annealingResolver.Resolve(graph);
                     return ExpandPathToFullMap(result, map);
@@ -70,6 +72,8 @@ namespace Service.Services
             if (requestBody.SelectedCities.Count() > 0 && map != null)
             {
                 Graph graph = _pathToGraphService.MapToGraph(map, requestBody.SelectedCities);
+                if (graph == null)
+                    return default;
                 return await Task.Run(() => {
                     var result = _nearestResolver.Solve(graph);
                     return ExpandPathToFullMap(result, map);
