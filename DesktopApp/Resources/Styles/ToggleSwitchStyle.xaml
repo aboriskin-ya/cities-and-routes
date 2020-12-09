@@ -24,6 +24,5 @@
                 <Setter Property="Fill" Value="{StaticResource UnCheckedColor}"/>
             </DataTrigger>
         </Style.Triggers>
-        
     </Style>
 </ResourceDictionary>
