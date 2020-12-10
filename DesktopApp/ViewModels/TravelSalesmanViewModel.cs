@@ -154,7 +154,7 @@ namespace DesktopApp.ViewModels
             var model = await _travelSalesmanService.Resolve(request, SelectedMethodIndex);
             if (!model.IsSuccessful)
             {
-                ConsoleResult += "\nFailed result.\n";
+                ConsoleResult += "\nA path is not found.\n";
             }
             else
             {

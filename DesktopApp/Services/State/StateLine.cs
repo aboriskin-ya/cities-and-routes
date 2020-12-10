@@ -42,10 +42,10 @@
         {
             switch (states)
             {
-                case StateLineStatus.ResolverPushButton: return "Press the button 'Select cities' to begin a procedure choicing cities";
+                case StateLineStatus.ResolverPushButton: return "Press the button 'Select cities' to start a selection procedure";
                 case StateLineStatus.ResolverSelectCities: return "Select cities for resolving a goal";
                 case StateLineStatus.ResolverResolvingGoal: return "Resolving process...";
-                case StateLineStatus.ResolverDone: return "The goal was resolved. Check the console above here";
+                case StateLineStatus.ResolverDone: return "The goal was resolved. Check the console below";
             }
             return "";
         }
