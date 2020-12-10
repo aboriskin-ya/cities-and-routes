@@ -3,6 +3,7 @@ using DesktopApp.Models;
 using DesktopApp.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,7 +22,6 @@ namespace DesktopApp.ViewModels
             _pathResolverAPIService = pathResolverAPIService;
             _cityAPIService = cityAPIService;
             _messageBoxService = messageBoxService;
-
             InitializeModels();
         }
 
@@ -46,7 +46,7 @@ namespace DesktopApp.ViewModels
         private void OnClearConsoleExecuted(object p)
         {
             ConsoleResult = "";
-            ShortestPath.CitiesPosition.RemoveAll(t => t != null);
+            ShortestPath.CitiesPosition = new List<Point>();
         }
 
         public ICommand CalculateShortestPathCommand => new RelayCommand(p => OnCalculateShortestPath(p), p => OnCanCalculateShortestPathExecute(p));
@@ -91,18 +91,20 @@ namespace DesktopApp.ViewModels
                     ConsoleResult += $"{city.Name}->";
                 }
             }
+            ShortestPath = shortestPath;
+            ShortestPath.CitiesPosition = cities;
             ConsoleResult = ConsoleResult.Substring(0, ConsoleResult.Length - 2);
             builder.Append($"\nProcess` duration: {shortestPath.ProcessDuration}\n" +
                             $"Calculated distance: {shortestPath.FinalDistance}\n");
             ConsoleResult += builder.ToString();
-            ShortestPath.CitiesPosition = cities;
-        }
+            }
 
         private bool OnCanCalculateShortestPathExecute(object p) => true;
 
         public void InitializeModels()
         {
             ShortestPath = new ShortestPath();
+            ShortestPath.CitiesPosition = new List<Point>();
             ConsoleResult = "";
         }
     }

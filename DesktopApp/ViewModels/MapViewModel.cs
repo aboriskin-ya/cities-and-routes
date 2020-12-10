@@ -16,8 +16,7 @@ namespace DesktopApp.ViewModels
 
         public MapViewModel(ICityAPIService cityAPIService,
                IMessageBoxService messageBoxService,
-               IRouteAPIService routeAPIService,
-               ITravelSalesmanService travelSalesmanService)
+               IRouteAPIService routeAPIService)
         {
             _cityAPIService = cityAPIService;
             _messageBoxService = messageBoxService;

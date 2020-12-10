@@ -2,9 +2,9 @@
 using DesktopApp.Resources;
 using DesktopApp.Services.Helper;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -497,8 +497,10 @@ namespace DesktopApp.UserControls
             else
             {
                 Guid[] SelectedCities = { SelectedRoute.FirstCity.Id, city.Id };
-                foreach (var Route in RouteCollection) {
-                    if (SelectedCities.Contains(Route.FirstCity.Id) && SelectedCities.Contains(Route.SecondCity.Id)) {
+                foreach (var Route in RouteCollection)
+                {
+                    if (SelectedCities.Contains(Route.FirstCity.Id) && SelectedCities.Contains(Route.SecondCity.Id))
+                    {
                         return;
                     }
                 }

@@ -176,15 +176,15 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Canvas>
-                                <Line Style="{StaticResource SelectedRoute}"/>
+                                <Line Style="{StaticResource foundPath}"/>
                             </Canvas>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <Path Stroke="{Binding ElementName=mControl, Path=SettingsMap.EdgeColor, Converter={StaticResource StringToColorInvertConverter}}"
+                <Path Stroke="{Binding ElementName=mControl, Path=SettingsMap.FoundPathColor, Converter={StaticResource StringToColorConverter}}"
                       Data="{StaticResource shortestPathGeometry}"
-                      Style="{StaticResource EdgeSizeStyle}">
+                      Style="{StaticResource FoundPathSize}">
                 </Path>
                 
                 <ItemsControl 
@@ -201,6 +201,9 @@
                                          Style="{StaticResource CityStyle}"/>
 
                                 <Label Content="{Binding Name}"
+                                       Visibility="{Binding ElementName=mControl,
+                                                    Path=SettingsMap.DisplayCitiesNames, 
+                                                    Converter={StaticResource BooleanToVisibilityConverter}}"
                                        Canvas.Bottom="{Binding ElementName=canvasOfCity, Path=Height}"
                                        FontWeight="ExtraBlack"
                                        FontSize="{Binding ElementName=city, Path=Width}"

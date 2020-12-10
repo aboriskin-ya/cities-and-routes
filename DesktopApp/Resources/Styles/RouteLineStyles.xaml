@@ -1,6 +1,16 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <Style x:Key="FoundPathSize">
+        <Setter Property="Line.StrokeThickness">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource SizeCorrectorConverter}">
+                    <Binding ElementName="mControl" Path="SettingsMap.FoundPathSize"/>
+                    <Binding ElementName="mControl" Path="ScaleValue"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style x:Key="EdgeSizeStyle">
         <Setter Property="Line.StrokeThickness">
             <Setter.Value>
@@ -115,16 +125,46 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style BasedOn="{StaticResource LineRoute}" TargetType="Line" x:Key="SelectedRoute">
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding ElementName=mControl, Path=CanDisplay}" Value="true">
-                <Setter Property="Stroke" Value="Black"/>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding ElementName=mControl, Path=CanDisplay}" Value="false">
-                <Setter Property="Stroke"  Value="{Binding ElementName=mControl, Path=SettingsMap.EdgeColor, 
+
+    <Style x:Key="foundPath" TargetType="Line" BasedOn="{StaticResource FoundPathSize}">
+        <Setter Property="Line.Stroke" Value="{Binding ElementName=mControl, Path=SettingsMap.FoundPathColor, 
                          Converter={StaticResource StringToColorConverter}}"/>
-            </DataTrigger>
-        </Style.Triggers>
+        <Setter Property="Line.Y1">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource PositionCorrectorConverter}">
+                    <Binding Path="FirstCity.Y"/>
+                    <Binding ElementName="mControl" Path="ActualHeight"/>
+                    <Binding ElementName="mControl" Path="InitialHeight"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Line.X1">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource PositionCorrectorConverter}">
+                    <Binding Path="FirstCity.X"/>
+                    <Binding ElementName="mControl" Path="ActualWidth"/>
+                    <Binding ElementName="mControl" Path="InitialWidth"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Line.Y2">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource PositionCorrectorConverter}">
+                    <Binding Path="SecondCity.Y"/>
+                    <Binding ElementName="mControl" Path="ActualHeight"/>
+                    <Binding ElementName="mControl" Path="InitialHeight"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Line.X2">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource PositionCorrectorConverter}">
+                    <Binding Path="SecondCity.X"/>
+                    <Binding ElementName="mControl" Path="ActualWidth"/>
+                    <Binding ElementName="mControl" Path="InitialWidth"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>
     
