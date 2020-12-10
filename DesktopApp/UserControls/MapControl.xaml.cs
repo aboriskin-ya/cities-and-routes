@@ -522,14 +522,11 @@ namespace DesktopApp.UserControls
                 SelectedCity = new City();
                 SelectedRoute = new Route();
                 Path = new PathModel();
-                CitiesPositionOfPath = new List<Point>();
-                SelectedRoutes = new ObservableCollection<Route>();
             }
         }
 
         private void City_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
             Panel panel = sender as Panel;
             var City = panel.DataContext;
             if (CanSelect)
@@ -560,13 +557,13 @@ namespace DesktopApp.UserControls
             {
                 AppState.IsAbleToUpdateCity = true;
                 AppState.IsAbleToUpdateRoute = false;
-                SelectedCity = City as City;
+                SelectedCity = city;
             }
 
             if (!AppState.IsAbleToPickFirstCity)
                 return;
 
-            MapControl_SetCityToRoute(City as City);
+            MapControl_SetCityToRoute(city);
         }
 
         private void Route_MouseDown(object sender, MouseButtonEventArgs e)

@@ -28,7 +28,7 @@ namespace Service.Services
         public IEnumerable<RouteGetDTO> GetRoutes()
         {
             _logger.LogInformation("Get routes started");
-            return _mapper.Map<IEnumerable<Route>, List<RouteGetDTO>>(_repository.GetAll());
+            return _mapper.Map<List<RouteGetDTO>>(_repository.GetAll());
         }
 
         public RouteGetDTO GetRoute(Guid id)

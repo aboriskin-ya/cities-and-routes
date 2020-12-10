@@ -39,12 +39,12 @@ namespace Service.Services
         public IEnumerable<MapGetDTO> GetMaps()
         {
             _logger.LogInformation("Get maps started");
-            return _mapper.Map<IEnumerable<Map>, List<MapGetDTO>>(_repository.GetAll());
+            return _mapper.Map<List<MapGetDTO>>(_repository.GetAll());
         }
 
         public IEnumerable<MapInfoGetDTO> GetMapsInfo()
         {
-            return _mapper.Map<IEnumerable<MapInfo>, List<MapInfoGetDTO>>(_repository.GetMapInfo());            
+            return _mapper.Map<List<MapInfoGetDTO>>(_repository.GetMapInfo());            
         }
 
         public MapGetDTO GetMap(Guid id)

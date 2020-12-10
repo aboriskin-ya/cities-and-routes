@@ -10,11 +10,10 @@
         SelectSecondCity,
         CreateRoute,
         SaveChanges,
-        FindShortestPath,
-        TravelSalesman_PushButton,
-        TravelSalesman_SelectCities,
-        TravelSalesman_ResolvingGoal,
-        TravelSalesman_Done
+        ResolverPushButton,
+        ResolverSelectCities,
+        ResolverResolvingGoal,
+        ResolverDone
     }
     public static class StateLine
     {
@@ -36,19 +35,17 @@
                     return "Please set a distance between the cities";
                 case StateLineStatus.SaveChanges:
                     return "All changes were saved";
-                case StateLineStatus.FindShortestPath:
-                    return "Please select two cities to calculate the shortest path";
             }
             return "";
         }
-        public static string GetStatus(StateLineStatus states)
+        public static string GetResolverState(StateLineStatus states)
         {
             switch (states)
             {
-                case StateLineStatus.TravelSalesman_PushButton: return "Press button 'Select cities' to begin procedure choicing cities";
-                case StateLineStatus.TravelSalesman_SelectCities: return "Select cities for resolving goal";
-                case StateLineStatus.TravelSalesman_ResolvingGoal: return "Resolving travelsalesman for selected routes";
-                case StateLineStatus.TravelSalesman_Done: return "Goal was resolved. Check console above here";
+                case StateLineStatus.ResolverPushButton: return "Press the button 'Select cities' to begin a procedure choicing cities";
+                case StateLineStatus.ResolverSelectCities: return "Select cities for resolving a goal";
+                case StateLineStatus.ResolverResolvingGoal: return "Resolving process...";
+                case StateLineStatus.ResolverDone: return "The goal was resolved. Check the console above here";
             }
             return "";
         }

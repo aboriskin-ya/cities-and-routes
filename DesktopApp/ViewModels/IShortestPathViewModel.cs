@@ -1,4 +1,5 @@
 ﻿using DesktopApp.Models;
+using DesktopApp.Services.State;
 using System.Windows.Input;
 
 namespace DesktopApp.ViewModels
@@ -11,5 +12,6 @@ namespace DesktopApp.ViewModels
         ICommand CalculateShortestPathCommand { get; }
 
         void InitializeModels();
+        void StateUpdate(StateLineStatus stateLine);
     }
 }
