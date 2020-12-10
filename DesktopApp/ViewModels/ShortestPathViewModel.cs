@@ -1,6 +1,7 @@
 ﻿using DesktopApp.APIInteraction;
 using DesktopApp.Models;
 using DesktopApp.Services;
+using DesktopApp.Services.State;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -36,8 +37,19 @@ namespace DesktopApp.ViewModels
         public string ConsoleResult
         {
             get => _consoleResult;
-            set => Set<string>(ref _consoleResult, value);
+            set => Set(ref _consoleResult, value);
         }
+
+        #region State
+
+        private string state;
+        public string State
+        {
+            get => state;
+            set => Set(ref state, value, nameof(State));
+        }
+
+        #endregion
 
         public ICommand ClearConsoleCommand { get => new RelayCommand(p => OnClearConsoleExecuted(p), p => OnCanClearExecute(p)); }
 
@@ -56,7 +68,7 @@ namespace DesktopApp.ViewModels
             var path = p as PathModel;
             if (path == null)
                 return;
-
+            StateUpdate(StateLineStatus.ResolverResolvingGoal);
             var res = await _pathResolverAPIService.FindShortestPathAsync(path);
             if (!res.IsSuccessful)
                 _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
@@ -66,6 +78,8 @@ namespace DesktopApp.ViewModels
                     ConsoleResult += $"There is no path from \"{path.CityFromName}\" to \"{path.CityToName}\"";
                 else
                     await GetCitiesAsync(res.Payload);
+
+                StateUpdate(Services.State.StateLineStatus.ResolverDone);
             }
         }
 
@@ -104,8 +118,14 @@ namespace DesktopApp.ViewModels
         public void InitializeModels()
         {
             ShortestPath = new ShortestPath();
+            State = StateLine.GetResolverState(StateLineStatus.ResolverPushButton);
             ShortestPath.CitiesPosition = new List<Point>();
             ConsoleResult = "";
+        }
+
+        public void StateUpdate(StateLineStatus stateLine)
+        {
+            State = StateLine.GetResolverState(stateLine);
         }
     }
 }

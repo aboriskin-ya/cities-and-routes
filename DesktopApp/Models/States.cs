@@ -134,7 +134,6 @@ namespace DesktopApp.Models
             {
                 _isAbleToPickShortestPath = value;
                 RaisePropertyChanged(nameof(IsAbleToPickShortestPath));
-                State = PathStatusUpdate();
             }
         }
 
@@ -146,7 +145,6 @@ namespace DesktopApp.Models
             {
                 _isAbleToFindShortestPath = value;
                 RaisePropertyChanged(nameof(IsAbleToFindShortestPath));
-                State = PathStatusUpdate();
             }
         }
 
@@ -199,14 +197,6 @@ namespace DesktopApp.Models
 
             if (IsAbleToCreateRoute)
                 return StateLine.Show(StateLineStatus.CreateRoute);
-
-            return StateLine.Show(StateLineStatus.Empty);
-        }
-
-        private string PathStatusUpdate()
-        {
-            if (IsAbleToPickShortestPath)
-                return StateLine.Show(StateLineStatus.FindShortestPath);
 
             return StateLine.Show(StateLineStatus.Empty);
         }

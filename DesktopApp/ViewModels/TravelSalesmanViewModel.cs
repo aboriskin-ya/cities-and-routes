@@ -62,8 +62,8 @@ namespace DesktopApp.ViewModels
             set
             {
                 if (value == false)
-                    State = StateLine.GetStatus(StateLineStatus.TravelSalesman_PushButton);
-                else State = StateLine.GetStatus(StateLineStatus.TravelSalesman_SelectCities);
+                    State = StateLine.GetResolverState(StateLineStatus.ResolverPushButton);
+                else State = StateLine.GetResolverState(StateLineStatus.ResolverSelectCities);
                 Set<bool>(ref _canSelect, value);
                 WasChanged?.Invoke(this, new EventArgs());
             }
@@ -128,13 +128,14 @@ namespace DesktopApp.ViewModels
 
         private void OnCancelSelectExecuted(object p)
         {
-            foreach (var city in SelectedCities)
+            for (int i = SelectedCities.Count - 1; i >= 0; i--)
             {
-                SelectedCities.Remove(city);
+                SelectedCities.RemoveAt(i);
             }
             SelectedCity = null;
-            State = StateLine.GetStatus(StateLineStatus.TravelSalesman_PushButton);
+            State = StateLine.GetResolverState(StateLineStatus.ResolverPushButton);
             CanSelectCities = false;
+            ClearConsoleCommand.Execute(p);
         }
         #endregion
 
@@ -149,25 +150,33 @@ namespace DesktopApp.ViewModels
                 MapId = SelectedCities.First().MapId,
                 SelectedCities = SelectedCities.Select(t => t.Id)
             };
-            State = StateLine.GetStatus(StateLineStatus.TravelSalesman_ResolvingGoal);
+            State = StateLine.GetResolverState(StateLineStatus.ResolverResolvingGoal);
             var model = await _travelSalesmanService.Resolve(request, SelectedMethodIndex);
-            var builder = new StringBuilder();
-            builder.Append($"\nAlgorithm: {model.Payload.NameAlghorithm}\n" +
-                           $"Process` duration: {model.Payload.ProcessDuration}\n" +
-                           $"Calculated distance: {model.Payload.CalculatedDistance}\n" +
-                           $"Preferable sequence: ");
-            foreach (var cityId in model.Payload.PreferableSequenceOfCities)
+            if (!model.IsSuccessful)
             {
-                var city = await _cityService.GetCityAsync(cityId);
-                builder.Append($"{city.Payload.Name}->");
+                ConsoleResult += "\nA path is not found.\n";
             }
-            await GetSelectedRoutes(model.Payload.PreferableSequenceOfCities.ToArray(), request.MapId);
-            ConsoleResult += builder.ToString().Substring(0, builder.Length - 2) + '\n';
+            else
+            {
+                var builder = new StringBuilder();
+                builder.Append($"\nAlgorithm: {model.Payload.NameAlghorithm}\n" +
+                               $"Process` duration: {model.Payload.ProcessDuration}\n" +
+                               $"Calculated distance: {model.Payload.CalculatedDistance}\n" +
+                               $"Preferable sequence: ");
+                foreach (var cityId in model.Payload.PreferableSequenceOfCities)
+                {
+                    var city = await _cityService.GetCityAsync(cityId);
+                    builder.Append($"{city.Payload.Name}->");
+                }
+                await GetSelectedRoutes(model.Payload.PreferableSequenceOfCities.ToArray(), request.MapId);
+                ConsoleResult += builder.ToString().Substring(0, builder.Length - 2) + '\n';
+            }
             CanDisplay = true;
+            State = StateLine.GetResolverState(StateLineStatus.ResolverDone);
             RemoveCities();
         }
 
-        private bool OnCanResolveExecute(object p) => CitiesCount >= 2 && SelectedMethodIndex != -1;
+        private bool OnCanResolveExecute(object p) => CitiesCount >= 2;
         #endregion
 
         #region ClearConsoleCommand
@@ -186,8 +195,8 @@ namespace DesktopApp.ViewModels
         public int CitiesCount { get => SelectedCities.Count; }
         public void Initialize()
         {
-            State = StateLine.GetStatus(StateLineStatus.TravelSalesman_PushButton);
-            SelectedMethodIndex = -1;
+            State = StateLine.GetResolverState(StateLineStatus.ResolverPushButton);
+            SelectedMethodIndex = 0;
             SelectedCity = new City();
             SelectedRoutes = new ObservableCollection<Route>();
             ConsoleResult = null;

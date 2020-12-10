@@ -40,7 +40,7 @@ namespace Service.Services
         public IEnumerable<CityGetDTO> GetCities()
         {
             _logger.LogInformation("Get cities started");
-            return _mapper.Map<IEnumerable<City>, List<CityGetDTO>>(_cityRepository.GetAll());
+            return _mapper.Map<List<CityGetDTO>>(_cityRepository.GetAll());
         }
 
         public CityGetDTO GetCity(Guid id)
