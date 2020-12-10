@@ -228,7 +228,7 @@ namespace DesktopApp.ViewModels
             AppState.IsAbleToUpdateRoute = false;
         }
 
-        private bool OnCanAddNewCityExecute(object p) =>  !AppState.IsAbleToCreateCity && !AppState.IsAbleToUpdateCity && MapViewModel.IsHaveMap();
+        private bool OnCanAddNewCityExecute(object p) => !AppState.IsAbleToCreateCity && !AppState.IsAbleToUpdateCity && MapViewModel.IsHaveMap();
         #endregion
 
         #region CreateNewCityCommand
@@ -371,7 +371,7 @@ namespace DesktopApp.ViewModels
             {
                 MapViewModel.DeleteCityCommand.Execute(p);
                 ShortestPathViewModel.InitializeModels();
-                TravelSalesmanViewModel.Initialize();                
+                TravelSalesmanViewModel.Initialize();
                 AppState.IsAbleToUpdateCity = false;
                 AppState.IsSuccess = true;
             }

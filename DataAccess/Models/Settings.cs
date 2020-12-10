@@ -4,6 +4,9 @@ namespace DataAccess.Models
 {
     public class Settings : BaseEntity
     {
+        public double FoundPathSize { get; set; }
+        public string FoundPathColor { get; set; }
+        public bool DisplayCitiesNames { get; set; }
         public bool DisplayingImage { get; set; }
         public bool DisplayingGraph { get; set; }
         public double VertexSize { get; set; }

@@ -1,0 +1,28 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    >
+    <Thickness x:Key="UnChecked" Left="-620" Bottom="0" Top="0" Right="0"/>
+    <Thickness x:Key="Checked" Left="620" Bottom="0" Top="0" Right="0"/>
+    <SolidColorBrush Color="#FF27FF51" x:Key="CheckedColor"/>
+    <SolidColorBrush Color="#FFBABABA" x:Key="UnCheckedColor"/>
+    <Style TargetType="Ellipse" x:Key="DefaultBtn">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ElementName=switch, Path=IsChecked}" Value="true">
+                <Setter Property="Margin" Value="{StaticResource Checked}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ElementName=switch, Path=IsChecked}" Value="false">
+                <Setter Property="Margin" Value="{StaticResource UnChecked}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    <Style TargetType="Rectangle" x:Key="DefaultBack">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ElementName=switch, Path=IsChecked}" Value="true">
+                <Setter Property="Fill" Value="{StaticResource CheckedColor}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ElementName=switch, Path=IsChecked}" Value="false">
+                <Setter Property="Fill" Value="{StaticResource UnCheckedColor}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

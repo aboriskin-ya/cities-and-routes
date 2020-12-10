@@ -35,7 +35,7 @@ namespace Repository.Storage
                     Name = p.Name,
                     CreateOnUTC = p.CreateOnUTC,
                     CountCities = p.Cities.Count(),
-                    CountRoutes = p.Routes.Count()                    
+                    CountRoutes = p.Routes.Count()
                 })
                 .ToList();
         }

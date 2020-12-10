@@ -24,11 +24,12 @@ namespace DesktopApp.Models
             set => Set(ref processDuration, value, nameof(ProcessDuration));
         }
 
-        private List<Point> citiesPosition = new List<Point>();
+        private List<Point> _citiesPosition;
         public List<Point> CitiesPosition
         {
-            get => citiesPosition;
-            set => Set(ref citiesPosition, value, nameof(CitiesPosition));
+            get => _citiesPosition;
+            set => Set(ref _citiesPosition, value);
+
         }
     }
 }
