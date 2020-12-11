@@ -22,7 +22,6 @@ namespace API
                 .Build();
 
             var logHost = _configuration.GetValue<string>("LogHost");
-            string dbConnection = _configuration.GetConnectionString("DefaultConnection");
 
             Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
@@ -38,7 +37,7 @@ namespace API
 
             try
             {
-                Log.Information("Starting web host, ASPNETCORE_ENVIRONMENT: {environment}, DB Connection:{dbConnection}", environmentName, dbConnection);
+                Log.Information("Starting web host, ASPNETCORE_ENVIRONMENT: {environment}", environmentName);
                 CreateHostBuilder(args).Build().Run();
             }
             catch (Exception ex)

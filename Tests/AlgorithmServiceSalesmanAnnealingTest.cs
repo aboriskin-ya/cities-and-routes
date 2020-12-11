@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests
@@ -135,7 +136,7 @@ namespace Tests
 
         }
         [Fact]
-        public void TestAllMap()
+        public async Task TestAllMap()
         {
             //Arrange
             travelSalesmanRequest = new TravelSalesmanRequest { MapId = map.Id, SelectedCities = new List<Guid>() };
@@ -154,16 +155,16 @@ namespace Tests
             var minCalculatedDistance = 20000;
             var maxCalculatedDistance = 40000;
             //Act
-            var result = algorithmService.SolveAnnealingTravelSalesman(travelSalesmanRequest);
+            var result = await algorithmService.SolveAnnealingTravelSalesman(travelSalesmanRequest);
             //Assert
-            Assert.InRange(result.Result.CalculatedDistance, minCalculatedDistance, maxCalculatedDistance);
+            Assert.InRange(result.CalculatedDistance, minCalculatedDistance, maxCalculatedDistance);
             foreach (var city in PreferableSequenceOfCities)
             {
-                Assert.Contains(city, result.Result.PreferableSequenceOfCities);
+                Assert.Contains(city, result.PreferableSequenceOfCities);
             }
         }
         [Fact]
-        public void TestRostovVoronezMoscowKazan()
+        public async Task TestRostovVoronezMoscowKazan()
         {
             //Arrange
             travelSalesmanRequest = new TravelSalesmanRequest
@@ -176,16 +177,16 @@ namespace Tests
             var minCalculatedDistance = 3000;
             var maxCalculatedDistance = 4000;
             //Act
-            var result = algorithmService.SolveAnnealingTravelSalesman(travelSalesmanRequest);
+            var result = await algorithmService.SolveAnnealingTravelSalesman(travelSalesmanRequest);
             //Assert
-            Assert.InRange(result.Result.CalculatedDistance, minCalculatedDistance, maxCalculatedDistance);
+            Assert.InRange(result.CalculatedDistance, minCalculatedDistance, maxCalculatedDistance);
             foreach (var city in PreferableSequenceOfCities)
             {
-                Assert.Contains(city, result.Result.PreferableSequenceOfCities);
+                Assert.Contains(city, result.PreferableSequenceOfCities);
             }
         }
         [Fact]
-        public void TestWith2Cities()
+        public async Task TestWith2Cities()
         {
             //Arrange
             travelSalesmanRequest = new TravelSalesmanRequest
@@ -197,16 +198,16 @@ namespace Tests
             var PreferableSequenceOfCities = new List<Guid> { smolenskId, moscowId };
             var CalculatedDistance = 796;
             //Act
-            var result = algorithmService.SolveAnnealingTravelSalesman(travelSalesmanRequest);
+            var result = await algorithmService.SolveAnnealingTravelSalesman(travelSalesmanRequest);
             //Assert
-            Assert.Equal(result.Result.CalculatedDistance, CalculatedDistance);
+            Assert.Equal(result.CalculatedDistance, CalculatedDistance);
             foreach (var city in PreferableSequenceOfCities)
             {
-                Assert.Contains(city, result.Result.PreferableSequenceOfCities);
+                Assert.Contains(city, result.PreferableSequenceOfCities);
             }
         }
         [Fact]
-        public void TestWith3Cities()
+        public async Task TestWith3Cities()
         {
             //Arrange
             travelSalesmanRequest = new TravelSalesmanRequest
@@ -218,16 +219,16 @@ namespace Tests
             var PreferableSequenceOfCities = new List<Guid> { saintPetersburgId, archangelskId, moscowId };
             var CalculatedDistance = 3726;
             //Act
-            var result = algorithmService.SolveAnnealingTravelSalesman(travelSalesmanRequest);
+            var result = await algorithmService.SolveAnnealingTravelSalesman(travelSalesmanRequest);
             //Assert
-            Assert.Equal(result.Result.CalculatedDistance, CalculatedDistance);
+            Assert.Equal(result.CalculatedDistance, CalculatedDistance);
             foreach (var city in PreferableSequenceOfCities)
             {
-                Assert.Contains(city, result.Result.PreferableSequenceOfCities);
+                Assert.Contains(city, result.PreferableSequenceOfCities);
             }
         }
         [Fact]
-        public void TestWith6Cities()
+        public async Task TestWith6Cities()
         {
             //Arrange
             travelSalesmanRequest = new TravelSalesmanRequest
@@ -240,12 +241,12 @@ namespace Tests
             var minCalculatedDistance = 4500;
             var maxCalculatedDistance = 7000;
             //Act
-            var result = algorithmService.SolveAnnealingTravelSalesman(travelSalesmanRequest);
+            var result = await algorithmService.SolveAnnealingTravelSalesman(travelSalesmanRequest);
             //Assert
-            Assert.InRange(result.Result.CalculatedDistance, minCalculatedDistance, maxCalculatedDistance);
+            Assert.InRange(result.CalculatedDistance, minCalculatedDistance, maxCalculatedDistance);
             foreach (var city in PreferableSequenceOfCities)
             {
-                Assert.Contains(city, result.Result.PreferableSequenceOfCities);
+                Assert.Contains(city, result.PreferableSequenceOfCities);
             }
         }
     }
