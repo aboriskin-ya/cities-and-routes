@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using DesktopApp.APIInteraction;
 using DesktopApp.ViewModels;
+using System;
 using System.Configuration;
 using System.Windows;
 
@@ -13,15 +14,16 @@ namespace DesktopApp
         {
             string url = ConfigurationManager.AppSettings["baseApiUrl"];
             APIClient.InitializeClient(url);
-
             var model = RegisterServices.Configure().Resolve<MainWindowViewModel>();
             var view = new MainWindow { DataContext = model };
 
             view.Show();
         }
-        private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        private async void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            MessageBox.Show("An unhandled exception: " + e.Exception.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
+            
+            var exceptionId = await LogAPIService.LoggingExceptions(e.Exception.Source, e.Exception.Message, e.Exception.StackTrace);
+            MessageBox.Show($"Some error happened in the application. Error Id: {exceptionId}. If that continue happening, please share that Error Id with us.", "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
             e.Handled = true;
         }
     }

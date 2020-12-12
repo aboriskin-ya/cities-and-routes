@@ -33,6 +33,7 @@ namespace API
             .Enrich.FromLogContext()
             .Enrich.WithMachineName()
             .Enrich.WithThreadId()
+            .Enrich.WithClientIp()
             .CreateLogger();
 
             try
