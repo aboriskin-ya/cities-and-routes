@@ -151,7 +151,7 @@ namespace Service.Services
         private string GetProcessDuration(TimeSpan timeSpan)
         {
             var seconds = timeSpan.Seconds.ToString();
-            var milliSeconds = timeSpan.Milliseconds;
+            var milliSeconds = timeSpan.TotalMilliseconds;
             return $"{seconds}s,{milliSeconds}ms.";
         }
     }

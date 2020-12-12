@@ -144,6 +144,7 @@ namespace DesktopApp.ViewModels
 
         private async Task OnResolveExecuted(object p)
         {
+            RemoveRoutes();
             ConsoleResult = ConsoleResult.Substring(0, ConsoleResult.Length - 2);
             var request = new TravelSalesmanRequest()
             {
@@ -173,7 +174,6 @@ namespace DesktopApp.ViewModels
             }
             CanDisplay = true;
             State = StateLine.GetResolverState(StateLineStatus.ResolverDone);
-            RemoveCities();
         }
 
         private bool OnCanResolveExecute(object p) => CitiesCount >= 2;
