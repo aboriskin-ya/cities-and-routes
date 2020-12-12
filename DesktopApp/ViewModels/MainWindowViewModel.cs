@@ -148,7 +148,7 @@ namespace DesktopApp.ViewModels
 
         private bool OnCanChangeTabExecute(object p) => true;
 
-        public ICommand PathResolverCancelCommand => new PathResolverCancelCommand(p => OnCanPathResolverCancelExecute(p), p => OnPathResolverCancel(p));
+        public ICommand PathResolverCancelCommand => new RelayCommand(p => OnPathResolverCancel(p), p => OnCanPathResolverCancelExecute(p));
 
         private bool OnCanPathResolverCancelExecute(object p) => MapViewModel.IsHaveMap() && MapViewModel.RoutesCount() > 0;
 
@@ -178,7 +178,7 @@ namespace DesktopApp.ViewModels
 
         #region ShowCreateMapDialog 
 
-        public ICommand ShowCreateMapDialogCommand => new ShowCreateMapDialogCommand(null, p => ShowCreateMapDialog(p));
+        public ICommand ShowCreateMapDialogCommand => new RelayCommand(p => ShowCreateMapDialog(p));
 
         private void ShowCreateMapDialog(object p)
         {
@@ -192,7 +192,7 @@ namespace DesktopApp.ViewModels
 
         #region ShowSelectExistingMapDialog
 
-        public ICommand ShowSelectExistingMapDialogCommand => new ShowCreateMapDialogCommand(null, p => ShowSelectExistingMapDialog(p));
+        public ICommand ShowSelectExistingMapDialogCommand => new RelayCommand(p => ShowSelectExistingMapDialog(p));
 
         private void ShowSelectExistingMapDialog(object p)
         {
@@ -221,7 +221,7 @@ namespace DesktopApp.ViewModels
         #endregion
 
         #region AddNewCityCommand
-        public ICommand AddNewCityCommand => new AddNewCityCommand(p => OnCanAddNewCityExecute(p), p => OnAddNewCity(p));
+        public ICommand AddNewCityCommand => new RelayCommand(p => OnAddNewCity(p), p => OnCanAddNewCityExecute(p));
 
         private void OnAddNewCity(object p)
         {
@@ -274,7 +274,7 @@ namespace DesktopApp.ViewModels
 
         #region AddNewRouteCommand
 
-        public ICommand AddNewRouteCommand => new AddNewRouteCommand(p => OnCanAddNewRouteExecute(p), p => OnAddNewRoute(p));
+        public ICommand AddNewRouteCommand => new RelayCommand(p => OnAddNewRoute(p), p => OnCanAddNewRouteExecute(p));
 
         private void OnAddNewRoute(object p)
         {
@@ -330,7 +330,7 @@ namespace DesktopApp.ViewModels
 
         #region DeleteRouteCommand
 
-        public ICommand DeleteRouteCommand => new DeleteRouteCommand(p => OnCanDeleteRouteExecuted(p), p => OnDeleteRouteExecuted(p));
+        public ICommand DeleteRouteCommand => new RelayCommand(p => OnDeleteRouteExecuted(p), p => OnCanDeleteRouteExecuted(p));
 
         private void OnDeleteRouteExecuted(object p)
         {
@@ -350,7 +350,7 @@ namespace DesktopApp.ViewModels
         #endregion
 
         #region CancelCreatingNewCityCommand
-        public ICommand CancelCreatingCityCommand => new CancelCreatingCityCommand(p => OnCanCancelCreatingCityExecuted(p), p => OnCancelCreatingCityExecuted(p));
+        public ICommand CancelCreatingCityCommand => new RelayCommand(p => OnCancelCreatingCityExecuted(p), p => OnCanCancelCreatingCityExecuted(p));
 
         private void OnCancelCreatingCityExecuted(object Button)
         {
@@ -363,7 +363,7 @@ namespace DesktopApp.ViewModels
         #endregion
 
         #region DeleteCityCommand
-        public ICommand DeleteCityCommand => new DeleteCityCommand(p => OnCanDeleteCityExecuted(p), p => DeleteCityCommandExecuted(p));
+        public ICommand DeleteCityCommand => new RelayCommand(p => DeleteCityCommandExecuted(p), p => OnCanDeleteCityExecuted(p));
 
         private void DeleteCityCommandExecuted(object p)
         {
@@ -382,7 +382,7 @@ namespace DesktopApp.ViewModels
         #endregion
 
         #region CancelCreatingNewCityCommand
-        public ICommand CancelCreatingRouteCommand => new CancelCreatingRouteCommand(p => OnCanCancelCreatingRouteExecuted(p), p => OnCancelCreatingRouteExecuted(p));
+        public ICommand CancelCreatingRouteCommand => new RelayCommand(p => OnCancelCreatingRouteExecuted(p), p => OnCanCancelCreatingRouteExecuted(p));
 
         private void OnCancelCreatingRouteExecuted(object p)
         {
@@ -434,7 +434,7 @@ namespace DesktopApp.ViewModels
         #endregion
 
         #region ZoomCommand
-        public ZoomCommand ZoomCommand => new ZoomCommand(p => MapViewModel.IsHaveMap(), p => OnZoomExecuted(p));
+        public ICommand ZoomCommand => new RelayCommand(p => OnZoomExecuted(p), p => MapViewModel.IsHaveMap());
 
         private void OnZoomExecuted(object p)
         {
@@ -460,7 +460,6 @@ namespace DesktopApp.ViewModels
 
                         }
                         break;
-
                 }
             }
 
@@ -479,7 +478,7 @@ namespace DesktopApp.ViewModels
         #endregion
 
         #region NavigateCommand
-        public NavigateCommand NavigateCommand => new NavigateCommand(p => OnCanNavigateExecute(p), p => OnNavigateExecuted(p));
+        public ICommand NavigateCommand => new RelayCommand(p => OnNavigateExecuted(p), p => OnCanNavigateExecute(p));
 
         private void OnNavigateExecuted(object p)
         {
