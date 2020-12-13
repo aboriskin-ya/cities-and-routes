@@ -161,7 +161,7 @@ namespace DesktopApp.ViewModels
                 var builder = new StringBuilder();
                 builder.Append($"\nAlgorithm: {model.Payload.NameAlghorithm}\n" +
                                $"Process` duration: {model.Payload.ProcessDuration}\n" +
-                               $"Calculated distance: {model.Payload.CalculatedDistance}\n" +
+                               $"Calculated distance: {model.Payload.CalculatedDistance} km\n" +
                                $"Preferable sequence: ");
                 foreach (var cityId in model.Payload.PreferableSequenceOfCities)
                 {

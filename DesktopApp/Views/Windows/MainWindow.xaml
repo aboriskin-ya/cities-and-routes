@@ -4,7 +4,7 @@
         xmlns:uc="clr-namespace:DesktopApp.UserControls"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"        
         Height="720" Width="1280" WindowStartupLocation="CenterScreen"
-        Title="{Binding MapViewModel.WholeMap.Name, StringFormat=City and Routes ({0})}"
+        Title="{Binding MapViewModel.WholeMap.Name, StringFormat=City and Roads ({0})}"
         x:Name="mainWindow">
 
     <DockPanel x:Name="praparent">
@@ -33,7 +33,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="270"/>
             </Grid.ColumnDefinitions>
             <DockPanel 
                 Name="dockPanel_1"
@@ -79,7 +79,7 @@
                     <TabControl Focusable="True">
                         <TabItem Selector.IsSelected="True">
                             <TabItem.Header>
-                                <TextBlock Text="Adding cities and routes">
+                                <TextBlock Text="Adding cities and roads">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
                                             <i:InvokeCommandAction Command="{Binding ChangeTabCommand}"/>
@@ -101,6 +101,7 @@
                                         <ToggleButton
                                             Grid.Column="0"
                                             Command ="{Binding AddNewCityCommand}"
+                                            IsChecked="{Binding AppState.IsAbleToSetCity}"
                                             VerticalAlignment="Top"
                                             Content="Add a city"
                                             x:Name="AddNewCityButton">
@@ -109,6 +110,7 @@
                                             Grid.Column="1"
                                             Command ="{Binding AddNewRouteCommand}"
                                             CommandParameter="{Binding ElementName=routeDistance}"
+                                            IsChecked="{Binding AppState.IsAbleToPickFirstCity}"
                                             VerticalAlignment="Top"
                                             Content="Add a road"
                                             x:Name="AddNewRouteButton"/>
@@ -249,7 +251,7 @@
                                             Text="{Binding SelectedRoute.SecondCity.Name}"/>
 
                                         <Label Grid.Row="1"
-                                            Content="Distance: "/>
+                                            Content="Distance (km): "/>
                                         <TextBox
                                             Grid.Column="1"
                                             Grid.Row="1"                        
@@ -304,7 +306,7 @@
                                         </Grid.ColumnDefinitions>
 
                                         <Label
-                                            Content="Update distance: "
+                                            Content="Update distance (km): "
                                             Target="{Binding routeUpdate}" Grid.ColumnSpan="2" Margin="0,-2,10,0" Grid.RowSpan="2" Height="41" VerticalAlignment="Top"/>
 
                                         <TextBox
@@ -413,10 +415,10 @@
                         </TabItem>
                         <TabItem>
                             <TabItem.Header>
-                                <TextBlock Text="Travelsalesman">
+                                <TextBlock Text="Travel salesman">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                                            <i:InvokeCommandAction Command="{Binding ChangeTabCommand}"/>
+                                            <i:InvokeCommandAction Command="{Binding ChangeTabCommand}" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </TextBlock>

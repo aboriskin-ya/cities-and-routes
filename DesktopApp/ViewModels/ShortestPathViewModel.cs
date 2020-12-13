@@ -109,7 +109,7 @@ namespace DesktopApp.ViewModels
             ShortestPath.CitiesPosition = cities;
             ConsoleResult = ConsoleResult.Substring(0, ConsoleResult.Length - 2);
             builder.Append($"\nProcess` duration: {shortestPath.ProcessDuration}\n" +
-                            $"Calculated distance: {shortestPath.FinalDistance}\n");
+                            $"Calculated distance: {shortestPath.FinalDistance} km\n");
             ConsoleResult += builder.ToString();
             }
 

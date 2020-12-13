@@ -225,11 +225,10 @@ namespace DesktopApp.ViewModels
 
         private void OnAddNewCity(object p)
         {
-            AppState.IsAbleToSetCity = !AppState.IsAbleToSetCity;
             AppState.IsAbleToUpdateRoute = false;
         }
 
-        private bool OnCanAddNewCityExecute(object p) => !AppState.IsAbleToCreateCity && !AppState.IsAbleToUpdateCity && MapViewModel.IsHaveMap();
+        private bool OnCanAddNewCityExecute(object p) => !AppState.IsAbleToCreateCity && !AppState.IsAbleToUpdateCity && !AppState.IsAbleToCreateRoute && MapViewModel.IsHaveMap();
         #endregion
 
         #region CreateNewCityCommand
@@ -278,13 +277,12 @@ namespace DesktopApp.ViewModels
 
         private void OnAddNewRoute(object p)
         {
-            AppState.IsAbleToPickFirstCity = !AppState.IsAbleToPickFirstCity;
             AppState.IsAbleToUpdateCity = false;
             AppState.IsAbleToUpdateRoute = false;
         }
 
         private bool OnCanAddNewRouteExecute(object p) => !AppState.IsAbleToCreateRoute
-            && MapViewModel.CitiesCount() >= 2;
+            && MapViewModel.CitiesCount() >= 2 && !AppState.IsAbleToCreateCity;
 
         #endregion
 
