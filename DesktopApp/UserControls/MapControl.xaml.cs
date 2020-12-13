@@ -481,6 +481,11 @@ namespace DesktopApp.UserControls
                 Y = NewPosY
             };
             AppState.IsAbleToCreateCity = true;
+            var cityPanel = GetGeneralParent().FindName("cityName") as TextBox;
+            if (cityPanel != null)
+            {
+                Keyboard.Focus(cityPanel);
+            }
             AppState.IsAbleToSetCity = false;
         }
 
@@ -506,6 +511,11 @@ namespace DesktopApp.UserControls
                 }
                 SelectedRoute.SecondCity = city;
                 AppState.IsAbleToCreateRoute = true;
+                var routePanel = GetGeneralParent().FindName("routeDistance") as TextBox;
+                if (routePanel != null)
+                {
+                    Keyboard.Focus(routePanel);
+                }
                 AppState.IsAbleToPickSecondCity = false;
                 AppState.IsAbleToUpdateCity = false;
             }
@@ -558,6 +568,11 @@ namespace DesktopApp.UserControls
             if (!AppState.IsAbleToSetCity && !AppState.IsAbleToPickFirstCity)
             {
                 AppState.IsAbleToUpdateCity = true;
+                var updateCityPanel = GetGeneralParent().FindName("cityNameUpdate") as TextBox;
+                if (updateCityPanel != null)
+                {
+                    Keyboard.Focus(updateCityPanel);
+                }
                 AppState.IsAbleToUpdateRoute = false;
                 SelectedCity = city;
             }
@@ -573,10 +588,19 @@ namespace DesktopApp.UserControls
             Panel panel = sender as Panel;
             var Route = panel.DataContext;
             AppState.IsAbleToUpdateRoute = true;
+            var updateRoutePanel = GetGeneralParent().FindName("routeUpdate") as TextBox;
+            if (updateRoutePanel != null)
+            {
+                Keyboard.Focus(updateRoutePanel);
+            }
             AppState.IsAbleToUpdateCity = false;
             SelectedRoute = Route as Route;
         }
-
+        private FrameworkElement GetGeneralParent()
+        {
+            var dockPanel = Parent as FrameworkElement;
+            return dockPanel.Parent as FrameworkElement;
+        }
         #endregion
     }
 }

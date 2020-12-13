@@ -10,6 +10,7 @@
     <converters:PositionCorrectorConverter x:Key="PositionCorrectorConverter"/>
     <converters:SizeCorrectorConverter x:Key="SizeCorrectorConverter"/>
     <converters:MultiPaddingConverter x:Key="MultiPaddingConverter"/>
+    <converters:DateTimeUTCToLocalTimeConverter x:Key="ToLocalTimeConverter"/>
     <dxmvvm:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
 </ResourceDictionary>

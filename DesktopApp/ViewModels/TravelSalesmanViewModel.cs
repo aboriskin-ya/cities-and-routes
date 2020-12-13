@@ -192,6 +192,7 @@ namespace DesktopApp.ViewModels
             RemoveRoutes();
         }
         #endregion
+
         public int CitiesCount { get => SelectedCities.Count; }
         public void Initialize()
         {
