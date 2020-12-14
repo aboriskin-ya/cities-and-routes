@@ -9,13 +9,12 @@ namespace Service.Services
 
         public TimeCounterService()
         {
-            _timeCounter = Stopwatch.StartNew();
+            _timeCounter = new Stopwatch();
         }
 
-        public void Stop()
-        {
-            _timeCounter.Stop();
-        }
+        public void Start() => _timeCounter.Start();       
+
+        public void Stop() => _timeCounter.Stop();
 
         public string GetTime()
         {

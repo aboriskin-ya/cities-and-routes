@@ -31,6 +31,7 @@ namespace API.Controllers
         [Route("FindShortestPath")]
         public IActionResult FindShortestPath([FromBody] PathResolverDTO Dto)
         {
+            _timeCounterService.Start();
             var result = _algorithmService.FindShortestPath(Dto.MapId, Dto.CityFromId, Dto.CityToId);
             _timeCounterService.Stop();
             if (result == null)
@@ -49,6 +50,7 @@ namespace API.Controllers
         [Route("solve-travel-salesman-annealing")]
         public async Task<IActionResult> SolveTravelSalesmanAnnealing([FromBody] TravelSalesmanRequest BodyRequest)
         {
+            _timeCounterService.Start();
             var response = await _algorithmService.SolveAnnealingTravelSalesman(BodyRequest);
             _timeCounterService.Stop();
             if (response == default) return BadRequest();
@@ -64,6 +66,7 @@ namespace API.Controllers
         [Route("solve-travel-salesman-nearest")]
         public async Task<IActionResult> SolveTravelSalesmanNearest([FromBody] TravelSalesmanRequest BodyRequest)
         {
+            _timeCounterService.Start();
             var response = await _algorithmService.SolveNearestNeghborTravelSalesman(BodyRequest);
             _timeCounterService.Stop();
             if (response == default) return BadRequest();
@@ -79,6 +82,7 @@ namespace API.Controllers
         [Route("solve-travel-salesman-quickest")]
         public IActionResult Experiment([FromBody] TravelSalesmanRequest BodyRequest)
         {
+            _timeCounterService.Start();
             var taskArr = new Task<TravelSalesmanResponse>[]
             {
                 _algorithmService.SolveNearestNeghborTravelSalesman(BodyRequest),
