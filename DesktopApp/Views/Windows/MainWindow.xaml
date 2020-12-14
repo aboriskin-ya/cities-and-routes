@@ -45,7 +45,7 @@
                                Text="{Binding AppState.State}"/>
                     </StatusBarItem>
                 </StatusBar>
-                <uc:MapControl CanSelect="{Binding CanSelectedCitiesForPath, Mode=TwoWay}"
+                <uc:MapControl 
                            OffsetValue="{Binding OffsetValue, Mode=TwoWay}"
                            ScaleValue="{Binding ScaleValue, Mode=TwoWay}"
                            MapImageSource="{Binding MapImageSource}"
@@ -358,10 +358,7 @@
                                 </TextBlock>
                             </TabItem.Header>
                             <DockPanel LastChildFill="True">
-                                <StatusBar DockPanel.Dock="Top">
-                                    <StatusBarItem Content="{Binding ShortestPathViewModel.State}"/>
-                                </StatusBar>
-                                
+
                                 <ToggleButton DockPanel.Dock="Top" Margin="0,0,0,10"
                                               Content="Start selection" 
                                               Grid.Row="0"
@@ -421,16 +418,12 @@
                                     </i:Interaction.Triggers>
                                 </TextBlock>
                             </TabItem.Header>
-                            <DockPanel LastChildFill="True" 
-                                       DataContext="{Binding TravelSalesmanViewModel}">
-                                <StatusBar DockPanel.Dock="Top">
-                                    <StatusBarItem Content="{Binding State}"/>
-                                </StatusBar>
+                            <DockPanel LastChildFill="True">
 
                                 <ToggleButton DockPanel.Dock="Top"  Margin="0,0,0,10"
                                               Content="Start selection"
-                                              IsChecked="{Binding CanSelectCities}"
-                                              IsEnabled="{Binding TravelsalesmanAcces}"
+                                              IsChecked="{Binding TravelSalesmanViewModel.CanSelectCities}"
+                                              IsEnabled="{Binding TravelSalesmanViewModel.TravelsalesmanAcces}"
                                               x:Name="travelsalesmanSelectButton"/>
 
                                 <StackPanel  DockPanel.Dock="Top">
@@ -457,21 +450,21 @@
                                         <TextBlock Grid.ColumnSpan="2" 
                                                    Text="Select an algorithm:"/>
                                         <ComboBox Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,20"
-                                                  SelectedIndex="{Binding SelectedMethodIndex}" 
-                                                  IsEnabled="{Binding TravelsalesmanAcces}">
+                                                  SelectedIndex="{Binding TravelSalesmanViewModel.SelectedMethodIndex}" 
+                                                  IsEnabled="{Binding TravelSalesmanViewModel.TravelsalesmanAcces}">
                                             <ComboBoxItem Content="Annealing"/>
                                             <ComboBoxItem Content="Nearest" />
                                             <ComboBoxItem Content="Quickest"/>
                                         </ComboBox>
                                         <Button Content="Cancel" 
                                                 Grid.Row="2" Grid.Column="1" 
-                                                Command="{Binding CancelSelectCitiesCommand}"/>
+                                                Command="{Binding TravelSalesmanCancelCommand}"/>
                                         <Button Content="Solve"
                                                 Grid.Row="2" Grid.Column="0"
                                                 Command="{Binding ResolveTravelSalesmanCommand}"/>
                                     </Grid>
                                 </StackPanel>
-                                <uc:ConsoleControl ConsoleContent="{Binding ConsoleResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <uc:ConsoleControl ConsoleContent="{Binding TravelSalesmanViewModel.ConsoleResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </DockPanel>
                         </TabItem>
                     </TabControl>

@@ -134,6 +134,7 @@ namespace DesktopApp.Models
             {
                 _isAbleToPickShortestPath = value;
                 RaisePropertyChanged(nameof(IsAbleToPickShortestPath));
+                State = (value)?StateLine.Show(StateLineStatus.ResolverSelectCities):StateLine.Show(StateLineStatus.Empty);
             }
         }
 
@@ -145,6 +146,34 @@ namespace DesktopApp.Models
             {
                 _isAbleToFindShortestPath = value;
                 RaisePropertyChanged(nameof(IsAbleToFindShortestPath));
+            }
+        }
+
+        #endregion
+
+        #region TravelSalesmenPossibility
+
+        private bool _canSelectedCitiesForPath;
+        public bool CanSelectedCitiesForPath
+        {
+            get => _canSelectedCitiesForPath;
+            set
+            {
+                _canSelectedCitiesForPath = value;
+                RaisePropertyChanged(nameof(CanSelectedCitiesForPath));
+                State = (value) ? StateLine.Show(StateLineStatus.ResolverSelectCities) : StateLine.Show(StateLineStatus.Empty);
+            }
+        }
+
+        private bool _canDisplay;
+        public bool CanDisplay
+        {
+            get => _canDisplay;
+            set
+            {
+                _canDisplay = value;
+                RaisePropertyChanged(nameof(CanDisplay));
+                State = (value) ? StateLine.Show(StateLineStatus.ResolverDone) : StateLine.Show(StateLineStatus.Empty);
             }
         }
 

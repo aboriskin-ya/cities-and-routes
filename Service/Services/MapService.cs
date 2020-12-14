@@ -6,8 +6,8 @@ using Repository.Storage;
 using Service.DTO;
 using Service.Services.Interfaces;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Service.Services
 {
@@ -42,9 +42,9 @@ namespace Service.Services
             return _mapper.Map<List<MapGetDTO>>(_repository.GetAll());
         }
 
-        public IEnumerable<MapInfoGetDTO> GetMapsInfo()
+        public async Task<IEnumerable<MapInfoGetDTO>> GetMapsInfoAsync()
         {
-            return _mapper.Map<List<MapInfoGetDTO>>(_repository.GetMapInfo());            
+            return _mapper.Map<List<MapInfoGetDTO>>(await _repository.GetMapInfoAsync());            
         }
 
         public MapGetDTO GetMap(Guid id)

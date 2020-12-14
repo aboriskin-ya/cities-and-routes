@@ -115,7 +115,9 @@ namespace DesktopApp.ViewModels
         #endregion
 
         #region SelectCity
-        public ICommand SelectCityCommand { get => TravelSalesmanViewModel.SelectCityCommand; }
+        public ICommand SelectCityForTravelSalesmanCommand { get => TravelSalesmanViewModel.SelectCityCommand; }
+
+        public ICommand SelectCityForShortestPathCommand { get => ShortestPathViewModel.SelectCityCommand; }
         #endregion
 
         #region PathResolver
@@ -125,32 +127,23 @@ namespace DesktopApp.ViewModels
         
         private void OnShortestPathResolveOpen(object p)
         {
-            if ((bool)p)
-                ShortestPathViewModel.StateUpdate(Services.State.StateLineStatus.ResolverSelectCities);
-            else
-                ShortestPathViewModel.StateUpdate(Services.State.StateLineStatus.ResolverPushButton);
             AppState.IsAbleToPickShortestPath = ((bool)p)? true: false;
+            ShortestPathViewModel.InitializeModels();
         }
 
-        private bool canSelectedCitiesForPath;
-        public bool CanSelectedCitiesForPath
-        {
-            get => canSelectedCitiesForPath;
-            set => Set<bool>(ref canSelectedCitiesForPath, value);
-        }
         public ICommand ChangeTabCommand => new RelayCommand(p => OnChangeTab(p), p => OnCanChangeTabExecute(p));
 
         private void OnChangeTab(object p)
         {
             AppState.IsAbleToFindShortestPath = false;
-            CanSelectedCitiesForPath = false;
+            AppState.CanSelectedCitiesForPath = false;
         }
 
         private bool OnCanChangeTabExecute(object p) => true;
 
         public ICommand PathResolverCancelCommand => new RelayCommand(p => OnPathResolverCancel(p), p => OnCanPathResolverCancelExecute(p));
 
-        private bool OnCanPathResolverCancelExecute(object p) => MapViewModel.IsHaveMap() && MapViewModel.RoutesCount() > 0;
+        private bool OnCanPathResolverCancelExecute(object p) => true;
 
         private void OnPathResolverCancel(object PathResolverOpen)
         {
@@ -158,9 +151,18 @@ namespace DesktopApp.ViewModels
             Path = new PathModel();
             AppState.IsAbleToPickShortestPath = false;
             AppState.IsAbleToFindShortestPath = false;
-            ShortestPathViewModel.ShortestPath = new ShortestPath();
-            ShortestPathViewModel.ClearConsoleCommand.Execute(this);
-            ShortestPathViewModel.StateUpdate(Services.State.StateLineStatus.ResolverPushButton);
+            AppState.CanDisplay = false;
+            ShortestPathViewModel.CancelCalculateShortestPathCommand.Execute(this);
+        }
+
+        public ICommand TravelSalesmanCancelCommand => new RelayCommand(p => OnTravelSalesmanCancel(p), p => OnTravelSalesmanCancelExecute(p));
+
+        private bool OnTravelSalesmanCancelExecute(object p) => true;
+
+        private void OnTravelSalesmanCancel(object p)
+        {
+            AppState.CanDisplay = false;
+            TravelSalesmanViewModel.CancelSelectCitiesCommand.Execute(p);
         }
 
         public ICommand CalculateShortestPathCommand => new RelayCommand(p => OnCalculateShortestPath(p), p => OnCanCalculateShortestPathExecute(p));
@@ -169,10 +171,21 @@ namespace DesktopApp.ViewModels
         {            
             path.MapId = MapViewModel.WholeMap.Id;
             ShortestPathViewModel.CalculateShortestPathCommand.Execute(path);
+            AppState.CanDisplay = true;
             Path = new PathModel();
         }
 
         private bool OnCanCalculateShortestPathExecute(object p) => Path.CityToId != default && Path.CityToId != Path.CityFromId;
+
+        public ICommand ResolveTravelSalesmanCommand => new RelayCommand(p => OnResolveTravelSalesman(p), p => OnCanResolveTravelSalesmanExecute(p));
+
+        private void OnResolveTravelSalesman(object p)
+        {
+            TravelSalesmanViewModel.ResolveTravelSalesmanCommand.Execute(path);
+            AppState.CanDisplay = true;
+        }
+
+        private bool OnCanResolveTravelSalesmanExecute(object p) => TravelSalesmanViewModel.CitiesCount > 1;
 
         #endregion
 
@@ -393,10 +406,6 @@ namespace DesktopApp.ViewModels
         private bool OnCanCancelCreatingRouteExecuted(object p) => AppState.IsAbleToCreateRoute;
         #endregion
 
-        #region ResolveTravelSalesmanCommand
-        public ICommand ResolveTravelSalesmanCommand { get => TravelSalesmanViewModel.ResolveTravelSalesmanCommand; }
-        #endregion
-
         #region MapImage
         private ImageSource _mapImage;
         public ImageSource MapImageSource
@@ -549,7 +558,7 @@ namespace DesktopApp.ViewModels
         private void TravelSalesmanViewModel_WasChanged(object sender, System.EventArgs e)
         {
             var travelsalesman = sender as TravelSalesmanViewModel;
-            CanSelectedCitiesForPath = travelsalesman.CanSelectCities;
+            AppState.CanSelectedCitiesForPath = travelsalesman.CanSelectCities;
         }
     }
 }

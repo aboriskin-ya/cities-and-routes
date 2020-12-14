@@ -43,7 +43,7 @@ namespace Service
                     {
                         PreferableSequenceOfCities = _currentSequence.Select(Guid.Parse),
                         CalculatedDistance = graph.GetEdge(_currentSequence[0], _currentSequence[1]).EdgeWeight * 2,
-                        NameAlghorithm = nameof(TravelSalesmanAnnealingResolver),
+                        NameAlghorithm = "Simulated annealing algorithm",
                         ProcessDuration = GetProcessDuration(_timeCounter.Elapsed)
                     };
                     return response;
@@ -56,7 +56,7 @@ namespace Service
                         CalculatedDistance = graph.GetEdge(_currentSequence[0], _currentSequence[1]).EdgeWeight +
                         graph.GetEdge(_currentSequence[1], _currentSequence[2]).EdgeWeight +
                         graph.GetEdge(_currentSequence[0], _currentSequence[2]).EdgeWeight,
-                        NameAlghorithm = nameof(TravelSalesmanAnnealingResolver),
+                        NameAlghorithm = "Simulated annealing algorithm",
                         ProcessDuration = GetProcessDuration(_timeCounter.Elapsed)
                     };
                     return response;
@@ -81,7 +81,7 @@ namespace Service
             {
                 PreferableSequenceOfCities = _preferableSequnce.Select(Guid.Parse),
                 CalculatedDistance = _minWeightValue,
-                NameAlghorithm = nameof(TravelSalesmanAnnealingResolver),
+                NameAlghorithm = "Simulated annealing algorithm",
                 ProcessDuration = GetProcessDuration(_timeCounter.Elapsed)
             };
             return response;
@@ -177,7 +177,7 @@ namespace Service
         private string GetProcessDuration(TimeSpan timeSpan)
         {
             var seconds = timeSpan.Seconds.ToString();
-            var milliSeconds = timeSpan.Milliseconds;
+            var milliSeconds = timeSpan.TotalMilliseconds;
             return $"{seconds}s,{milliSeconds}ms.";
         }
         #endregion
