@@ -15,11 +15,10 @@ namespace DesktopApp.ViewModels
         bool TravelsalesmanAcces { get; set; }
         int SelectedMethodIndex { get; set; }
         string ConsoleResult { get; set; }
-        string State { get; set; }
         ICommand SelectCityCommand { get; }
         ICommand CancelSelectCitiesCommand { get; }
         ICommand ResolveTravelSalesmanCommand { get; }
-        ICommand ClearConsoleCommand { get; }
+        void ClearConsole();
         int CitiesCount { get; }
         void Initialize();
     }

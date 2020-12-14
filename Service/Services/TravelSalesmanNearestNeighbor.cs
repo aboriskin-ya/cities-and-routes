@@ -78,7 +78,7 @@ namespace Service.Services.Interfaces
             {
                 PreferableSequenceOfCities = _sequence,
                 CalculatedDistance = _result,
-                NameAlghorithm = nameof(TravelSalesmanNearestNeighbor),
+                NameAlghorithm = "The nearest neighbor algorithm",
                 ProcessDuration = GetProcessDuration(_timeCounter.Elapsed)
             };
             return response;
