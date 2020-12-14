@@ -16,10 +16,11 @@ namespace API.Controllers
     public class PathResolverController : ControllerBase
     {
         private readonly IAlgorithmService _algorithmService;
-
-        public PathResolverController(IAlgorithmService AlgorithmService)
+        private readonly ITimeCounterService _timeCounterService;
+        public PathResolverController(IAlgorithmService AlgorithmService, ITimeCounterService timeCounterService)
         {
             _algorithmService = AlgorithmService;
+            _timeCounterService = timeCounterService;
         }
 
         [ProducesResponseType(typeof(ShortestPathResponseDTO), StatusCodes.Status200OK)]
@@ -31,10 +32,12 @@ namespace API.Controllers
         public IActionResult FindShortestPath([FromBody] PathResolverDTO Dto)
         {
             var result = _algorithmService.FindShortestPath(Dto.MapId, Dto.CityFromId, Dto.CityToId);
+            _timeCounterService.Stop();
             if (result == null)
                 result = new ShortestPathResponseDTO() { IsPathFound = false };
             else
                 result.IsPathFound = true;
+            result.ProcessDuration = _timeCounterService.GetTime();
             return Ok(result);
         }
 
@@ -47,7 +50,9 @@ namespace API.Controllers
         public async Task<IActionResult> SolveTravelSalesmanAnnealing([FromBody] TravelSalesmanRequest BodyRequest)
         {
             var response = await _algorithmService.SolveAnnealingTravelSalesman(BodyRequest);
+            _timeCounterService.Stop();
             if (response == default) return BadRequest();
+            response.ProcessDuration = _timeCounterService.GetTime();
             return Ok(response);
         }
 
@@ -60,7 +65,9 @@ namespace API.Controllers
         public async Task<IActionResult> SolveTravelSalesmanNearest([FromBody] TravelSalesmanRequest BodyRequest)
         {
             var response = await _algorithmService.SolveNearestNeghborTravelSalesman(BodyRequest);
+            _timeCounterService.Stop();
             if (response == default) return BadRequest();
+            response.ProcessDuration = _timeCounterService.GetTime();
             return Ok(response);
         }
 
@@ -80,6 +87,8 @@ namespace API.Controllers
 
             var task = Task.WhenAny(taskArr).Result;
             var response = task.Result;
+            _timeCounterService.Stop();
+            response.ProcessDuration = _timeCounterService.GetTime();
             return Ok(response);
         }
 

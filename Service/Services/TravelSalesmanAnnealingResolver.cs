@@ -4,7 +4,6 @@ using Service.PathResolver;
 using Service.Services;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Service
@@ -22,7 +21,6 @@ namespace Service
         private int _maxLimit;
         private double _currentWeightValue = 0;
         private string[] _currentSequence;
-        private Stopwatch _timeCounter;
         Graph _graph;
         TravelSalesmanResponse response;
 
@@ -43,8 +41,7 @@ namespace Service
                     {
                         PreferableSequenceOfCities = _currentSequence.Select(Guid.Parse),
                         CalculatedDistance = graph.GetEdge(_currentSequence[0], _currentSequence[1]).EdgeWeight * 2,
-                        NameAlghorithm = "Simulated annealing algorithm",
-                        ProcessDuration = GetProcessDuration(_timeCounter.Elapsed)
+                        NameAlghorithm = "Simulated annealing algorithm"
                     };
                     return response;
                 }
@@ -56,8 +53,7 @@ namespace Service
                         CalculatedDistance = graph.GetEdge(_currentSequence[0], _currentSequence[1]).EdgeWeight +
                         graph.GetEdge(_currentSequence[1], _currentSequence[2]).EdgeWeight +
                         graph.GetEdge(_currentSequence[0], _currentSequence[2]).EdgeWeight,
-                        NameAlghorithm = "Simulated annealing algorithm",
-                        ProcessDuration = GetProcessDuration(_timeCounter.Elapsed)
+                        NameAlghorithm = "Simulated annealing algorithm"
                     };
                     return response;
                 }
@@ -76,13 +72,11 @@ namespace Service
                     MatchSequencesAndWeights(changedSequence);
                 _previosWeightValue = _currentWeightValue;
             }
-            _timeCounter.Stop();
             response = new TravelSalesmanResponse()
             {
                 PreferableSequenceOfCities = _preferableSequnce.Select(Guid.Parse),
                 CalculatedDistance = _minWeightValue,
-                NameAlghorithm = "Simulated annealing algorithm",
-                ProcessDuration = GetProcessDuration(_timeCounter.Elapsed)
+                NameAlghorithm = "Simulated annealing algorithm"
             };
             return response;
         }
@@ -168,18 +162,10 @@ namespace Service
             _maxLimit = _currentSequence.IndexOf(_currentSequence.Last());
             _minWeightValue = GetEdgeSum(_currentSequence, graph) * 2;
             _preferableSequnce = _currentSequence;
-            _timeCounter = new Stopwatch();
-            _timeCounter.Start();
         }
 
 
         private bool CheckExecuting(double criticalValue) => criticalValue.Equals(0);
-        private string GetProcessDuration(TimeSpan timeSpan)
-        {
-            var seconds = timeSpan.Seconds.ToString();
-            var milliSeconds = timeSpan.TotalMilliseconds;
-            return $"{seconds}s,{milliSeconds}ms.";
-        }
         #endregion
     }
 }
