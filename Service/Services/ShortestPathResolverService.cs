@@ -5,7 +5,6 @@ using Service.DTO;
 using Service.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Service.Services
 {
@@ -13,7 +12,6 @@ namespace Service.Services
     {
         public Graph Graph;
         ShortestPathResponseDTO result;
-        Stopwatch _timeCounter;
         private readonly ILogger<ShortestPathResolverService> _logger;
 
         public ShortestPathResolverService(ILogger<ShortestPathResolverService> logger)
@@ -21,7 +19,6 @@ namespace Service.Services
             _logger = logger;
             result = new ShortestPathResponseDTO();
             result.FinalDistance = 0;
-            _timeCounter = new Stopwatch();
         }
 
         public ShortestPathResolverService()
@@ -29,13 +26,11 @@ namespace Service.Services
             _logger = new Logger<ShortestPathResolverService>(new LoggerFactory());
             result = new ShortestPathResponseDTO();
             result.FinalDistance = 0;
-            _timeCounter = new Stopwatch();
         }
 
         public ShortestPathResponseDTO FindShortestPath(ShortPathResolverDTO PathResolverDTO, string startName, string finishName)
         {
             _logger.LogInformation("Find shortest path first function started");
-            _timeCounter.Start();
             Graph = new Graph();
             foreach (City City in PathResolverDTO.Cities)
             {
@@ -136,8 +131,6 @@ namespace Service.Services
             ResultList.Add(Guid.Parse(startVertex.ToString()));
             ResultList.Reverse();
             result.Path = ResultList;
-            _timeCounter.Stop();
-            result.ProcessDuration = GetProcessDuration(_timeCounter.Elapsed);
             foreach (var vertex in Graph.Vertices)
             {
                 vertex.EdgesWeightSum = int.MaxValue;
@@ -146,13 +139,6 @@ namespace Service.Services
                 vertex.PreviousVertex = null;
             }
             return result;
-        }
-
-        private string GetProcessDuration(TimeSpan timeSpan)
-        {
-            var seconds = timeSpan.Seconds.ToString();
-            var milliSeconds = timeSpan.TotalMilliseconds;
-            return $"{seconds}s,{milliSeconds}ms.";
         }
     }
 }
