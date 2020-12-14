@@ -55,7 +55,7 @@ namespace DesktopApp.ViewModels
 
         #region CreateMapCommand
 
-        public ICommand CreateMapCommand => new CreateMapCommand(p => OnCanCreateMapExecuted(p), async p => await OnCreateMapExecuted(p));
+        public ICommand CreateMapCommand => new RelayCommand(async p => await OnCreateMapExecuted(p), p => OnCanCreateMapExecuted(p));
 
         private async Task OnCreateMapExecuted(object p)
         {
@@ -164,7 +164,7 @@ namespace DesktopApp.ViewModels
 
         #region OpenFileDialogCommand
 
-        public ICommand DownloadImageCommand => new DownloadImageCommand(p => OnCanDownloadImageExecuted(p), p => OnDownloadImageExecuted(p));
+        public ICommand DownloadImageCommand => new RelayCommand(p => OnDownloadImageExecuted(p), p => OnCanDownloadImageExecuted(p));
 
         private void OnDownloadImageExecuted(object p)
         {
