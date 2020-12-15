@@ -17,6 +17,7 @@ namespace DesktopApp.ViewModels
         private readonly IPathResolverAPIService _pathResolverAPIService;
         private readonly ICityAPIService _cityAPIService;
         private readonly IMessageBoxService _messageBoxService;
+        public event EventHandler WasChanged;
 
         public ShortestPathViewModel(IPathResolverAPIService pathResolverAPIService, ICityAPIService cityAPIService, IMessageBoxService messageBoxService)
         {
@@ -40,15 +41,17 @@ namespace DesktopApp.ViewModels
             set => Set(ref _consoleResult, value);
         }
 
-        #region State
-
-        private string state;
-        public string State
+        #region AppState
+        private States appState;
+        public States AppState
         {
-            get => state;
-            set => Set(ref state, value, nameof(State));
+            get => appState;
+            set
+            {
+                Set<States>(ref appState, value);
+                WasChanged?.Invoke(this, new EventArgs());
+            }
         }
-
         #endregion
 
         public ICommand ClearConsoleCommand { get => new RelayCommand(p => OnClearConsoleExecuted(p), p => OnCanClearExecute(p)); }
@@ -79,7 +82,7 @@ namespace DesktopApp.ViewModels
                 else
                     await GetCitiesAsync(res.Payload);
 
-                StateUpdate(Services.State.StateLineStatus.ResolverDone);
+                StateUpdate(StateLineStatus.ResolverDone);
             }
         }
 
@@ -109,23 +112,25 @@ namespace DesktopApp.ViewModels
             ShortestPath.CitiesPosition = cities;
             ConsoleResult = ConsoleResult.Substring(0, ConsoleResult.Length - 2);
             builder.Append($"\nProcess` duration: {shortestPath.ProcessDuration}\n" +
-                            $"Calculated distance: {shortestPath.FinalDistance} km\n");
+                            $"Calculated distance: {shortestPath.FinalDistance}km\n");
             ConsoleResult += builder.ToString();
-            }
+            StateUpdate(StateLineStatus.ResolverDone);
+        }
 
         private bool OnCanCalculateShortestPathExecute(object p) => true;
 
         public void InitializeModels()
         {
             ShortestPath = new ShortestPath();
-            State = StateLine.GetResolverState(StateLineStatus.ResolverPushButton);
+            AppState = new States();
             ShortestPath.CitiesPosition = new List<Point>();
             ConsoleResult = "";
         }
 
         public void StateUpdate(StateLineStatus stateLine)
         {
-            State = StateLine.GetResolverState(stateLine);
+            AppState.State = StateLine.GetResolverState(stateLine);
+            WasChanged?.Invoke(this, new EventArgs());
         }
     }
 }

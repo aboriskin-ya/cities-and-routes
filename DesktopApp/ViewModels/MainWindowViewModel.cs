@@ -16,6 +16,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using DesktopApp.Services.State;
 
 namespace DesktopApp.ViewModels
 {
@@ -60,6 +61,7 @@ namespace DesktopApp.ViewModels
             InitializeModels();
             Messenger.Default.Register<WholeMap>(this, map => ReceiveMessageSelectExistingMap(map));
             TravelSalesmanViewModel.WasChanged += TravelSalesmanViewModel_WasChanged;
+            ShortestPathViewModel.WasChanged += ShortestPathViewModel_WasChanged;
 
             _messageBoxService = messageBoxService;
             _eventAggregator = eventAggregator;
@@ -126,10 +128,9 @@ namespace DesktopApp.ViewModels
         private void OnShortestPathResolveOpen(object p)
         {
             if ((bool)p)
-                ShortestPathViewModel.StateUpdate(Services.State.StateLineStatus.ResolverSelectCities);
+                AppState.State = StateLine.GetResolverState(StateLineStatus.ResolverSelectCities);
             else
-                ShortestPathViewModel.StateUpdate(Services.State.StateLineStatus.ResolverPushButton);
-            AppState.IsAbleToPickShortestPath = ((bool)p)? true: false;
+                AppState.State = StateLine.GetResolverState(StateLineStatus.ResolverPushButton);
         }
 
         private bool canSelectedCitiesForPath;
@@ -142,8 +143,18 @@ namespace DesktopApp.ViewModels
 
         private void OnChangeTab(object p)
         {
+            AppState.IsAbleToCreateRoute = false;
+            AppState.IsAbleToUpdateRoute = false;
+            AppState.IsAbleToCreateCity = false;
+            AppState.IsAbleToUpdateCity = false;
+            AppState.IsAbleToPickSecondCity = false;
+            AppState.IsAbleToPickFirstCity = false;
+            MapViewModel.SelectedCity = new City();
+            Path = new PathModel();
             AppState.IsAbleToFindShortestPath = false;
             CanSelectedCitiesForPath = false;
+            this.OnPathResolverCancel();
+            TravelSalesmanViewModel.OnCancelSelectExecuted();
         }
 
         private bool OnCanChangeTabExecute(object p) => true;
@@ -152,15 +163,16 @@ namespace DesktopApp.ViewModels
 
         private bool OnCanPathResolverCancelExecute(object p) => MapViewModel.IsHaveMap() && MapViewModel.RoutesCount() > 0;
 
-        private void OnPathResolverCancel(object PathResolverOpen)
+        private void OnPathResolverCancel(object PathResolverOpen = null)
         {
+            if (PathResolverOpen != null)  
             (PathResolverOpen as ToggleButton).IsChecked = false;
             Path = new PathModel();
             AppState.IsAbleToPickShortestPath = false;
             AppState.IsAbleToFindShortestPath = false;
             ShortestPathViewModel.ShortestPath = new ShortestPath();
             ShortestPathViewModel.ClearConsoleCommand.Execute(this);
-            ShortestPathViewModel.StateUpdate(Services.State.StateLineStatus.ResolverPushButton);
+            AppState.State = StateLine.GetResolverState(StateLineStatus.ResolverPushButton);
         }
 
         public ICommand CalculateShortestPathCommand => new RelayCommand(p => OnCalculateShortestPath(p), p => OnCanCalculateShortestPathExecute(p));
@@ -226,9 +238,11 @@ namespace DesktopApp.ViewModels
         private void OnAddNewCity(object p)
         {
             AppState.IsAbleToUpdateRoute = false;
+            AppState.IsAbleToUpdateCity = false;
         }
 
-        private bool OnCanAddNewCityExecute(object p) => !AppState.IsAbleToCreateCity && !AppState.IsAbleToUpdateCity && !AppState.IsAbleToCreateRoute && MapViewModel.IsHaveMap();
+        private bool OnCanAddNewCityExecute(object p) => !AppState.IsAbleToCreateCity && !AppState.IsAbleToCreateRoute
+            && !AppState.IsAbleToPickFirstCity && MapViewModel.IsHaveMap();
         #endregion
 
         #region CreateNewCityCommand
@@ -282,7 +296,7 @@ namespace DesktopApp.ViewModels
         }
 
         private bool OnCanAddNewRouteExecute(object p) => !AppState.IsAbleToCreateRoute
-            && MapViewModel.CitiesCount() >= 2 && !AppState.IsAbleToCreateCity;
+            && MapViewModel.CitiesCount() >= 2 && !AppState.IsAbleToCreateCity && !AppState.IsAbleToSetCity;
 
         #endregion
 
@@ -546,8 +560,14 @@ namespace DesktopApp.ViewModels
         }
         private void TravelSalesmanViewModel_WasChanged(object sender, System.EventArgs e)
         {
-            var travelsalesman = sender as TravelSalesmanViewModel;
-            CanSelectedCitiesForPath = travelsalesman.CanSelectCities;
+            var TravelSalesman = sender as TravelSalesmanViewModel;
+            CanSelectedCitiesForPath = TravelSalesman.CanSelectCities;
+            AppState = TravelSalesman.AppState;
+        }
+        private void ShortestPathViewModel_WasChanged(object sender, System.EventArgs e)
+        {
+            var ShortestPathView = sender as ShortestPathViewModel;
+            AppState = ShortestPathView.AppState;
         }
     }
 }

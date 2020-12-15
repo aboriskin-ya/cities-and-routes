@@ -62,8 +62,9 @@ namespace DesktopApp.ViewModels
             set
             {
                 if (value == false)
-                    State = StateLine.GetResolverState(StateLineStatus.ResolverPushButton);
-                else State = StateLine.GetResolverState(StateLineStatus.ResolverSelectCities);
+                    AppState.State = StateLine.GetResolverState(StateLineStatus.ResolverPushButton);
+                else
+                    AppState.State = StateLine.GetResolverState(StateLineStatus.ResolverSelectCities);
                 Set<bool>(ref _canSelect, value);
                 WasChanged?.Invoke(this, new EventArgs());
             }
@@ -97,12 +98,16 @@ namespace DesktopApp.ViewModels
         }
         #endregion
 
-        #region State
-        private string _state;
-        public string State
+        #region AppState
+        private States appState;
+        public States AppState
         {
-            get => _state;
-            set => Set<string>(ref _state, value);
+            get => appState;
+            set
+            {
+                Set<States>(ref appState, value);
+                WasChanged?.Invoke(this, new EventArgs());
+            }
         }
         #endregion
 
@@ -126,14 +131,14 @@ namespace DesktopApp.ViewModels
 
         private bool OnCanCancelSelectCityExecute(object p) => TravelsalesmanAcces && CanSelectCities;
 
-        private void OnCancelSelectExecuted(object p)
+        public void OnCancelSelectExecuted(object p = null)
         {
             for (int i = SelectedCities.Count - 1; i >= 0; i--)
             {
                 SelectedCities.RemoveAt(i);
             }
             SelectedCity = null;
-            State = StateLine.GetResolverState(StateLineStatus.ResolverPushButton);
+            AppState.State = StateLine.GetResolverState(StateLineStatus.ResolverPushButton);
             CanSelectCities = false;
             ClearConsoleCommand.Execute(p);
         }
@@ -150,7 +155,7 @@ namespace DesktopApp.ViewModels
                 MapId = SelectedCities.First().MapId,
                 SelectedCities = SelectedCities.Select(t => t.Id)
             };
-            State = StateLine.GetResolverState(StateLineStatus.ResolverResolvingGoal);
+            AppState.State = StateLine.GetResolverState(StateLineStatus.ResolverResolvingGoal);
             var model = await _travelSalesmanService.Resolve(request, SelectedMethodIndex);
             if (!model.IsSuccessful)
             {
@@ -161,7 +166,7 @@ namespace DesktopApp.ViewModels
                 var builder = new StringBuilder();
                 builder.Append($"\nAlgorithm: {model.Payload.NameAlghorithm}\n" +
                                $"Process` duration: {model.Payload.ProcessDuration}\n" +
-                               $"Calculated distance: {model.Payload.CalculatedDistance} km\n" +
+                               $"Calculated distance: {model.Payload.CalculatedDistance}km\n" +
                                $"Preferable sequence: ");
                 foreach (var cityId in model.Payload.PreferableSequenceOfCities)
                 {
@@ -172,7 +177,7 @@ namespace DesktopApp.ViewModels
                 ConsoleResult += builder.ToString().Substring(0, builder.Length - 2) + '\n';
             }
             CanDisplay = true;
-            State = StateLine.GetResolverState(StateLineStatus.ResolverDone);
+            AppState.State = StateLine.GetResolverState(StateLineStatus.ResolverDone);
             RemoveCities();
         }
 
@@ -196,10 +201,10 @@ namespace DesktopApp.ViewModels
         public int CitiesCount { get => SelectedCities.Count; }
         public void Initialize()
         {
-            State = StateLine.GetResolverState(StateLineStatus.ResolverPushButton);
             SelectedMethodIndex = 0;
             SelectedCity = new City();
             SelectedRoutes = new ObservableCollection<Route>();
+            AppState = new States();
             ConsoleResult = null;
         }
         private void RemoveCities()
