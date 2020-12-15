@@ -61,7 +61,6 @@ namespace DesktopApp.ViewModels
             InitializeModels();
             Messenger.Default.Register<WholeMap>(this, map => ReceiveMessageSelectExistingMap(map));
             TravelSalesmanViewModel.WasChanged += TravelSalesmanViewModel_WasChanged;
-            ShortestPathViewModel.WasChanged += ShortestPathViewModel_WasChanged;
 
             _messageBoxService = messageBoxService;
             _eventAggregator = eventAggregator;
@@ -146,7 +145,6 @@ namespace DesktopApp.ViewModels
             MapViewModel.SelectedCity = new City();
             Path = new PathModel();
             AppState.IsAbleToFindShortestPath = false;
-            CanSelectedCitiesForPath = false;
             this.OnPathResolverCancel();
             TravelSalesmanViewModel.OnCancelSelectExecuted();
             AppState.CanSelectedCitiesForPath = false;
@@ -165,9 +163,6 @@ namespace DesktopApp.ViewModels
             Path = new PathModel();
             AppState.IsAbleToPickShortestPath = false;
             AppState.IsAbleToFindShortestPath = false;
-            ShortestPathViewModel.ShortestPath = new ShortestPath();
-            ShortestPathViewModel.ClearConsoleCommand.Execute(this);
-            AppState.State = StateLine.GetResolverState(StateLineStatus.ResolverPushButton);
             AppState.CanDisplay = false;
             ShortestPathViewModel.CancelCalculateShortestPathCommand.Execute(this);
         }

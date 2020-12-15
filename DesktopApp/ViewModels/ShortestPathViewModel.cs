@@ -16,7 +16,6 @@ namespace DesktopApp.ViewModels
         private readonly IPathResolverAPIService _pathResolverAPIService;
         private readonly ICityAPIService _cityAPIService;
         private readonly IMessageBoxService _messageBoxService;
-        public event EventHandler WasChanged;
 
         public ShortestPathViewModel(IPathResolverAPIService pathResolverAPIService, ICityAPIService cityAPIService, IMessageBoxService messageBoxService)
         {

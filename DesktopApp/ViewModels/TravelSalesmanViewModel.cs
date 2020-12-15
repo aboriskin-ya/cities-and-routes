@@ -104,7 +104,7 @@ namespace DesktopApp.ViewModels
 
         private bool OnCanCancelSelectCityExecute(object p) => true;
 
-        private void OnCancelSelectExecuted(object p)
+        public void OnCancelSelectExecuted(object p = null)
         {            
             SelectedCity = null;
             CanSelectCities = false;            
