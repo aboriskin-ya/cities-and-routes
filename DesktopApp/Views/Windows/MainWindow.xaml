@@ -441,8 +441,7 @@
                                     </i:Interaction.Triggers>
                                 </TextBlock>
                             </TabItem.Header>
-                            <DockPanel LastChildFill="True" 
-                                       DataContext="{Binding TravelSalesmanViewModel}"
+                            <DockPanel LastChildFill="True"
                                        >
                                 <ToggleButton DockPanel.Dock="Top"  Margin="0,0,0,10"
                                               Content="Start selection"
