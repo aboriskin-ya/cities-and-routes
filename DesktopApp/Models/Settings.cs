@@ -121,6 +121,9 @@ namespace DesktopApp.Models
             MapId = settings.MapId;
             VertexColor = settings.VertexColor;
             VertexSize = settings.VertexSize;
+            FoundPathSize = settings.FoundPathSize;
+            FoundPathColor = settings.FoundPathColor;
+            DisplayCitiesNames = settings.DisplayCitiesNames;
         }
 
         public Settings() { DisplayingImage = true; }

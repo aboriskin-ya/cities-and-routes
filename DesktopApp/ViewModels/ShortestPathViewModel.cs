@@ -1,10 +1,9 @@
 ﻿using DesktopApp.APIInteraction;
 using DesktopApp.Models;
 using DesktopApp.Services;
-using DesktopApp.Services.State;
+using DesktopApp.Services.Console;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -41,48 +40,34 @@ namespace DesktopApp.ViewModels
             set => Set(ref _consoleResult, value);
         }
 
-        #region AppState
-        private States appState;
-        public States AppState
+        public ICommand CancelCalculateShortestPathCommand { get => new RelayCommand(p => OnCancelCalculateShortestPathExecuted(p), p => OnCancelCalculateShortestPathExecute(p)); }
+
+        private void OnCancelCalculateShortestPathExecuted(object p)
         {
-            get => appState;
-            set
-            {
-                Set<States>(ref appState, value);
-                WasChanged?.Invoke(this, new EventArgs());
-            }
+            InitializeModels();
         }
-        #endregion
 
-        public ICommand ClearConsoleCommand { get => new RelayCommand(p => OnClearConsoleExecuted(p), p => OnCanClearExecute(p)); }
+        private bool OnCancelCalculateShortestPathExecute(object p) => true;
 
-        private bool OnCanClearExecute(object p) => !string.IsNullOrEmpty(ConsoleResult);
-
-        private void OnClearConsoleExecuted(object p)
-        {
-            ConsoleResult = "";
-            ShortestPath.CitiesPosition = new List<Point>();
-        }
 
         public ICommand CalculateShortestPathCommand => new RelayCommand(p => OnCalculateShortestPath(p), p => OnCanCalculateShortestPathExecute(p));
 
         private async void OnCalculateShortestPath(object p)
         {
+            ConsoleResult += ConsoleOutput.SolveButtonPressed();
             var path = p as PathModel;
             if (path == null)
                 return;
-            StateUpdate(StateLineStatus.ResolverResolvingGoal);
             var res = await _pathResolverAPIService.FindShortestPathAsync(path);
             if (!res.IsSuccessful)
                 _messageBoxService.ShowError("An error occured. Please try it again.", "Failed result");
             else
             {
+                ConsoleResult += ConsoleOutput.ResultBoundary();
                 if (!res.Payload.IsPathFound)
-                    ConsoleResult += $"There is no path from \"{path.CityFromName}\" to \"{path.CityToName}\"";
+                    ConsoleResult += ConsoleOutput.FailedResult();
                 else
                     await GetCitiesAsync(res.Payload);
-
-                StateUpdate(StateLineStatus.ResolverDone);
             }
         }
 
@@ -96,25 +81,26 @@ namespace DesktopApp.ViewModels
 
         private async Task GetCitiesAsync(ShortestPath shortestPath)
         {
-            var builder = new StringBuilder();
             var cities = new List<Point>();
-            ConsoleResult += "Route has forward cities: ";
+
+            ConsoleResult += ConsoleOutput.SuccessfulResult(shortestPath.ProcessDuration, shortestPath.FinalDistance);
+
+            var position = 0;
+            var count = shortestPath.Path.Count;
             foreach (var guid in shortestPath.Path)
             {
                 var city = await GetCityAsync(guid);
                 if(city != null)
                 {
                     cities.Add(new Point { X = city.X, Y = city.Y });
-                    ConsoleResult += $"{city.Name}->";
+                    ConsoleResult += city.Name;
+                    if (++position != count)
+                        ConsoleResult += ConsoleOutput.Arrow();
                 }
             }
+            ConsoleResult += ConsoleOutput.Boundary();
             ShortestPath = shortestPath;
             ShortestPath.CitiesPosition = cities;
-            ConsoleResult = ConsoleResult.Substring(0, ConsoleResult.Length - 2);
-            builder.Append($"\nProcess` duration: {shortestPath.ProcessDuration}\n" +
-                            $"Calculated distance: {shortestPath.FinalDistance}km\n");
-            ConsoleResult += builder.ToString();
-            StateUpdate(StateLineStatus.ResolverDone);
         }
 
         private bool OnCanCalculateShortestPathExecute(object p) => true;
@@ -122,15 +108,17 @@ namespace DesktopApp.ViewModels
         public void InitializeModels()
         {
             ShortestPath = new ShortestPath();
-            AppState = new States();
             ShortestPath.CitiesPosition = new List<Point>();
-            ConsoleResult = "";
+            ConsoleResult = ConsoleOutput.Empty();
         }
 
-        public void StateUpdate(StateLineStatus stateLine)
+        public ICommand SelectCityCommand { get => new RelayCommand(p => OnSelectCityExecuted(p), p => OnCanSelectCityExecute(p)); }
+
+        private bool OnCanSelectCityExecute(object p) => true;
+        public void OnSelectCityExecuted(object p)
         {
-            AppState.State = StateLine.GetResolverState(stateLine);
-            WasChanged?.Invoke(this, new EventArgs());
+            var name = p as string;
+            ConsoleResult += ConsoleOutput.CityName(name);
         }
     }
 }

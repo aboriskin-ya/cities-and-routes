@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Repository.Storage
 {
@@ -25,9 +26,9 @@ namespace Repository.Storage
                 .SingleOrDefault(p => p.Id == id);
         }
 
-        public IEnumerable<MapInfo> GetMapInfo()
+        public async Task<IEnumerable<MapInfo>> GetMapInfoAsync()
         {
-            return _entity.Include(p => p.Cities)
+            return await _entity.Include(p => p.Cities)
                 .Include(p => p.Routes)
                 .Select(p => new MapInfo
                 {
@@ -37,7 +38,7 @@ namespace Repository.Storage
                     CountCities = p.Cities.Count(),
                     CountRoutes = p.Routes.Count()
                 })
-                .ToList();
+                .ToListAsync();
         }
     }
 }

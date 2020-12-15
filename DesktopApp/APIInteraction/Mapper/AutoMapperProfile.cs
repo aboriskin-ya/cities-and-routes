@@ -24,7 +24,6 @@ namespace DesktopApp.APIInteraction.Mapper
 
             CreateMap<Route, RouteCreateDTO>();
             CreateMap<RouteGetDTO, Route>();
-            CreateMap<TravelSalesmanResponse, TravelSalesman>();
 
             CreateMap<Map, MapCreateDTO>();
             CreateMap<Map, MapGetDTO>().ReverseMap();
@@ -37,6 +36,9 @@ namespace DesktopApp.APIInteraction.Mapper
 
             CreateMap<PathModel, PathResolverDTO>();
             CreateMap<ShortestPathResponseDTO, ShortestPath>();
+
+            CreateMap<TravelSalesmanModel, TravelSalesmanRequest>();
+            CreateMap<TravelSalesmanResponse, TravelSalesman>();
         }
     }
 }
