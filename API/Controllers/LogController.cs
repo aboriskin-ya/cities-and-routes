@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Service.DTO;
 
 namespace API.Controllers
 {
@@ -20,11 +21,12 @@ namespace API.Controllers
         }
 
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
-        [Route("{type:string}/{mess:string}/{stacktrace:string}")]
-        public IActionResult LoggingWPF(string type, string mess, string stacktrace)
+        [HttpPost]
+        public IActionResult LoggingWPF([FromBody] LoggingDTO loggingDTO)
         {
-            Guid guidError = new Guid();
-            _logger.LogInformation($"Wpf exception message: type {type}, message {mess}, stacktrace {stacktrace}, Guid {guidError}");
+            Guid guidError = Guid.NewGuid();
+            _logger.LogInformation($"Wpf exception message: type {loggingDTO.ExceptionType}, " +
+                $"message {loggingDTO.ExceptionMessage}, stacktrace {loggingDTO.ExceptionStackTrace}, Guid {guidError}");
             return Ok(guidError);
         }
     }

@@ -33,7 +33,7 @@ namespace DesktopApp
             else
             {
                 MessageBox.Show("There is no connection to the server", "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }          
+            }
             e.Handled = true;
         }
     }
