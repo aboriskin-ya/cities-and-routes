@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Service.DTO;
 
 namespace DesktopApp.APIInteraction
 {
     internal class LogAPIService
     {
-        public static async Task<HttpResponsePayload<Guid>> LoggingExceptions(string type, string mess, string stacktrace)
+        public static async Task<HttpResponsePayload<Guid>> LoggingExceptions(string type, string message, string stacktrace)
         {
             HttpResponseMessage response;
+            var loggingDTO = new LoggingDTO { ExceptionType = type, ExceptionMessage = message, ExceptionStackTrace = stacktrace };
             try
             {
-                response = await APIClient.Client.GetAsync($"api/log/{type}/{mess}/{stacktrace}");
+                response = await APIClient.Client.PostAsJsonAsync($"api/log", loggingDTO);
             }
             catch
             {
