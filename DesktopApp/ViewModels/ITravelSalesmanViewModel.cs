@@ -21,5 +21,6 @@ namespace DesktopApp.ViewModels
         void ClearConsole();
         int CitiesCount { get; }
         void Initialize();
+        void OnCancelSelectExecuted(object p = null);
     }
 }

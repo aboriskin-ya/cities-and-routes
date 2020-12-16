@@ -16,6 +16,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using DesktopApp.Services.State;
 
 namespace DesktopApp.ViewModels
 {
@@ -135,7 +136,17 @@ namespace DesktopApp.ViewModels
 
         private void OnChangeTab(object p)
         {
+            AppState.IsAbleToCreateRoute = false;
+            AppState.IsAbleToUpdateRoute = false;
+            AppState.IsAbleToCreateCity = false;
+            AppState.IsAbleToUpdateCity = false;
+            AppState.IsAbleToPickSecondCity = false;
+            AppState.IsAbleToPickFirstCity = false;
+            MapViewModel.SelectedCity = new City();
+            Path = new PathModel();
             AppState.IsAbleToFindShortestPath = false;
+            this.OnPathResolverCancel();
+            TravelSalesmanViewModel.OnCancelSelectExecuted();
             AppState.CanSelectedCitiesForPath = false;
         }
 
@@ -145,8 +156,9 @@ namespace DesktopApp.ViewModels
 
         private bool OnCanPathResolverCancelExecute(object p) => true;
 
-        private void OnPathResolverCancel(object PathResolverOpen)
+        private void OnPathResolverCancel(object PathResolverOpen = null)
         {
+            if (PathResolverOpen != null)  
             (PathResolverOpen as ToggleButton).IsChecked = false;
             Path = new PathModel();
             AppState.IsAbleToPickShortestPath = false;
@@ -238,11 +250,12 @@ namespace DesktopApp.ViewModels
 
         private void OnAddNewCity(object p)
         {
-            AppState.IsAbleToSetCity = !AppState.IsAbleToSetCity;
             AppState.IsAbleToUpdateRoute = false;
+            AppState.IsAbleToUpdateCity = false;
         }
 
-        private bool OnCanAddNewCityExecute(object p) => !AppState.IsAbleToCreateCity && !AppState.IsAbleToUpdateCity && MapViewModel.IsHaveMap();
+        private bool OnCanAddNewCityExecute(object p) => !AppState.IsAbleToCreateCity && !AppState.IsAbleToCreateRoute
+            && !AppState.IsAbleToPickFirstCity && MapViewModel.IsHaveMap();
         #endregion
 
         #region CreateNewCityCommand
@@ -291,13 +304,12 @@ namespace DesktopApp.ViewModels
 
         private void OnAddNewRoute(object p)
         {
-            AppState.IsAbleToPickFirstCity = !AppState.IsAbleToPickFirstCity;
             AppState.IsAbleToUpdateCity = false;
             AppState.IsAbleToUpdateRoute = false;
         }
 
         private bool OnCanAddNewRouteExecute(object p) => !AppState.IsAbleToCreateRoute
-            && MapViewModel.CitiesCount() >= 2;
+            && MapViewModel.CitiesCount() >= 2 && !AppState.IsAbleToCreateCity && !AppState.IsAbleToSetCity;
 
         #endregion
 

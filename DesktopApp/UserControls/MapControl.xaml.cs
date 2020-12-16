@@ -511,6 +511,7 @@ namespace DesktopApp.UserControls
                 }
                 AppState.IsAbleToPickSecondCity = false;
                 AppState.IsAbleToUpdateCity = false;
+                AppState.State = "Road: " + SelectedRoute.FirstCity.Name + " -> " + SelectedRoute.SecondCity.Name;
             }
         }
 
@@ -552,14 +553,13 @@ namespace DesktopApp.UserControls
                 {
                     Path.CityToId = city.Id;
                     Path.CityToName = city.Name;
-                    AppState.IsAbleToPickShortestPath = false;
                     AppState.IsAbleToFindShortestPath = true;
                 }
                 SelectCityForShortestPathCommand.Execute(city.Name);
                 return;
             }
 
-            if (!AppState.IsAbleToSetCity && !AppState.IsAbleToPickFirstCity)
+            if (!AppState.IsAbleToSetCity && !AppState.IsAbleToPickFirstCity && !AppState.IsAbleToCreateCity && !AppState.IsAbleToCreateRoute)
             {
                 AppState.IsAbleToUpdateCity = true;
                 var updateCityPanel = GetGeneralParent().FindName("cityNameUpdate") as TextBox;
@@ -581,14 +581,18 @@ namespace DesktopApp.UserControls
         {
             Panel panel = sender as Panel;
             var Route = panel.DataContext;
-            AppState.IsAbleToUpdateRoute = true;
-            var updateRoutePanel = GetGeneralParent().FindName("routeUpdate") as TextBox;
-            if (updateRoutePanel != null)
+            if (!AppState.IsAbleToCreateCity && !AppState.IsAbleToCreateRoute)
             {
-                Keyboard.Focus(updateRoutePanel);
+                AppState.IsAbleToUpdateRoute = true;
+                var updateRoutePanel = GetGeneralParent().FindName("routeUpdate") as TextBox;
+                if (updateRoutePanel != null)
+                {
+                    Keyboard.Focus(updateRoutePanel);
+                }
+                AppState.IsAbleToUpdateCity = false;
+                SelectedRoute = Route as Route;
+                AppState.State = "Road: " + SelectedRoute.FirstCity.Name + " -> " + SelectedRoute.SecondCity.Name;
             }
-            AppState.IsAbleToUpdateCity = false;
-            SelectedRoute = Route as Route;
         }
         private FrameworkElement GetGeneralParent()
         {
