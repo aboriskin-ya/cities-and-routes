@@ -5,6 +5,7 @@ using DesktopApp.Services.Commands;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 
 namespace DesktopApp.ViewModels
 {
@@ -72,7 +73,7 @@ namespace DesktopApp.ViewModels
         }
         private bool OnCanAddCityCollection() => true;
 
-        public UpdateCityCommand UpdateCityCommand { get => new UpdateCityCommand(p => OnCanUpdateCityCollection(), async m => await OnUpdateCityCollectionAsync()); }
+        public ICommand UpdateCityCommand { get => new RelayCommand(async m => await OnUpdateCityCollectionAsync(), p => OnCanUpdateCityCollection()); }
         private async Task OnUpdateCityCollectionAsync()
         {
             var res = await _cityAPIService.UpdateCityAsync(SelectedCity);
@@ -84,14 +85,14 @@ namespace DesktopApp.ViewModels
 
         private bool OnCanUpdateCityCollection() => true;
 
-        public CancelCreatingCityCommand CancelCreatingCityCommand { get => new CancelCreatingCityCommand(p => OnCanRemoveCityFromCollection(), m => OnRemoveCityFromCollection()); }
+        public ICommand CancelCreatingCityCommand { get => new RelayCommand(m => OnRemoveCityFromCollection(), p => OnCanRemoveCityFromCollection()); }
         private void OnRemoveCityFromCollection()
         {
             SelectedCity = new City();
         }
         private bool OnCanRemoveCityFromCollection() => true;
 
-        public DeleteCityCommand DeleteCityCommand { get => new DeleteCityCommand(p => OnCanDeleteCityFromCollection(), async m => await OnDeleteCityFromCollection()); }
+        public ICommand DeleteCityCommand { get => new RelayCommand(async m => await OnDeleteCityFromCollection(), p => OnCanDeleteCityFromCollection()); }
         private async Task OnDeleteCityFromCollection()
         {
             var res = await _cityAPIService.DeleteCityAsync(SelectedCity);
@@ -135,7 +136,7 @@ namespace DesktopApp.ViewModels
 
         private bool OnCanAddRouteCollection() => true;
 
-        public CancelCreatingRouteCommand CancelCreatingRouteCommand { get => new CancelCreatingRouteCommand(p => OnCanRemoveRouteFromCollection(), m => OnRemoveRouteFromCollection(m)); }
+        public ICommand CancelCreatingRouteCommand { get => new RelayCommand(m => OnRemoveRouteFromCollection(m), p => OnCanRemoveRouteFromCollection()); }
         private void OnRemoveRouteFromCollection(object Button)
         {
             (Button as ToggleButton).IsChecked = false;
@@ -143,7 +144,7 @@ namespace DesktopApp.ViewModels
         }
         private bool OnCanRemoveRouteFromCollection() => true;
 
-        public UpdateRouteCommand UpdateRouteCommand { get => new UpdateRouteCommand(p => OnCanUpdateRouteCollection(), async m => await OnUpdateRouteCollectionAsync()); }
+        public ICommand UpdateRouteCommand { get => new RelayCommand(async m => await OnUpdateRouteCollectionAsync(), p => OnCanUpdateRouteCollection()); }
         private async Task OnUpdateRouteCollectionAsync()
         {
             var res = await _routeAPIService.UpdateRouteAsync(SelectedRoute);
@@ -155,7 +156,7 @@ namespace DesktopApp.ViewModels
 
         private bool OnCanUpdateRouteCollection() => true;
 
-        public DeleteRouteCommand DeleteRouteCommand { get => new DeleteRouteCommand(p => OnCanDeleteRouteFromCollection(), async m => await OnDeleteRouteFromCollection()); }
+        public ICommand DeleteRouteCommand { get => new RelayCommand(async m => await OnDeleteRouteFromCollection(), p => OnCanDeleteRouteFromCollection()); }
         private async Task OnDeleteRouteFromCollection()
         {
             var res = await _routeAPIService.DeleteRouteAsync(SelectedRoute);

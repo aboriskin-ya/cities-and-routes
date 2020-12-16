@@ -1,6 +1,7 @@
 ﻿using DesktopApp.Models;
 using DesktopApp.Services.Commands;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace DesktopApp.ViewModels
 {
@@ -14,19 +15,19 @@ namespace DesktopApp.ViewModels
 
         RelayCommandAsync CreateNewCityCommand { get; }
 
-        UpdateCityCommand UpdateCityCommand { get; }
+        ICommand UpdateCityCommand { get; }
 
-        CancelCreatingCityCommand CancelCreatingCityCommand { get; }
+        ICommand CancelCreatingCityCommand { get; }
 
-        DeleteCityCommand DeleteCityCommand { get; }
+        ICommand DeleteCityCommand { get; }
 
-        CancelCreatingRouteCommand CancelCreatingRouteCommand { get; }
+        ICommand CancelCreatingRouteCommand { get; }
 
         RelayCommandAsync CreateNewRouteCommand { get; }
 
-        UpdateRouteCommand UpdateRouteCommand { get; }
+        ICommand UpdateRouteCommand { get; }
 
-        DeleteRouteCommand DeleteRouteCommand { get; }
+        ICommand DeleteRouteCommand { get; }
 
         int CitiesCount();
 

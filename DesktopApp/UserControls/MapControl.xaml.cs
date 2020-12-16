@@ -32,7 +32,8 @@ namespace DesktopApp.UserControls
 
             SetBinding(ZoomCommandProperty, new Binding("ZoomCommand"));
             SetBinding(NavigateCommandProperty, new Binding("NavigateCommand"));
-            SetBinding(SelectCityCommandProperty, new Binding("SelectCityCommand"));
+            SetBinding(SelectCityForTravelSalesmanCommandProperty, new Binding("SelectCityForTravelSalesmanCommand"));
+            SetBinding(SelectCityForShortestPathCommandProperty, new Binding("SelectCityForShortestPathCommand"));
         }
 
         private void MapControl_WindowResize(object sender, System.EventArgs e)
@@ -247,33 +248,25 @@ namespace DesktopApp.UserControls
         #endregion
 
         #region SelectCityCommand
-        public ICommand SelectCityCommand
+        public ICommand SelectCityForTravelSalesmanCommand
         {
-            get { return (ICommand)GetValue(SelectCityCommandProperty); }
-            set { SetValue(SelectCityCommandProperty, value); }
+            get { return (ICommand)GetValue(SelectCityForTravelSalesmanCommandProperty); }
+            set { SetValue(SelectCityForTravelSalesmanCommandProperty, value); }
         }
 
-        public static readonly DependencyProperty SelectCityCommandProperty =
-            DependencyProperty.Register("SelectCityCommand", typeof(ICommand), typeof(MapControl));
+        public static readonly DependencyProperty SelectCityForTravelSalesmanCommandProperty =
+            DependencyProperty.Register(nameof(SelectCityForTravelSalesmanCommand), typeof(ICommand), typeof(MapControl));
 
-
-        #endregion
-
-        #region CanSelect
-
-
-        public bool CanSelect
+        public ICommand SelectCityForShortestPathCommand
         {
-            get { return (bool)GetValue(CanSelectProperty); }
-            set { SetValue(CanSelectProperty, value); }
+            get { return (ICommand)GetValue(SelectCityForShortestPathCommandProperty); }
+            set { SetValue(SelectCityForShortestPathCommandProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for CanSelect.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty CanSelectProperty =
-            DependencyProperty.Register("CanSelect", typeof(bool), typeof(MapControl));
+        public static readonly DependencyProperty SelectCityForShortestPathCommandProperty =
+            DependencyProperty.Register(nameof(SelectCityForShortestPathCommand), typeof(ICommand), typeof(MapControl));
 
-
-        #endregion
+        #endregion        
 
         #region PixelPerWidth
 
@@ -473,14 +466,19 @@ namespace DesktopApp.UserControls
         #region SetCityRoute
         private void MapControl_SetCity()
         {
-            var NexPosX = (PosX / (ActualWidth / 100) / 100) * InitialWidth;
-            var NewPosY = (PosY / (ActualHeight / 100) / 100) * InitialHeight;
+            var NexPosX = PosX / ActualWidth * InitialWidth;
+            var NewPosY = PosY / ActualHeight * InitialHeight;
             SelectedCity = new City()
             {
                 X = NexPosX,
                 Y = NewPosY
             };
             AppState.IsAbleToCreateCity = true;
+            var cityPanel = GetGeneralParent().FindName("cityName") as TextBox;
+            if (cityPanel != null)
+            {
+                Keyboard.Focus(cityPanel);
+            }
             AppState.IsAbleToSetCity = false;
         }
 
@@ -506,8 +504,14 @@ namespace DesktopApp.UserControls
                 }
                 SelectedRoute.SecondCity = city;
                 AppState.IsAbleToCreateRoute = true;
+                var routePanel = GetGeneralParent().FindName("routeDistance") as TextBox;
+                if (routePanel != null)
+                {
+                    Keyboard.Focus(routePanel);
+                }
                 AppState.IsAbleToPickSecondCity = false;
                 AppState.IsAbleToUpdateCity = false;
+                AppState.State = "Road: " + SelectedRoute.FirstCity.Name + " -> " + SelectedRoute.SecondCity.Name;
             }
         }
 
@@ -531,9 +535,9 @@ namespace DesktopApp.UserControls
         {
             Panel panel = sender as Panel;
             var City = panel.DataContext;
-            if (CanSelect)
+            if (AppState.CanSelectedCitiesForPath)
             {
-                SelectCityCommand.Execute(City);
+                SelectCityForTravelSalesmanCommand.Execute(City);
                 return;
             }
 
@@ -549,15 +553,20 @@ namespace DesktopApp.UserControls
                 {
                     Path.CityToId = city.Id;
                     Path.CityToName = city.Name;
-                    AppState.IsAbleToPickShortestPath = false;
                     AppState.IsAbleToFindShortestPath = true;
                 }
+                SelectCityForShortestPathCommand.Execute(city.Name);
                 return;
             }
 
-            if (!AppState.IsAbleToSetCity && !AppState.IsAbleToPickFirstCity)
+            if (!AppState.IsAbleToSetCity && !AppState.IsAbleToPickFirstCity && !AppState.IsAbleToCreateCity && !AppState.IsAbleToCreateRoute)
             {
                 AppState.IsAbleToUpdateCity = true;
+                var updateCityPanel = GetGeneralParent().FindName("cityNameUpdate") as TextBox;
+                if (updateCityPanel != null)
+                {
+                    Keyboard.Focus(updateCityPanel);
+                }
                 AppState.IsAbleToUpdateRoute = false;
                 SelectedCity = city;
             }
@@ -572,11 +581,24 @@ namespace DesktopApp.UserControls
         {
             Panel panel = sender as Panel;
             var Route = panel.DataContext;
-            AppState.IsAbleToUpdateRoute = true;
-            AppState.IsAbleToUpdateCity = false;
-            SelectedRoute = Route as Route;
+            if (!AppState.IsAbleToCreateCity && !AppState.IsAbleToCreateRoute)
+            {
+                AppState.IsAbleToUpdateRoute = true;
+                var updateRoutePanel = GetGeneralParent().FindName("routeUpdate") as TextBox;
+                if (updateRoutePanel != null)
+                {
+                    Keyboard.Focus(updateRoutePanel);
+                }
+                AppState.IsAbleToUpdateCity = false;
+                SelectedRoute = Route as Route;
+                AppState.State = "Road: " + SelectedRoute.FirstCity.Name + " -> " + SelectedRoute.SecondCity.Name;
+            }
         }
-
+        private FrameworkElement GetGeneralParent()
+        {
+            var dockPanel = Parent as FrameworkElement;
+            return dockPanel.Parent as FrameworkElement;
+        }
         #endregion
     }
 }

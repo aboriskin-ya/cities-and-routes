@@ -13,7 +13,10 @@ namespace DesktopApp
         protected override void OnStartup(StartupEventArgs e)
         {
             string url = ConfigurationManager.AppSettings["baseApiUrl"];
-            APIClient.InitializeClient(url);
+            string login = ConfigurationManager.AppSettings["authenticationType"];
+            string password= ConfigurationManager.AppSettings["authenticationInfo"];
+            APIClient.InitializeClient(url, login, password);
+
             var model = RegisterServices.Configure().Resolve<MainWindowViewModel>();
             var view = new MainWindow { DataContext = model };
 

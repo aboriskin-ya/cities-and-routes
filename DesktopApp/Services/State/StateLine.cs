@@ -10,9 +10,7 @@
         SelectSecondCity,
         CreateRoute,
         SaveChanges,
-        ResolverPushButton,
         ResolverSelectCities,
-        ResolverResolvingGoal,
         ResolverDone
     }
     public static class StateLine
@@ -35,17 +33,10 @@
                     return "Please set a distance between the cities";
                 case StateLineStatus.SaveChanges:
                     return "All changes were saved";
-            }
-            return "";
-        }
-        public static string GetResolverState(StateLineStatus states)
-        {
-            switch (states)
-            {
-                case StateLineStatus.ResolverPushButton: return "Press the button 'Select cities' to start a selection procedure";
-                case StateLineStatus.ResolverSelectCities: return "Select cities for resolving a goal";
-                case StateLineStatus.ResolverResolvingGoal: return "Resolving process...";
-                case StateLineStatus.ResolverDone: return "The goal was resolved. Check the console below";
+                case StateLineStatus.ResolverSelectCities: 
+                    return "Select cities for resolving a goal";
+                case StateLineStatus.ResolverDone: 
+                    return "The goal was resolved";
             }
             return "";
         }
