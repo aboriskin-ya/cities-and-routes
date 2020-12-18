@@ -3,6 +3,7 @@ using DesktopApp.APIInteraction;
 using DesktopApp.ViewModels;
 using System;
 using System.Configuration;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace DesktopApp
@@ -22,18 +23,23 @@ namespace DesktopApp
 
             view.Show();
         }
-        private async void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
-        {         
-            var exceptionId = await LogAPIService.LoggingExceptions(e.Exception.Source, e.Exception.Message, e.Exception.StackTrace);
-            if (exceptionId.IsSuccessful)
-            {
-                MessageBox.Show($"Some error happened in the application. Error Id: {exceptionId.Payload.ToString()}. If that continue happening, " +
-                    $"please share that Error Id with us.", "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            else
-            {
-                MessageBox.Show("There is no connection to the server", "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
+        private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            var t = Task.Run(() => {
+                var exceptionId = LogAPIService.LoggingExceptions(e.Exception.GetType().ToString(), e.Exception.Message, e.Exception.StackTrace).Result;
+                if (exceptionId.IsSuccessful)
+                {
+                    MessageBox.Show($"Some error happened in the application. Error Id: {exceptionId.Payload.ToString()}. If that continue happening, " +
+                        $"please share that Error Id with us.", "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else
+                {
+                    MessageBox.Show("Some error happened in the application, but you have no connection to the server. If that continue happening," +
+                        "please share that Error Id with us.", "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            });
+            t.Wait();
+            
             e.Handled = true;
         }
     }
