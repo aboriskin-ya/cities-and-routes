@@ -23,23 +23,20 @@ namespace DesktopApp
 
             view.Show();
         }
-        private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        private async void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            var t = Task.Run(() => {
-                var exceptionId = LogAPIService.LoggingExceptions(e.Exception.GetType().ToString(), e.Exception.Message, e.Exception.StackTrace).Result;
-                if (exceptionId.IsSuccessful)
-                {
-                    MessageBox.Show($"Some error happened in the application. Error Id: {exceptionId.Payload.ToString()}. If that continue happening, " +
-                        $"please share that Error Id with us.", "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-                else
-                {
-                    MessageBox.Show("Some error happened in the application, but you have no connection to the server. If that continue happening," +
-                        "please share that Error Id with us.", "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-            });
-            t.Wait();
-            
+            var exceptionId = await LogAPIService.LoggingExceptions(e.Exception.GetType().ToString(), e.Exception.Message, e.Exception.StackTrace);
+            if (exceptionId.IsSuccessful)
+            {
+                MessageBox.Show($"Some error happened in the application. Error Id: {exceptionId.Payload.ToString()}. If that continue happening, " +
+                    $"please share that Error Id with us.", "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+            {
+                MessageBox.Show("Some error happened in the application, but you have no connection to the server. If that continue happening," +
+                    "please share that Error Id with us.", "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
             e.Handled = true;
         }
     }
