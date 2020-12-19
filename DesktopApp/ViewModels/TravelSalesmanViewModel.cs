@@ -168,8 +168,9 @@ namespace DesktopApp.ViewModels
         {
             SelectedMethodIndex = 0;
             SelectedCity = new City();
+            SelectedCities = new ObservableCollection<City>();
             SelectedRoutes = new ObservableCollection<Route>();
-            ClearConsole();
+            this.OnCancelSelectExecuted(null);
         }
         private void RemoveCities()
         {
