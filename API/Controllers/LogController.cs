@@ -26,7 +26,7 @@ namespace API.Controllers
         public IActionResult LoggingWPF([FromBody] LoggingDTO loggingDTO)
         {
             Guid guidError = Guid.NewGuid();
-            _logger.LogInformation("Wpf exception message: {@guidError}, {@ExceptionMessage}, {@ExceptionType}, {@ExceptionStackTrace}", 
+            _logger.LogError("Wpf exception message: {@guidError}, {@ExceptionMessage}, {@ExceptionType}, {@ExceptionStackTrace}", 
                 guidError.ToString(), loggingDTO.ExceptionMessage, loggingDTO.ExceptionType, loggingDTO.ExceptionStackTrace);
             return Ok(guidError);
         }

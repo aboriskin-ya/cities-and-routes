@@ -3,6 +3,7 @@ using DesktopApp.APIInteraction;
 using DesktopApp.ViewModels;
 using System;
 using System.Configuration;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -25,6 +26,7 @@ namespace DesktopApp
         }
         private async void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
+            e.Handled = true;
             var exceptionId = await LogAPIService.LoggingExceptions(e.Exception.GetType().ToString(), e.Exception.Message, e.Exception.StackTrace);
             if (exceptionId.IsSuccessful)
             {
@@ -36,8 +38,7 @@ namespace DesktopApp
                 MessageBox.Show("Some error happened in the application, but you have no connection to the server. If that continue happening," +
                     "please share that Error Id with us.", "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-
-            e.Handled = true;
+            
         }
     }
 }
