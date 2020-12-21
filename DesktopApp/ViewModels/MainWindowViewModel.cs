@@ -210,6 +210,7 @@ namespace DesktopApp.ViewModels
             var model = RegisterServices.Configure().Resolve<CreateMapViewModel>(new NamedParameter("eventAggregator", _eventAggregator));
             var view = new CreateMapDialog { DataContext = model };
             view.Owner = (Window)p;
+            this.CenterWindow(view);
             view.Show();
         }
 
@@ -224,6 +225,7 @@ namespace DesktopApp.ViewModels
             var model = RegisterServices.Configure().Resolve<SelectExistingMapViewModel>(new NamedParameter("eventAggregator", _eventAggregator));
             var view = new SelectExistingMapDialog { DataContext = model };
             view.Owner = (Window)p;
+            this.CenterWindow(view);
             view.Show();
         }
 
@@ -239,6 +241,7 @@ namespace DesktopApp.ViewModels
                 new NamedParameter("eventAggregator", _eventAggregator));
             var view = new SettingsDialog { DataContext = model };
             view.Owner = (Window)p;
+            this.CenterWindow(view);
             view.Show();
         }
 
@@ -571,6 +574,16 @@ namespace DesktopApp.ViewModels
         {
             var travelsalesman = sender as TravelSalesmanViewModel;
             AppState.CanSelectedCitiesForPath = travelsalesman.CanSelectCities;
+        }
+
+        private void CenterWindow(Window window)
+        {
+            double screenWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
+            double screenHeight = System.Windows.SystemParameters.PrimaryScreenHeight;
+            double windowWidth = window.Width;
+            double windowHeight = window.Height;
+            window.Left = (screenWidth / 2) - (windowWidth / 2);
+            window.Top = (screenHeight / 2) - (windowHeight / 2);
         }
     }
 }

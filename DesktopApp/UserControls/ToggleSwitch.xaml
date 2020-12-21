@@ -23,8 +23,9 @@
                      Height="330"
                      Style="{StaticResource DefaultBtn}"
                     />
-            <TextBlock Grid.Column="2" Margin="30,0,0,0" FontSize="260" Text="{Binding ElementName=switch, Path=SwitchContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                       VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="2" Margin="150,0,0,0" FontSize="254px" Text="{Binding ElementName=switch, Path=SwitchContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                       VerticalAlignment="Center"
+                       />
         </Grid>
     </Viewbox>
 </UserControl>

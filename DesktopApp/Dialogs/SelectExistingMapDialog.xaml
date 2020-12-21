@@ -35,6 +35,8 @@
                   SelectedItem="{Binding SelectedMap}"
                   VerticalScrollBarVisibility="Auto"
                   FontSize="15"
+                  CanUserResizeColumns="False"
+                  CanUserResizeRows="False"
                   x:Name="dataGrid">
             <DataGrid.Style>
                 <Style TargetType="{x:Type DataGrid}">
