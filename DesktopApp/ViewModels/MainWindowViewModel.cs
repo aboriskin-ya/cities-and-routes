@@ -75,11 +75,14 @@ namespace DesktopApp.ViewModels
 
         public void ReceiveMessageSelectExistingMap(WholeMap map)
         {
+
             ShortestPathViewModel.InitializeModels();
             MapViewModel.InitializeModels();
             InitializeModels();
             InitializeMapViewModel(map);
             InitializeMapImageSource(map.Image.Data);
+            TravelSalesmanViewModel.Initialize();
+            ScaleValue = 1;
             TravelSalesmanViewModel.TravelsalesmanAcces = MapViewModel.IsHaveMap();
         }
 
@@ -137,6 +140,7 @@ namespace DesktopApp.ViewModels
         private void OnChangeTab(object p)
         {
             AppState.IsAbleToCreateRoute = false;
+            AppState.IsAbleToSetCity = false;
             AppState.IsAbleToUpdateRoute = false;
             AppState.IsAbleToCreateCity = false;
             AppState.IsAbleToUpdateCity = false;
@@ -166,6 +170,10 @@ namespace DesktopApp.ViewModels
             AppState.CanDisplay = false;
             ShortestPathViewModel.CancelCalculateShortestPathCommand.Execute(this);
         }
+
+        public ICommand TravelSalesmanStartCommand { get => new RelayCommand(p => {}, p => OnCanTravelSalesmanStartExecute(p)); }
+
+        private bool OnCanTravelSalesmanStartExecute(object p) => TravelSalesmanViewModel.CitiesCount < 1;
 
         public ICommand TravelSalesmanCancelCommand => new RelayCommand(p => OnTravelSalesmanCancel(p), p => OnTravelSalesmanCancelExecute(p));
 

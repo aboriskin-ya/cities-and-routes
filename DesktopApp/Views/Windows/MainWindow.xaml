@@ -451,6 +451,7 @@
                                               Content="Start selection"
                                               IsChecked="{Binding TravelSalesmanViewModel.CanSelectCities}"
                                               IsEnabled="{Binding TravelSalesmanViewModel.TravelsalesmanAcces}"
+                                              Command="{Binding TravelSalesmanStartCommand}"
                                               x:Name="travelsalesmanSelectButton" Height="22"/>
 
                                 <StackPanel  DockPanel.Dock="Top">
