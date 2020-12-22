@@ -35,7 +35,7 @@ namespace DesktopApp
             }
             else
             {
-                MessageBox.Show("An unhandled exception: " + e.Exception.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Some error happened in the application, try it again later.", "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
             }          
         }
     }
