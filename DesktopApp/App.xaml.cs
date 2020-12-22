@@ -1,7 +1,10 @@
 ﻿using Autofac;
 using DesktopApp.APIInteraction;
 using DesktopApp.ViewModels;
+using System;
 using System.Configuration;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace DesktopApp
@@ -21,10 +24,19 @@ namespace DesktopApp
 
             view.Show();
         }
-        private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        private async void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            MessageBox.Show("An unhandled exception: " + e.Exception.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
             e.Handled = true;
+            var exceptionId = await LogAPIService.LoggingExceptions(e.Exception.GetType().ToString(), e.Exception.Message, e.Exception.StackTrace);
+            if (exceptionId.IsSuccessful)
+            {
+                MessageBox.Show($"Some error happened in the application. Error Id: {exceptionId.Payload.ToString()}. If that continue happening, " +
+                    $"please share that Error Id with us.", "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+            {
+                MessageBox.Show("Some error happened in the application, try it again later.", "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }          
         }
     }
 }
