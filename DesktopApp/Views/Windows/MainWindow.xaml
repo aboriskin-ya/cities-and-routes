@@ -88,8 +88,8 @@
                                 </TextBlock>
                             </TabItem.Header>
                             <TabItem.Content>
-                                <StackPanel Background="#FFF0F0F0">
-                                    <Grid Margin="0 0 0 5">
+                                <StackPanel>
+                                    <Grid Margin="2 5 2 5">
                                         <Grid.RowDefinitions>
                                             <RowDefinition  />
                                             <RowDefinition  />
@@ -105,7 +105,7 @@
                                             VerticalAlignment="Top"
                                             Content="Add a city"
                                             x:Name="AddNewCityButton"
-                                            Height="22" Margin="0 0 0 10"/>
+                                            Height="22" Margin="0 0 4 10"/>
                                         <ToggleButton   
                                             Grid.Column="1"
                                             Command ="{Binding AddNewRouteCommand}"
@@ -121,7 +121,7 @@
                                     <Grid 
                                         x:Name ="CreatingCityPanel"
                                         Visibility="{Binding AppState.IsAbleToCreateCity, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                        Margin="0 0 0 5"
+                                        Margin="2 0 2 15"
                                         >
                                         <Grid.RowDefinitions>
                                             <RowDefinition  />
@@ -142,6 +142,7 @@
 
                                         <TextBox 
                                             Height="25"
+                                            Padding="0,2,0,0"
                                             Margin="1,0,1,6"
                                             Grid.Column="1"
                                             Grid.Row="1" 
@@ -159,7 +160,7 @@
                                             Content="Create"
                                             Command="{Binding CreateNewCityCommand}" 
                                             CommandParameter="{Binding ElementName=cityName, Path=(Validation.HasError)}"
-                                            Margin="0,0,2,0"
+                                            Margin="0,0,4,0"
                                             Height="22">
                                             <Button.Style>
                                                 <Style TargetType="{x:Type Button}">
@@ -185,7 +186,7 @@
                                             Height="22"/>
                                     </Grid>
 
-                                    <Grid Margin="0 0 0 5"
+                                    <Grid Margin="2 0 2 15"
                                         x:Name ="UpdatingCityPanel"
                                         Visibility="{Binding AppState.IsAbleToUpdateCity, Converter={StaticResource BooleanToVisibilityConverter}}">
                                         <Grid.RowDefinitions>
@@ -206,6 +207,7 @@
                                         <TextBox 
                                             Grid.Column="1"
                                             Grid.Row="1" 
+                                            Padding="0,2,0,0"
                                             Margin="1,0,1,6"
                                             Text="{Binding MapViewModel.SelectedCity.Name, NotifyOnValidationError=true, ValidatesOnDataErrors=True}"
                                             Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
@@ -221,7 +223,7 @@
                                             Content="Update"
                                             Command="{Binding UpdateCityCommand}"
                                             CommandParameter="{Binding ElementName=cityNameUpdate, Path=(Validation.HasError)}"
-                                            Margin="0,0,2,0" Height="22">
+                                            Margin="0,0,4,0" Height="22">
                                             <Button.Style>
                                                 <Style TargetType="{x:Type Button}">
                                                     <Setter Property="IsEnabled" Value="True"/>
@@ -247,7 +249,7 @@
                                     <Grid 
                                         x:Name="CreatingRoutePanel"
                                         Visibility="{Binding AppState.IsAbleToCreateRoute, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                        Margin="0 0 0 5"
+                                        Margin="2 0 2 15"
                                         >
                                         <Grid.RowDefinitions>
                                             <RowDefinition  />
@@ -265,6 +267,7 @@
                                             Grid.Column="1"
                                             Grid.Row="1"      
                                             Height="25"
+                                            Padding="0,2,0,0"
                                             Margin="1,0,1,6"
                                             Text="{Binding MapViewModel.SelectedRoute.Distance, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                             Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
@@ -281,7 +284,7 @@
                                             Command="{Binding CreateNewRouteCommand}"
                                             CommandParameter="{Binding ElementName=routeDistance, Path=(Validation.HasError)}"
                                             Height="22"
-                                            Margin="-1,0,2,0">
+                                            Margin="0,0,4,0">
                                             <Button.Style>
                                                 <Style TargetType="{x:Type Button}">
                                                     <Setter Property="IsEnabled" Value="False"/>
@@ -307,7 +310,7 @@
                                             />
                                     </Grid>
                                     <Grid 
-                                        Margin="0 0 0 5"
+                                        Margin="2 0 2 15"
                                         x:Name ="UpdatingRoutePanel"
                                         Visibility="{Binding AppState.IsAbleToUpdateRoute, Converter={StaticResource BooleanToVisibilityConverter}}">
                                         <Grid.RowDefinitions>
@@ -327,7 +330,8 @@
 
                                         <TextBox
                                             Grid.Column="1"
-                                            Grid.Row="1"       
+                                            Grid.Row="1"      
+                                            Padding="0,2,0,0"
                                             Margin="1,0,1,6"
                                             Text="{Binding MapViewModel.SelectedRoute.Distance, NotifyOnValidationError=true, ValidatesOnDataErrors=True}"
                                             Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
@@ -343,7 +347,7 @@
                                             Content="Update"
                                             Command="{Binding UpdateRouteCommand}"
                                             CommandParameter="{Binding ElementName=routeUpdate, Path=(Validation.HasError)}"
-                                            Margin="-1,0,2,0" Height="22">
+                                            Margin="0,0,4,0" Height="22">
                                             <Button.Style>
                                                 <Style TargetType="{x:Type Button}">
                                                     <Setter Property="IsEnabled" Value="True"/>
@@ -379,14 +383,14 @@
                                 </TextBlock>
                             </TabItem.Header>
                             <DockPanel LastChildFill="True">
-                                  <ToggleButton DockPanel.Dock="Top" Margin="0,0,0,10"
+                                  <ToggleButton DockPanel.Dock="Top" Margin="0,5,0,10"
                                               Content="Start selection" 
                                               Grid.Row="0"
                                               Grid.ColumnSpan="2"
                                               IsChecked="{Binding AppState.IsAbleToPickShortestPath}"
                                               Command="{Binding ShortestPathResolveCommand}"
                                               CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
-                                              x:Name="PathResolverButton">
+                                              x:Name="PathResolverButton" Height="22">
                                 </ToggleButton>
                                 <StackPanel x:Name="ShortestPathPanel" 
                                             DockPanel.Dock="Top">
@@ -443,12 +447,12 @@
                             </TabItem.Header>
                             <DockPanel LastChildFill="True"
                                        >
-                                <ToggleButton DockPanel.Dock="Top"  Margin="0,0,0,10"
+                                <ToggleButton DockPanel.Dock="Top"  Margin="0,5,0,10"
                                               Content="Start selection"
                                               IsChecked="{Binding TravelSalesmanViewModel.CanSelectCities}"
                                               IsEnabled="{Binding TravelSalesmanViewModel.TravelsalesmanAcces}"
                                               Command="{Binding TravelSalesmanStartCommand}"
-                                              x:Name="travelsalesmanSelectButton"/>
+                                              x:Name="travelsalesmanSelectButton" Height="22"/>
 
                                 <StackPanel  DockPanel.Dock="Top">
                                     <StackPanel.Style>
