@@ -14,7 +14,6 @@ namespace DesktopApp.Services
         }
         public string ShowDialog()
         {
-            throw new NotImplementedException("message");
             _ofd.ShowDialog();
             return _ofd.FileName;
         }
