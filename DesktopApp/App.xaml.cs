@@ -35,10 +35,8 @@ namespace DesktopApp
             }
             else
             {
-                MessageBox.Show("Some error happened in the application, but you have no connection to the server. If that continue happening," +
-                    "please share that Error Id with us.", "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            
+                MessageBox.Show("An unhandled exception: " + e.Exception.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }          
         }
     }
 }
