@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Serilog.Context;
 using Serilog.Core;
 using Service.DTO;
 
@@ -26,8 +27,11 @@ namespace API.Controllers
         public IActionResult LoggingWPF([FromBody] LoggingDTO loggingDTO)
         {
             Guid guidError = Guid.NewGuid();
-            _logger.LogError("Wpf exception message: {@guidError}, {@ExceptionMessage}, {@ExceptionType}, {@ExceptionStackTrace}", 
-                guidError.ToString(), loggingDTO.ExceptionMessage, loggingDTO.ExceptionType, loggingDTO.ExceptionStackTrace);
+            using (LogContext.PushProperty("ExceptionStackTrace", loggingDTO.ExceptionStackTrace))
+            {
+                _logger.LogError("Wpf exception message: {@guidError}, {@ExceptionMessage}, {@ExceptionType}",
+                guidError.ToString(), loggingDTO.ExceptionMessage, loggingDTO.ExceptionType);
+            }
             return Ok(guidError);
         }
     }
