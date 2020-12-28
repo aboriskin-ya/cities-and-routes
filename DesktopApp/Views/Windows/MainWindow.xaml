@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"       
         xmlns:uc="clr-namespace:DesktopApp.UserControls"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"        
-        Height="720" Width="1280" WindowStartupLocation="CenterScreen"
+        Height="720" Width="1350" WindowStartupLocation="CenterScreen"
         Title="{Binding MapViewModel.WholeMap.Name, StringFormat=City and Roads ({0})}"
         x:Name="mainWindow">
 
