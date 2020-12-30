@@ -101,11 +101,6 @@ namespace API.Controllers
         [Route("{id:Guid}")]
         public IActionResult DeleteMap(Guid id)
         {
-            if (id == new Guid("643D4972-F06B-4F4B-5705-08D895F56871"))
-            {
-                return BadRequest("Cannot delete the map for the demo");
-            }
-
             if (_service.DeleteMap(id))
             {
                 return Ok();
